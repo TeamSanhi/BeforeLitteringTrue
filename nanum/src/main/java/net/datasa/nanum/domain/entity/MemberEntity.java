@@ -8,6 +8,8 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ import lombok.NoArgsConstructor;
 public class MemberEntity {
     // 회원 번호
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_num")
 	private Integer memberNum;
 	// 회원 ID
@@ -55,8 +58,8 @@ public class MemberEntity {
 	@Column(name = "role_name", columnDefinition = "VARCHAR(10) DEFAULT 'ROLE_USER' CHECK(role_name IN ('ROLE_USER','ROLE_ADMIN'))", length=10)
 	private String roleName;
 	// 회원 상태
-	@Column(name = "member_status", nullable = false, columnDefinition = "TINYINT NOT NULL DEFAULT 0 CHECK(member_status IN (0,1,2))")
-	private Byte memberStatus;
+	@Column(name = "member_status", nullable = false, columnDefinition = "INTEGER NOT NULL DEFAULT 0 CHECK(member_status IN (0,1,2))")
+	private Integer memberStatus;
 	// 계정 삭제일
 	@Column(name = "quit_date", columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private LocalDateTime quitDate;    

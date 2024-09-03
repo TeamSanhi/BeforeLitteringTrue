@@ -15,7 +15,7 @@
   </head>
   <body>
     <h1>[ 회원 가입 ]</h1>
-    <form action="@{/member/join}" method="post">
+    <form th:action="@{/member/join}" method="post">
       <table>
         <tr>
           <th>ID</th>
@@ -51,7 +51,7 @@
           </td>
         </tr>
       </table>
-      <button type="submit" id="postButton">회원가입</button>
+      <input type="submit" value="회원가입" id="postButton" />
     </form>
   </body>
 </html>

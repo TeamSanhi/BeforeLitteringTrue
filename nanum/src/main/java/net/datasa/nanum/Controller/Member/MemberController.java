@@ -5,18 +5,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
+import net.datasa.nanum.service.MemberService;
 
 @Slf4j
 @Controller
 @RequestMapping("member")
+@RequiredArgsConstructor
 public class MemberController {
+
+    private final MemberService memberService;
+
     /**
      * 로그인 화면으로 이동
      * @return memberView/login.html
      */
-    @GetMapping("login")
+    @GetMapping("loginForm")
     public String login () {
         return "memberView/login";
     }
@@ -34,6 +40,8 @@ public class MemberController {
     public String join (MemberDTO dto) {
         
         log.debug("입력값: {}", dto);
+
+        memberService.join(dto);      
 
         return "redirect:/";
     }
