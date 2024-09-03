@@ -2,9 +2,9 @@ package net.datasa.nanum.Controller.Home;
 
 import org.springframework.stereotype.Controller;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 홈 컨트롤러 
@@ -19,6 +19,7 @@ public class HomeController {
      */
     @GetMapping({"","/"})
     public String home() {
+        log.debug("homeController를 지나간다");
         return "homeView/home";
     }
     
