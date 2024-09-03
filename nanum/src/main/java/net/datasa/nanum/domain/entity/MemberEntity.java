@@ -64,3 +64,16 @@ public class MemberEntity {
 	@Column(name = "quit_date", columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private LocalDateTime quitDate;    
 }
+
+// CREATE TABLE MEMBER (
+// 	member_num	        INTEGER	        AUTO_INCREMENT PRIMARY KEY,                                       
+// 	member_id           VARCHAR(20)	    NOT NULL,                                                       
+// 	member_pw	        VARCHAR(100)	NOT NULL,                                                                
+// 	member_email	    VARCHAR(30)	    NOT NULL,                                                           
+// 	member_nickname	    VARCHAR(20)	    NOT NULL,                                                         
+// 	member_file_name	VARCHAR(100),                                                                  
+// 	create_date	        TIMESTAMP	    DEFAULT CURRENT_TIMESTAMP,                                       
+// 	role_name	        VARCHAR(10)	    DEFAULT "ROLE_USER" CHECK(role_name IN ("ROLE_USER","ROLE_ADMIN")),
+// 	member_status	    INTEGER	        NOT NULL DEFAULT 0 CHECK(member_status IN (0,1,2)),         
+// 	quit_date	        TIMESTAMP	    ON UPDATE CURRENT_TIMESTAMP                                      
+// );
