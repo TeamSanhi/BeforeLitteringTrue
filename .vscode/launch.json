@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-NanumApplication<nanum>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "net.datasa.nanum.NanumApplication",
+            "projectName": "nanum",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
