@@ -2,8 +2,13 @@ package net.datasa.nanum.Controller.Member;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.MemberDTO;
+
+@Slf4j
 @Controller
 @RequestMapping("member")
 public class MemberController {
@@ -23,6 +28,14 @@ public class MemberController {
     @GetMapping("join")
     public String join () {
         return "memberView/joinSave";
+    }
+
+    @PostMapping("join")
+    public String join (MemberDTO dto) {
+        
+        log.debug("입력값: {}", dto);
+
+        return "redirect:/";
     }
 
 }
