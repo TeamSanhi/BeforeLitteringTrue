@@ -7,5 +7,7 @@ import net.datasa.nanum.domain.entity.MemberEntity;
 
 @Repository
 public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
+
+    MemberEntity findByMemberIdEquals(String s);
     
 }
