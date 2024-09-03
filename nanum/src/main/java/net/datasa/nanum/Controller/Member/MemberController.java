@@ -9,12 +9,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MemberController {
     /**
      * 로그인 화면으로 이동
-     * @return login.html
+     * @return memberView/login.html
      */
     @GetMapping("login")
     public String login () {
         return "memberView/login";
     }
 
-    
+    /**
+     * 회원 가입 화면으로 이동
+     * @return memberView/joinSave.html
+     */ 
+    @GetMapping("join")
+    public String join () {
+        return "memberView/joinSave";
+    }
+
 }

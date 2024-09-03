@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://thymeleaf.org"
+  xmlns:sec="http://thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script>
+      $(document).ready(function () {});
+    </script>
+  </head>
+  <body>
+    <h1>[ 회원 가입 ]</h1>
+    <form action="@{/member/join}" method="post">
+      <table>
+        <tr>
+          <th>ID</th>
+          <td>
+            <input type="text" name="memberId" id="memberId" />
+            <input type="button" value="ID중복확인" id="idButton" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>PW</th>
+          <td><input type="password" name="memberPw" id="memberPw" /></td>
+        </tr>
+
+        <tr>
+          <th>PW 확인</th>
+          <td><input type="password" id="pwCheck" /></td>
+        </tr>
+
+        <tr>
+          <th>이메일</th>
+          <td>
+            <input type="text" name="memberEmail" id="memberEmail" />
+            <input type="button" value="인증번호 전송" id="emailButton" />
+          </td>
+        </tr>
+
+        <tr>
+          <th>닉네임</th>
+          <td>
+            <input type="text" name="memberNickname" id="memberNickname" />
+            <input type="button" value="닉네임중복확인" id="nickButton" />
+          </td>
+        </tr>
+      </table>
+      <button type="submit" id="postButton">회원가입</button>
+    </form>
+  </body>
+</html>
