@@ -56,7 +56,7 @@ public class MemberEntity {
 	private String roleName;
 	// 회원 상태
 	@Column(name = "member_status", nullable = false, columnDefinition = "TINYINT NOT NULL DEFAULT 0 CHECK(member_status IN (0,1,2))")
-	private Integer memberStatus;
+	private Byte memberStatus;
 	// 계정 삭제일
 	@Column(name = "quit_date", columnDefinition = "TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 	private LocalDateTime quitDate;    
