@@ -1,14 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+    xmlns:th="http://thymeleaf.org"
+    xmlns:sec="http://thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글작성</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script>
+        $(document).ready(function () {
+            // 폼 제출 이벤트 핸들러
+            $("#shareSave").submit(function (event) {
+                // 제목과 내용 입력 여부 확인
+                var title = $("#title").val();
+                var content = $("#content").val();
+                var lat = $("#lat").val();
+                var lng = $("#lng").val();
+                if (title.trim() === "" || content.trim() === "" || lat.trim() === "" || lng.trim() === ""){
+                    alert("제목, 내용, 위도, 경도를 모두 입력해주세요.");
+                    event.preventDefault(); // 폼 제출 방지
+                }
+            })
+        })
+    </script>
 </head>
 <body>
     <form id="shareSave" method="post" action="shareSave">
-        
+        <p>제목 <input type="text" name="title" id="title"></p>
+        <p>내용 <textarea type="text" name="content" id="content"></textarea></p>
+        <div id="map" style="width:50%;height:350px;"></div>
+        <p><em>지도를 클릭해주세요!</em></p> 
+        <p>위도<input type="text" name="lat" id="lat"></p>
+        <p>경도<input type="text" name="lng" id="lng"></p>
+        <p><input type="submit" value="저장"></p>
     </form>
+    <!-- 지도 자바스크립트 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
+    <script>
+        //gelocation으로 현재 위치 가져오기
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+                mapOption = {                   //geolocation으로 가져온 현재 위치를 기준으로 지도 옵션 설정
+                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude   ), // 지도의 중심좌표
+                    level: 4 // 지도의 확대 레벨
+                };
+            
+            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+            
+            // 지도를 클릭한 위치에 표출할 마커입니다
+            var marker = new kakao.maps.Marker({ 
+                // 지도 중심좌표에 마커를 생성합니다 
+                position: map.getCenter() 
+            }); 
+            // 지도에 마커를 표시합니다
+            marker.setMap(map);
+            
+            // 지도에 클릭 이벤트를 등록합니다
+            // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
+                
+                // 클릭한 위도, 경도 정보를 가져옵니다 
+                var latlng = mouseEvent.latLng; 
+                
+                // 마커 위치를 클릭한 위치로 옮깁니다
+                marker.setPosition(latlng);
+                
+                //form에 위도 경도값 값 넣어주기 
+                $('#lat').val(latlng.getLat());
+                $('#lng').val(latlng.getLng());
+            });
+        })
+    };
+    </script>
     
 </body>
 </html>
