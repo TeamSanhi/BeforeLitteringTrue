@@ -1,17 +1,18 @@
 package net.datasa.nanum.Controller.Share;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
+import net.datasa.nanum.security.AuthenticatedUser;
+import net.datasa.nanum.service.ShareService;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -21,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Slf4j
 @Controller
 @RequestMapping("share")
+@RequiredArgsConstructor
 public class ShareController {
-    
+    //서비스 객체 생성
+    private final ShareService shareService;
+
     /**
      * 나눔 list 페이지로 이동 
      * @param param
@@ -50,8 +54,14 @@ public class ShareController {
      */
     @PostMapping("shareSave")
     public String postMethodName(
-        @ModelAttribute ShareBoardDTO DTO) {
-        log.debug("ShareBoardDTO 확인 : {}", DTO);
+        @ModelAttribute ShareBoardDTO DTO,
+        @AuthenticationPrincipal AuthenticatedUser user) {
+        //로그인한 유저 정보를 DTO에 저장 
+        DTO.setMemberNum(user.getNum());
+        //저장하여 받아온 데이터와 로그인한 유저를 확인 
+        log.debug("ShareBoardDTO, user정보 확인 : {}", DTO);
+        //데이터를 저장하는 함수 실행 
+        shareService.shareSave(DTO);
         //게시판으로 리턴
         return "redirect:/share/shareList";
     }

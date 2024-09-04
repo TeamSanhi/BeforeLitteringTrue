@@ -10,6 +10,8 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 </head>
 <body>
-    <p><a href="/share/shareSave">글작성</a></p>
+    <th:block sec:authorize="isAuthenticated()">
+        <p><a href="/share/shareSave">글작성</a></p>
+    </th:block>
 </body>
 </html>

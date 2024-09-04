@@ -2,7 +2,6 @@ package net.datasa.nanum.domain.entity;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.type.descriptor.java.BigDecimalJavaType;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
