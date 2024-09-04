@@ -1,12 +1,16 @@
 package net.datasa.nanum.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.ImageEntity;
@@ -19,6 +23,7 @@ import net.datasa.nanum.repository.ShareBoardRepository;
 /**
  * shareService 클래스 
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ShareService {
@@ -71,6 +76,31 @@ public class ShareService {
         }
         
 
+    }
+
+    /**
+     * 모든게시글을 가져오는 함수
+     * @return
+     */
+    public List<ShareBoardDTO> getListAll() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "shareNum");        
+        //전체 보기
+        List<ShareBoardEntity> entityList = shareBoardRepository.findAll(sort);
+        log.debug("전체 글목록 조회 : {}", entityList);
+        //DTO로 변환할 리스트 생성
+        List<ShareBoardDTO> dtoList = new ArrayList<>();
+        //entityList를 DTO로 변환해서 dtoList에 저장
+        for (ShareBoardEntity entity : entityList) {
+            ShareBoardDTO dto = ShareBoardDTO.builder()
+                    .shareTitle(entity.getShareTitle())
+                    .memberNickname(entity.getMember().getMembeNickname())
+                    .shareDate(entity.getShareDate())
+                    .shareNum(entity.getShareNum())
+                    .build();
+            dtoList.add(dto);
+        }
+        //dtoList를 반환
+        return dtoList;
     }
     
 

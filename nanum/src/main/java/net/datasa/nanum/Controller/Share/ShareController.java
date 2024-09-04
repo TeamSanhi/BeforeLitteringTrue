@@ -1,8 +1,11 @@
 package net.datasa.nanum.Controller.Share;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,12 +34,13 @@ public class ShareController {
     private final ShareService shareService;
 
     //application.properties 파일의 게시판 관련 설정값
+    //페이지 사이즈
     @Value("${board.pageSize}")
     int pageSize;
- 
+    //페이지 블록 크기
     @Value("${board.linkSize}")
     int linkSize;
-
+    //파일 저장경로 
     @Value("${board.uploadPath}")
     String uploadPath;
 
@@ -46,7 +50,11 @@ public class ShareController {
      * @return
      */
     @GetMapping("shareList")
-    public String shareList() {
+    public String shareList(Model model) {
+        //모든 게시글을 가져온다.
+        List<ShareBoardDTO> shareList = shareService.getListAll();
+        //Model에 저장한다.
+        model.addAttribute("shareList", shareList);
         log.debug("sharelist 컨트롤러 지나감");
         return "shareView/shareList";
     }
@@ -61,8 +69,10 @@ public class ShareController {
         return "shareView/shareSave";
     }
     /**
-     * 나눔게시글 작성
-     * @param DTO   //작성한 글 정보
+     * 나눔 게시글 작성 후 저장 
+     * @param DTO       정보를 받아옴
+     * @param user      로그인한 유저 정보를 받아옴
+     * @param upload    업로드할 파일 정보를 받아옴
      * @return
      */
     @PostMapping("shareSave")

@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class ShareBoardDTO {
 
     private Integer shareNum;       //게시글 번호
-    private Integer memberNum;      //회원 번호
+    private Integer memberNum;      //회원 번호 
     private Integer receiverNum;    //reciver 번호
     private String shareTitle;      //제목
     private String shareContents;   //내용
@@ -27,4 +27,7 @@ public class ShareBoardDTO {
     private LocalDateTime shareDate;//게시글 등록일
     private Integer reportCount;    //신고 횟수
     private Integer bookmarkCount;  //북마크 갯수
+
+    //추가
+    private String memberNickname;      //회원 이름 
 }
