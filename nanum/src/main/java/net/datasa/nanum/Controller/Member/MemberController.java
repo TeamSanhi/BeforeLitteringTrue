@@ -36,6 +36,11 @@ public class MemberController {
         return "memberView/joinSave";
     }
 
+    /**
+     * 가입하려는 회원 정보를 dto에 담아서 DB에 저장
+     * @param dto   입력한 회원 정보
+     * @return      homeView/home.html
+     */
     @PostMapping("join")
     public String join (MemberDTO dto) {
         
