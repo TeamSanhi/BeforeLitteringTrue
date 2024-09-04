@@ -26,13 +26,18 @@
     </script>
 </head>
 <body>
-    <form id="shareSave" method="post" action="shareSave">
+    <form id="shareSave" method="post" action="shareSave" enctype="multipart/form-data">
         <p>제목 <input type="text" name="shareTitle" id="title"></p>
         <p>내용 <textarea type="text" name="shareContents" id="content"></textarea></p>
+        <!-- 지도 태그 -->
         <div id="map" style="width:50%;height:350px;"></div>
         <p><em>지도를 클릭해주세요!</em></p> 
+
+        <!-- 위도경도 태그 -->
         <p>위도<input type="text" name="shareLat" id="lat"></p>
         <p>경도<input type="text" name="shareLng" id="lng"></p>
+
+        <!-- 파일첨부 태그 -->
         <p>사진첨부<input type="file" name="upload" id="file"></p>
         <p><input type="submit" value="저장"></p>
     </form>

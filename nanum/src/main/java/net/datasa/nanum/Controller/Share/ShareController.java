@@ -72,21 +72,27 @@ public class ShareController {
         @RequestParam("upload") MultipartFile upload) {
         //로그인한 유저 정보를 DTO에 저장 
         DTO.setMemberNum(user.getNum());
-        
-        //전달받은 파일 확인 
-        log.debug("Empty : {}", upload.isEmpty());
-        log.debug("파라미터 이름 : {}", upload.getName());
-        log.debug("파일명 : {}", upload.getOriginalFilename());
-        log.debug("파일크기 : {}", upload.getSize());
-        log.debug("파일종류 : {}", upload.getContentType());
-    
 
         //저장하여 받아온 데이터와 로그인한 유저를 확인 
         log.debug("ShareBoardDTO, user정보 확인 : {}", DTO);
-        //데이터를 저장하는 함수 실행 
-        shareService.shareSave(DTO);
-        //게시판으로 리턴
-        return "redirect:/share/shareList";
+
+        //업로드된 첨부파일
+          if (upload != null) {
+            log.debug("Empty : {}", upload.isEmpty());
+            log.debug("파라미터 이름 : {}", upload.getName());
+            log.debug("파일명 : {}", upload.getOriginalFilename());
+            log.debug("파일크기 : {}", upload.getSize());
+            log.debug("파일종류 : {}", upload.getContentType());
+        }
+        try {
+           //데이터를 저장하는 함수 실행 
+            shareService.shareSave(DTO, uploadPath, upload);
+            return "redirect:/share/shareList";
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "shareView/shareSave";
+        }
     }
     
     

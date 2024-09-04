@@ -30,7 +30,7 @@ public class ImageEntity {
     //게시글 번호
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "share_num", referencedColumnName = "share_num")
-    private ShareBoardEntity shareBoard;
+    private ShareBoardEntity shareBoardEntity;
     //사진이름
     @Column(name = "image_file_name")
     private String imageFileName;
