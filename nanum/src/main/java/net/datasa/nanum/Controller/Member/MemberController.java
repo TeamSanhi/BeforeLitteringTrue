@@ -60,8 +60,11 @@ public class MemberController {
     @GetMapping("idCheck")
     public String idCheck (@RequestParam("memberId") String memberId, Model model) {
 
+        boolean isDuplicate = memberService.isDuplicate(memberId);
+
         log.debug("가져온 memberId값: {}", memberId);
 
+        model.addAttribute("isDuplicate", isDuplicate);
         model.addAttribute("memberId", memberId);
 
         return "findView/idCheck";
