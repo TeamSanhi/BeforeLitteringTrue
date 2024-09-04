@@ -33,7 +33,7 @@ public class ShareController {
      * @return
      */
     @GetMapping("shareSave")
-    public String shareRead() {
+    public String shareSave() {
         log.debug("shareSave 컨트롤러 지나감");
         return "shareView/shareSave";
     }
