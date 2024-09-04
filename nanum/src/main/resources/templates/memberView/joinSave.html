@@ -21,7 +21,12 @@
           <th>ID</th>
           <td>
             <input type="text" name="memberId" id="memberId" />
-            <input type="button" value="ID중복확인" id="idButton" />
+            <input
+              type="button"
+              value="ID중복확인"
+              id="idButton"
+              th:onclick="|location.href='@{/member/idCheck}'|"
+            />
           </td>
         </tr>
 
