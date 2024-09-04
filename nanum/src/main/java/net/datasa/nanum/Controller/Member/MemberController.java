@@ -51,4 +51,12 @@ public class MemberController {
         return "redirect:/";
     }
 
+    /**
+     * ID 중복 확인 창으로 이동
+     * @return  findView/idCheck.html
+     */
+    @GetMapping("idCheck")
+    public String idCheck () {
+        return "findView/idCheck";
+    }
 }
