@@ -1,16 +1,108 @@
 <!DOCTYPE html>
-<html
-  lang="ko"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-  <head>
-    <meta charset="UTF-8" />
-    <title>home</title>
-  </head>
-  <body>
-    <h1>[ home ]</h1>
-    <p><a href="member/login">로그인</a></p>
-    <p><a href="member/join">회원가입</a></p>
-  </body>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: white;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* 네비게이션 바 CSS */
+        .nav {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav button, .nav span {
+            font-size: 16px;
+        }
+
+        .nav button {
+            padding: 5px 10px;
+        }
+
+        /* 회원가입/로그인 CSS */
+        .member {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .member button {
+            font-size: 16px;
+        }
+
+        /*  사이트 부가설명 CSS  */
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <!-- 네비게이션 바 -->
+    <div class="nav">
+        <p><a href="">로고</a></p>
+        <p><a href="service">우리는..</a></p>
+        <p><a href="share">나눠요</a></p>
+        <p><a href="recycle">버려요</a></p>
+    </div>
+
+    <!-- 로그인/회원가입 -->
+    <div class="member">
+        <th:block sec:authorize="not isAuthenticated()">
+            <p>
+                <button th:href="@{/member/join}">회원가입</button>
+            </p>
+            <p>
+                <button th:href="@{/member/login}">로그인</button>
+            </p>
+        </th:block>
+        <th:block sec:authorize="isAuthenticated()">
+            <p>
+                <button th:href="@{/member/logout}">로그아웃</button>
+            </p>
+            <p>
+                <button th:href="@{/myPage/view}">마이페이지</button>
+            </p>
+        </th:block>
+    </div>
+
+    <!-- 사이트 부가설명 -->
+    <div class="footer">
+        <span class="siteMap">사이트맵</span>
+        <span class="faq">FAQ</span>
+    </div>
+</div>
+</body>
 </html>

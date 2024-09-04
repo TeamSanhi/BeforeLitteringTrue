@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #eee;
+            padding: 10px 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .profile-section {
+            margin: 50px 0;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 auto;
+        }
+
+        .nickname {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .profile-info {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .alert {
+            font-size: 18px;
+            margin-top: 50px;
+        }
+
+        .alert strong {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 네비게이션 바 -->
+    <div class="nav">
+        <p><a href="">로고</a></p>
+        <p><a href="service">우리는..</a></p>
+        <p><a href="share">나눠요</a></p>
+        <p><a href="recycle">버려요</a></p>
+    </div>
+
+    <section class="profile-section">
+        <div class="profile-pic"></div>
+        <div class="nickname">닉네임</div>
+        <div class="profile-info">
+            <span>나의 동네</span> · <span>나눔 수</span> · <span>나의 알림</span>
+        </div>
+        <div>
+            <a href="#" class="btn" style="background-color: #000; color: #fff;">나의 알림</a>
+            <a href="#" class="btn">나의 나눔</a>
+            <a href="#" class="btn">북마크</a>
+        </div>
+    </section>
+
+    <section class="alert">
+        <p>2일 뒤, <strong>재활용 쓰레기 버리는 날</strong>이에요!</p>
+    </section>
+</div>
+</body>
+</html>
