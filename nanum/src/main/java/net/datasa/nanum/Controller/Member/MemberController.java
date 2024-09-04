@@ -26,6 +26,8 @@ public class MemberController {
      */
     @GetMapping("loginForm")
     public String login () {
+
+        log.debug("login.html 이동");
         return "memberView/login";
     }
 
@@ -35,6 +37,7 @@ public class MemberController {
      */ 
     @GetMapping("join")
     public String join () {
+        log.debug("joinSave.html 이동");
         return "memberView/joinSave";
     }
 
@@ -60,8 +63,11 @@ public class MemberController {
     @GetMapping("idCheck")
     public String idCheck (@RequestParam("memberId") String memberId, Model model) {
 
+        boolean isDuplicate = memberService.isDuplicate(memberId);
+
         log.debug("가져온 memberId값: {}", memberId);
 
+        model.addAttribute("isDuplicate", isDuplicate);
         model.addAttribute("memberId", memberId);
 
         return "findView/idCheck";

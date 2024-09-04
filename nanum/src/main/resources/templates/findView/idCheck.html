@@ -7,16 +7,26 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>ID 중복 확인</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
       $(document).ready(function () {});
     </script>
   </head>
   <body>
-    <h1>[ ID 중복 확인 ]</h1>
-    <p>입력한 ID: <span th:text="${memberId}">값</span></p>
+    <h1>ID 중복 확인 결과</h1>
 
-    <button onclick="window.close();">닫기</button>
+    <div>
+      <p th:text="'입력한 ID: ' + ${memberId}"></p>
+
+      <div th:if="${isDuplicate}">
+        <p>해당 ID는 이미 사용 중입니다.</p>
+        <button onclick="window.close();">돌아가기</button>
+      </div>
+      <div th:if="${!isDuplicate}">
+        <p>사용 가능한 ID입니다.</p>
+        <button onclick="window.close();">닫기</button>
+      </div>
+    </div>
   </body>
 </html>
