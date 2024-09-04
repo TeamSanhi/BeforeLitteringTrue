@@ -27,7 +27,8 @@ public class AuthenticatedUser implements UserDetails {
      * UUID
      */
     private static final long serialVersionUID = 8436537801398766673L;
-	int num;
+    
+	int num;        //회원 번호
 	String id;
     String password;
     String email;
