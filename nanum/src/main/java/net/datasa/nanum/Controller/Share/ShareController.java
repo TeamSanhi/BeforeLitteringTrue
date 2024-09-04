@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 /**
  * 나눔 게시판 컨트롤러
  */
+@Slf4j
 @Controller
 @RequestMapping("share")
 public class ShareController {
@@ -22,6 +24,7 @@ public class ShareController {
      */
     @GetMapping("shareList")
     public String shareList() {
+        log.debug("나눔 list 컨트롤러 지나감");
         return "shareView/shareList";
     }
     
@@ -29,9 +32,10 @@ public class ShareController {
      * 나눔글작성으로 이동 
      * @return
      */
-    @GetMapping("shareRead")
+    @GetMapping("shareSave")
     public String shareRead() {
-        return "shareView/shareRead";
+        log.debug("shareSave 컨트롤러 지나감");
+        return "shareView/shareSave";
     }
     
 }
