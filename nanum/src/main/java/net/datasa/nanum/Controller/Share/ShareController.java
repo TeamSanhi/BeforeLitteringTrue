@@ -30,7 +30,7 @@ public class ShareController {
      */
     @GetMapping("shareList")
     public String shareList() {
-        log.debug("나눔 list 컨트롤러 지나감");
+        log.debug("sharelist 컨트롤러 지나감");
         return "shareView/shareList";
     }
     
@@ -45,13 +45,13 @@ public class ShareController {
     }
     /**
      * 나눔게시글 작성
-     * @param DTO
+     * @param DTO   //작성한 글 정보
      * @return
      */
     @PostMapping("shareSave")
     public String postMethodName(
         @ModelAttribute ShareBoardDTO DTO) {
-        log.debug("DTo 확인 : {}", DTO);
+        log.debug("ShareBoardDTO 확인 : {}", DTO);
         //게시판으로 리턴
         return "redirect:/share/shareList";
     }
