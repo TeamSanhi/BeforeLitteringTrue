@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+      .header,
+      .footer {
+        width: 100%;
+        padding: 15px;
+        background-color: #eee;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .menu {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      .menu button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        background-color: #ddd;
+        border: 1px solid #ccc;
+        cursor: pointer;
+      }
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr); /* 8개의 열 */
+        gap: 10px;
+      }
+      .grid-item {
+        background-color: #ddd;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #bbb;
+        font-weight: bold;
+      }
+      .search-container {
+        margin: 20px 0;
+        text-align: center;
+      }
+      .search-bar {
+        padding: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .pagination {
+        margin: 20px 0;
+        display: flex;
+        justify-content: center;
+      }
+      .pagination div {
+        width: 10px;
+        height: 10px;
+        background-color: #ccc;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+      .pagination div.active {
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <button>로그인</button>
+        <button>마이페이지</button>
+      </div>
+
+      <div class="menu">
+        <button>우리는...</button>
+        <button>나눠요</button>
+        <button>버려요</button>
+      </div>
+
+      <!-- 그리드 레이아웃 -->
+      <div class="grid-container">
+        <div class="grid-item" th:each="item : ${items}">
+          <span th:text="${item}"></span>
+        </div>
+      </div>
+
+      <!-- 페이지네이션 모양 -->
+      <div class="pagination">
+        <div class="active"></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+
+      <!-- 검색 바 -->
+      <div class="search-container">
+        <input
+          type="text"
+          class="search-bar"
+          placeholder="검색어를 입력해주세요!"
+        />
+      </div>
+
+      <div class="footer">
+        <p>최종 업데이트 날짜: 2024년 8월 26일</p>
+      </div>
+    </div>
+  </body>
+</html>
