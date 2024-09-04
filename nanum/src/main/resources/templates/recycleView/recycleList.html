@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<<<<<< Updated upstream
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,3 +9,310 @@
 <body>
 </body>
 </html>
+=======
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>recycleList</title>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+      }
+      body,
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      ul,
+      li,
+      dl,
+      dt,
+      dd,
+      form,
+      input,
+      button,
+      select,
+      textarea,
+      fieldset,
+      legend,
+      optgroup,
+      option,
+      textarea,
+      th,
+      td {
+        margin: 0;
+        padding: 0;
+      }
+      body,
+      form,
+      input,
+      button,
+      select,
+      textarea {
+        font-family: "Nanum Gothic", sans-serif;
+        font-size: 12px;
+      }
+      img,
+      fieldset {
+        border: 0;
+      }
+      ul,
+      ol {
+        list-style: none;
+      }
+      em,
+      address {
+        font-style: normal;
+      }
+      a {
+        text-decoration: none;
+      }
+      a:hover,
+      a:active,
+      a:focus {
+        color: #000;
+        text-decoration: underline;
+      }
+      .wrap {
+        width: 600px;
+        margin: 0 auto;
+        font-family: "Nanum Gothic", sans-serif;
+      }
+      .wrap h1 {
+        padding: 10px 0 4 px;
+        border-bottom: 1px solid #aaa;
+      }
+      .fixed_img_col li {
+        float: left;
+        width: 120px;
+        height: 180px;
+        padding: 20px 15px;
+        margin-bottom: -1px;
+        border-bottom: 1px solid #aaa;
+      }
+      .fixed_img_col li a {
+        display: block;
+      }
+      .fixed_img_col li a .thumb {
+        position: relative;
+        display: block;
+        background-color: #ccc;
+        height: 120px;
+        color: #666;
+        text-align: center;
+        line-height: 120px;
+      }
+      .fixed_img_col li a .thumb em {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #eee;
+        font-weight: bold;
+        text-align: center;
+        line-height: 120px;
+      }
+      .fixed_img_col li a:hover.thumb em {
+        display: block;
+      }
+      .fixed_img_col li a:hover .thumb em {
+        display: block;
+        padding: 8px 0 4px;
+        color: #333;
+        font-weight: bold;
+        line-height: 1.4;
+      }
+      .fixed_img_col li a:hover {
+        text-decoration: none;
+      }
+      .fixed_img_col li p {
+        color: #767676;
+        font-size: 0.9em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>[ 버려요 게시판 ]</h1>
+      <div class="fixed_img_col">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/thumbnail.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
+                <em>Category</em>
+              </span>
+              <strong>이미지 제목</strong>
+            </a>
+            <p>2019-12-18</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>
+>>>>>>> Stashed changes
