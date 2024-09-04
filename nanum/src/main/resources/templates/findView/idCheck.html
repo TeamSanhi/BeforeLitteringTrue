@@ -16,15 +16,17 @@
   <body>
     <h1>ID 중복 확인 결과</h1>
 
-    <p th:text="'입력한 ID: ' + ${memberId}"></p>
+    <div>
+      <p th:text="'입력한 ID: ' + ${memberId}"></p>
 
-    <div th:if="${isDuplicate}">
-      <p>해당 ID는 이미 사용 중입니다.</p>
-      <button onclick="window.close();">돌아가기</button>
-    </div>
-    <div th:if="${!isDuplicate}">
-      <p>사용 가능한 ID입니다.</p>
-      <button onclick="window.close();">닫기</button>
+      <div th:if="${isDuplicate}">
+        <p>해당 ID는 이미 사용 중입니다.</p>
+        <button onclick="window.close();">돌아가기</button>
+      </div>
+      <div th:if="${!isDuplicate}">
+        <p>사용 가능한 ID입니다.</p>
+        <button onclick="window.close();">닫기</button>
+      </div>
     </div>
   </body>
 </html>

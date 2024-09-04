@@ -49,10 +49,15 @@
           return false;
         }
 
-        // if (pw == "") {
-        //   alert("비밀번호를 입력해주세요.");
-        //   return false;
-        // }
+        if (pw == "") {
+          alert("비밀번호를 입력해주세요.");
+          return false;
+        }
+
+        if (pw.length < 8) {
+          alert("비밀번호는 8자 이상으로 입력해주세요.");
+          return false;
+        }
 
         // if (email == "") {
         //   alert("이메일을 입력해주세요.");
@@ -96,7 +101,9 @@
 
         <tr>
           <th>PW</th>
-          <td><input type="password" name="memberPw" id="memberPw" /></td>
+          <td>
+            <input type="password" name="memberPw" id="memberPw" />
+          </td>
         </tr>
 
         <tr>
