@@ -1,9 +1,11 @@
 package net.datasa.nanum.Controller.Member;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +46,7 @@ public class MemberController {
     @PostMapping("join")
     public String join (MemberDTO dto) {
         
-        log.debug("입력값: {}", dto);
+        log.debug("회원 가입 정보 입력값: {}", dto);
 
         memberService.join(dto);      
 
@@ -56,7 +58,12 @@ public class MemberController {
      * @return  findView/idCheck.html
      */
     @GetMapping("idCheck")
-    public String idCheck () {
+    public String idCheck (@RequestParam("memberId") String memberId, Model model) {
+
+        log.debug("가져온 memberId값: {}", memberId);
+
+        model.addAttribute("memberId", memberId);
+
         return "findView/idCheck";
     }
 }
