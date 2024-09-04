@@ -23,8 +23,8 @@ public class WebSecurityConfig {
             , "/js/**"                  // JavaSCript 파일
             , "/member/join"            // 회원가입
             , "/member/idCheck"         // ID 중복 확인
-            , "/share/shareList"        // 나눔 리스트
-            , "/share/shareRead"        // 나눔글 읽기
+            , "/share/list"        // 나눔 리스트
+            , "/share/read"        // 나눔글 읽기
 //          , "/share/shareSave"      // 나눔글 작성
             , "/recycle/recycleList"    // 나눔리스트
             , "/recycle/recycleRead"    // 분리수거 규정 읽기

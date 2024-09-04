@@ -43,7 +43,7 @@ public class ShareService {
      * @param DTO           저장할 글 정보
      * @throws IOException  데이터 저장시 필요
      */
-    public void shareSave(ShareBoardDTO DTO, String uploadPath, MultipartFile upload) throws IOException {
+    public void Save(ShareBoardDTO DTO, String uploadPath, MultipartFile upload) throws IOException {
 
         //글작성자가 테이블에 존재하는지 확인
         MemberEntity memberEntity = memberRepository.findById(DTO.getMemberNum())
@@ -68,11 +68,13 @@ public class ShareService {
            String fileName = fileManager.saveFile(uploadPath, upload);
            //imageEntity 생성 및 저장
            ImageEntity imageEntity = ImageEntity.builder()
-                   .shareBoardEntity(shareEntity)
+                   .shareBoard(shareEntity)   //imageEntity의 외래키 shareBoardEntity
                    .imageFileName(fileName)
                    .build();
-           //생성된 imageEntity를 저장
-           imageRepository.save(imageEntity);
+            //shareEntity에 imageFileNmae 저장
+            shareEntity.setImageFileName(fileName);
+            //생성된 imageEntity를 저장
+            imageRepository.save(imageEntity);
         }
         
 
@@ -80,7 +82,7 @@ public class ShareService {
 
     /**
      * 모든게시글을 가져오는 함수
-     * @return
+     * @return 모든 dto리스트를 반환
      */
     public List<ShareBoardDTO> getListAll() {
         Sort sort = Sort.by(Sort.Direction.DESC, "shareNum");        
@@ -93,9 +95,10 @@ public class ShareService {
         for (ShareBoardEntity entity : entityList) {
             ShareBoardDTO dto = ShareBoardDTO.builder()
                     .shareTitle(entity.getShareTitle())
-                    .memberNickname(entity.getMember().getMembeNickname())
+                    .memberNickname(entity.getMember().getMembeNickname()) //테이블에 없는 닉네임 DTO 따로 만들어 Nickname 저장 
                     .shareDate(entity.getShareDate())
                     .shareNum(entity.getShareNum())
+                    .imageFileName(entity.getImageFileName())
                     .build();
             dtoList.add(dto);
         }

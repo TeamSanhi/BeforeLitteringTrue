@@ -27,6 +27,7 @@ public class ShareBoardDTO {
     private LocalDateTime shareDate;//게시글 등록일
     private Integer reportCount;    //신고 횟수
     private Integer bookmarkCount;  //북마크 갯수
+    private String imageFileName;   // 파일 이름 
 
     //추가
     private String memberNickname;      //회원 이름 

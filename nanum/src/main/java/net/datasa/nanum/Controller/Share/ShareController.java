@@ -49,7 +49,7 @@ public class ShareController {
      * @param param
      * @return
      */
-    @GetMapping("shareList")
+    @GetMapping("list")
     public String shareList(Model model) {
         //모든 게시글을 가져온다.
         List<ShareBoardDTO> shareList = shareService.getListAll();
@@ -63,7 +63,7 @@ public class ShareController {
      * 나눔글작성으로 이동 
      * @return
      */
-    @GetMapping("shareSave")
+    @GetMapping("save")
     public String shareSave() {
         log.debug("shareSave 컨트롤러 지나감");
         return "shareView/shareSave";
@@ -75,7 +75,7 @@ public class ShareController {
      * @param upload    업로드할 파일 정보를 받아옴
      * @return
      */
-    @PostMapping("shareSave")
+    @PostMapping("save")
     public String postMethodName(
         @ModelAttribute ShareBoardDTO DTO,
         @AuthenticationPrincipal AuthenticatedUser user,
@@ -96,8 +96,8 @@ public class ShareController {
         }
         try {
            //데이터를 저장하는 함수 실행 
-            shareService.shareSave(DTO, uploadPath, upload);
-            return "redirect:/share/shareList";
+            shareService.Save(DTO, uploadPath, upload);
+            return "redirect:/share/list";
         }
         catch (Exception e) {
             e.printStackTrace();
