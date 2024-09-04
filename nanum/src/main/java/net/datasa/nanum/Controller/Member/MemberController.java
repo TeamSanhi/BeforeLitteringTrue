@@ -36,6 +36,11 @@ public class MemberController {
         return "memberView/joinSave";
     }
 
+    /**
+     * 가입하려는 회원 정보를 dto에 담아서 DB에 저장
+     * @param dto   입력한 회원 정보
+     * @return      homeView/home.html
+     */
     @PostMapping("join")
     public String join (MemberDTO dto) {
         
@@ -46,4 +51,12 @@ public class MemberController {
         return "redirect:/";
     }
 
+    /**
+     * ID 중복 확인 창으로 이동
+     * @return  findView/idCheck.html
+     */
+    @GetMapping("idCheck")
+    public String idCheck () {
+        return "findView/idCheck";
+    }
 }
