@@ -2,11 +2,17 @@ package net.datasa.nanum.Controller.Share;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.ShareBoardDTO;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 /**
@@ -37,5 +43,18 @@ public class ShareController {
         log.debug("shareSave 컨트롤러 지나감");
         return "shareView/shareSave";
     }
+    /**
+     * 나눔게시글 작성
+     * @param DTO
+     * @return
+     */
+    @PostMapping("shareSave")
+    public String postMethodName(
+        @ModelAttribute ShareBoardDTO DTO) {
+        log.debug("DTo 확인 : {}", DTO);
+        //게시판으로 리턴
+        return "redirect:/share/shareList";
+    }
+    
     
 }
