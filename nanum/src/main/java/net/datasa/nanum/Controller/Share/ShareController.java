@@ -1,10 +1,13 @@
 package net.datasa.nanum.Controller.Share;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class ShareController {
     //서비스 객체 생성
     private final ShareService shareService;
+
+    //application.properties 파일의 게시판 관련 설정값
+    @Value("${board.pageSize}")
+    int pageSize;
+ 
+    @Value("${board.linkSize}")
+    int linkSize;
+
+    @Value("${board.uploadPath}")
+    String uploadPath;
 
     /**
      * 나눔 list 페이지로 이동 
@@ -55,9 +68,19 @@ public class ShareController {
     @PostMapping("shareSave")
     public String postMethodName(
         @ModelAttribute ShareBoardDTO DTO,
-        @AuthenticationPrincipal AuthenticatedUser user) {
+        @AuthenticationPrincipal AuthenticatedUser user,
+        @RequestParam("upload") MultipartFile upload) {
         //로그인한 유저 정보를 DTO에 저장 
         DTO.setMemberNum(user.getNum());
+        
+        //전달받은 파일 확인 
+        log.debug("Empty : {}", upload.isEmpty());
+        log.debug("파라미터 이름 : {}", upload.getName());
+        log.debug("파일명 : {}", upload.getOriginalFilename());
+        log.debug("파일크기 : {}", upload.getSize());
+        log.debug("파일종류 : {}", upload.getContentType());
+    
+
         //저장하여 받아온 데이터와 로그인한 유저를 확인 
         log.debug("ShareBoardDTO, user정보 확인 : {}", DTO);
         //데이터를 저장하는 함수 실행 
