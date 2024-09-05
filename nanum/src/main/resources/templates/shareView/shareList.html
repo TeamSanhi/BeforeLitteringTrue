@@ -13,40 +13,56 @@
     </script>
 </head>
 <body>
+    <!-- 지도를 보여줄 div -->
     <div id="map" style="width:100%;height:350px;"></div>
-    <p><em>지도 영역이 변경되면 지도 정보가 표출됩니다</em></p> 
-    <p id="result"></p>
-    <!-- 지도 작성 스크립트 -->
+    <!-- js로 지도 불러오기 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
+    <!-- 지도 script -->
     <script>
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-        mapOption = { 
-            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-            level: 4 // 지도의 확대 레벨
-        };
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            mapOption = { 
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 4 // 지도의 확대 레벨
+            };
+        // 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOption); 
+        //내위치 가져오기
+        if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var lat = position.coords.latitude; // 위도
+                    var lon = position.coords.longitude; // 경도
+                    var locPosition = new kakao.maps.LatLng(lat, lon);
+                    // 지도 중심을 내 위치로 이동
+                    map.setCenter(locPosition);
+                });
+        } else {
+            alert("Geolocation을 지원하지 않는 브라우저입니다.");
+        }
 
-    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+        kakao.maps.event.addListener(map, 'bounds_changed', function() {             
+            // 지도 영역정보를 얻어옵니다 
+            var bounds = map.getBounds();
+            var swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
+            var swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
+            var neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
+            var neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
+            // data에 위도 경도 정보를 담기
+            var data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
+            // 저장된 위도 경도 정보를 console.log로 확인
+            console.log(data);
+            //ajax를 이용해 데이터 가져오기
+            $.ajax({
+                url: '/share/mapList',
+                type: 'get',
+                data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
+                success: function() {
+                    console.log("ajax 성공");
+                }              
+            })
 
-    // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
-    kakao.maps.event.addListener(map, 'bounds_changed', function() {             
-        
-        // 지도 영역정보를 얻어옵니다 
-        var bounds = map.getBounds();
-        
-        // 영역정보의 남서쪽 정보를 얻어옵니다 
-        var swLatlng = bounds.getSouthWest();
-        
-        // 영역정보의 북동쪽 정보를 얻어옵니다 
-        var neLatlng = bounds.getNorthEast();
-        
-        var message = '<p>영역좌표는 남서쪽 위도, 경도는  ' + swLatlng.toString() + '이고 <br>'; 
-        message += '북동쪽 위도, 경도는  ' + neLatlng.toString() + '입니다 </p>'; 
-        
-        var resultDiv = document.getElementById('result');   
-        resultDiv.innerHTML = message;
-        
-    });
-</script>
+        });
+    </script>
     <p><a href="/share/save">글작성</a></p>
     <!-- 게시판 목록 출력 -->
     <table>
@@ -70,7 +86,5 @@
             <td th:text="${#temporals.format(share.shareDate, 'yy.MM.dd HH:mm')}"></td>
         </tr>
     </table>
-
-
 </body>
 </html>

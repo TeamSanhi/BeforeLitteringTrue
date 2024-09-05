@@ -31,6 +31,7 @@ public class WebSecurityConfig {
             , "/share/read"             // 나눔글 읽기
 //          , "/share/Save"             // 나눔글 작성
             , "/share/download"         // 나눔 첨부파일 다운로드 
+            , "/share/mapList"          // 나눔 지도 리스트
             , "/info/service"            // 서비스 소개
             , "/info/siteMap"            // 사이트맵
             , "/info/faq"                // FAQ
