@@ -23,14 +23,15 @@ public class WebSecurityConfig {
             , "/js/**"                  // JavaSCript 파일
             , "/member/join"            // 회원가입
             , "/member/idCheck"         // ID 중복 확인
-            , "/share/list"        // 나눔 리스트
-            , "/share/read"        // 나눔글 읽기
-//          , "/share/shareSave"      // 나눔글 작성
+            , "/share/list"             // 나눔 리스트
+            , "/share/read"             // 나눔글 읽기
+//          , "/share/Save"             // 나눔글 작성
+            , "/share/download"         // 나눔 첨부파일 다운로드 
             , "/recycle/recycleList"    // 나눔리스트
             , "/recycle/recycleRead"    // 분리수거 규정 읽기
-            , "/info/service"            // 서비스 소개
-            , "/info/siteMap"            // 사이트맵
-            , "/info/faq"                // FAQ
+            , "/info/service"           // 서비스 소개
+            , "/info/siteMap"           // 사이트맵
+            , "/info/faq"               // FAQ
     };
 
     @Bean

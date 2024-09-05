@@ -1,14 +1,19 @@
 package net.datasa.nanum.service;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
@@ -76,8 +81,6 @@ public class ShareService {
             //생성된 imageEntity를 저장
             imageRepository.save(imageEntity);
         }
-        
-
     }
 
     /**
@@ -106,5 +109,38 @@ public class ShareService {
         return dtoList;
     }
     
+    /**
+     * 파일 다운로드
+     * @param boardNum          글 번호
+     * @param response          응답 정보
+     * @param uploadPath        파일 저장 경로
+     */
+    public void download(Integer boardNum, HttpServletResponse response, String uploadPath) {
+        //전달된 글 번호로 글 정보 조회
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(boardNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+
+        response.setHeader("Content-Disposition", "attachment;filename="+ shareBoardEntity.getImageFileName());
+
+        //저장된 파일 경로
+        String fullPath = uploadPath + "/" + shareBoardEntity.getImageFileName();
+
+        //서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
+        FileInputStream filein = null;
+        ServletOutputStream fileout = null;
+
+        try {
+            filein = new FileInputStream(fullPath);
+            fileout = response.getOutputStream();
+
+            //Spring의 파일 관련 유틸 이용하여 출력
+            FileCopyUtils.copy(filein, fileout);
+
+            filein.close();
+            fileout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
@@ -103,6 +104,19 @@ public class ShareController {
             e.printStackTrace();
             return "shareView/shareSave";
         }
+    }
+
+    /**
+     * 첨부 파일 다운로드
+     * @param boardNum      게시글 번호
+     * @param response      응답 정보
+     */
+    @GetMapping("download")
+    public void download(
+            @RequestParam("boardNum") Integer boardNum
+            , HttpServletResponse response) {
+
+        shareService.download(boardNum, response, uploadPath);
     }
     
     
