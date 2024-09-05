@@ -67,7 +67,7 @@ public class MemberController {
 
         boolean idDuplicate = memberService.idDuplicate(memberId);
 
-       // boolean nickDuplicate = memberService.nickDuplicate(memberNickname);
+        boolean nickDuplicate = memberService.nickDuplicate(memberNickname);
 
         log.debug("가져온 memberId값: {}", memberId);
         log.debug("가져온 memberNickname값: {}", memberNickname);

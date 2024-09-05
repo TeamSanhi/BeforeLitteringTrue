@@ -41,9 +41,11 @@ public class MemberService {
         return memberRepository.existsByMemberId(memberId);
     }
 
-    // public boolean nickDuplicate(String memberNickname) {
-       
-    // }
+    public boolean nickDuplicate(String memberNickname) {
+        log.debug("닉네임이 DB에 존재하는지 여부: {}", memberRepository.existsByMemberNickname(memberNickname));
+
+        return memberRepository.existsByMemberNickname(memberNickname);
+    }
 
     
     
