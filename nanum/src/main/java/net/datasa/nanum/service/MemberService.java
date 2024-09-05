@@ -34,13 +34,17 @@ public class MemberService {
 
     }
 
-    public boolean isDuplicate(String memberId) {
+    public boolean idDuplicate(String memberId) {
         
         log.debug("ID가 DB에 존재하는지 여부: {}", memberRepository.existsByMemberId(memberId));
 
         return memberRepository.existsByMemberId(memberId);
     }
 
+    // public boolean nickDuplicate(String memberNickname) {
+       
+    // }
 
+    
     
 }

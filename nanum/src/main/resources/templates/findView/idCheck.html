@@ -10,22 +10,59 @@
     <title>ID 중복 확인</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
-      $(document).ready(function () {});
+      $(document).ready(function () {
+        let sendCode = opener.$("#sendToChild").val();
+
+        $("#showWhat").val(sendCode);
+
+        if ($("#showWhat").val() == "i") {
+          $("#showNick").hide();
+        }
+
+        if ($("#showWhat").val() == "n") {
+          $("#showId").hide();
+        }
+      });
+
+      function idChecked() {
+        let idChecked = "y";
+        $("#idDuplicationCheck", opener.document).val(idChecked);
+        window.close();
+      }
+
+      function nickChecked() {
+        let nickChecked = "y";
+        $("#nickDuplicationCheck", opener.document).val(nickChecked);
+        window.close();
+      }
     </script>
   </head>
   <body>
-    <h1>ID 중복 확인 결과</h1>
-
-    <div>
+    <h1>중복 확인 결과</h1>
+    <input type="hidden" id="showWhat" />
+    <div id="showId">
       <p th:text="'입력한 ID: ' + ${memberId}"></p>
 
-      <div th:if="${isDuplicate}">
+      <div th:if="${idDuplicate}">
         <p>해당 ID는 이미 사용 중입니다.</p>
         <button onclick="window.close();">돌아가기</button>
       </div>
-      <div th:if="${!isDuplicate}">
+      <div th:if="${!idDuplicate}">
         <p>사용 가능한 ID입니다.</p>
-        <button onclick="window.close();">닫기</button>
+        <button onclick="idChecked();">ID 확정</button>
+      </div>
+    </div>
+
+    <div id="showNick">
+      <p th:text="'입력한 닉네임: ' + ${memberNickname}"></p>
+
+      <div th:if="${nickDuplicate}">
+        <p>해당 닉네임은 이미 사용 중입니다.</p>
+        <button onclick="window.close();">돌아가기</button>
+      </div>
+      <div th:if="${!nickDuplicate}">
+        <p>사용 가능한 닉네임입니다.</p>
+        <button onclick="nickChecked();">닉네임 확정</button>
       </div>
     </div>
   </body>

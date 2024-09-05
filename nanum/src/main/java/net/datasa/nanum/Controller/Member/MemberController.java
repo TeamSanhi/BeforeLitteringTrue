@@ -61,14 +61,21 @@ public class MemberController {
      * @return  findView/idCheck.html
      */
     @GetMapping("idCheck")
-    public String idCheck (@RequestParam("memberId") String memberId, Model model) {
+    public String idCheck (@RequestParam("memberId") String memberId,
+                           @RequestParam("memberNickname") String memberNickname,
+                           Model model) {
 
-        boolean isDuplicate = memberService.isDuplicate(memberId);
+        boolean idDuplicate = memberService.idDuplicate(memberId);
+
+       // boolean nickDuplicate = memberService.nickDuplicate(memberNickname);
 
         log.debug("가져온 memberId값: {}", memberId);
+        log.debug("가져온 memberNickname값: {}", memberNickname);
 
-        model.addAttribute("isDuplicate", isDuplicate);
+        model.addAttribute("idDuplicate", idDuplicate);
+        model.addAttribute("nickDuplicate", nickDuplicate);
         model.addAttribute("memberId", memberId);
+        model.addAttribute("memberNickname", memberNickname);
 
         return "findView/idCheck";
     }
