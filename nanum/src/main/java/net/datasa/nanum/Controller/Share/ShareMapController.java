@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("share")
 public class ShareMapController {
-
-
     /**
      * 남서 북서 위도경도를 받아와 속하는 게시판글들을 반환하는 컨트롤러
      */
@@ -25,6 +23,6 @@ public class ShareMapController {
         @RequestParam("neLat") double neLat,
         @RequestParam("neLng") double neLng) {
         //전달 받은 위도 경도 값 
-        log.debug("swLat: {}, swLng: {}, neLat: {}, neLng: {}", swLat, swLng, neLat, neLng);
+        log.debug("swLat:{}, swLng:{}, neLat:{}, neLng:{}", swLat, swLng, neLat, neLng);
     }
 }    
