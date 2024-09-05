@@ -97,6 +97,7 @@ public class ShareService {
         //entityList를 DTO로 변환해서 dtoList에 저장
         for (ShareBoardEntity entity : entityList) {
             ShareBoardDTO dto = ShareBoardDTO.builder()
+                    .memberNum(entity.getMember().getMemberNum())         //memberNum을 가져오기 위해서 entity.getMember().getMemberNum() 사용
                     .shareTitle(entity.getShareTitle())
                     .memberNickname(entity.getMember().getMembeNickname()) //테이블에 없는 닉네임 DTO 따로 만들어 Nickname 저장 
                     .shareDate(entity.getShareDate())
@@ -120,9 +121,10 @@ public class ShareService {
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(boardNum)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
 
+        //response setHeader 설정 
         response.setHeader("Content-Disposition", "attachment;filename="+ shareBoardEntity.getImageFileName());
 
-        //저장된 파일 경로
+        //저장된 파일 경로와 파일 이름 합한다.
         String fullPath = uploadPath + "/" + shareBoardEntity.getImageFileName();
 
         //서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
