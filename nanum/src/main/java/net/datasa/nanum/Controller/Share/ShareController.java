@@ -99,7 +99,7 @@ public class ShareController {
         }
         try {
            //데이터를 저장하는 함수 실행 
-            shareService.Save(DTO, uploadPath, upload);
+            shareService.save(DTO, uploadPath, upload);
             return "redirect:/share/list";
         }
         catch (Exception e) {
@@ -165,22 +165,50 @@ public class ShareController {
     }
 
     /**
-     * 게시글 수정하기 위한 ajax 요청을 받는 컨트롤러
-     * @param shareNum  게시글 번호
-     * @param user      로그인한 유저 정보
+     * 게시글 수정 폼으로 이동
+     * @param shareNum      수정할 글번호
+     * @param user          로그인한 사용자 정보
+     * @return              수정폼 HTML
      */
     @GetMapping("edit")
     public String edit(
-        @RequestParam("shareNum") Integer shareNum
-        , @AuthenticationPrincipal AuthenticatedUser user) {
-        log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+            Model model
+            , @RequestParam("shareNum") Integer shareNum
+            , @AuthenticationPrincipal AuthenticatedUser user) {
+                log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
         try {
-            //게시글 수정 함수를 실행시킨다.
-            shareService.edit(shareNum, user.getUsername(), uploadPath);
+            ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
+            if (!user.getUsername().equals(shareBoardDTO.getMemberId())) {
+                throw new RuntimeException("수정 권한이 없습니다.");
+            }
+            model.addAttribute("shareBoard", shareBoardDTO);
+            return "shareView/shareEdit";
         }
         catch (Exception e) {
             e.printStackTrace();
+            return "redirect:list";
         }
-        return "shareView/shareEdit";
+    }
+
+    /**
+     * 게시글 수정 처리
+     * @param boardDTO      수정할 글 정보
+     * @param user          로그인한 사용자 정보
+     * @return              수정폼 HTML
+     */
+    @PostMapping("edit")
+    public String edit(
+            @ModelAttribute ShareBoardDTO shareBoardDTO
+            , @AuthenticationPrincipal AuthenticatedUser user
+            , @RequestParam("upload") MultipartFile upload) {
+        log.debug("share/edit 컨트롤러 지나감 shareBoardDTO, user.getUsername : {}, {}", shareBoardDTO, user.getUsername());
+        try {
+            shareService.edit(shareBoardDTO, user.getUsername(), uploadPath, upload);
+            return "redirect:read?shareNum=" + shareBoardDTO.getShareNum();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:list";
+        }
     }
 }

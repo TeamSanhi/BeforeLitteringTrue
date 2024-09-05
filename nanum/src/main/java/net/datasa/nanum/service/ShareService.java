@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ import net.datasa.nanum.repository.ShareBoardRepository;
  */
 @Slf4j
 @Service
+@Transactional          //영속성
 @RequiredArgsConstructor
 public class ShareService {
     //shareBoradRepository 생성자 주입
@@ -47,8 +49,7 @@ public class ShareService {
      * @param DTO           저장할 글 정보
      * @throws IOException  데이터 저장시 필요
      */
-    public void Save(ShareBoardDTO DTO, String uploadPath, MultipartFile upload) throws IOException {
-
+    public void save(ShareBoardDTO DTO, String uploadPath, MultipartFile upload) throws IOException {
         //글작성자가 테이블에 존재하는지 확인
         MemberEntity memberEntity = memberRepository.findById(DTO.getMemberNum())
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
@@ -62,6 +63,7 @@ public class ShareService {
                     .shareCompleted(false) // 나눔 확인상태 false로 초기화
                     .reportCount(0)            //  신고 수 0으로 초기화
                     .bookmarkCount(0)       // bookmark 수 0으로 초기화
+                    .imageFileName("image")            // 이미지 이름 초기화
                     .build();
 
         //변환된 shareBoardEnetity를 저장
@@ -154,7 +156,7 @@ public class ShareService {
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
 
-        //전달된 게시글shareBoardDTO로 변환해서 반환
+        //전달된 게시글ShareBoardDTO로 변환해서 반환
         ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
                 .memberNum(shareBoardEntity.getMember().getMemberNum())
                 .memberNickname(shareBoardEntity.getMember().getMemberNickname())
@@ -194,13 +196,35 @@ public class ShareService {
 
     /**
      * 게시글 수정
-     * @param shareNum   수정할 글 번호
-     * @param username   로그인한 아이디
-     * @param uploadPath 파일 저장 경로
+     * @param shareBoardDTO      수정할 글정보
+     * @param username      로그인한 아이디
+     * @param uploadPath    파일 저장할 경로
+     * @param upload        업로드된 파일
      */
-    public void edit(Integer shareNum, String username, String uploadPath) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'edit'");
+    public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, MultipartFile upload)
+            throws Exception {
+        //게시글이 있는지 확인 
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareBoardDTO.getShareNum())
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+        //로그인한 유저와 게시글 작성자가 일치하는지 확인
+        if (!shareBoardEntity.getMember().getMemberId().equals(username)) {
+            throw new RuntimeException("수정 권한이 없습니다.");
+        }
+        //전달된 정보 수정
+        shareBoardEntity.setShareTitle(shareBoardDTO.getShareTitle());
+        shareBoardEntity.setShareContents(shareBoardDTO.getShareContents());
+        shareBoardEntity.setShareLat(shareBoardDTO.getShareLat());
+        shareBoardEntity.setShareLng(shareBoardDTO.getShareLng());
+        //debug
+        log.debug("수정된 shareBoardEntity", shareBoardEntity);
+        //업로드된 파일이 있으면 기존 파일 삭제하고 새로 저장
+        if (upload != null && !upload.isEmpty()) {
+            if (shareBoardEntity.getImageFileName() != null) {
+                fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+            }
+            String fileName = fileManager.saveFile(uploadPath, upload);
+            shareBoardEntity.setImageFileName(fileName);
+        }
     }
 
 }
