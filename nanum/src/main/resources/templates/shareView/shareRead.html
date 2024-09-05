@@ -1,11 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+    xmlns:th="http://thymeleaf.org"
+    xmlns:sec="http://thymeleaf.org/extras/spring-security"
+>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글읽기</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script>
+        // 삭제 버튼 클릭 시 실행될 함수
+        $(document).ready(function () {
+            $('#deleteButton').click(del);
+            $('#editButton').click(edit);
+        })
+        //삭제함수
+        function del(){
+            //삭제여부 확인
+            if(!confirm("정말 삭제하시겠습니까?")) return;
+            //삭제할 글번호 가져오기
+            let shareNum = $('#deleteButton').data('num');
+            //ajax를 이용해서 삭제 요청 보내기
+            $.ajax({
+                url : 'delete',
+                type : 'get',
+                data : { shareNum : shareNum },
+                success : function (result) {
+                    alert("게시글을 삭제하였습니다.");
+                    window.location.href = '/share/list'
+                }
+            })
+        };
+        //수정함수
+        function edit() {
+            //수정여부확인
+            if(!confirm("정말 수정하시겠습니까?")) return;
+            //수정할 글번호 가져오기
+            let shareNum = $('#editButton').data('num')
+            //ajax를 이용해서 수정 요청 보내기
+            $.ajax({
+                url : 'edit',
+                type : 'get',
+                data : { shareNum : shareNum },
+                success : function (result) {
+                    //수정한 페이지로 이동
+                    window.location.href = '/share/read?shareNum=' + shareNum;
+                }
+            })
+        };
+
+
+    </script>
 </head>
 <body>
     <h1>나눠요 글읽기</h1>
+    <table>
+        <tr>
+            <th>제목</th>
+            <th>내용</th>
+            <th>닉네임</th>
+            <th>사진</th>
+            <th>작성일</th>
+            <th>삭제</th>
+            <th>수정</th>
+        </tr>
+        <tr>
+            <td th:text="${shareBoard.shareTitle}"></td>
+            <td th:text="${shareBoard.shareContents}"></td>
+            <td th:text="${shareBoard.memberNickname}"></td>
+            <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
+            <td><img style="width: 200px; height: 200px;" th:src="|download?shareNum=${shareBoard.shareNum}|"></td>
+            <td th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></td>
+            <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 삭제가 보이도록 한다.  -->
+            <td th:if="${#authentication.name == shareBoard.memberId}">
+                <button id="deleteButton" th:data-num="${shareBoard.shareNum}">삭제</button>
+            </td>
+            <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 수정이 보이도록 한다.  -->
+            <td th:if="${#authentication.name == shareBoard.memberId}">
+                <button id="editButton" th:data-num="${shareBoard.shareNum}">수정</button>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

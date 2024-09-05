@@ -144,4 +144,63 @@ public class ShareService {
         }
     }
 
+    /**
+     * 글 상세 조회
+     * @param shareNum  글 번호
+     * @return          ShareBoardDTO를 반환
+     */
+    public ShareBoardDTO read(Integer shareNum) {
+        //전달된 글 번호로 글 정보 조회
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+
+        //전달된 게시글shareBoardDTO로 변환해서 반환
+        ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
+                .memberNum(shareBoardEntity.getMember().getMemberNum())
+                .memberNickname(shareBoardEntity.getMember().getMemberNickname())
+                .shareNum(shareBoardEntity.getShareNum())
+                .shareTitle(shareBoardEntity.getShareTitle())
+                .shareContents(shareBoardEntity.getShareContents())
+                .shareDate(shareBoardEntity.getShareDate())
+                .memberId(shareBoardEntity.getMember().getMemberId())
+                .build();
+        //DTO를 반환
+        return shareBoardDTO;
+    }
+
+    /**
+     * 게시글 삭제
+     * @param shareNum  삭제할 글번호
+     * @param username  로그인한 아이디
+     * @param uploadPath  파일 저장경로
+     */
+    public void delete(int shareNum, String username, String uploadPath) {
+        //게시글의 존제여부 확인
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+        //로그인 유저와 게시글 작성자가 일치하는지 확인
+        if (!shareBoardEntity.getMember().getMemberId().equals(username)) {
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+        //첨부파일이 있는 경우 파일 삭제
+        try {
+			fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        //게시글을 삭제
+        shareBoardRepository.delete(shareBoardEntity);
+    }
+
+    /**
+     * 게시글 수정
+     * @param shareNum   수정할 글 번호
+     * @param username   로그인한 아이디
+     * @param uploadPath 파일 저장 경로
+     */
+    public void edit(Integer shareNum, String username, String uploadPath) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'edit'");
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -102,7 +103,7 @@ public class ShareController {
             return "redirect:/share/list";
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//+
             return "shareView/shareSave";
         }
         
@@ -120,7 +121,66 @@ public class ShareController {
         //파일 다운로드 함수 실행
         shareService.download(shareNum, response, uploadPath);
         log.debug("download 컨트롤러 지나감");
+        
     }
     
-    
+    /**
+     * 게시판 읽기 기능 
+     * @param model
+     * @param shareNum
+     * @return
+     */
+    @GetMapping("read")
+    public String read(
+        Model model,
+        @RequestParam("shareNum") Integer shareNum) {
+        log.debug("share/read 컨트롤러 지나감 shareNum : {}", shareNum);
+        //DTO생성 후 해당 게시글 번호의 게시글 정보를 저장
+        ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
+        log.debug("전달받은 DTO : {}", shareBoardDTO);
+        //모델에 저장
+        model.addAttribute("shareBoard", shareBoardDTO);
+        //read로 이동
+        return "shareView/shareRead";
+    }
+
+    /**
+     * 게시글을 삭제하기 위한 ajax 요청을 받는 컨트롤러
+     * @param shareNum  게시글 번호
+     * @param user      로그인한 유저 정보
+     */
+    @ResponseBody
+    @GetMapping("delete")
+    public void delete(
+        @RequestParam("shareNum") Integer shareNum,
+        @AuthenticationPrincipal AuthenticatedUser user){
+        log.debug("share/delete 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+        try {
+            //게시글 삭제함수 실행
+            shareService.delete(shareNum, user.getUsername(), uploadPath);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 게시글 수정하기 위한 ajax 요청을 받는 컨트롤러
+     * @param shareNum  게시글 번호
+     * @param user      로그인한 유저 정보
+     */
+    @GetMapping("edit")
+    public String edit(
+        @RequestParam("shareNum") Integer shareNum
+        , @AuthenticationPrincipal AuthenticatedUser user) {
+        log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+        try {
+            //게시글 수정 함수를 실행시킨다.
+            shareService.edit(shareNum, user.getUsername(), uploadPath);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "shareView/shareEdit";
+    }
 }
