@@ -10,10 +10,5 @@ import net.datasa.nanum.domain.entity.RecycleEntity;
 @Repository
 public interface RecycleRepository  extends JpaRepository<RecycleEntity, Integer> {
 
-    Page<RecycleEntity> findByTitleContaining(String searchWord, Pageable pageable);
-
-    Page<RecycleEntity> findByContentContaining(String searchWord, Pageable pageable);
-
-    Page<RecycleEntity> findByMember_MemberId(String searchWord, Pageable pageable);
 
 }

@@ -34,8 +34,8 @@ public class WebSecurityConfig {
             , "/info/service"            // 서비스 소개
             , "/info/siteMap"            // 사이트맵
             , "/info/faq"                // FAQ
-            , "/recycle/recycleList"     // 버려요 게시글 리스트
-            , "/recycle/recycleRead"     // 버려요 게시글 읽기
+            , "/recycle/list"            // 버려요 게시글 리스트
+            , "/recycle/read"            // 버려요 게시글 읽기
     };
 
     // 로그인 실패 핸들러 의존성 주입

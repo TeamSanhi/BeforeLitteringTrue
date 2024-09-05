@@ -22,7 +22,7 @@ import org.springframework.data.domain.Page;  // 페이지네이션을 위한 �
 @RequiredArgsConstructor
 public class RecycleController {
 
-    private final RecycleService recycleService;
+//    private final RecycleService recycleService;
 
     // application.properties 파일의 게시판 관련 설정값
 	@Value("${board.pageSize}")
@@ -40,41 +40,43 @@ public class RecycleController {
      * @return
      */
     @GetMapping("list")
-    public String recycleList(Model model, @RequestParam(name="page", defaultValue="1") int page, 
-        @RequestParam(name="searchType", defaultValue="") String searchType,
-        @RequestParam(name="searchWord", defaultValue="") String searchWord) {
-        log.debug("설정값 : pageSize={}, linkSize={}", pageSize, linkSize);
+    public String recycleList(
+        // Model model, @RequestParam(name="page", defaultValue="1") int page, 
+        // @RequestParam(name="searchType", defaultValue="") String searchType,
+        // @RequestParam(name="searchWord", defaultValue="") String searchWord
+        ) {
+    //     log.debug("설정값 : pageSize={}, linkSize={}", pageSize, linkSize);
         
-        Page<RecycleDTO> recyclePage = recycleService.getList(page, pageSize, searchType, searchWord);
+    //    Page<RecycleDTO> recyclePage = recycleService.getList(page, pageSize, searchType, searchWord);
 
-        model.addAttribute("recyclePage", recyclePage);
-        model.addAttribute("page", page);
-        model.addAttribute("searchType", searchType);
-        model.addAttribute("searchWord", searchWord);
-        model.addAttribute("linkSize", linkSize);
-
+    //     model.addAttribute("recyclePage", recyclePage);
+    //     model.addAttribute("page", page);
+    //     model.addAttribute("searchType", searchType);
+    //     model.addAttribute("searchWord", searchWord);
+    //     model.addAttribute("linkSize", linkSize);
+    
         return "recycleView/recycleList";
     }
 
-    /**
-     * 버려요 게시글 상세보기
-     * @param param
-     * @return
-     */
-    @GetMapping("read")
-    public String read(Model model, @RequestParam("recycleNum") int recycleNum) {
-        log.debug("버려요 게시글 조회", recycleNum);
+//     /**
+//      * 버려요 게시글 상세보기
+//      * @param param
+//      * @return
+//      */
+//     @GetMapping("read")
+//     public String read(Model model, @RequestParam("recycleNum") int recycleNum) {
+//         log.debug("버려요 게시글 조회", recycleNum);
 
-        try {
-            RecycleDTO recycleDTO = recycleService.getRecycle(recycleNum);
-            model.addAttribute("recycle", recycleDTO);
-            return "recycleView/recycleRead";  // 추가: 조회 후의 뷰로 리턴
-        } catch (Exception e) {
-            log.error("게시글 조회 중 오류 발생", e);
-            model.addAttribute("error", "게시글을 조회하는 중 오류가 발생했습니다.");
-            return "redirect:list";
-            }
-}
+//         try {
+//             RecycleDTO recycleDTO = recycleService.getRecycle(recycleNum);
+//             model.addAttribute("recycle", recycleDTO);
+//             return "recycleView/recycleRead";  // 추가: 조회 후의 뷰로 리턴
+//         } catch (Exception e) {
+//             log.error("게시글 조회 중 오류 발생", e);
+//             model.addAttribute("error", "게시글을 조회하는 중 오류가 발생했습니다.");
+//             return "redirect:list";
+//             }
+// }
     
 
 }
