@@ -23,7 +23,7 @@ public class MemberService {
                                     .memberId(dto.getMemberId())
                                     .memberPw(passwordEncoder.encode(dto.getMemberPw()))
                                     .memberEmail(dto.getMemberEmail())
-                                    .membeNickname(dto.getMemberNickname())
+                                    .memberNickname(dto.getMemberNickname())
                                     .roleName("ROLE_USER")
                                     .memberStatus(0)
                                     .build();

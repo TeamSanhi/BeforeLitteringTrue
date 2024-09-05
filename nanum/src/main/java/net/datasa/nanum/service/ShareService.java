@@ -2,7 +2,6 @@ package net.datasa.nanum.service;
 
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +98,7 @@ public class ShareService {
             ShareBoardDTO dto = ShareBoardDTO.builder()
                     .memberNum(entity.getMember().getMemberNum())         //memberNum을 가져오기 위해서 entity.getMember().getMemberNum() 사용
                     .shareTitle(entity.getShareTitle())
-                    .memberNickname(entity.getMember().getMembeNickname()) //테이블에 없는 닉네임 DTO 따로 만들어 Nickname 저장 
+                    .memberNickname(entity.getMember().getMemberNickname()) //테이블에 없는 닉네임 DTO 따로 만들어 Nickname 저장 
                     .shareDate(entity.getShareDate())
                     .shareNum(entity.getShareNum())
                     .imageFileName(entity.getImageFileName())
