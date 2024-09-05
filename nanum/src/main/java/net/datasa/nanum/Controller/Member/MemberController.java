@@ -65,8 +65,9 @@ public class MemberController {
                            @RequestParam("memberNickname") String memberNickname,
                            Model model) {
 
+        // id 중복 여부 확인                    
         boolean idDuplicate = memberService.idDuplicate(memberId);
-
+        // 닉네임 중복 여부 확인 
         boolean nickDuplicate = memberService.nickDuplicate(memberNickname);
 
         log.debug("가져온 memberId값: {}", memberId);
