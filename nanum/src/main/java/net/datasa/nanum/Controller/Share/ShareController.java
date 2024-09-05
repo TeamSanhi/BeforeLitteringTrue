@@ -56,6 +56,7 @@ public class ShareController {
         List<ShareBoardDTO> shareList = shareService.getListAll();
         //Model에 저장한다.
         model.addAttribute("shareList", shareList);
+        
         log.debug("sharelist 컨트롤러 지나감");
         return "shareView/shareList";
     }
@@ -104,19 +105,21 @@ public class ShareController {
             e.printStackTrace();
             return "shareView/shareSave";
         }
+        
     }
 
     /**
      * 첨부 파일 다운로드
-     * @param boardNum      게시글 번호
+     * @param shareNum      게시글 번호
      * @param response      응답 정보
      */
     @GetMapping("download")
     public void download(
-            @RequestParam("boardNum") Integer boardNum
+            @RequestParam("shareNum") Integer shareNum
             , HttpServletResponse response) {
-
-        shareService.download(boardNum, response, uploadPath);
+        //파일 다운로드 함수 실행
+        shareService.download(shareNum, response, uploadPath);
+        log.debug("download 컨트롤러 지나감");
     }
     
     

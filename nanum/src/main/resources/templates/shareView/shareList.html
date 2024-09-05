@@ -14,7 +14,30 @@
 </head>
 <body>
     <p><a href="/share/save">글작성</a></p>
-    [[${shareList}]]
-    <img th:src="|download?boardNum=4|">
+
+    <!-- 게시판 목록 출력 -->
+    <table>
+        <tr>
+            <th>번호</th>
+            <th style="width:300px;">제목</th>
+            <th>닉네임</th>
+            <th>사진</th>
+            <th>작성일</th>
+        </tr>
+        <!-- 타임리프 반복문 사용 -->
+        <tr th:each="share, status : ${shareList}">
+            <td th:text="${share.shareNum}"></td>
+            <td>
+                <a th:text="${share.shareTitle}"></a>
+                <!-- th:href="|read?boardNum=${board.boardNum}|" a태그에 추가해야함  -->
+            </td>
+            <td th:text="${share.memberNickname}"></td>
+            <!-- 이미지 경로를 "|download?shareNum=${share.shareNum}|" 로 만들어 download하여 이미지를 보여준다. -->
+            <td><img style="width:100px; height:100px;" th:src="|download?shareNum=${share.shareNum}|"></td>
+            <td th:text="${#temporals.format(share.shareDate, 'yy.MM.dd HH:mm')}"></td>
+        </tr>
+    </table>
+
+
 </body>
 </html>

@@ -112,13 +112,13 @@ public class ShareService {
     
     /**
      * 파일 다운로드
-     * @param boardNum          글 번호
+     * @param shareNum          글 번호
      * @param response          응답 정보
      * @param uploadPath        파일 저장 경로
      */
-    public void download(Integer boardNum, HttpServletResponse response, String uploadPath) {
+    public void download(Integer shareNum, HttpServletResponse response, String uploadPath) {
         //전달된 글 번호로 글 정보 조회
-        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(boardNum)
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
 
         //response setHeader 설정 
