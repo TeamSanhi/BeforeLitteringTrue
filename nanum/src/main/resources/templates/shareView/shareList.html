@@ -28,8 +28,8 @@
         <tr th:each="share, status : ${shareList}">
             <td th:text="${share.shareNum}"></td>
             <td>
-                <a th:text="${share.shareTitle}"></a>
-                <!-- th:href="|read?boardNum=${board.boardNum}|" a태그에 추가해야함  -->
+                <!-- a태그 게시글 read로 이동  -->
+                <a th:text="${share.shareTitle}" th:href="|read?shareNum=${share.shareNum}|"></a>
             </td>
             <td th:text="${share.memberNickname}"></td>
             <!-- 이미지 경로를 "|download?shareNum=${share.shareNum}|" 로 만들어 download하여 이미지를 보여준다. -->

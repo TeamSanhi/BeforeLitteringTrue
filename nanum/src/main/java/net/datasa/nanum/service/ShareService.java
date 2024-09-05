@@ -145,4 +145,34 @@ public class ShareService {
         }
     }
 
+    /**
+     * 글 상세 조회
+     * @param shareNum  글 번호
+     * @return          ShareBoardDTO를 반환
+     */
+    public ShareBoardDTO read(Integer shareNum) {
+        //전달된 글 번호로 글 정보 조회
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+
+        //전달된 게시글shareBoardDTO로 변환해서 반환
+        ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
+                .memberNum(shareBoardEntity.getMember().getMemberNum())
+                .memberNickname(shareBoardEntity.getMember().getMembeNickname())
+                .shareNum(shareBoardEntity.getShareNum())
+                .shareTitle(shareBoardEntity.getShareTitle())
+                .shareContents(shareBoardEntity.getShareContents())
+                .shareDate(shareBoardEntity.getShareDate())
+                .memberId(shareBoardEntity.getMember().getMemberId())
+                .build();
+        //DTO를 반환
+        return shareBoardDTO;
+    }
+
+    //
+    public void delete(Integer shareNum) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
 }

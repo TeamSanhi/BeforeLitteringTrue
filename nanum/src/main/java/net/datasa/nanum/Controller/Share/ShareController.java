@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -120,7 +121,39 @@ public class ShareController {
         //파일 다운로드 함수 실행
         shareService.download(shareNum, response, uploadPath);
         log.debug("download 컨트롤러 지나감");
+        
     }
     
-    
+    /**
+     * 게시판 읽기 기능 
+     * @param model
+     * @param shareNum
+     * @return
+     */
+    @GetMapping("read")
+    public String read(
+        Model model,
+        @RequestParam("shareNum") Integer shareNum) {
+        log.debug("share/read 컨트롤러 지나감 shareNum : {}", shareNum);
+        //DTO생성 후 해당 게시글 번호의 게시글 정보를 저장
+        ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
+        log.debug("전달받은 DTO : {}", shareBoardDTO);
+        //모델에 저장
+        model.addAttribute("shareBoard", shareBoardDTO);
+        //read로 이동
+        return "shareView/shareRead";
+    }
+
+    /**
+     * 게시글 삭제 ajax 요청
+     * @param shareNum  전달받은 data 
+     */
+    @ResponseBody
+    @GetMapping("delete")
+    public void delete(
+        @RequestParam("shareNum") Integer shareNum) {
+        log.debug("share/delete 컨트롤러 지나감 shareNum : {}", shareNum);
+        //게시글 삭제함수 실행
+        shareService.delete(shareNum);
+    }
 }

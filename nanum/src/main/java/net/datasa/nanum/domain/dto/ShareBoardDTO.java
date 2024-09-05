@@ -29,6 +29,7 @@ public class ShareBoardDTO {
     private Integer bookmarkCount;  //북마크 갯수
     private String imageFileName;   // 파일 이름 
 
-    //추가
-    private String memberNickname;      //회원 이름 
+    // entity에 없는 변수명 추가
+    private String memberNickname;   //회원 이름 
+    private String memberId;         // 회원 ID
 }
