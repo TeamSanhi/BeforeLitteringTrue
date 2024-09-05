@@ -23,7 +23,7 @@ public class MemberService {
                                     .memberId(dto.getMemberId())
                                     .memberPw(passwordEncoder.encode(dto.getMemberPw()))
                                     .memberEmail(dto.getMemberEmail())
-                                    .membeNickname(dto.getMemberNickname())
+                                    .memberNickname(dto.getMemberNickname())
                                     .roleName("ROLE_USER")
                                     .memberStatus(0)
                                     .build();
@@ -34,13 +34,19 @@ public class MemberService {
 
     }
 
-    public boolean isDuplicate(String memberId) {
+    public boolean idDuplicate(String memberId) {
         
         log.debug("ID가 DB에 존재하는지 여부: {}", memberRepository.existsByMemberId(memberId));
 
         return memberRepository.existsByMemberId(memberId);
     }
 
+    public boolean nickDuplicate(String memberNickname) {
+        log.debug("닉네임이 DB에 존재하는지 여부: {}", memberRepository.existsByMemberNickname(memberNickname));
 
+        return memberRepository.existsByMemberNickname(memberNickname);
+    }
+
+    
     
 }

@@ -46,7 +46,7 @@ public class MemberEntity {
 	private String memberEmail;
 	// 회원 닉네임
 	@Column(name = "member_nickname", nullable = false, length = 20)
-	private String membeNickname;
+	private String memberNickname;
 	// 프로필 사진 이름
 	@Column(name = "member_file_name", length = 100)
 	private String memberFileName;

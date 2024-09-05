@@ -13,5 +13,8 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 
     // 입력한 ID가 DB에 존재하는지 여부
     boolean existsByMemberId(String id);
+
+    // 입력한 닉네임이 DB에 존재하는지 여부
+    boolean existsByMemberNickname(String nickname);
     
 }
