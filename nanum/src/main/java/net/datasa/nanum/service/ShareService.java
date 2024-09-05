@@ -157,7 +157,7 @@ public class ShareService {
         //전달된 게시글shareBoardDTO로 변환해서 반환
         ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
                 .memberNum(shareBoardEntity.getMember().getMemberNum())
-                .memberNickname(shareBoardEntity.getMember().getMembeNickname())
+                .memberNickname(shareBoardEntity.getMember().getMemberNickname())
                 .shareNum(shareBoardEntity.getShareNum())
                 .shareTitle(shareBoardEntity.getShareTitle())
                 .shareContents(shareBoardEntity.getShareContents())
