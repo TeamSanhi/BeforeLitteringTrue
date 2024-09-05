@@ -40,6 +40,7 @@ public class AuthenticatedUserDetailsService implements UserDetailsService {
                 .status(memberEntity.getMemberStatus())
                 .build();
 
+        log.debug("로그인 가능 여부: {}", user.isEnabled());
         return user;
     }
 }

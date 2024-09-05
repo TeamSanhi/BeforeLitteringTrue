@@ -1,5 +1,6 @@
 package net.datasa.nanum.Controller.Member;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
+import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.MemberService;
 
 @Slf4j
@@ -25,9 +27,10 @@ public class MemberController {
      * @return memberView/login.html
      */
     @GetMapping("loginForm")
-    public String login () {
+    public String login (@AuthenticationPrincipal AuthenticatedUser user, Model model) {
 
         log.debug("login.html 이동");
+
         return "memberView/login";
     }
 
@@ -65,8 +68,9 @@ public class MemberController {
                            @RequestParam("memberNickname") String memberNickname,
                            Model model) {
 
+        // id 중복 여부 확인                    
         boolean idDuplicate = memberService.idDuplicate(memberId);
-
+        // 닉네임 중복 여부 확인 
         boolean nickDuplicate = memberService.nickDuplicate(memberNickname);
 
         log.debug("가져온 memberId값: {}", memberId);
