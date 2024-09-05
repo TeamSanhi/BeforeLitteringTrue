@@ -8,12 +8,16 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 시큐리티 환경설정
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
     //로그인 없이 접근 가능한 경로
     private static final String[] PUBLIC_URLS = {
@@ -34,6 +38,9 @@ public class WebSecurityConfig {
             , "/info/faq"               // FAQ
     };
 
+    // 로그인 실패 핸들러 의존성 주입
+    private final AuthenticationFailureHandler customFailureHandler;
+
     @Bean
     protected SecurityFilterChain config(HttpSecurity http) throws Exception {
         http
@@ -48,6 +55,7 @@ public class WebSecurityConfig {
                         .passwordParameter("password")
                         .loginProcessingUrl("/member/login")
                         .defaultSuccessUrl("/", true)
+                        .failureHandler(customFailureHandler)   // 로그인 실패 핸들러
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -58,6 +66,7 @@ public class WebSecurityConfig {
         http
                 .cors(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable);
+                
 
         return http.build();
     }
