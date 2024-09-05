@@ -1,107 +1,86 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Page</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            color: #333;
-        }
-
-        header {
+        .nav {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            background-color: #eee;
-            padding: 10px 20px;
-        }
-
-        nav {
-            display: flex;
             gap: 20px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
         }
 
-        nav a {
-            text-decoration: none;
-            color: #333;
+        .member {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
 
         .profile-section {
-            margin: 50px 0;
-        }
-
-        .profile-pic {
-            width: 100px;
-            height: 100px;
-            background-color: #ccc;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-
-        .nickname {
-            font-size: 24px;
-            margin: 10px 0;
-        }
-
-        .profile-info {
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            margin: 10px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #000;
-            font-weight: bold;
-        }
-
-        .alert {
-            font-size: 18px;
-            margin-top: 50px;
-        }
-
-        .alert strong {
-            color: #000;
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            bottom: 10px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- 네비게이션 바 -->
-    <div class="nav">
-        <p><a href="">로고</a></p>
-        <p><a href="service">우리는..</a></p>
-        <p><a href="share">나눠요</a></p>
-        <p><a href="recycle">버려요</a></p>
-    </div>
+    <header>
+        <!-- 네비게이션 바 -->
+        <div class="nav">
+            <p><a href="">로고</a></p>
+            <p><a th:href="@{/info/service}">우리는..</a></p>
+            <p><a th:href="@{/share/list}">나눠요</a></p>
+            <p><a th:href="@{/recycle/recycleList}">버려요</a></p>
+        </div>
 
+        <!--  회원 기능  -->
+        <div class="member">
+            <th:block sec:authorize="not isAuthenticated()">
+                <p>
+                    <a th:href="@{/member/join}">회원가입</a>
+                </p>
+                <p>
+                    <a th:href="@{/member/loginForm}">로그인</a>
+                </p>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <p>
+                    <a th:href="@{/member/logout}">로그아웃</a>
+                </p>
+                <p>
+                    <a th:href="@{/myPage/view}">마이페이지</a>
+                </p>
+            </th:block>
+        </div>
+    </header>
+    <!--  프로필 정보 제공  -->
     <section class="profile-section">
-        <div class="profile-pic"></div>
-        <div class="nickname">닉네임</div>
-        <div class="profile-info">
-            <span>나의 동네</span> · <span>나눔 수</span> · <span>나의 알림</span>
-        </div>
-        <div>
-            <a href="#" class="btn" style="background-color: #000; color: #fff;">나의 알림</a>
-            <a href="#" class="btn">나의 나눔</a>
-            <a href="#" class="btn">북마크</a>
-        </div>
+        <!--        <div class="profile-pic"></div>-->
+        <div class="nickname"><span>닉네임</span></div>
+        <!--        <div class="profile-info">-->
+        <!--            <span>나눔 수</span> · <span>나의 알림</span>-->
+        <!--        </div>-->
+        <!--        <div>-->
+        <!--            <a href="#" class="btn">나의 알림</a>-->
+        <!--            <a href="#" class="btn" style="background-color: #000; color: #fff;">나의 나눔</a>-->
+        <!--            <a href="#" class="btn">북마크</a>-->
+        <!--        </div>-->
     </section>
 
-    <section class="alert">
-        <p>2일 뒤, <strong>재활용 쓰레기 버리는 날</strong>이에요!</p>
-    </section>
+    <!--    <section class="alert">-->
+    <!--        <p>2일 뒤, <strong>재활용 쓰레기 버리는 날</strong>이에요!</p>-->
+    <!--    </section>-->
 </div>
 </body>
 </html>
