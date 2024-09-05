@@ -215,7 +215,8 @@ public class ShareService {
         shareBoardEntity.setShareContents(shareBoardDTO.getShareContents());
         shareBoardEntity.setShareLat(shareBoardDTO.getShareLat());
         shareBoardEntity.setShareLng(shareBoardDTO.getShareLng());
-
+        //debug
+        log.debug("수정된 shareBoardEntity", shareBoardEntity);
         //업로드된 파일이 있으면 기존 파일 삭제하고 새로 저장
         if (upload != null && !upload.isEmpty()) {
             if (shareBoardEntity.getImageFileName() != null) {

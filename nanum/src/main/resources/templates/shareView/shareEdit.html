@@ -29,6 +29,9 @@
 <body>
     [[${shareBoard}]]
     <form id="edit" method="post" action="edit" enctype="multipart/form-data">
+        <!-- findbyid로 조회하기 위해 hidden 처리한 게시글 번호 -->
+        <input type="hidden" name="shareNum" th:value="${shareBoard.shareNum}">
+        <!-- 제목, 내용 -->
         <p>제목 <input type="text" name="shareTitle" id="title"></p>
         <p>내용 <textarea type="text" name="shareContents" id="content"></textarea></p>
         <!-- 지도 태그 -->

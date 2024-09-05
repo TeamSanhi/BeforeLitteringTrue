@@ -204,7 +204,7 @@ public class ShareController {
         log.debug("share/edit 컨트롤러 지나감 shareBoardDTO, user.getUsername : {}, {}", shareBoardDTO, user.getUsername());
         try {
             shareService.edit(shareBoardDTO, user.getUsername(), uploadPath, upload);
-            return "redirect:read?boardNum=" + shareBoardDTO.getShareNum();
+            return "redirect:read?shareNum=" + shareBoardDTO.getShareNum();
         }
         catch (Exception e) {
             e.printStackTrace();
