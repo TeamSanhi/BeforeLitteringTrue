@@ -14,7 +14,7 @@
             $('#deleteButton').click(del);
             $('#editButton').click(edit);
         })
-        //삭제함수
+        //삭제 함수
         function del(){
             //삭제여부 확인
             if(!confirm("정말 삭제하시겠습니까?")) return;
@@ -31,22 +31,16 @@
                 }
             })
         };
-        //수정함수
+        //수정 함수
         function edit() {
             //수정여부확인
-            if(!confirm("정말 수정하시겠습니까?")) return;
-            //수정할 글번호 가져오기
-            let shareNum = $('#editButton').data('num')
-            //ajax를 이용해서 수정 요청 보내기
-            $.ajax({
-                url : 'edit',
-                type : 'get',
-                data : { shareNum : shareNum },
-                success : function (result) {
-                    //수정한 페이지로 이동
-                    window.location.href = '/share/read?shareNum=' + shareNum;
-                }
-            })
+            if(confirm("정말 수정하시겠습니까?")){
+                //수정할 글번호 가져오기
+                let shareNum = $('#editButton').data('num')
+                //수정할 경로 전송
+                window.location.href = '/share/edit?shareNum=' + shareNum;
+            }
+            
         };
 
 
