@@ -103,7 +103,7 @@ public class ShareController {
             return "redirect:/share/list";
         }
         catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace();//+
             return "shareView/shareSave";
         }
         
@@ -145,15 +145,42 @@ public class ShareController {
     }
 
     /**
-     * 게시글 삭제 ajax 요청
-     * @param shareNum  전달받은 data 
+     * 게시글을 삭제하기 위한 ajax 요청을 받는 컨트롤러
+     * @param shareNum  게시글 번호
+     * @param user      로그인한 유저 정보
      */
     @ResponseBody
     @GetMapping("delete")
     public void delete(
-        @RequestParam("shareNum") Integer shareNum) {
-        log.debug("share/delete 컨트롤러 지나감 shareNum : {}", shareNum);
-        //게시글 삭제함수 실행
-        shareService.delete(shareNum);
+        @RequestParam("shareNum") Integer shareNum,
+        @AuthenticationPrincipal AuthenticatedUser user){
+        log.debug("share/delete 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+        try {
+            //게시글 삭제함수 실행
+            shareService.delete(shareNum, user.getUsername(), uploadPath);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 게시글 수정하기 위한 ajax 요청을 받는 컨트롤러
+     * @param shareNum  게시글 번호
+     * @param user      로그인한 유저 정보
+     */
+    @GetMapping("edit")
+    public String edit(
+        @RequestParam("shareNum") Integer shareNum
+        , @AuthenticationPrincipal AuthenticatedUser user) {
+        log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+        try {
+            //게시글 수정 함수를 실행시킨다.
+            shareService.edit(shareNum, user.getUsername(), uploadPath);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "shareView/shareEdit";
     }
 }

@@ -169,10 +169,39 @@ public class ShareService {
         return shareBoardDTO;
     }
 
-    //
-    public void delete(Integer shareNum) {
+    /**
+     * 게시글 삭제
+     * @param shareNum  삭제할 글번호
+     * @param username  로그인한 아이디
+     * @param uploadPath  파일 저장경로
+     */
+    public void delete(int shareNum, String username, String uploadPath) {
+        //게시글의 존제여부 확인
+        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
+        //로그인 유저와 게시글 작성자가 일치하는지 확인
+        if (!shareBoardEntity.getMember().getMemberId().equals(username)) {
+            throw new RuntimeException("삭제 권한이 없습니다.");
+        }
+        //첨부파일이 있는 경우 파일 삭제
+        try {
+			fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        //게시글을 삭제
+        shareBoardRepository.delete(shareBoardEntity);
+    }
+
+    /**
+     * 게시글 수정
+     * @param shareNum   수정할 글 번호
+     * @param username   로그인한 아이디
+     * @param uploadPath 파일 저장 경로
+     */
+    public void edit(Integer shareNum, String username, String uploadPath) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        throw new UnsupportedOperationException("Unimplemented method 'edit'");
     }
 
 }
