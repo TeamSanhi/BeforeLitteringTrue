@@ -42,4 +42,24 @@ public class FindController {
 
         return "findView/idCheck";
     }
+
+    /**
+     * 아이디 찾기 화면으로 이동
+     * @return findView/idFind.html
+     */
+    @GetMapping("idFind")
+    public String idFind() {
+        log.debug("idFind.html로 이동");
+        return "findView/idFind";
+    }
+
+    /**
+     * 비밀번호 찾기 화면으로 이동
+     * @return findView/pwFind.html
+     */
+    @GetMapping("pwFind")
+    public String pwFind() {
+        log.debug("pwFind.html로 이동");
+        return "findView/pwFind";
+    }
 }

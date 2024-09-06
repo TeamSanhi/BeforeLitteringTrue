@@ -11,7 +11,7 @@ import net.datasa.nanum.repository.MemberRepository;
 @RequiredArgsConstructor
 public class FindService {
     private final MemberRepository memberRepository;
-        /**
+    /**
      * 입력한 아이디가 DB에 존재하는지 확인
      * @param memberId  입력한 아이디
      * @return MemberController -> idCheck()

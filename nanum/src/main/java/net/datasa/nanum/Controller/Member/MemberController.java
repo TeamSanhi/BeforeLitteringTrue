@@ -39,6 +39,9 @@ public class MemberController {
 
     @GetMapping("loginForm")
     public String login(HttpServletRequest request, Model model) {
+
+        log.debug("login.html로 이동");
+
         // 세션에서 에러 메시지를 가져옴
         String errorMessage = (String) request.getSession().getAttribute("errorMessage");
         if (errorMessage != null) {
