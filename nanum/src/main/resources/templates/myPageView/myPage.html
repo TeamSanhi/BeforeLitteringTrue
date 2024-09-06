@@ -52,7 +52,10 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
-            $('#alarmEdit').click(alarmEdit);
+            // $('#alarmEdit').click(alarmEdit);
+            $('.myAlarm').click(showAlarm);
+            $('.myShare').click(showShare);
+            $('.myBookmark').click(showBookmark);
         });
 
         function alarmEdit() {}
@@ -111,24 +114,36 @@
     <!--  프로필 정보 제공  -->
     <section class="profile-info">
         <!--  닉네임  -->
+
         <!--  나눔 수  -->
+
         <!--  나의 알림  -->
+
     </section>
 
     <!--  프로필 편집  -->
     <section class="profile-edit">
         <!--  프로필 수정  -->
-        <!--  알림 수정  -->
-        <!--  id 탈퇴  -->
+        <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
+        <!--  알림 추가  -->
+        <button class="alarmEdit">알림 수정</button>
+        <!--  ID 탈퇴  -->
+        <button class="deleteId">ID 탈퇴</button>
     </section>
 
     <!--  맞춤형 보드 제공  -->
     <section class="profile-board">
+        <!--  알림 띄우기  -->
         <button class="myAlarm">나의 알림</button>
+        <!--  알림 편집  -->
+
+        <!--  나눔 현황 띄우기  -->
         <button class="myShare">나의 나눔</button>
+        <!--  북마크 띄우기  -->
         <button class="myBookmark">북마크</button>
     </section>
 </main>
-<footer></footer>
+<footer>
+</footer>
 </body>
 </html>
