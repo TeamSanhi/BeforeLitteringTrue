@@ -32,10 +32,15 @@
           return false;
         }
 
+        if (memberId.length < 4 || memberId.length > 12) {
+          alert("아이디는 4자 이상 12자 이하로 입력해주세요.");
+          return false;
+        }
+
         $("#sendToChild").val(divide);
 
         let w = window.open(
-          "/member/idCheck?memberId=" +
+          "/find/idCheck?memberId=" +
             memberId +
             "&memberNickname=" +
             memberNickname,
@@ -57,7 +62,7 @@
         $("#sendToChild").val(divide);
 
         let w = window.open(
-          "/member/idCheck?memberId=" +
+          "/find/idCheck?memberId=" +
             memberId +
             "&memberNickname=" +
             memberNickname,

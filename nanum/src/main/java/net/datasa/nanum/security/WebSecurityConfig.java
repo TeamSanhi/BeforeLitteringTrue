@@ -26,7 +26,9 @@ public class WebSecurityConfig {
             , "/css/**"                 // CSS파일
             , "/js/**"                  // JavaSCript 파일
             , "/member/join"            // 회원가입
-            , "/member/idCheck"         // ID 중복 확인
+            , "/find/idFind"            // ID 찾기
+            , "/find/pwFind"            // 비밀번호 찾기
+            , "/find/idCheck"           // ID 중복 확인
             , "/share/list"             // 나눔 리스트
             , "/share/read"             // 나눔글 읽기
 //          , "/share/Save"             // 나눔글 작성
