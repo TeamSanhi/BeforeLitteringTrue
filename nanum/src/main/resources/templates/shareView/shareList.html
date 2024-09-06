@@ -9,7 +9,7 @@
     <title>나눠요</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
-        
+
     </script>
 </head>
 <body>
@@ -32,6 +32,7 @@
                     var lat = position.coords.latitude; // 위도
                     var lon = position.coords.longitude; // 경도
                     var locPosition = new kakao.maps.LatLng(lat, lon);
+                    console.log(lat, lon, locPosition);
                     // 지도 중심을 내 위치로 이동
                     map.setCenter(locPosition);
                 });
