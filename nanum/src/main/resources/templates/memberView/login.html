@@ -26,6 +26,11 @@
           <th>Password</th>
           <td><input type="password" name="password" id="password" /></td>
         </tr>
+        <tr th:if="${error}">
+          <td colspan="2">
+            <p th:text="${exception}" style="color: red"></p>
+          </td>
+        </tr>
         <tr>
           <td><button type="submit">Login</button></td>
         </tr>
