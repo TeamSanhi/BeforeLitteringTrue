@@ -27,6 +27,11 @@ public class AuthenticatedUserDetailsService implements UserDetailsService {
 
         MemberEntity memberEntity = memberRepository.findByMemberIdEquals(id);
 
+        if (memberEntity == null) {
+            log.error("해당 ID로 회원을 찾을 수 없습니다: {}", id);
+            throw new UsernameNotFoundException("해당 ID로 회원을 찾을 수 없습니다.");
+        }
+
         log.debug("조회정보 : {}", memberEntity);
 
         // 인증정보 생성
