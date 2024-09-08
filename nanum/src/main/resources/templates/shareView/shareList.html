@@ -62,7 +62,7 @@
             var neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
             // data에 위도 경도 정보를 담기
             var data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
-            //ajax를 이용해 데이터 가져오기
+            //지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
                 url: '/share/mapList',
                 type: 'get',
