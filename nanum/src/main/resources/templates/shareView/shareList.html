@@ -31,8 +31,8 @@
         var clusterer = new kakao.maps.MarkerClusterer({
             map: map, // 마커들을 클러스터로 관리할 지도 객체
             averageCenter: true, // 클러스터의 중심을 마커들의 평균 좌표로 설정
-            minLevel: 5, // 최소 레벨로 클러스터링을 적용
-            disableClickZoom: true // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
+            minLevel: 4, // 최소 레벨로 클러스터링을 적용
+            disableClickZoom: false // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
         });
 
         //내위치 가져오기
@@ -69,10 +69,10 @@
                 data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
                 success: function(mapList) {
                     // 기존 마커를 제거하고 클러스터러에서 삭제
-                    clusterer.clear(); // **기존 클러스터 삭제**
+                    clusterer.clear(); // 지도 영역이벤트가 발생할때마다 비우지 않으면 클러스터에 마커가 계속 쌓인다
                     
                     // 마커 배열을 초기화
-                    markers = []; // **기존 마커 배열 초기화**
+                    markers = []; // 지도 영역이벤트가 발생할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
 
                     // 지도에 마커를 찍어 게시글 위치를 표시
                     mapList.forEach(function(share) {
