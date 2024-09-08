@@ -40,6 +40,9 @@
             alert("Geolocation을 지원하지 않는 브라우저입니다.");
         }
 
+        //마커를 저장할 배열 
+        var markers = [];
+
         // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
         kakao.maps.event.addListener(map, 'bounds_changed', function() {             
             // 지도 영역정보를 얻어옵니다 
@@ -50,19 +53,41 @@
             var neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
             // data에 위도 경도 정보를 담기
             var data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
-            // 저장된 위도 경도 정보를 console.log로 확인
-            console.log(data);
             //ajax를 이용해 데이터 가져오기
             $.ajax({
                 url: '/share/mapList',
                 type: 'get',
                 data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
-                success: function() {
-                    console.log("ajax 성공");
+                success: function(mapList) {
+                    // 지도에 마커를 찍어 게시글 위치를 표시
+                    mapList.forEach(function(share) {
+                        var markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
+
+                        // 중복 마커가 없을 때만 추가
+                        if (!isMarkerExists(markerPosition)) {
+                            var marker = new kakao.maps.Marker({
+                                position: markerPosition
+                            });
+                            marker.setMap(map);
+                            markers.push(marker);  // marker를 markers 배열에 넣는다.
+                        } else {
+                            console.log("중복된 마커입니다:", markerPosition);
+                        }
+
+                        console.log("현재 markers 배열:", markers);
+                    });
                 }              
             })
 
         });
+
+        // 좌표를 기반으로 중복 마커 확인
+        function isMarkerExists(position) {
+            return markers.some(function(marker) {
+                var markerPosition = marker.getPosition();
+                return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
+            });
+        }
     </script>
     <p><a href="/share/save">글작성</a></p>
     <!-- 게시판 목록 출력 -->
