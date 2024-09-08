@@ -54,7 +54,7 @@
 
         // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록
         kakao.maps.event.addListener(map, 'bounds_changed', function() {             
-            // 지도 영역정보를 얻어옵니다 
+            // map.getBounds로 지도 영역정보를 얻어옵니다 
             var bounds = map.getBounds();
             var swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
             var swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
@@ -78,7 +78,7 @@
                     mapList.forEach(function(share) {
                         var markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
 
-                        // 중복 마커가 없을 때만 추가
+                        // 마커 중복확인 함수 isMarkerExists가 false일때 실행 (마커가 이미 있으면 true를 반환한다.)
                         if (!isMarkerExists(markerPosition)) {
                             var marker = new kakao.maps.Marker({
                                 position: markerPosition
@@ -101,7 +101,9 @@
         // 좌표를 기반으로 중복 마커 확인
         function isMarkerExists(position) {
             return markers.some(function(marker) {
+                //지도에 찍혀있는 배열의 마커 위치정보 markerPosition에 저장
                 var markerPosition = marker.getPosition();
+                //배열에 있는 마커의 위치정보와 파라미터로 받은 마커의 위치정보가 같으면 true를 반환
                 return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
             });
         }
