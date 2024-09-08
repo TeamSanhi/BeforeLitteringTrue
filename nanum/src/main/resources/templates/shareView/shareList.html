@@ -73,6 +73,9 @@
                         } else {
                             console.log("중복된 마커입니다:", markerPosition);
                         }
+                        
+                        // 경계 밖의 마커 제거
+                        removeMarkersOutOfBounds();
 
                         console.log("현재 markers 배열:", markers);
                     });
@@ -86,6 +89,22 @@
             return markers.some(function(marker) {
                 var markerPosition = marker.getPosition();
                 return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
+            });
+        }
+
+        // 지도 경계 밖 마커를 삭제하는 함수
+        function removeMarkersOutOfBounds() {
+            var bounds = map.getBounds(); // 지도의 현재 경계 가져오기
+
+            markers = markers.filter(function(marker) {
+                var position = marker.getPosition();
+                // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
+                if (bounds.contain(position)) {
+                    return true;  // 경계 안에 있는 마커는 유지
+                } else {
+                    marker.setMap(null);  // 경계 밖의 마커는 지도에서 제거
+                    return false;  // markers 배열에서 삭제
+                }
             });
         }
     </script>
