@@ -116,14 +116,13 @@
                         $('#result').append(`
                                 <div style="display: inline-block; width:350px ">
                                     <a href="/share/read?shareNum=${share.shareNum}">
-                                        <p>번호 : ${share.shareNum}</p>
                                         <p>제목 : ${share.shareTitle}</p>
-                                        <p>내용 : ${share.shareContents}</p>
-                                        <p>별명 : ${share.memberNickname}</p>
-                                        <p>${share.shareDate}</p>
                                         <p>
                                             <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
                                         </p>
+                                        <p>내용 : ${share.shareContents}</p>
+                                        <p>별명 : ${share.memberNickname}</p>
+                                        <p>${share.formatDate}</p>
                                     </a>
                                 </div>
                         `);

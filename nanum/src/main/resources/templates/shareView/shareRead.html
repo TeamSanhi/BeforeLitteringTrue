@@ -64,6 +64,7 @@
             <td th:text="${shareBoard.memberNickname}"></td>
             <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
             <td><img style="width: 200px; height: 200px;" th:src="|download?shareNum=${shareBoard.shareNum}|"></td>
+            <!-- 타임리프 이용해 날짜 데이터 포멧 -->
             <td th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></td>
             <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 삭제가 보이도록 한다.  -->
             <td th:if="${#authentication.name == shareBoard.memberId}">
