@@ -115,16 +115,16 @@
                         //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
                         $('#result').append(`
                                 <div style="display: inline-block; width:350px ">
-                                    <p>번호 : ${share.shareNum}</p>
-                                    <p>제목 : ${share.shareTitle}</p>
-                                    <p>내용 : ${share.shareContents}</p>
-                                    <p>별명 : ${share.memberNickname}</p>
-                                    <p>${share.shareDate}</p>
-                                    <p>
-                                        <a href="/share/read?shareNum=${share.shareNum}">
-                                        <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
-                                        </a>
-                                    </p>
+                                    <a href="/share/read?shareNum=${share.shareNum}">
+                                        <p>번호 : ${share.shareNum}</p>
+                                        <p>제목 : ${share.shareTitle}</p>
+                                        <p>내용 : ${share.shareContents}</p>
+                                        <p>별명 : ${share.memberNickname}</p>
+                                        <p>${share.shareDate}</p>
+                                        <p>
+                                            <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
+                                        </p>
+                                    </a>
                                 </div>
                         `);
                     });
@@ -212,6 +212,6 @@
     <!-- ShareMapContorller 게시판 목록 출력 -->
     <div id="result">
 
-    </div>>
+    </div>
 </body>
 </html>
