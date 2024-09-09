@@ -52,6 +52,9 @@
         //마커를 저장할 배열 
         var markers = [];
 
+        // **현재 열린 인포윈도우를 저장할 변수**
+        var openInfoWindow = null;
+
         // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록
         kakao.maps.event.addListener(map, 'bounds_changed', function() {             
             // map.getBounds로 지도 영역정보를 얻어옵니다 
@@ -89,30 +92,33 @@
                             
                             // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
                             var iwContent = `
-                                        <div style="padding:5px; width:110px; height:200px;">
+                                        <div style="padding:5px; width:110px; height:150px;">
                                             <span>${share.shareTitle}</span><br>
                                             <span>${share.memberNickname}</span>
                                             <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
                                         </div>
-                            `; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+                            `;
 
                             // 인포윈도우를 생성합니다
-                            var infowindow = new kakao.maps.InfoWindow({
-                                content : iwContent
+                            infowindow = new kakao.maps.InfoWindow({
+                                content : iwContent,
+                                disableAutoPan: true // 자동 이동 비활성화
                             });
-
                             // 마커에 마우스오버 이벤트를 등록합니다
                             kakao.maps.event.addListener(marker, 'mouseover', function() {
-                            // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                                // 이미 열려있는 인포윈도우가 있다면 이를 닫는다.
+                                if (openInfoWindow) openInfoWindow.close();
+                                //마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
                                 infowindow.open(map, marker);
+                                // 열린 인포윈도우를 저장
+                                openInfoWindow = infowindow;  
                             });
-
+                            
                             // 마커에 마우스아웃 이벤트를 등록합니다
                             kakao.maps.event.addListener(marker, 'mouseout', function() {
                                 // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
                                 infowindow.close();
                             });
-
                             // 마커를 클릭할 때 이벤트를 등록합니다.
                             kakao.maps.event.addListener(marker, 'click', function() {
                                 // 마커를 클릭할 때, 해당 게시글의 상세 페이지로 이동합니다.
@@ -170,10 +176,12 @@
     </script>
     <p><a href="/share/save">글작성</a></p>
     <!-- ShareMapContorller 게시판 목록 출력 -->
+     <p>ShareMapContorller 게시판 목록 출력</p>
     <div style="width: 200px; height: 200px;" id="result">
 
     </div>
     <!-- shareController 게시판 목록 출력 -->
+     <p>shareController 게시판 목록 출력</p>
     <table>
         <tr>
             <th>번호</th>
