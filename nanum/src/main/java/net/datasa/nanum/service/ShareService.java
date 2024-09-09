@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -234,7 +233,7 @@ public class ShareService {
      * @param memberNum 멤버 엔티티
      * @return 멤버 나눔글 수 합산
      */
-    public Integer getShareCount(Optional<MemberEntity> memberNum){
+    public Integer getShareCount(MemberEntity memberNum){
         Integer shareCount = shareBoardRepository.shareCount(memberNum);
         return shareCount;
     }
