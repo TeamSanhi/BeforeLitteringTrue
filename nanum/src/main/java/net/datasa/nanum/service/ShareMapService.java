@@ -45,7 +45,7 @@ public class ShareMapService {
         List<ShareBoardDTO> dtoList = new ArrayList<>();
         // entityList를 DTO로 변환해서 dtoList에 저장
         for (ShareBoardEntity entity : entityList) {
-
+            // entity 를 dto에 하나씩 저장하여 dtoList에 추가
             ShareBoardDTO dto = ShareBoardDTO.builder()
                     .memberNum(entity.getMember().getMemberNum()) // 게시글을 작성한 사용자번호
                     .shareNum(entity.getShareNum()) // 게시글 번호
