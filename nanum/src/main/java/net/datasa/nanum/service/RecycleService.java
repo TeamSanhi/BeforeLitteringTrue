@@ -21,39 +21,42 @@ import net.datasa.nanum.repository.RecycleRepository;
 @RequiredArgsConstructor
 @Service
 public class RecycleService {
-    
+
     private final RecycleRepository recycleRepository;
     private final MemberService memberService;
 
-    // public Page<RecycleDTO> getList(int page, int pageSize, String searchType, String searchWord) {
-    //     page--; // 페이지 인덱스는 0부터 시작하므로 1 감소시킴
+    // public Page<RecycleDTO> getList(int page, int pageSize, String searchType,
+    // String searchWord) {
+    // page--; // 페이지 인덱스는 0부터 시작하므로 1 감소시킴
 
-    //     // 페이지 조회 조건 (현재 페이지, 페이지당 글수, 정렬 순서, 정렬 기준 컬럼)
-    //     Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.DESC, "recycleNum");
+    // // 페이지 조회 조건 (현재 페이지, 페이지당 글수, 정렬 순서, 정렬 기준 컬럼)
+    // Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.DESC,
+    // "recycleNum");
 
-    //     Page<RecycleEntity> entityPage;
+    // Page<RecycleEntity> entityPage;
 
-    //     switch (searchType) {
-    //         case "title":
-    //             entityPage = recycleRepository.findByTitleContaining(searchWord, pageable);
-    //             break;
-    //         case "content":
-    //             entityPage = recycleRepository.findByContentContaining(searchWord, pageable);
-    //             break;
-    //         case "id":
-    //             entityPage = recycleRepository.findByMember_MemberId(searchWord, pageable);
-    //             break;
-    //         default:
-    //             entityPage = recycleRepository.findAll(pageable);
-    //             break;
-    //     }
+    // switch (searchType) {
+    // case "title":
+    // entityPage = recycleRepository.findByTitleContaining(searchWord, pageable);
+    // break;
+    // case "content":
+    // entityPage = recycleRepository.findByContentContaining(searchWord, pageable);
+    // break;
+    // case "id":
+    // entityPage = recycleRepository.findByMember_MemberId(searchWord, pageable);
+    // break;
+    // default:
+    // entityPage = recycleRepository.findAll(pageable);
+    // break;
+    // }
 
-    //     Page<RecycleDTO> recycleDTOPage = entityPage.map(this::convertToDTO);
-    //     return recycleDTOPage;
+    // Page<RecycleDTO> recycleDTOPage = entityPage.map(this::convertToDTO);
+    // return recycleDTOPage;
     // }
 
     /**
      * DB에서 조회한 게시글 정보인 RecycleEntity 객체를 RecycleDTO 객체로 변환
+     * 
      * @param recycleEntity
      * @return
      */
@@ -70,17 +73,15 @@ public class RecycleService {
                 .updateDate(recycleEntity.getUpdateDate())
                 .build();
     }
-    
+
     public RecycleDTO getRecycle(int recycleNum) {
         RecycleEntity recycleEntity = recycleRepository.findById(recycleNum)
-             .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 을 수 없습니다."));
-        recycleEntity.setViewCount(recycleEntity.getViewCount() + 1); // 조회수 1 
+                .orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 을 수 없습니다."));
+        recycleEntity.setViewCount(recycleEntity.getViewCount() + 1); // 조회수 1
 
         RecycleDTO dto = convertToDTO(recycleEntity);
 
         return dto;
-}
-    
-}
+    }
 
-    
+}

@@ -43,11 +43,12 @@ public class ShareMapService {
         for (ShareBoardEntity entity : entityList) {
             ShareBoardDTO dto = ShareBoardDTO.builder()
                     .memberNum(entity.getMember().getMemberNum()) // entity.getMember().getMemberNum() 사용
-                    .shareTitle(entity.getShareTitle())
+                    .shareTitle(entity.getShareTitle()) // 제목
+                    .shareContents(entity.getShareContents()) // 내용
                     .memberNickname(entity.getMember().getMemberNickname()) // share_board에 없는 컬럼 DTO 따로 만들어 Nickname저장
-                    .shareDate(entity.getShareDate())
-                    .shareNum(entity.getShareNum())
-                    .imageFileName(entity.getImageFileName())
+                    .shareDate(entity.getShareDate()) // 게시글 작성 날짜
+                    .shareNum(entity.getShareNum()) // 게시글 번호
+                    .imageFileName(entity.getImageFileName()) // 게시글 파일 이미지 이름
                     .shareLat(entity.getShareLat()) // 위도
                     .shareLng(entity.getShareLng()) // 경도
                     .build();
