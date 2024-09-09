@@ -42,6 +42,11 @@ public class MemberService {
 
     }
 
+    /**
+     * 멤버 일련번호로 멤버 엔티티 받아오기
+     * @param memberNum 멤버 일련번호
+     * @return 멤버 엔티티
+     */
     public Optional<MemberEntity> getMemberByNum (Integer memberNum) {
         Optional<MemberEntity> member = memberRepository.findById(memberNum);
 

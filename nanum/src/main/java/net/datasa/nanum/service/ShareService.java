@@ -229,6 +229,11 @@ public class ShareService {
         }
     }
 
+    /**
+     * 나눔글 수 합산
+     * @param memberNum 멤버 엔티티
+     * @return 멤버 나눔글 수 합산
+     */
     public Integer getShareCount(Optional<MemberEntity> memberNum){
         Integer shareCount = shareBoardRepository.shareCount(memberNum);
         return shareCount;
