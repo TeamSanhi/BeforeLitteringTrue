@@ -9,17 +9,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>비밀번호 찾기</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script></script>
+    <script>
+      $(document).ready(function () {
+        $("#passwordSearchForm").submit(function (event) {
+          event.preventDefault(); // 폼 기본 제출 방지
+
+          const email = $("#memberEmail").val();
+
+          $.ajax({
+            url: "/find/pwFind",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ memberEmail: email }),
+            success: function (response) {
+              console.log(response);
+              $("#responseMessage").text(response.message);
+            },
+            error: function (xhr, status, error) {
+              $("#responseMessage").text("이메일 전송 중 오류가 발생했습니다.");
+            },
+          });
+        });
+      });
+    </script>
   </head>
   <body>
     <h1>비밀번호 찾기</h1>
-    <form action="/find/pwFind" method="post"></form>
-    <label for="memberId">아이디</label>
-    <input type="text" name="memberId" id="memberId">
-    <label for="email">이메일</label>
-      <input type="email" name="memberEmail" id="memberEmail" placeholder="이메일" />
-      <button type="submit">비밀번호 찾기</button>
+    <form id="passwordSearchForm">
+      <label for="memberEmail">이메일:</label>
+      <input type="email" id="memberEmail" name="memberEmail" required />
+      <button type="submit">비밀번호 재설정 링크 전송</button>
     </form>
+
+    <div id="responseMessage"></div>
+    <!-- 서버 응답 메시지를 표시할 영역 -->
+
     <div>
       <a href="/member/loginForm">로그인 페이지로 이동</a>
     </div>
