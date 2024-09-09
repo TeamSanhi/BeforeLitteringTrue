@@ -39,7 +39,6 @@ public class ShareMapController {
         List<ShareBoardDTO> shareBoardDTO = shareMapService.mapList(swLat, swLng, neLat, neLng);
         // 올바르게 값을 전달받았는지 디버깅
         log.debug("shareMapController에서 전달받은 값 : {}", shareBoardDTO);
-
         return shareBoardDTO; // JSON 형태로 반환
     }
 }
