@@ -23,34 +23,34 @@ import lombok.NoArgsConstructor;
 @Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name="recycle_board")
+@Table(name = "recycle_board")
 public class RecycleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="recycle_num")
+    @Column(name = "recycle_num")
     private Integer recycleNum;
 
-    @Column(name="recycle_file_name", nullable = false, length = 100)
+    @Column(name = "recycle_file_name", nullable = false, length = 100)
     private String recycleFileName;
-    
-    @Column(name="recycle_category", nullable = false, length = 20)
+
+    @Column(name = "recycle_category", nullable = false, length = 20)
     private String recycleCategory;
 
-    @Column(name="recycle_name", nullable = false, length = 30)
+    @Column(name = "recycle_name", nullable = false, length = 30)
     private String recycleName;
 
-    @Column(name="recycle_contents", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "recycle_contents", nullable = false, columnDefinition = "TEXT")
     private String recycleContents;
 
-    @Column(name="view_count", columnDefinition = "integer default 0")
+    @Column(name = "view_count", columnDefinition = "integer default 0")
     private Integer viewCount = 0;
 
     @LastModifiedDate
-    @Column(name="update_date", columnDefinition = "timestamp default current_timestamp")
+    @Column(name = "update_date", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime updateDate;
 
     public Object getTitle() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getTitle'");
-    } 
+    }
 }

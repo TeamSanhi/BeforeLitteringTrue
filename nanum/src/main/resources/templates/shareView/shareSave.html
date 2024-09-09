@@ -10,7 +10,7 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
-            // 폼 제출 이벤트 핸들러
+            // 폼 제출 이벤트 제어 
             $("#Save").submit(function (event) {
                 // 제목과 내용 입력 여부 확인
                 var title = $("#title").val();
@@ -19,11 +19,21 @@
                 var lng = $("#lng").val();
                 var file = $("#file").val();
                 if (title.trim() === "" || content.trim() === "" || lat.trim() === "" || lng.trim() === "" || file.trim() === ""){
-                    alert("제목, 내용, 위도, 경도, 사진을 모두 입력해주세요.");
+                    alert("제목, 내용, 위치, 사진을 모두 입력해주세요.");
                     event.preventDefault(); // 폼 제출 방지
                 }
             })
         })
+        //사진 미리보기 함수 
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){
+                const preview = document.getElementById('preview');
+                preview.src = reader.result;
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
     </script>
 </head>
 <body>
@@ -39,7 +49,9 @@
         <input type="hidden" name="shareLng" id="lng">
 
         <!-- 파일첨부 태그 -->
-        <p>사진첨부<input type="file" name="upload" id="file"></p>
+        <p>사진첨부<input type="file" name="upload" id="file" onchange="previewImage(event)"></p>
+        <!-- 미리 보기 태그 -->
+        <p><img id="preview" src="" style="max-width: 200px; height: auto;"></p>
         <p><input type="submit" value="저장"></p>
     </form>
     <!-- 지도 자바스크립트 -->

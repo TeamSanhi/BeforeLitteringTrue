@@ -55,7 +55,7 @@ public class ShareService {
         MemberEntity memberEntity = memberRepository.findById(DTO.getMemberNum())
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
         // ShareSave에서 받아온 DTO를 Entity로 변환
-        ShareBoardEntity shareEntity = ShareBoardEntity.builder()
+        ShareBoardEntity shareBoardEntity = ShareBoardEntity.builder()
                 .shareTitle(DTO.getShareTitle())
                 .shareContents(DTO.getShareContents())
                 .shareLat(DTO.getShareLat())
@@ -68,18 +68,18 @@ public class ShareService {
                 .build();
 
         // 변환된 shareBoardEnetity를 저장
-        shareBoardRepository.save(shareEntity);
+        shareBoardRepository.save(shareBoardEntity);
 
         // 첨부파일이 있는 경우 imageEntity로 변환
         if (upload != null && !upload.isEmpty()) {
             String fileName = fileManager.saveFile(uploadPath, upload);
             // imageEntity 생성 및 저장
             ImageEntity imageEntity = ImageEntity.builder()
-                    .shareBoard(shareEntity) // imageEntity의 외래키 shareBoardEntity
+                    .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
                     .imageFileName(fileName)
                     .build();
             // shareEntity에 imageFileNmae 저장
-            shareEntity.setImageFileName(fileName);
+            shareBoardEntity.setImageFileName(fileName);
             // 생성된 imageEntity를 저장
             imageRepository.save(imageEntity);
         }
