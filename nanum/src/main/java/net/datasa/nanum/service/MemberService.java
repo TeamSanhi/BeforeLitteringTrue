@@ -2,14 +2,11 @@ package net.datasa.nanum.service;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.repository.MemberRepository;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -47,9 +44,8 @@ public class MemberService {
      * @param memberNum 멤버 일련번호
      * @return 멤버 엔티티
      */
-    public Optional<MemberEntity> getMemberByNum (Integer memberNum) {
-        Optional<MemberEntity> member = memberRepository.findById(memberNum);
-
+    public MemberEntity getMemberByNum (Integer memberNum) {
+        MemberEntity member = memberRepository.findById(memberNum).orElse(null);;
         return member;
     }
     
