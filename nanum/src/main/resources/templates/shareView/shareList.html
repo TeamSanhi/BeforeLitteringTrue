@@ -14,7 +14,7 @@
 </head>
 <body>
     <!-- 지도를 보여줄 div -->
-    <div id="map" style="width:100%;height:350px;"></div>
+    <div id="map" style="width:93vw;height:70vh;"></div>
     <!-- js로 지도 불러오기 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
     <!-- 지도 script -->
@@ -52,6 +52,9 @@
         //마커를 저장할 배열 
         var markers = [];
 
+        // **현재 열린 인포윈도우를 저장할 변수**
+        var openInfoWindow = null;
+
         // 지도가 이동, 확대, 축소로 인해 지도영역이 변경되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록
         kakao.maps.event.addListener(map, 'bounds_changed', function() {             
             // map.getBounds로 지도 영역정보를 얻어옵니다 
@@ -67,6 +70,7 @@
                 url: '/share/mapList',
                 type: 'get',
                 data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
+                //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
                 success: function(mapList) {
                     // 기존 마커를 제거하고 클러스터러에서 삭제
                     clusterer.clear(); // 지도 영역이벤트가 발생할때마다 비우지 않으면 클러스터에 마커가 계속 쌓인다
@@ -83,20 +87,57 @@
                             var marker = new kakao.maps.Marker({
                                 position: markerPosition
                             });
-                            marker.setMap(map);
+                            marker.setMap(map);    // marker를 지도에 표시합니다.
                             markers.push(marker);  // marker를 markers 배열에 넣는다.
+                            
+                            // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+                            var iwContent = `
+                                        <div style="padding:5px; width:110px; height:150px;">
+                                            <span>${share.shareTitle}</span><br>
+                                            <span>${share.memberNickname}</span>
+                                            <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
+                                        </div>
+                            `;
+
+                            // 인포윈도우를 생성합니다
+                            infowindow = new kakao.maps.InfoWindow({
+                                content : iwContent,
+                                disableAutoPan: true // 자동 이동 비활성화
+                            });
+                            // 마커에 마우스오버 이벤트를 등록합니다
+                            kakao.maps.event.addListener(marker, 'mouseover', function() {
+                                // 이미 열려있는 인포윈도우가 있다면 이를 닫는다.
+                                if (openInfoWindow) openInfoWindow.close();
+                                //마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                                infowindow.open(map, marker);
+                                // 열린 인포윈도우를 저장
+                                openInfoWindow = infowindow;  
+                            });
+                            
+                            // 마커에 마우스아웃 이벤트를 등록합니다
+                            kakao.maps.event.addListener(marker, 'mouseout', function() {
+                                // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                                infowindow.close();
+                            });
+                            // 마커를 클릭할 때 이벤트를 등록합니다.
+                            kakao.maps.event.addListener(marker, 'click', function() {
+                                // 마커를 클릭할 때, 해당 게시글의 상세 페이지로 이동합니다.
+                                window.location.href = '/share/read?shareNum=' + share.shareNum;
+                            });
+
                         }
-                        console.log("현재 markers 배열:", markers);
                         
                         // 클러스터러에 새로 추가된 마커들 등록
                         clusterer.addMarkers(markers);
                         removeMarkersOutOfBounds(); // 경계 밖 마커 제거
 
                     });
+                    
+                    console.log("현재 markers 배열:", markers);
+
                 }              
             })
-
-        });
+        }); //영역변경 이벤트 끝 
 
         // 좌표를 기반으로 중복 마커 확인
         function isMarkerExists(position) {
@@ -126,16 +167,21 @@
             // 클러스터러에 경계 안의 마커들만 다시 추가
             clusterer.clear(); // 기존 클러스터 삭제
             clusterer.addMarkers(markers); // 클러스터에 남은 마커 다시 추가
-             
         }
-        
+
         // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
         kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
         kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
 
     </script>
     <p><a href="/share/save">글작성</a></p>
-    <!-- 게시판 목록 출력 -->
+    <!-- ShareMapContorller 게시판 목록 출력 -->
+     <p>ShareMapContorller 게시판 목록 출력</p>
+    <div style="width: 200px; height: 200px;" id="result">
+
+    </div>
+    <!-- shareController 게시판 목록 출력 -->
+     <p>shareController 게시판 목록 출력</p>
     <table>
         <tr>
             <th>번호</th>

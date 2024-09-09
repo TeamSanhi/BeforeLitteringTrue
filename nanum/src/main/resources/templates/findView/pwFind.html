@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html
+  lang="ko"
+  xmlns:th="http://thymeleaf.org"
+  xmlns:sec="http://thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비밀번호 찾기</title>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script></script>
+  </head>
+  <body>
+    <h1>비밀번호 찾기</h1>
+    <form action="/find/pwFind" method="post"></form>
+    <label for="memberId">아이디</label>
+    <input type="text" name="memberId" id="memberId">
+    <label for="email">이메일</label>
+      <input type="email" name="memberEmail" id="memberEmail" placeholder="이메일" />
+      <button type="submit">비밀번호 찾기</button>
+    </form>
+    <div>
+      <a href="/member/loginForm">로그인 페이지로 이동</a>
+    </div>
+  </body>
+</html>
