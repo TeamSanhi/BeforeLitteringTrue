@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Page</title>
     <style>
+
         nav {
             display: flex;
             justify-content: space-between;
@@ -28,35 +29,45 @@
         .profile-info {
             display: flex;
             justify-content: space-between;
+            gap: 20px;
             position: absolute;
-            top: 50px;
-            left : 50px;
+            top: 150px;
         }
 
         .profile-edit {
             display: flex;
             justify-content: space-between;
+            gap: 20px;
             position: absolute;
-            top: 100px;
-            left : 50px;
+            top: 350px;
         }
 
         .profile-board {
             display: flex;
             justify-content: space-between;
+            gap: 20px;
             position: absolute;
-            top: 150px;
-            left : 50px;
+            top: 500px;
         }
     </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
             $('#alarmEdit').click(alarmEdit);
+            $('#deleteId').click(deleteId);
+            $('.myAlarm').click(showAlarm);
+            $('.myShare').click(showShare);
+            $('.myBookmark').click(showBookmark);
         });
 
-        function alarmEdit() {}
-        // function alarmBoard() {
+        function alarmEdit() {
+        }
+
+        function deleteId() {
+
+        }
+
+        // function showAlarm() {
         //     $.ajax({
         //         url: 'myPage/alarmSave',
         //         type: 'GET',
@@ -74,6 +85,15 @@
         //         }
         //     });
         // }
+
+        function showAlarm() {
+        }
+
+        function showShare() {
+        }
+
+        function showBookmark() {
+        }
     </script>
 </head>
 <body>
@@ -111,24 +131,36 @@
     <!--  프로필 정보 제공  -->
     <section class="profile-info">
         <!--  닉네임  -->
+        <p th:text="${userNickname}">닉네임</p>
         <!--  나눔 수  -->
+        <p th:text="${shareCount}">나눔 수</p>
         <!--  나의 알림  -->
+        <!--  <p th:text="${alarmTotal}">나의 알림</p>  -->
     </section>
 
     <!--  프로필 편집  -->
     <section class="profile-edit">
         <!--  프로필 수정  -->
-        <!--  알림 수정  -->
-        <!--  id 탈퇴  -->
+        <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
+        <!--  알림 추가  -->
+        <button class="alarmEdit">알림 수정</button>
+        <!--  ID 탈퇴  -->
+        <button class="deleteId">ID 탈퇴</button>
     </section>
 
     <!--  맞춤형 보드 제공  -->
     <section class="profile-board">
+        <!--  알림 띄우기  -->
         <button class="myAlarm">나의 알림</button>
+        <!--  알림 편집  -->
+        <!--  해당 알람만 편집  -->
+        <!--  나눔 현황 띄우기  -->
         <button class="myShare">나의 나눔</button>
+        <!--  북마크 띄우기  -->
         <button class="myBookmark">북마크</button>
     </section>
 </main>
-<footer></footer>
+<footer>
+</footer>
 </body>
 </html>
