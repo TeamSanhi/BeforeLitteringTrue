@@ -52,11 +52,11 @@ public class ShareController {
      */
     @GetMapping("list")
     public String shareList(Model model) {
-        // 모든 게시글을 가져온다.
-        List<ShareBoardDTO> shareList = shareService.getListAll();
-        // Model에 저장한다.
-        model.addAttribute("shareList", shareList);
-
+        // ajax로 지도가 변할때 마다 지도에 표시되는 게시글을 업데이트 하며 게시판으로 보여줌으로 필요없어 졌음으로 경로의 역할만 한다.
+        // // 모든 게시글을 가져온다.
+        // List<ShareBoardDTO> shareList = shareService.getListAll();
+        // // Model에 저장한다.
+        // model.addAttribute("shareList", shareList);
         log.debug("sharelist 컨트롤러 지나감");
         return "shareView/shareList";
     }
