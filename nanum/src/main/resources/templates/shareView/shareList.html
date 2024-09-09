@@ -113,6 +113,12 @@
                                 infowindow.close();
                             });
 
+                            // 마커를 클릭할 때 이벤트를 등록합니다.
+                            kakao.maps.event.addListener(marker, 'click', function() {
+                                // 마커를 클릭할 때, 해당 게시글의 상세 페이지로 이동합니다.
+                                window.location.href = '/share/read?shareNum=' + share.shareNum;
+                            });
+
                         }
                         
                         // 클러스터러에 새로 추가된 마커들 등록
@@ -155,9 +161,8 @@
             // 클러스터러에 경계 안의 마커들만 다시 추가
             clusterer.clear(); // 기존 클러스터 삭제
             clusterer.addMarkers(markers); // 클러스터에 남은 마커 다시 추가
-             
         }
-        
+
         // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
         kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
         kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
