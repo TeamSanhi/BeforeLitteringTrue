@@ -86,13 +86,15 @@
                             marker.setMap(map);
                             markers.push(marker);  // marker를 markers 배열에 넣는다.
                         }
-                        console.log("현재 markers 배열:", markers);
                         
                         // 클러스터러에 새로 추가된 마커들 등록
                         clusterer.addMarkers(markers);
                         removeMarkersOutOfBounds(); // 경계 밖 마커 제거
 
                     });
+                    
+                    console.log("현재 markers 배열:", markers);
+
                 }              
             })
 
