@@ -9,6 +9,8 @@ import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.repository.MemberRepository;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,6 +41,11 @@ public class MemberService {
         memberRepository.save(memberEntity);                            
 
     }
-    
+
+    public Optional<MemberEntity> getMemberByNum (Integer memberNum) {
+        Optional<MemberEntity> member = memberRepository.findById(memberNum);
+
+        return member;
+    }
     
 }

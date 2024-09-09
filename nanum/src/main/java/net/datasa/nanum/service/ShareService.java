@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,7 @@ public class ShareService {
     private final ImageRepository imageRepository;
     // 파일저장을 위한 FileManager 생성자 주입
     private final FileManager fileManager;
+
 
     /**
      * shareSave 메소드
@@ -225,6 +227,11 @@ public class ShareService {
             String fileName = fileManager.saveFile(uploadPath, upload);
             shareBoardEntity.setImageFileName(fileName);
         }
+    }
+
+    public Integer getShareCount(Optional<MemberEntity> memberNum){
+        Integer shareCount = shareBoardRepository.shareCount(memberNum);
+        return shareCount;
     }
 
 }
