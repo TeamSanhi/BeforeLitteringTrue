@@ -120,7 +120,6 @@ public class ShareController {
         // 파일 다운로드 함수 실행
         shareService.download(shareNum, response, uploadPath);
         log.debug("download 컨트롤러 지나감");
-
     }
 
     /**

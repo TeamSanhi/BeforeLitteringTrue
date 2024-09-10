@@ -47,23 +47,27 @@
 <body>
     <h1>나눠요 글읽기</h1>
     <table>
-        <tr>
+        <tr  style="height: 100px;">
             <th>제목</th>
             <th>내용</th>
             <th>닉네임</th>
-            <th>사진</th>
             <th>작성일</th>
-            <th>삭제</th>
-            <th>수정</th>
         </tr>
         <tr>
             <td th:text="${shareBoard.shareTitle}"></td>
             <td th:text="${shareBoard.shareContents}"></td>
             <td th:text="${shareBoard.memberNickname}"></td>
-            <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
-            <td><img style="width: 200px; height: 200px;" th:src="|download?shareNum=${shareBoard.shareNum}|"></td>
             <!-- 타임리프 이용해 날짜 데이터 포멧 -->
             <td th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></td>
+        </tr>
+        <tr>
+            <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
+            <td th:each = "image : ${shareBoard.imageList}">
+                <img style="width: 200px; height: 200px;" th:src="|download?shareNum=${image.shareNum}|">
+                <p th:text="${image.shareNum}"></p>
+            </td>
+        </tr>
+        <tr>
             <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 삭제가 보이도록 한다.  -->
             <td th:if="${#authentication.name == shareBoard.memberId}">
                 <button id="deleteButton" th:data-num="${shareBoard.shareNum}">삭제</button>
