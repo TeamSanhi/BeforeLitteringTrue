@@ -109,7 +109,7 @@ public class ShareController {
     }
 
     /**
-     * 첨부 파일 다운로드
+     * shareBoard테이블 기준으로 사진 이름을 검색할 수 있게 해주는 컨트롤러 경로
      * 
      * @param shareNum 게시글 번호
      * @param response 응답 정보
@@ -120,6 +120,21 @@ public class ShareController {
         // 파일 다운로드 함수 실행
         shareService.download(shareNum, response, uploadPath);
         log.debug("download 컨트롤러 지나감");
+    }
+
+    /**
+     * image테이블 기준으로 사진 이름을 검색할 수 있게 해주는 컨트롤러 경로
+     * 
+     * @param shareNum
+     * @param response
+     */
+    @GetMapping("readDownload")
+    public void readDownload(
+            @RequestParam("imageNum") Integer imageNum, HttpServletResponse response) {
+        // 파일 다운로드 함수 실행
+        shareService.readDownload(imageNum, response, uploadPath);
+
+        log.debug("readdownload 컨트롤러 지나감: {}", imageNum);
     }
 
     /**
