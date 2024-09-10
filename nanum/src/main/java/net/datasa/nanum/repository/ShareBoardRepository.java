@@ -18,11 +18,10 @@ public interface ShareBoardRepository extends JpaRepository<ShareBoardEntity, In
     Integer shareCount(@Param("memberNum") MemberEntity memberNum);
 
     // 남서 북동 좌펴안의 게시판 글들을 부러오는 함수
-    @Query("SELECT e FROM ShareBoardEntity e WHERE e.shareLat > :swLat AND e.shareLat < :neLat AND e.shareLng > :swLng AND e.shareLng < :neLng")
+    @Query("SELECT e FROM ShareBoardEntity e WHERE e.shareLat > :swLat AND e.shareLat < :neLat AND e.shareLng > :swLng AND e.shareLng < :neLng ORDER BY e.shareNum DESC")
     List<ShareBoardEntity> findMapList(
             @Param("swLat") double swLat,
             @Param("swLng") double swLng,
             @Param("neLat") double neLat,
             @Param("neLng") double neLng);
-
 }
