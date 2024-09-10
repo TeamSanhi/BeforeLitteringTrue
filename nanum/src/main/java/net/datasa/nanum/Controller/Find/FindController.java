@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.service.FindService;
+import net.datasa.nanum.service.MailService;
 
 @Slf4j
 @Controller
@@ -16,7 +18,9 @@ import net.datasa.nanum.service.FindService;
 @RequiredArgsConstructor
 public class FindController {
 
+    private final MemberRepository memberRepository;
     private final FindService findService;
+    private final MailService mailService;
 
     /**
      * ID 중복 확인 창으로 이동
@@ -62,4 +66,5 @@ public class FindController {
         log.debug("pwFind.html로 이동");
         return "findView/pwFind";
     }
+    
 }
