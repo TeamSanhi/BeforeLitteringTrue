@@ -49,19 +49,107 @@
             position: absolute;
             top: 500px;
         }
+
+        /* .modal 클래스는 모달의 배경을 정의합니다. 처음에는 display: none으로 설정되어 화면에 보이지 않습니다. */
+        .modal {
+            display: none; /* 모달을 숨김 */
+            position: fixed; /* 화면에 고정된 위치로 설정 */
+            z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
+            left: 0; /* 화면 왼쪽부터 시작 */
+            top: 0; /* 화면 상단부터 시작 */
+            width: 100%; /* 화면 전체 너비 */
+            height: 100%; /* 화면 전체 높이 */
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
+            padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
+            border: 1px solid #888;
+            width: 90%; /* 너비를 화면의 90%로 변경 */
+            max-width: 600px; /* 최대 너비를 600px로 확장 */
+            text-align: center;
+        }
+
+        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
+        .close {
+            color: #aaa; /* 닫기 버튼의 기본 색상 */
+            float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
+            font-size: 28px; /* 닫기 버튼의 글자 크기 */
+            font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
+        }
+
+        /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
+        .close:hover, .close:focus {
+            color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
+            text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
+            cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+        }
+
     </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
-            $('#alarmEdit').click(alarmEdit);
-            $('#deleteId').click(deleteId);
-            $('.myAlarm').click(showAlarm);
-            $('.myShare').click(showShare);
-            $('.myBookmark').click(showBookmark);
-        });
+            // 알림 추가 모달
+            $("#alarmEdit").click(function () { // 열기
+                $("#alarmModal").fadeIn();
+            });
+            $("#alarmClose").click(function () { // 닫기 (X 버튼)
+                $("#alarmModal").fadeOut();
+            });
+            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                if ($(event.target).is("#alarmModal")) {
+                    $("#alarmModal").fadeOut();
+                }
+            });
 
-        function alarmEdit() {
-        }
+            // 탈퇴 경고 모달
+            $("#deleteId").click(function () { // 열기
+                $("#alertModal").fadeIn();
+            });
+            $("#alertClose").click(function () { // 닫기 (X 버튼)
+                $("#alertModal").fadeOut();
+            });
+            $("#reset").click(function () { // 닫기 (취소 버튼)
+                $("#alertModal").fadeOut();
+            });
+            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                if ($(event.target).is("#alertModal")) {
+                    $("#alertModal").fadeOut();
+                }
+            });
+
+            // 비밀번호 확인 모달
+            // $(".delete").click(function () { // 열기
+            //     $(".checkPassword").fadeIn();
+            // });
+            // $(".checkClose").click(function () { // 닫기 (X 버튼)
+            //     $(".checkPassword").fadeOut();
+            // });
+            // $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+            //     if ($(event.target).is(".checkPassword")) {
+            //         $(".checkPassword").fadeOut();
+            //     }
+            // });
+
+            // 탈퇴 확인 모달
+            // $(탈퇴하게 되면).click(function () { // 열기
+            //     $(".verifyModal").fadeIn();
+            // });
+            // $(".verifyClose").click(function () { // 닫기 (X 버튼)
+            //     $(".verifyModal").fadeOut();
+            // });
+            // $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+            //     if ($(event.target).is(".verifyModal")) {
+            //         $(".verifyModal").fadeOut();
+            //     }
+            // });
+
+            $('#myAlarm').click(showAlarm);
+            $('#myShare').click(showShare);
+            $('#myBookmark').click(showBookmark);
+        });
 
         function deleteId() {
 
@@ -135,29 +223,80 @@
         <!--  나눔 수  -->
         <p th:text="${shareCount}">나눔 수</p>
         <!--  나의 알림  -->
-          <p th:text="${alarmTotal}">나의 알림</p>
+        <p th:text="${alarmTotal}">나의 알림</p>
     </section>
 
     <!--  프로필 편집  -->
     <section class="profile-edit">
         <!--  프로필 수정  -->
         <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
+
         <!--  알림 추가  -->
-        <button class="alarmEdit">알림 수정</button>
+        <button id="alarmEdit">알림 추가</button>
+
+        <!-- 알림 추가 모달 -->
+        <div id="alarmModal" class="modal">
+            <div class="modal-content">
+                <span id="alarmClose" class="close">&times;</span>
+                <h2>일정 등록</h2>
+                <div id="alarmDay">
+                    <span style="font-weight: bold">요일</span>
+                    <input type="radio" name="alarmDay" value="sun">일
+                    <input type="radio" name="alarmDay" value="mon">월
+                    <input type="radio" name="alarmDay" value="tue">화
+                    <input type="radio" name="alarmDay" value="wed">수
+                    <input type="radio" name="alarmDay" value="thu">목
+                    <input type="radio" name="alarmDay" value="fri">금
+                    <input type="radio" name="alarmDay" value="sat">토
+                </div>
+                <div id="alarmContents">
+                    <span style="font-weight: bold">알림 내용</span>
+                    <input type="text" name="alarmContents">
+                </div>
+            </div>
+        </div>
+
         <!--  ID 탈퇴  -->
-        <button class="deleteId">ID 탈퇴</button>
+        <button id="deleteId">ID 탈퇴</button>
+
+        <!--  탈퇴 경고 모달  -->
+        <div id="alertModal" class="modal">
+            <div class="modal-content">
+                <span id="alertClose" class="close">&times;</span>
+                <div class="board">
+                    <span style="font-weight: bold">탈퇴하시겠습니까?</span>
+                    <div class="button">
+                        <button id="reset">취소</button>
+                        <button id="delete">탈퇴하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--  비밀번호 확인 모달  -->
+        <!--        <div class="checkModal">-->
+        <!--            <span class="checkClose">&times;</span>-->
+        <!--            <span class="check">비밀번호 확인</span>-->
+        <!--        </div>-->
+
+        <!--  탈퇴 확인 모달  -->
+        <!--  <div class="verifyModal">-->
+        <!--  <span class="verifyClose">&times;</span>-->
+        <!--  <span class="verify">탈퇴 확인</span>-->
+        <!--  </div>-->
+
     </section>
 
     <!--  맞춤형 보드 제공  -->
     <section class="profile-board">
         <!--  알림 띄우기  -->
-        <button class="myAlarm">나의 알림</button>
+        <button id="myAlarm">나의 알림</button>
         <!--  알림 편집  -->
         <!--  해당 알람만 편집  -->
         <!--  나눔 현황 띄우기  -->
-        <button class="myShare">나의 나눔</button>
+        <button id="myShare">나의 나눔</button>
         <!--  북마크 띄우기  -->
-        <button class="myBookmark">북마크</button>
+        <button id="myBookmark">북마크</button>
     </section>
 </main>
 <footer>

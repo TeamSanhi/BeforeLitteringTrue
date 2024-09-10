@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -34,11 +36,41 @@ public class MyPageController {
         MemberEntity member = memberService.getMemberByNum(userNum);
 
         Integer shareCount = shareService.getShareCount(member);
-        List<AlarmDTO> alarmTotal = alarmService.getAlarmList(member);
+        List<AlarmDTO> alarmDTOTotal = alarmService.getAlarmList(member);
+        List<String> alarmTotal = new ArrayList<>();
+
+        for (AlarmDTO alarmDTO : alarmDTOTotal) {
+            String alarmDay = "null";
+            switch (alarmDTO.getAlarmDay()) {
+                case 0:
+                    alarmDay = "일요일";
+                    break;
+                case 1:
+                    alarmDay = "월요일";
+                    break;
+                case 2:
+                    alarmDay = "화요일";
+                    break;
+                case 3:
+                    alarmDay = "수요일";
+                    break;
+                case 4:
+                    alarmDay = "목요일";
+                    break;
+                case 5:
+                    alarmDay = "금요일";
+                    break;
+                case 6:
+                    alarmDay = "토요일";
+                    break;
+            }
+            alarmTotal.add(alarmDay);
+        }
 
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
         model.addAttribute("alarmTotal", alarmTotal);
+
 
         return "myPageView/myPage";
     }
