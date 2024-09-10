@@ -46,11 +46,6 @@ public class ShareController {
      */
     @GetMapping("list")
     public String shareList(Model model) {
-        // ajax로 지도가 변할때 마다 지도에 표시되는 게시글을 업데이트 하며 게시판으로 보여줌으로 필요없어 졌음으로 경로의 역할만 한다.
-        // // 모든 게시글을 가져온다.
-        // List<ShareBoardDTO> shareList = shareService.getListAll();
-        // // Model에 저장한다.
-        // model.addAttribute("shareList", shareList);
         log.debug("sharelist 컨트롤러 지나감");
         return "shareView/shareList";
     }
@@ -109,30 +104,16 @@ public class ShareController {
     }
 
     /**
-     * shareBoard테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
-     * 
-     * @param shareNum 게시글 번호
-     * @param response 응답 정보
-     */
-    @GetMapping("download")
-    public void download(
-            @RequestParam("shareNum") Integer shareNum, HttpServletResponse response) {
-        // 파일 다운로드 함수 실행
-        shareService.download(shareNum, response, uploadPath);
-        log.debug("download 컨트롤러 지나감");
-    }
-
-    /**
      * image테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
      * 
      * @param shareNum
      * @param response
      */
-    @GetMapping("readDownload")
+    @GetMapping("download")
     public void readDownload(
             @RequestParam("imageNum") Integer imageNum, HttpServletResponse response) {
         // 파일 다운로드 함수 실행
-        shareService.readDownload(imageNum, response, uploadPath);
+        shareService.download(imageNum, response, uploadPath);
 
         log.debug("readdownload 컨트롤러 지나감: {}", imageNum);
     }

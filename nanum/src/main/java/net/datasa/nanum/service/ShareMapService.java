@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
+import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
 import net.datasa.nanum.repository.ShareBoardRepository;
 
@@ -58,8 +60,27 @@ public class ShareMapService {
                     .shareLat(entity.getShareLat()) // 위도
                     .shareLng(entity.getShareLng()) // 경도
                     .build();
+
+            // image정보를 shareBoardDTO에 저장하기
+            // shareBoardDTO의 이미지 리스트에 저장할 ImageDTO List를 생성한다.
+            List<ImageDTO> imageList = new ArrayList<ImageDTO>();
+            // shareBoardEntity에서 imageList를 하나씩 ImageDTO에 저장한다.
+            for (ImageEntity imageEntity : entity.getImageList()) {
+                // ImageDTO로 ImageEntity를 변환
+                ImageDTO imageDTO = ImageDTO.builder()
+                        .imageNum(imageEntity.getImageNum())
+                        .shareNum(imageEntity.getShareBoard().getShareNum())
+                        .imageFileName(imageEntity.getImageFileName())
+                        .build();
+                // 변환한 DTO를 shareBoradDTO에 저장할 imageList에 하나씩 저장
+                imageList.add(imageDTO);
+            }
+            // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
+            dto.setImageList(imageList);
+
             dtoList.add(dto);
         }
+
         // DTO로 변환한 entityList를 return
         return dtoList;
     }
