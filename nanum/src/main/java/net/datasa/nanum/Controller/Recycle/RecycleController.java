@@ -58,11 +58,11 @@ public class RecycleController {
         return "recycleView/recycleList";
     }
 
-//     /**
-//      * 버려요 게시글 상세보기
-//      * @param param
-//      * @return
-//      */
+     /**
+      * 버려요 게시글 상세보기
+      * @param param
+      * @return
+      */
 //     @GetMapping("read")
 //     public String read(Model model, @RequestParam("recycleNum") int recycleNum) {
 //         log.debug("버려요 게시글 조회", recycleNum);

@@ -31,7 +31,8 @@ public class WebSecurityConfig {
                         , "/find/idCheck" // ID 중복 확인
                         , "/share/list" // 나눔 리스트
                         , "/share/read" // 나눔글 읽기
-                        , "/share/download" // 나눔 첨부파일 다운로드
+                        , "/share/download" // shareBoard 테이블 파일이름 기준 다운로드
+                        , "/share/readDownload" // image 테이블 파일이름 기준 다운로드
                         , "/share/mapList" // 나눔 지도 리스트
                         , "/info/service" // 서비스 소개
                         , "/info/siteMap" // 사이트맵

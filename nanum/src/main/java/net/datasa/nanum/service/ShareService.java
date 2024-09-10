@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
+import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
@@ -132,6 +133,36 @@ public class ShareService {
         }
     }
 
+    public void readDownload(Integer imageNum, HttpServletResponse response, String uploadPath) {
+
+        // 전달된 글 번호로 글 정보 조회
+        ImageEntity imageEntity = imageRepository.findById(imageNum)
+                .orElseThrow(() -> new EntityNotFoundException("이미지가 없습니다."));
+
+        // response setHeader 설정
+        response.setHeader("Content-Disposition", "attachment;filename=" + imageEntity.getImageFileName());
+
+        // 저장된 파일 경로와 파일 이름 합한다.
+        String fullPath = uploadPath + "/" + imageEntity.getImageFileName();
+
+        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
+        FileInputStream filein = null;
+        ServletOutputStream fileout = null;
+
+        try {
+            filein = new FileInputStream(fullPath);
+            fileout = response.getOutputStream();
+
+            // Spring의 파일 관련 유틸 이용하여 출력
+            FileCopyUtils.copy(filein, fileout);
+
+            filein.close();
+            fileout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 글 상세 조회
      * 
@@ -153,6 +184,24 @@ public class ShareService {
                 .shareDate(shareBoardEntity.getShareDate())
                 .memberId(shareBoardEntity.getMember().getMemberId())
                 .build();
+
+        // image정보를 shareBoardDTO에 저장하기
+        // shareBoardDTO의 이미지 리스트에 저장할 ImageDTO List를 생성한다.
+        List<ImageDTO> imageList = new ArrayList<ImageDTO>();
+        // shareBoardEntity에서 imageList를 하나씩 ImageDTO에 저장한다.
+        for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+            // ImageDTO로 ImageEntity를 변환
+            ImageDTO imageDTO = ImageDTO.builder()
+                    .imageNum(imageEntity.getImageNum())
+                    .shareNum(imageEntity.getShareBoard().getShareNum())
+                    .imageFileName(imageEntity.getImageFileName())
+                    .build();
+            // 변환한 DTO를 shareBoradDTO에 저장할 imageList에 하나씩 저장
+            imageList.add(imageDTO);
+        }
+        // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
+        shareBoardDTO.setImageList(imageList);
+
         // DTO를 반환
         return shareBoardDTO;
     }

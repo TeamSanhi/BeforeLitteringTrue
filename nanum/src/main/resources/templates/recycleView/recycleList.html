@@ -74,7 +74,7 @@
         text-decoration: underline;
       }
       .wrap {
-        width: 600px;
+        width: 1200px;
         margin: 0 auto;
         font-family: "Nanum Gothic", sans-serif;
         text-align: center;
@@ -87,7 +87,7 @@
         float: left;
         width: 120px;
         height: 180px;
-        padding: 20px 15px;
+        padding: 20px 5px;
         margin-bottom: -1px;
         border-bottom: 1px solid #aaa;
       }
@@ -133,17 +133,43 @@
         color: #767676;
         font-size: 0.9em;
       }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
     </style>
   </head>
   <body>
     <div class="wrap">
-      <h1>[ 버려요 게시판 ]</h1>
+      <div class="container">
+        <!--  네비게이션 바  -->
+        <div class="nav">
+          <p><a href="">로고</a></p>
+          <p><a th:href="@{/info/service}">우리는..</a></p>
+          <p><a th:href="@{/share/list}">나눠요</a></p>
+          <p><a th:href="@{/recycle/list}">버려요</a></p>
+        </div>
+      </div>
+      <br />
+      <br />
       <div class="fixed_img_col">
         <ul>
           <li>
             <a href="#">
               <span class="thumb">
                 <img src="img/thumbnail.jpg" alt="" />
+                <em>Category</em>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="img/sample.jpg" alt="" />
                 <em>Category</em>
               </span>
             </a>
