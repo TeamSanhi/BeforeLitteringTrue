@@ -117,7 +117,7 @@
             navigator.geolocation.getCurrentPosition(function(position) {
             var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
                 mapOption = {                   //geolocation으로 가져온 현재 위치를 기준으로 지도 옵션 설정
-                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude   ), // 지도의 중심좌표
+                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude), // 지도의 중심좌표
                     level: 4 // 지도의 확대 레벨
                 };
             
@@ -131,6 +131,10 @@
             // 지도에 마커를 표시합니다
             marker.setMap(map);
             
+            //form에 현재 위치의 위도 경도값 값 넣어주기 
+            $('#lat').val(position.coords.latitude);
+            $('#lng').val(position.coords.longitude);
+
             // 지도에 클릭 이벤트를 등록합니다
             // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
             kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
@@ -141,7 +145,7 @@
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
                 
-                //form에 위도 경도값 값 넣어주기 
+                //form에 마커로 찍은 위도 경도값 값 넣어주기 
                 $('#lat').val(latlng.getLat());
                 $('#lng').val(latlng.getLng());
             });
