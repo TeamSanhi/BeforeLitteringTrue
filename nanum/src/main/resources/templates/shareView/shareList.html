@@ -117,8 +117,9 @@
                                 <div style="display: inline-block; width:350px ">
                                     <a href="/share/read?shareNum=${share.shareNum}">
                                         <p>제목 : ${share.shareTitle}</p>
-                                        <p>
-                                            <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
+                                        <p>                                                         
+                                            <img style="width:100px; height:100px;" 
+                                                            src="/share/download?imageNum=${share.imageList[0].imageNum}">
                                         </p>
                                         <p>내용 : ${share.shareContents}</p>
                                         <p>별명 : ${share.memberNickname}</p>
@@ -141,7 +142,7 @@
                 <div style="padding:5px; width:110px; height:150px;">
                     <span>${share.shareTitle}</span><br>
                     <span>${share.memberNickname}</span>
-                    <img style="width:100px; height:100px;" src="/share/download?shareNum=${share.shareNum}">
+                    <img style="width:100px; height:100px;" src="/share/download?imageNum=${share.imageList[0].imageNum}">
                 </div>
             `;
 

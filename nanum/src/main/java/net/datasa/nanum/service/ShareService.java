@@ -40,7 +40,7 @@ public class ShareService {
     private final MemberRepository memberRepository;
     // imageRepository 생성자 주입
     private final ImageRepository imageRepository;
-    // 파일저장을 위한 FileManager 생성자 주입
+    // 파일관리를 위한 FileManager 생성자 주입
     private final FileManager fileManager;
 
     /**
@@ -65,7 +65,6 @@ public class ShareService {
                 .shareCompleted(false) // 나눔 확인상태 false로 초기화
                 .reportCount(0) // 신고 수 0으로 초기화
                 .bookmarkCount(0) // bookmark 수 0으로 초기화
-                .imageFileName("image") // 이미지 이름 초기화
                 .build();
 
         // 변환된 shareBoardEnetity를 저장
@@ -85,82 +84,12 @@ public class ShareService {
                             .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
                             .imageFileName(fileName)
                             .build();
-                    // 첫번째 사진은 게시글에도 저장시킨다.
-                    if (shareBoardEntity.getImageFileName().equals("image")) {
-                        shareBoardEntity.setImageFileName(fileName);
-                    }
                     // 이미지 엔티티 저장
                     imageRepository.save(imageEntity);
                 }
             }
         }
 
-    }
-
-    /**
-     * 파일 다운로드
-     * 
-     * @param shareNum   글 번호
-     * @param response   응답 정보
-     * @param uploadPath 파일 저장 경로
-     */
-    public void download(Integer shareNum, HttpServletResponse response, String uploadPath) {
-        // 전달된 글 번호로 글 정보 조회
-        ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
-                .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
-
-        // response setHeader 설정
-        response.setHeader("Content-Disposition", "attachment;filename=" + shareBoardEntity.getImageFileName());
-
-        // 저장된 파일 경로와 파일 이름 합한다.
-        String fullPath = uploadPath + "/" + shareBoardEntity.getImageFileName();
-
-        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
-        FileInputStream filein = null;
-        ServletOutputStream fileout = null;
-
-        try {
-            filein = new FileInputStream(fullPath);
-            fileout = response.getOutputStream();
-
-            // Spring의 파일 관련 유틸 이용하여 출력
-            FileCopyUtils.copy(filein, fileout);
-
-            filein.close();
-            fileout.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void readDownload(Integer imageNum, HttpServletResponse response, String uploadPath) {
-
-        // 전달된 글 번호로 글 정보 조회
-        ImageEntity imageEntity = imageRepository.findById(imageNum)
-                .orElseThrow(() -> new EntityNotFoundException("이미지가 없습니다."));
-
-        // response setHeader 설정
-        response.setHeader("Content-Disposition", "attachment;filename=" + imageEntity.getImageFileName());
-
-        // 저장된 파일 경로와 파일 이름 합한다.
-        String fullPath = uploadPath + "/" + imageEntity.getImageFileName();
-
-        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
-        FileInputStream filein = null;
-        ServletOutputStream fileout = null;
-
-        try {
-            filein = new FileInputStream(fullPath);
-            fileout = response.getOutputStream();
-
-            // Spring의 파일 관련 유틸 이용하여 출력
-            FileCopyUtils.copy(filein, fileout);
-
-            filein.close();
-            fileout.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /**
@@ -239,7 +168,7 @@ public class ShareService {
      * @param uploadPath    파일 저장할 경로
      * @param upload        업로드된 파일
      */
-    public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, MultipartFile upload)
+    public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, List<MultipartFile> uploads)
             throws Exception {
         // 게시글이 있는지 확인
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareBoardDTO.getShareNum())
@@ -254,15 +183,68 @@ public class ShareService {
         shareBoardEntity.setShareLat(shareBoardDTO.getShareLat());
         shareBoardEntity.setShareLng(shareBoardDTO.getShareLng());
 
-        log.debug("수정된 shareBoardEntity", shareBoardEntity);
-
         // 업로드된 파일이 있으면 기존 파일 삭제하고 새로 저장
-        if (upload != null && !upload.isEmpty()) {
-            if (shareBoardEntity.getImageFileName() != null) {
-                fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+        if (uploads != null && !uploads.isEmpty()) {
+            // 기존 이미지 삭제
+            if (shareBoardEntity.getImageList() != null && !shareBoardEntity.getImageList().isEmpty()) {
+                for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+                    // 경로와 파일이름을 받아서 일치하는 것을 삭제한다.
+                    fileManager.deleteFile(uploadPath, imageEntity.getImageFileName());
+                }
+                // 이미지 리스트 비우기 (orphanRemoval을 통해 참조되고 있는 image테이블의 entity도 삭제된다. 위해)
+                shareBoardEntity.getImageList().clear();
             }
-            String fileName = fileManager.saveFile(uploadPath, upload);
-            shareBoardEntity.setImageFileName(fileName);
+            // 새 이미지 저장
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    // 각 파일을 저장
+                    String fileName = fileManager.saveFile(uploadPath, upload);
+
+                    // imageEntity 생성 및 저장
+                    ImageEntity imageEntity = ImageEntity.builder()
+                            .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity 설정
+                            .imageFileName(fileName)
+                            .build();
+
+                    // 이미지 엔티티 저장 및 게시글 엔티티에 추가
+                    imageRepository.save(imageEntity);
+                    // 이미지 리스트에 추가
+                    shareBoardEntity.getImageList().add(imageEntity);
+                }
+            }
+        }
+    }
+
+    /**
+     * imageRepository에서 이미지를 다운로드 하거나 보여주는 함수
+     */
+    public void download(Integer imageNum, HttpServletResponse response, String uploadPath) {
+
+        // 전달된 글 번호로 image테이블에서 글 정보 조회
+        ImageEntity imageEntity = imageRepository.findById(imageNum)
+                .orElseThrow(() -> new EntityNotFoundException("이미지가 없습니다."));
+
+        // response setHeader 설정
+        response.setHeader("Content-Disposition", "attachment;filename=" + imageEntity.getImageFileName());
+
+        // 저장된 파일 경로와 파일 이름 합한다.
+        String fullPath = uploadPath + "/" + imageEntity.getImageFileName();
+
+        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
+        FileInputStream filein = null;
+        ServletOutputStream fileout = null;
+
+        try {
+            filein = new FileInputStream(fullPath);
+            fileout = response.getOutputStream();
+
+            // Spring의 파일 관련 유틸 이용하여 출력
+            FileCopyUtils.copy(filein, fileout);
+
+            filein.close();
+            fileout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -277,32 +259,4 @@ public class ShareService {
         return shareCount;
     }
 
-    /*
-     * ajax로 지도가 변할때 마다 지도에 표시되는 게시글을 업데이트 하며 게시판으로 보여줌으로 필요없어 졌음으로 경로의 역할만 한다.
-     * 고로 모든 게시글 목록을 불러오는 이 함수는 필요가 없다.
-     * public List<ShareBoardDTO> getListAll() {
-     * Sort sort = Sort.by(Sort.Direction.DESC, "shareNum");
-     * // 전체 보기
-     * List<ShareBoardEntity> entityList = shareBoardRepository.findAll(sort);
-     * log.debug("전체 글목록 조회 : {}", entityList);
-     * // DTO로 변환할 리스트 생성
-     * List<ShareBoardDTO> dtoList = new ArrayList<>();
-     * // entityList를 DTO로 변환해서 dtoList에 저장
-     * for (ShareBoardEntity entity : entityList) {
-     * ShareBoardDTO dto = ShareBoardDTO.builder()
-     * .memberNum(entity.getMember().getMemberNum()) // memberNum을 가져오기 위해서
-     * // entity.getMember().getMemberNum() 사용
-     * .shareTitle(entity.getShareTitle())
-     * .memberNickname(entity.getMember().getMemberNickname()) // 테이블에 없는 닉네임 DTO 따로
-     * 만들어 Nickname 저장
-     * .shareDate(entity.getShareDate())
-     * .shareNum(entity.getShareNum())
-     * .imageFileName(entity.getImageFileName())
-     * .build();
-     * dtoList.add(dto);
-     * }
-     * // dtoList를 반환
-     * return dtoList;
-     * }
-     */
 }

@@ -63,8 +63,7 @@
         <tr>
             <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
             <td th:each = "image : ${shareBoard.imageList}">        
-                <img style="width: 200px; height: 200px;" th:src="|readDownload?imageNum=${image.imageNum}|">
-                <p th:text="${image.imageNum}"></p>
+                <img style="width: 200px; height: 200px;" th:src="|download?imageNum=${image.imageNum}|">
             </td>
         </tr>
         <tr>
