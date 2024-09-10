@@ -1,11 +1,13 @@
 package net.datasa.nanum.domain.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import net.datasa.nanum.domain.entity.ImageEntity;
 
 /**
  * 게시판 DTO
@@ -33,4 +35,6 @@ public class ShareBoardDTO {
     private String memberNickname; // 회원 이름
     private String memberId; // 회원 ID
     private String formatDate; // shareList sciprt에서 사용하기 위해 날짜
+    private List<ImageDTO> imageList; // 리플 목록
+
 }

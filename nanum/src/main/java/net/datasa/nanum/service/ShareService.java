@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
+import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
@@ -153,6 +154,24 @@ public class ShareService {
                 .shareDate(shareBoardEntity.getShareDate())
                 .memberId(shareBoardEntity.getMember().getMemberId())
                 .build();
+
+        // image정보를 shareBoardDTO에 저장하기
+        // shareBoardDTO의 이미지 리스트에 저장할 ImageDTO List를 생성한다.
+        List<ImageDTO> imageList = new ArrayList<ImageDTO>();
+        // shareBoardEntity에서 imageList를 하나씩 ImageDTO에 저장한다.
+        for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+            // ImageDTO로 ImageEntity를 변환
+            ImageDTO imageDTO = ImageDTO.builder()
+                    .imageNum(imageEntity.getImageNum())
+                    .shareNum(imageEntity.getShareBoard().getShareNum())
+                    .imageFileName(imageEntity.getImageFileName())
+                    .build();
+            // 변환한 DTO를 shareBoradDTO에 저장할 imageList에 하나씩 저장
+            imageList.add(imageDTO);
+        }
+        // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
+        shareBoardDTO.setImageList(imageList);
+
         // DTO를 반환
         return shareBoardDTO;
     }
