@@ -239,7 +239,7 @@ public class ShareService {
      * @param uploadPath    파일 저장할 경로
      * @param upload        업로드된 파일
      */
-    public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, MultipartFile upload)
+    public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, List<MultipartFile> uploads)
             throws Exception {
         // 게시글이 있는지 확인
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareBoardDTO.getShareNum())
@@ -257,12 +257,39 @@ public class ShareService {
         log.debug("수정된 shareBoardEntity", shareBoardEntity);
 
         // 업로드된 파일이 있으면 기존 파일 삭제하고 새로 저장
-        if (upload != null && !upload.isEmpty()) {
-            if (shareBoardEntity.getImageFileName() != null) {
-                fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+        if (uploads != null && !uploads.isEmpty()) {
+            // 기존 이미지 삭제
+            if (shareBoardEntity.getImageList() != null && !shareBoardEntity.getImageList().isEmpty()) {
+                for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+                    fileManager.deleteFile(uploadPath, imageEntity.getImageFileName());
+                    imageRepository.delete(imageEntity); // 기존 이미지 엔티티 삭제
+                }
+                // 기존 이미지 리스트 초기화
+                shareBoardEntity.getImageList().clear();
             }
-            String fileName = fileManager.saveFile(uploadPath, upload);
-            shareBoardEntity.setImageFileName(fileName);
+
+            // 새 이미지 저장
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    // 각 파일을 저장
+                    String fileName = fileManager.saveFile(uploadPath, upload);
+
+                    // imageEntity 생성 및 저장
+                    ImageEntity imageEntity = ImageEntity.builder()
+                            .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity 설정
+                            .imageFileName(fileName)
+                            .build();
+
+                    // 첫 번째 사진은 게시글의 대표 이미지로 설정
+                    if (shareBoardEntity.getImageList().isEmpty()) {
+                        shareBoardEntity.setImageFileName(fileName); // 대표 이미지 설정
+                    }
+
+                    // 이미지 엔티티 저장 및 게시글 엔티티에 추가
+                    imageRepository.save(imageEntity);
+                    shareBoardEntity.getImageList().add(imageEntity); // 이미지 리스트에 추가
+                }
+            }
         }
     }
 

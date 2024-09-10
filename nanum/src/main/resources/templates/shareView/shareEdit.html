@@ -27,27 +27,32 @@
         
         //올라오는 파일의 갯수를 제한하는 함수 
         function checkFileLimit(event) {
-            // 사용자가 업로드한 파일 목록을 가져오는 코드 
-            const files = event.target.files;
-            // 최대 업로드 갯수 제한 
+            // 사용자가 새로 선택한 파일들
+            const newFiles = event.target.files;
+            // 최대 업로드 갯수 제한
             const maxFiles = 5;
+            
+            // 미리보기 div 안에 이미 존재하는 이미지의 개수
+            const existingFilesCount = document.querySelectorAll('.preview img').length;
 
-            //사용자가 업로드한 파일의 길이가 최대 업로드 갯수 제한을 초과하면 아래 실행 
-            if (files.length > maxFiles) {
-                alert(`사진은 최대 ${maxFiles}장만 업로드할 수 있습니다.`);
+            // 새로 선택한 파일들과 기존에 업로드된 파일들의 총합을 계산
+            const totalFiles = existingFilesCount + newFiles.length;
+
+            // 만약 총 파일 수가 최대 갯수를 초과하면 경고하고 막음
+            if (totalFiles > maxFiles) {
+                alert(`사진은 최대 ${maxFiles}장까지만 업로드할 수 있습니다.`);
                 // 파일 선택 초기화 (선택된 파일을 지움)
                 event.target.value = '';
-                //함수를 빠져나오고 이미지 미리보기 함수를 실행시키지 않는다.
                 return;
             }
             // if 조건문에서 5개를 초과하지 않았을 경우 이미지 미리보기 함수 실행
-            // files은 사용자가 업로드한 파일 목록이니 미리보기 이벤트의 파라미터로 가져간다.
-            previewImages(files);
+            // newfiles는 사용자가 업로드한 파일 목록이니 미리보기 이벤트의 파라미터로 가져간다.
+            previewImages(newFiles);
         }
 
         //사진 미리보기 함수 
         function previewImages(files) {
-            //미리보기 이미지를 넣을 div 클래스를 배열로 불러온다.
+            //미리보기 이미지를 넣을 div클래스들을 배열로 불러온다.
             const previewContainer = document.getElementsByClassName('preview');
             previewContainer.innerHTML = "";  // 기존 이미지 초기화
 

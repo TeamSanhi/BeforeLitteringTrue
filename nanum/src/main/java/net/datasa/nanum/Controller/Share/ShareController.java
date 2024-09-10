@@ -109,7 +109,7 @@ public class ShareController {
     }
 
     /**
-     * shareBoard테이블 기준으로 사진 이름을 검색할 수 있게 해주는 컨트롤러 경로
+     * shareBoard테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
      * 
      * @param shareNum 게시글 번호
      * @param response 응답 정보
@@ -123,7 +123,7 @@ public class ShareController {
     }
 
     /**
-     * image테이블 기준으로 사진 이름을 검색할 수 있게 해주는 컨트롤러 경로
+     * image테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
      * 
      * @param shareNum
      * @param response
@@ -187,9 +187,12 @@ public class ShareController {
      */
     @GetMapping("edit")
     public String edit(
-            Model model, @RequestParam("shareNum") Integer shareNum,
+            Model model,
+            @RequestParam("shareNum") Integer shareNum,
             @AuthenticationPrincipal AuthenticatedUser user) {
+
         log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
+
         try {
             // 글읽기 함수 실행
             ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
@@ -210,18 +213,19 @@ public class ShareController {
      * 
      * @param boardDTO 수정할 글 정보
      * @param user     로그인한 사용자 정보
-     * @return 수정폼 HTML
+     * @return
      */
     @PostMapping("edit")
     public String edit(
             @ModelAttribute ShareBoardDTO shareBoardDTO,
             @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam("uploads") MultipartFile upload) {
+            @RequestParam("uploads") List<MultipartFile> uploads) {
         log.debug("share/edit 컨트롤러 지나감 shareBoardDTO, user.getUsername : {}, {}", shareBoardDTO, user.getUsername());
 
         try {
             // 수정 함수 edit 실행
-            shareService.edit(shareBoardDTO, user.getUsername(), uploadPath, upload);
+            shareService.edit(shareBoardDTO, user.getUsername(), uploadPath, uploads);
+            // 수정을 완료한 게시글로 이동
             return "redirect:read?shareNum=" + shareBoardDTO.getShareNum();
         } catch (Exception e) {
             e.printStackTrace();
