@@ -34,12 +34,6 @@ public class ShareController {
     private final ShareService shareService;
 
     // application.properties 파일의 게시판 관련 설정값
-    // 페이지 사이즈
-    @Value("${board.pageSize}")
-    int pageSize;
-    // 페이지 블록 크기
-    @Value("${board.linkSize}")
-    int linkSize;
     // 파일 저장경로
     @Value("${board.uploadPath}")
     String uploadPath;
@@ -84,24 +78,28 @@ public class ShareController {
     public String postMethodName(
             @ModelAttribute ShareBoardDTO DTO,
             @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam("upload") MultipartFile upload) {
+            @RequestParam("uploads") List<MultipartFile> uploads) {
         // 로그인한 유저 정보를 DTO에 저장
         DTO.setMemberNum(user.getNum());
 
         // 저장하여 받아온 데이터와 로그인한 유저를 확인
-        log.debug("ShareBoardDTO, user정보 확인 : {}", DTO);
+        log.debug("ShareBoardDTO, user정보 확인 : {}, {}", DTO, user.getUsername());
+        log.debug("전달받은 이미지 : {}", uploads);
 
-        // 업로드된 첨부파일
-        if (upload != null) {
-            log.debug("Empty : {}", upload.isEmpty());
-            log.debug("파라미터 이름 : {}", upload.getName());
-            log.debug("파일명 : {}", upload.getOriginalFilename());
-            log.debug("파일크기 : {}", upload.getSize());
-            log.debug("파일종류 : {}", upload.getContentType());
+        // 업로드된 첨부파일들의 정보
+        if (uploads != null && !uploads.isEmpty()) {
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    log.debug("파라미터 이름 : {}", upload.getName());
+                    log.debug("파일명 : {}", upload.getOriginalFilename());
+                    log.debug("파일크기 : {}", upload.getSize());
+                    log.debug("파일종류 : {}", upload.getContentType());
+                }
+            }
         }
         try {
             // 데이터를 저장하는 함수 실행
-            shareService.save(DTO, uploadPath, upload);
+            shareService.save(DTO, uploadPath, uploads);
             return "redirect:/share/list";
         } catch (Exception e) {
             e.printStackTrace();// +

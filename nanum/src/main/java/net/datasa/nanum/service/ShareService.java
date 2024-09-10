@@ -50,7 +50,7 @@ public class ShareService {
      * @param DTO        저장할 글 정보
      * @throws IOException 데이터 저장시 필요
      */
-    public void save(ShareBoardDTO DTO, String uploadPath, MultipartFile upload) throws IOException {
+    public void save(ShareBoardDTO DTO, String uploadPath, List<MultipartFile> uploads) throws IOException {
         // 글작성자가 테이블에 존재하는지 확인
         MemberEntity memberEntity = memberRepository.findById(DTO.getMemberNum())
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
@@ -71,18 +71,18 @@ public class ShareService {
         shareBoardRepository.save(shareBoardEntity);
 
         // 첨부파일이 있는 경우 imageEntity로 변환
-        if (upload != null && !upload.isEmpty()) {
-            String fileName = fileManager.saveFile(uploadPath, upload);
-            // imageEntity 생성 및 저장
-            ImageEntity imageEntity = ImageEntity.builder()
-                    .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
-                    .imageFileName(fileName)
-                    .build();
-            // shareEntity에 imageFileNmae 저장
-            shareBoardEntity.setImageFileName(fileName);
-            // 생성된 imageEntity를 저장
-            imageRepository.save(imageEntity);
-        }
+        // if (uploads != null && !uploads.isEmpty()) {
+        // String fileName = fileManager.saveFile(uploadPath, uploads);
+        // // imageEntity 생성 및 저장
+        // ImageEntity imageEntity = ImageEntity.builder()
+        // .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
+        // .imageFileName(fileName)
+        // .build();
+        // // shareEntity에 imageFileNmae 저장
+        // shareBoardEntity.setImageFileName(fileName);
+        // // 생성된 imageEntity를 저장
+        // imageRepository.save(imageEntity);
+        // }
     }
 
     /**
