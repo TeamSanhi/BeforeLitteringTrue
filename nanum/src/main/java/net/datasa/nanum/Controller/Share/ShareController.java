@@ -173,7 +173,8 @@ public class ShareController {
      */
     @GetMapping("edit")
     public String edit(
-            Model model, @RequestParam("shareNum") Integer shareNum, @AuthenticationPrincipal AuthenticatedUser user) {
+            Model model, @RequestParam("shareNum") Integer shareNum,
+            @AuthenticationPrincipal AuthenticatedUser user) {
         log.debug("share/edit 컨트롤러 지나감 shareNum, user.getUsername : {}, {}", shareNum, user.getUsername());
         try {
             // 글읽기 함수 실행
@@ -199,8 +200,9 @@ public class ShareController {
      */
     @PostMapping("edit")
     public String edit(
-            @ModelAttribute ShareBoardDTO shareBoardDTO, @AuthenticationPrincipal AuthenticatedUser user,
-            @RequestParam("upload") MultipartFile upload) {
+            @ModelAttribute ShareBoardDTO shareBoardDTO,
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam("uploads") MultipartFile upload) {
         log.debug("share/edit 컨트롤러 지나감 shareBoardDTO, user.getUsername : {}, {}", shareBoardDTO, user.getUsername());
 
         try {

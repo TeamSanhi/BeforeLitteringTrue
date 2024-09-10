@@ -70,19 +70,30 @@ public class ShareService {
         // 변환된 shareBoardEnetity를 저장
         shareBoardRepository.save(shareBoardEntity);
 
-        // 첨부파일이 있는 경우 imageEntity로 변환
-        // if (uploads != null && !uploads.isEmpty()) {
-        // String fileName = fileManager.saveFile(uploadPath, uploads);
-        // // imageEntity 생성 및 저장
-        // ImageEntity imageEntity = ImageEntity.builder()
-        // .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
-        // .imageFileName(fileName)
-        // .build();
-        // // shareEntity에 imageFileNmae 저장
-        // shareBoardEntity.setImageFileName(fileName);
-        // // 생성된 imageEntity를 저장
-        // imageRepository.save(imageEntity);
-        // }
+        log.debug("Service로 전달받은 이미지 정보 : {}", uploads);
+
+        // 첨부파일이 있는 경우 각 파일을 imageEntity로 변환
+        if (uploads != null && !uploads.isEmpty()) {
+            for (MultipartFile upload : uploads) {
+                if (!upload.isEmpty()) {
+                    // 각 파일을 저장
+                    String fileName = fileManager.saveFile(uploadPath, upload);
+
+                    // imageEntity 생성 및 저장
+                    ImageEntity imageEntity = ImageEntity.builder()
+                            .shareBoard(shareBoardEntity) // imageEntity의 외래키 shareBoardEntity
+                            .imageFileName(fileName)
+                            .build();
+                    // 첫번째 사진은 게시글에도 저장시킨다.
+                    if (shareBoardEntity.getImageFileName().equals("image")) {
+                        shareBoardEntity.setImageFileName(fileName);
+                    }
+                    // 이미지 엔티티 저장
+                    imageRepository.save(imageEntity);
+                }
+            }
+        }
+
     }
 
     /**
@@ -193,8 +204,9 @@ public class ShareService {
         shareBoardEntity.setShareContents(shareBoardDTO.getShareContents());
         shareBoardEntity.setShareLat(shareBoardDTO.getShareLat());
         shareBoardEntity.setShareLng(shareBoardDTO.getShareLng());
-        // debug
+
         log.debug("수정된 shareBoardEntity", shareBoardEntity);
+
         // 업로드된 파일이 있으면 기존 파일 삭제하고 새로 저장
         if (upload != null && !upload.isEmpty()) {
             if (shareBoardEntity.getImageFileName() != null) {
