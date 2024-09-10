@@ -188,11 +188,12 @@ public class ShareService {
             // 기존 이미지 삭제
             if (shareBoardEntity.getImageList() != null && !shareBoardEntity.getImageList().isEmpty()) {
                 for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+                    // 경로와 파일이름을 받아서 일치하는 것을 삭제한다.
                     fileManager.deleteFile(uploadPath, imageEntity.getImageFileName());
-                    imageRepository.delete(imageEntity); // 기존 이미지 엔티티 삭제
                 }
+                // 이미지 리스트 비우기 (orphanRemoval을 통해 참조되고 있는 image테이블의 entity도 삭제된다. 위해)
+                shareBoardEntity.getImageList().clear();
             }
-
             // 새 이미지 저장
             for (MultipartFile upload : uploads) {
                 if (!upload.isEmpty()) {
