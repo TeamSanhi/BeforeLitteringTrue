@@ -304,32 +304,4 @@ public class ShareService {
         return shareCount;
     }
 
-    /*
-     * ajax로 지도가 변할때 마다 지도에 표시되는 게시글을 업데이트 하며 게시판으로 보여줌으로 필요없어 졌음으로 경로의 역할만 한다.
-     * 고로 모든 게시글 목록을 불러오는 이 함수는 필요가 없다.
-     * public List<ShareBoardDTO> getListAll() {
-     * Sort sort = Sort.by(Sort.Direction.DESC, "shareNum");
-     * // 전체 보기
-     * List<ShareBoardEntity> entityList = shareBoardRepository.findAll(sort);
-     * log.debug("전체 글목록 조회 : {}", entityList);
-     * // DTO로 변환할 리스트 생성
-     * List<ShareBoardDTO> dtoList = new ArrayList<>();
-     * // entityList를 DTO로 변환해서 dtoList에 저장
-     * for (ShareBoardEntity entity : entityList) {
-     * ShareBoardDTO dto = ShareBoardDTO.builder()
-     * .memberNum(entity.getMember().getMemberNum()) // memberNum을 가져오기 위해서
-     * // entity.getMember().getMemberNum() 사용
-     * .shareTitle(entity.getShareTitle())
-     * .memberNickname(entity.getMember().getMemberNickname()) // 테이블에 없는 닉네임 DTO 따로
-     * 만들어 Nickname 저장
-     * .shareDate(entity.getShareDate())
-     * .shareNum(entity.getShareNum())
-     * .imageFileName(entity.getImageFileName())
-     * .build();
-     * dtoList.add(dto);
-     * }
-     * // dtoList를 반환
-     * return dtoList;
-     * }
-     */
 }
