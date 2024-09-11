@@ -187,7 +187,8 @@
         // 지도 경계 밖 마커를 삭제하는 함수
         function removeMarkersOutOfBounds() {
             let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
-
+            
+            //filter함수를 사용하여 마커배열을 순회해 경게 안에 있으면 유지, 없으면 삭제 
             markers = markers.filter(function(marker) {
                 let position = marker.getPosition();
                 // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -70,8 +69,6 @@ public class ShareService {
         // 변환된 shareBoardEnetity를 저장
         shareBoardRepository.save(shareBoardEntity);
 
-        log.debug("Service로 전달받은 이미지 정보 : {}", uploads);
-
         // 첨부파일이 있는 경우 각 파일을 imageEntity로 변환
         if (uploads != null && !uploads.isEmpty()) {
             for (MultipartFile upload : uploads) {
@@ -105,16 +102,16 @@ public class ShareService {
 
         // 전달된 게시글ShareBoardDTO로 변환해서 반환
         ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
-                .memberNum(shareBoardEntity.getMember().getMemberNum())
-                .memberNickname(shareBoardEntity.getMember().getMemberNickname())
-                .shareNum(shareBoardEntity.getShareNum())
-                .shareTitle(shareBoardEntity.getShareTitle())
-                .shareContents(shareBoardEntity.getShareContents())
-                .shareDate(shareBoardEntity.getShareDate())
-                .memberId(shareBoardEntity.getMember().getMemberId())
+                .memberNum(shareBoardEntity.getMember().getMemberNum()) // 작성자 번호
+                .memberNickname(shareBoardEntity.getMember().getMemberNickname()) // 작성자 별명
+                .shareNum(shareBoardEntity.getShareNum()) // 게시글 번호
+                .shareTitle(shareBoardEntity.getShareTitle()) // 게시글 제목
+                .shareContents(shareBoardEntity.getShareContents()) // 게시글 내용
+                .shareDate(shareBoardEntity.getShareDate()) // 게시글 작성 날짜
+                .memberId(shareBoardEntity.getMember().getMemberId()) // 게시글 작성자 이름
                 .build();
 
-        // image정보를 shareBoardDTO에 저장하기
+        // ***********image정보를 shareBoardDTO에 저장하기*************************
         // shareBoardDTO의 이미지 리스트에 저장할 ImageDTO List를 생성한다.
         List<ImageDTO> imageList = new ArrayList<ImageDTO>();
         // shareBoardEntity에서 imageList를 하나씩 ImageDTO에 저장한다.
