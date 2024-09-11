@@ -14,8 +14,8 @@ import net.datasa.nanum.domain.entity.ShareBoardEntity;
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Integer> {
     
-    @Query("SELECT m FROM MessageEntity m WHERE m.shareBoard = :shareBoard AND (m.giver = :giver OR m.receiver = :receiver)")
-    List<MessageEntity> findByThree(@Param("shareBoard") ShareBoardEntity shareBoard, @Param("giver") MemberEntity giver, @Param("receiver") MemberEntity receiver);
+    @Query("SELECT m FROM MessageEntity m WHERE m.shareBoard = :shareBoard AND (m.sender = :sender OR m.receiver = :receiver)")
+    List<MessageEntity> findByThree(@Param("shareBoard") ShareBoardEntity shareBoard, @Param("sender") MemberEntity sender, @Param("receiver") MemberEntity receiver);
 
     // 게시글 번호와 회원 번호를 이용하여 모든 쪽지 목록을 가져온다.
     //List<MessageEntity> findByShareBoardShareNumAndGiverMemberNumOrReceiverMemberNum(Integer shareNum, Integer giverNum, Integer receiverNum);

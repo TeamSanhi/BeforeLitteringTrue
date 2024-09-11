@@ -12,10 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDTO {
-    private Integer messageNum;
-    private Integer giverNum;
-    private Integer receiverNum;
-    private Integer shareNum;
-    private String messageContents;
-    private LocalDateTime deliverDate;
+    private Integer messageNum;         // 쪽지 번호
+    private Integer senderNum;          // 발신자 번호
+    private Integer receiverNum;        // 수신자 번호
+    private Integer shareNum;           // 게시글 번호
+    private Integer roomNum;            // 쪽지방 번호
+    private String messageContents;     // 쪽지 내용
+    private LocalDateTime deliverDate;  // 전송일
+    private Boolean isRead;         // 읽음 여부
 }
