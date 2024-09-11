@@ -52,17 +52,6 @@
             previewImages(newFiles);
         }
 
-        // 미리보기 초기화 함수     
-        function resetPreview() {
-            // 미리보기 이미지를 넣을 태그를 배열로 선택 요소 선택
-            let previewContainer = document.querySelectorAll('.preview'); 
-
-            // 반복문을 이용하여 img를 넣기전 태그를 초기화 해준다.
-            for (let i = 0; i < 5; i++) {
-                previewContainer[i].innerHTML = "";
-            }
-        }
-
         // 사진 미리보기 함수 
         function previewImages(files) {
             
@@ -85,6 +74,17 @@
                 }
                 // 사용자가 선택한 파일을 미리 볼 수 있도록 변환 작업 시행
                 reader.readAsDataURL(files[i]); 
+            }
+        }
+
+        // 미리보기 초기화 함수     
+        function resetPreview() {
+            // 미리보기 이미지를 넣을 태그를 배열로 선택 요소 선택
+            let previewContainer = document.querySelectorAll('.preview'); 
+
+            // 반복문을 이용하여 img를 넣기전 태그를 초기화 해준다.
+            for (let i = 0; i < 5; i++) {
+                previewContainer[i].innerHTML = "";
             }
         }
     </script>
