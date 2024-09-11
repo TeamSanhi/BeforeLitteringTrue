@@ -14,7 +14,7 @@
         $(document).ready(function () {
             $('#deleteButton').click(del);
             $('#editButton').click(edit);
-            $('#bookmark').click(bookmark);
+            $('#bookmark1').click(bookmark1);
         })
 
         //삭제 함수
@@ -47,7 +47,7 @@
         };
 
         //북마크 버튼 클릭시 실행되는 함수
-        function bookmark() {
+        function bookmark1() {
             //data에 담겨있는 게시글 번호 가져옴 
             let shareNum = $(this).data('num'); 
 
@@ -80,7 +80,8 @@
             <td th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></td>
             <!-- 북마크 기능 -->
             <td>
-                <img id="bookmark" th:data-num="${shareBoard.shareNum}" style="width: 40px; height: 40px;" src="/images/bookmark1.png">
+                <img id="bookmark1" th:data-num="${shareBoard.shareNum}" style="width: 40px; height: 40px;" src="/images/bookmark1.png">
+                <img id="bookmark2" th:data-num="${shareBoard.shareNum}" style="width: 40px; height: 40px;" src="/images/bookmark2.png">
             </td>
         </tr>
     </table>

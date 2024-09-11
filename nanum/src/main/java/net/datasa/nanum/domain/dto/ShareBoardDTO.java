@@ -35,6 +35,8 @@ public class ShareBoardDTO {
     private String memberNickname; // 회원 이름
     private String memberId; // 회원 ID
     private String formatDate; // shareList sciprt에서 사용하기 위해 날짜
-    private List<ImageDTO> imageList; // 리플 목록
+    // 로그인한 사람이 클릭한 글을 북마크 하였는지 안했는지 확인하는 변수
+    private Boolean bookmarked; // true면 북마크함 false면 북마크안함
 
+    private List<ImageDTO> imageList; // 이미지 목록
 }
