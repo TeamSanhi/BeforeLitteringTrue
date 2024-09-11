@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.datasa.nanum.domain.entity.ImageEntity;
 
 /**
  * 게시판 DTO
