@@ -63,6 +63,7 @@ public class MessageService {
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
         .orElseThrow(() -> new EntityNotFoundException("게시글 정보가 없습니다."));
 
+
         return messageRepository.findByThree(shareBoardEntity, memberEntity, memberEntity);
     }
     
@@ -75,8 +76,8 @@ public class MessageService {
             .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 게시글입니다."));
                        
         MessageEntity messageEntity = MessageEntity.builder()
-                                    .giver(shareBoardEntity.getMember())
-                                    .receiver(memberEntity)
+                                    .sender(memberEntity)
+                                    .receiver(shareBoardEntity.getMember())
                                     .shareBoard(shareBoardEntity)
                                     .messageContents(dto.getMessageContents())
                                     .build();

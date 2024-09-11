@@ -41,6 +41,7 @@ public class MessageController {
 
         log.debug("messageView/messageList.html로 이동");                    
 
+
         // 게시글별로 주고받은 쪽지 조회 
         Map<ShareBoardEntity, MessageEntity> messagesByShareNum = messageService.getMessagesGroupedByShareNum(user.getNum());
 
@@ -50,6 +51,7 @@ public class MessageController {
         return "messageView/messageList";
     }
 
+    // 쪽지 내용 페이지
     @GetMapping("/messages/full/{shareNum}")
     public String viewFullMessagesByPost(@PathVariable("shareNum") Integer shareNum, Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 

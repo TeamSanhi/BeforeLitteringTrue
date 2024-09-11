@@ -8,40 +8,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>쪽지 내역</title>
-    <style>
-      .message-item {
-        margin-bottom: 10px;
-        padding: 10px;
-        border: 1px solid #ccc;
-        background-color: #f1f1f1;
-      }
-    </style>
+    <style></style>
 
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script></script>
   </head>
-  <body>
-    <main>
-      <h1>게시글 <span th:text="${shareNum}"></span>의 쪽지 내역</h1>
-
-      <div th:each="message : ${fullMessages}">
-        <div class="message-item">
-          <p>
-            <strong>발신자:</strong>
-            <span th:text="${message.giver.memberNickname}"></span>
-          </p>
-          <p>
-            <strong>내용:</strong>
-            <span th:text="${message.messageContents}"></span>
-          </p>
-          <p>
-            <strong>전송일:</strong>
-            <span
-              th:text="${#temporals.format(message.deliverDate, 'yyyy-MM-dd HH:mm')}"
-            ></span>
-          </p>
-        </div>
-      </div>
-    </main>
-  </body>
+  <body></body>
 </html>
