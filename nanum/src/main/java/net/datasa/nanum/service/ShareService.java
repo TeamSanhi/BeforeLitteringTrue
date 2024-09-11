@@ -167,9 +167,13 @@ public class ShareService {
         if (!shareBoardEntity.getMember().getMemberId().equals(username)) {
             throw new RuntimeException("삭제 권한이 없습니다.");
         }
+
         // 첨부파일이 있는 경우 파일 삭제
         try {
-            fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+            for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+                // 경로와 파일이름을 받아서 일치하는 것을 삭제한다.
+                fileManager.deleteFile(uploadPath, imageEntity.getImageFileName());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

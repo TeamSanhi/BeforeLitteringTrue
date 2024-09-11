@@ -55,7 +55,6 @@ public class ShareMapService {
                     .memberNickname(entity.getMember().getMemberNickname()) // share_board에 없는 컬럼 DTO 따로 만들어 Nickname저장
                     .shareDate(entity.getShareDate()) // 게시글 작성 날짜
                     .formatDate(dateFormat.format(entity.getShareDate())) // String 타입으로 포멧된 데이터 형식
-                    .imageFileName(entity.getImageFileName()) // 게시글 파일 이미지 이름
                     .shareLat(entity.getShareLat()) // 위도
                     .shareLng(entity.getShareLng()) // 경도
                     .build();
