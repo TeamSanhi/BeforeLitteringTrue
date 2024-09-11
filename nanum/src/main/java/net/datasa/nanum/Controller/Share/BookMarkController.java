@@ -22,6 +22,7 @@ import net.datasa.nanum.service.BookMarkService;
 @RequiredArgsConstructor
 public class BookMarkController {
 
+    // 북마크 서비스 클래스 사용
     private final BookMarkService bookMarkService;
 
     /**
@@ -35,6 +36,7 @@ public class BookMarkController {
     public void bookmark(
             @RequestParam("shareNum") Integer shareNum,
             @AuthenticationPrincipal AuthenticatedUser user) {
+
         log.debug("전달받은 게시글 번호화 로그인한 유저 정보 : {}, {}", shareNum, user.getNum());
 
         bookMarkService.bookmark(shareNum, user.getNum());

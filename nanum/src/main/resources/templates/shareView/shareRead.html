@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글읽기</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- 게시글 수정 삭제, 북마크 처리 script -->
     <script>
         // 삭제 버튼 클릭 시 실행될 함수
         $(document).ready(function () {
@@ -15,6 +16,7 @@
             $('#editButton').click(edit);
             $('#bookmark').click(bookmark);
         })
+
         //삭제 함수
         function del(){
             //삭제여부 확인
@@ -32,6 +34,7 @@
                 }
             })
         };
+
         //수정 함수
         function edit() {
             //수정여부확인
@@ -47,18 +50,18 @@
         function bookmark() {
             //data에 담겨있는 게시글 번호 가져옴 
             let shareNum = $(this).data('num'); 
+            console.log(shareNum);
 
             // ajax를 이용해 게시글 번호 전송 
             $.ajax({
                 url:'/share/bookmark',
                 type: 'get',
                 data: { shareNum : shareNum },
-                success: function () {
-
+                success: function() { 
+                    alert("ajax성공")
                 }
             })
         }
-
     </script>
 </head>
 <body>
@@ -84,12 +87,39 @@
         </tr>
     </table>
     <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
-    <div th:each = "image : ${shareBoard.imageList}">      
-        <div>
+    <div th:each = "image : ${shareBoard.imageList}" style="display: inline-block;">      
             <img style="width: 200px; height: 200px;" th:src="|download?imageNum=${image.imageNum}|">
-        </div>  
     </div>
 
+    <!--지도 -->
+    <div id="map" style="width:100%;height:350px;">
+    </div>
+    <!-- 위도 경도 정보 -->
+    <input id="shareLat" type="hidden" th:value="${shareBoard.shareLat}">
+    <input id="shareLng" type="hidden" th:value="${shareBoard.shareLng}">
+    <!-- 지도 작성 스크립트  -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
+    <script>
+        let shareLat = $('#shareLat').val();
+        let shareLng = $('#shareLng').val();
+        // 지도를 표시할 div 
+        var mapContainer = document.getElementById('map'), 
+            mapOption = { 
+                center: new kakao.maps.LatLng(shareLat, shareLng), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        // 마커가 표시될 위치입니다 
+        var markerPosition  = new kakao.maps.LatLng(shareLat, shareLng); 
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+    });
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
+    </script>
+
+    <!-- 삭제 수정  -->
     <div>
         <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 삭제가 보이도록 한다.  -->
         <p th:if="${#authentication.name == shareBoard.memberId}">

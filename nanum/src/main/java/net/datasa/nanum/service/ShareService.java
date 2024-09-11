@@ -109,6 +109,8 @@ public class ShareService {
                 .shareContents(shareBoardEntity.getShareContents()) // 게시글 내용
                 .shareDate(shareBoardEntity.getShareDate()) // 게시글 작성 날짜
                 .memberId(shareBoardEntity.getMember().getMemberId()) // 게시글 작성자 이름
+                .shareLat(shareBoardEntity.getShareLat()) // 게시글의 위도
+                .shareLng(shareBoardEntity.getShareLng()) // 게시글의 경도
                 .build();
 
         // ***********image정보를 shareBoardDTO에 저장하기*************************
