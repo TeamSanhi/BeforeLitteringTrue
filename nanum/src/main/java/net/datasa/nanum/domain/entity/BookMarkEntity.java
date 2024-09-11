@@ -14,6 +14,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * 북마크 entity
+ */
 @Data
 @Entity
 @NoArgsConstructor
