@@ -9,6 +9,6 @@ import net.datasa.nanum.domain.entity.BookMarkEntity;
  * 북마크 관련 repository
  */
 @Repository
-public interface BookmarkRepository extends JpaRepository<BookMarkEntity, Integer> {
+public interface BookMarkRepository extends JpaRepository<BookMarkEntity, Integer> {
 
 }

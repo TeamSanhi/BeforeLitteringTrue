@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +37,7 @@ public class BookMarkController {
             @AuthenticationPrincipal AuthenticatedUser user) {
 
         log.debug("전달받은 게시글 번호화 로그인한 유저 정보 : {}, {}", shareNum, user.getNum());
-
+        // 북마크요청 처리
         bookMarkService.bookmark(shareNum, user.getNum());
     }
 }

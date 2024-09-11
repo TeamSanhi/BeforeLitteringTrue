@@ -19,9 +19,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "bookmark")
 public class BookMarkEntity {
 

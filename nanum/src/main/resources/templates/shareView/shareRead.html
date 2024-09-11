@@ -50,15 +50,13 @@
         function bookmark() {
             //data에 담겨있는 게시글 번호 가져옴 
             let shareNum = $(this).data('num'); 
-            console.log(shareNum);
 
             // ajax를 이용해 게시글 번호 전송 
             $.ajax({
-                url:'/share/bookmark',
+                url:'bookmark',
                 type: 'get',
                 data: { shareNum : shareNum },
                 success: function() { 
-                    alert("ajax성공")
                 }
             })
         }
