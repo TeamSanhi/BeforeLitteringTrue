@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class BookMarkDTO {
 
-    private Integer bookmarkKey;
+    private Integer bookmarkNum; // 북마크 번호
     private Integer memberNum; // Member의 ID
     private Integer shareNum; // 게시글 번호
 

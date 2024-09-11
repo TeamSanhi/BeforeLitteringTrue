@@ -28,8 +28,8 @@ public class BookMarkEntity {
     // 북마크 번호
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bookmark_key")
-    private Integer bookmarkKey;
+    @Column(name = "bookmark_num")
+    private Integer bookmarkNum;
 
     // 회원번호
     @ManyToOne(fetch = FetchType.LAZY)
