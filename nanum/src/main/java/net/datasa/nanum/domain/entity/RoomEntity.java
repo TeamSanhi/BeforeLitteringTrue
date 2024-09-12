@@ -29,21 +29,27 @@ public class RoomEntity {
 
     // 생성자 번호
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_num", referencedColumnName = "member_num")
-    private MemberEntity member;
+    @JoinColumn(name = "creator_num", referencedColumnName = "member_num")
+    private MemberEntity creator;
 
-    // 제공자 번호
+    // 게시글 주인 번호
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "receiver_num", referencedColumnName = "member_num")
+    private MemberEntity receiver;
+
+    // 게시글 번호
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "share_num", referencedColumnName = "share_num")
     private ShareBoardEntity shareBoard;
 
 }
 
-
 // CREATE TABLE ROOM (
 // 	room_num            INTEGER     AUTO_INCREMENT PRIMARY KEY,                                     -- 쪽지방 번호
-//  member_num        	INTEGER,                                                                    -- 생성자 번호 (물건을 받으려고 처음 쪽지를 보낸 신청자)
+//  creator_num         INTEGER,                                                                    -- 생성자 번호
+// 	receiver_num        INTEGER,                                                                	-- 게시글 주인 번호
 //  share_num           INTEGER,                                                                    -- 게시글 번호
-// 	CONSTRAINT FOREIGN KEY (member_num) REFERENCES MEMBER (member_num) ON DELETE SET NULL,
+// 	CONSTRAINT FOREIGN KEY (creator_num) REFERENCES MEMBER (member_num) ON DELETE SET NULL,
+// 	CONSTRAINT FOREIGN KEY (receiver_num) REFERENCES MEMBER (member_num) ON DELETE SET NULL,
 // 	CONSTRAINT FOREIGN KEY (share_num) 	REFERENCES SHARE_BOARD (share_num) ON DELETE SET NULL
 // );
