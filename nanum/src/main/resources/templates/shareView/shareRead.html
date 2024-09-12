@@ -198,6 +198,19 @@
           수정
         </button>
       </p>
+      <form
+        th:action="@{/message/read}"
+        method="get"
+        id="messageRead"
+        th:if="${#authentication.name == shareBoard.memberId}"
+      >
+        <input
+          type="hidden"
+          name="shareNum"
+          th:value="${shareBoard.shareNum}"
+        />
+        <button>받을래요</button>
+      </form>
     </div>
 
     <div th:if="${#authentication.name != shareBoard.memberId}">
