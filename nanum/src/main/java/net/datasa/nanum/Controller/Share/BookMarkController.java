@@ -25,6 +25,29 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     /**
+     * 게시글 클릭시 로그인한 사용자의 게시글 북마크 여부를 체크
+     * 
+     * @param shareNum
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("bookmark/check")
+    public Boolean checkBookmark(
+            @RequestParam("shareNum") Integer shareNum,
+            @AuthenticationPrincipal AuthenticatedUser user) {
+
+        // 북마크 존재 여부를 ture, false로 반환
+        boolean isBookmarked = bookMarkService.isBookmarked(shareNum, user.getNum());
+
+        // 로그인함 사람의 북마크 여부
+        log.debug("북마크 여부 isbookmarked : {}", isBookmarked);
+
+        // 반환받은 true, false 값을 ajax에 응답
+        return isBookmarked;
+    }
+
+    /**
      * ajax로 요청받은 북마크 처리
      * 
      * @param shareNum
@@ -32,12 +55,18 @@ public class BookMarkController {
      */
     @ResponseBody
     @GetMapping("bookmark")
-    public void bookmark(
+    public Boolean bookmark(
             @RequestParam("shareNum") Integer shareNum,
             @AuthenticationPrincipal AuthenticatedUser user) {
-        log.debug("전달받은 게시글 번호화 로그인한 유저 정보 : {}, {}", shareNum, user.getNum());
+
+        log.debug("bookmark 게시글 번호, 로그인 유저 정보 : {}, {}", shareNum, user.getNum());
 
         // 북마크요청 처리
-        bookMarkService.bookmark(shareNum, user.getNum());
+        boolean isBookmarked = bookMarkService.bookmark(shareNum, user.getNum());
+
+        log.debug("bookmark()에서 전달받은 boolean 값 : {}", isBookmarked);
+
+        return isBookmarked; // ajax로 boolean값을 전송
     }
+
 }

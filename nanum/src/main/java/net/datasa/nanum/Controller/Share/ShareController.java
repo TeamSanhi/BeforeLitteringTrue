@@ -128,11 +128,12 @@ public class ShareController {
     @GetMapping("read")
     public String read(
             Model model,
-            @RequestParam("shareNum") Integer shareNum,
-            @AuthenticationPrincipal AuthenticatedUser user) {
-        log.debug("share/read 컨트롤러 지나감 shareNum : {}, {}", shareNum, user.getNum());
+            @RequestParam("shareNum") Integer shareNum) {
+
+        log.debug("share/read 컨트롤러 지나감 shareNum : {}, {}", shareNum);
+
         // DTO생성 후 해당 게시글 번호의 게시글 정보를 저장
-        ShareBoardDTO shareBoardDTO = shareService.read(shareNum, user.getNum());
+        ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
         log.debug("전달받은 DTO : {}", shareBoardDTO);
         // 모델에 저장
         model.addAttribute("shareBoard", shareBoardDTO);
@@ -177,7 +178,7 @@ public class ShareController {
 
         try {
             // 글읽기 함수 실행 파라미터로 게시글번호와 로그인한 사람의 정보를 넘겨준다.
-            ShareBoardDTO shareBoardDTO = shareService.read(shareNum, user.getNum());
+            ShareBoardDTO shareBoardDTO = shareService.read(shareNum);
             if (!user.getUsername().equals(shareBoardDTO.getMemberId())) {
                 throw new RuntimeException("수정 권한이 없습니다.");
             }

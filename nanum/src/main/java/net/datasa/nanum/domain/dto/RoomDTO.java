@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RoomDTO {
     private Integer roomNum;        // 쪽지방 번호
-    private Integer memberNum;      // 참여자 번호
+    private Integer creatorNum;     // 생성자 번호
+    private Integer receiverNum;    // 게시글 주인 번호
     private Integer shareNum;       // 게시글 번호
 
     // entity에 없는 변수명
