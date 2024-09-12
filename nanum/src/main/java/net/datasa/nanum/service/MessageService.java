@@ -120,14 +120,17 @@ public void messageSave(int num, Integer roomNum, String messageContents) {
 }
 
 
-public List<MessageDTO> getMessage(RoomEntity room, String userName) {
+public List<MessageDTO> getMessage(RoomEntity room, int num) {
         List<MessageEntity> messageList = messageRepository.findAllByRoom(room);
         List<MessageDTO> dtoList = new ArrayList<>();
 
+        log.debug("지금 로그인한 유저: {}", num);
+        log.debug("쪽지방 만든 유저: {}", room.getCreator().getMemberNum());
+        log.debug("게시글 유저: {}", room.getReceiver().getMemberNum());
+
         // 내가 쓴 쪽지일때
-        if(userName == room.getCreator().getMemberId()) {
+        if(num == room.getCreator().getMemberNum()) {
                 for (MessageEntity message : messageList) {
-                        log.debug("쪽지: {}", message);
                         MessageDTO messageDTO = MessageDTO.builder()
                         .messageNum(message.getMessageNum())
                         .senderNum(message.getSender().getMemberNum())
@@ -142,7 +145,7 @@ public List<MessageDTO> getMessage(RoomEntity room, String userName) {
                 return dtoList;
         }
         // 내가 받은 쪽지일때
-        else if (userName == room.getReceiver().getMemberId()) {
+        else if (num == room.getReceiver().getMemberNum()) {
                 for (MessageEntity message : messageList) {
                         message.setIsRead(true);
                         messageRepository.save(message);
@@ -163,31 +166,6 @@ public List<MessageDTO> getMessage(RoomEntity room, String userName) {
                 return null;
         }
 }
-
-/**
- * 현재 게시글이 내가 올린 게시글인지 아닌지 확인
- * @param num           현재 회원번호
- * @param shareNum      게시글 번호
- * @return
- */
-public boolean isMe(int num, int shareNum) {
-        ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
-                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
-        
-        if(num == shareBoard.getMember().getMemberNum()) {
-                return true;
-        } else{
-                return false;
-        }       
-}
-
-
-
-
-
-
-
-
 
 
 }
