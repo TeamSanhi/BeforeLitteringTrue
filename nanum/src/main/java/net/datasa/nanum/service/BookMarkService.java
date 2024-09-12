@@ -32,6 +32,25 @@ public class BookMarkService {
         private final ShareBoardRepository shareBoardRepository;
 
         /**
+         * 게시글 클릭시 로그인한 사용자의 북마크 여부를 판단 .
+         * 
+         * @param shareNum
+         * @param memberNum
+         * @return
+         */
+        public boolean isBookmarked(Integer shareNum, Integer memberNum) {
+                // 해당 유저가 해당 게시글을 북마크했는지 확인
+                Optional<BookMarkEntity> bookmark = bookMarkRepository.findByMemberAndShareBoard(
+                                memberRepository.findById(memberNum)
+                                                .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다")),
+                                shareBoardRepository.findById(shareNum)
+                                                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다")));
+
+                // 북마크가 존재하면 true, 없으면 false 반환
+                return bookmark.isPresent();
+        }
+
+        /**
          * 북마크 추가/삭제 처리
          * 
          * @param shareNum  게시글 번호
@@ -52,6 +71,8 @@ public class BookMarkService {
                 if (existingBookmark.isPresent()) {
                         // 북마크가 존재하면 삭제
                         bookMarkRepository.delete(existingBookmark.get());
+                        // 게시글의 북마크 갯수 - 1
+                        shareBoard.setBookmarkCount(shareBoard.getBookmarkCount() - 1);
                         return false; // 삭제된 경우
                 } else {
                         // 북마크가 없으면 추가
@@ -60,6 +81,8 @@ public class BookMarkService {
                                         .shareBoard(shareBoard)
                                         .build();
                         bookMarkRepository.save(newBookmark);
+                        // 게시글의 북마크 갯수 + 1
+                        shareBoard.setBookmarkCount(shareBoard.getBookmarkCount() + 1);
                         return true; // 추가된 경우
                 }
         }
