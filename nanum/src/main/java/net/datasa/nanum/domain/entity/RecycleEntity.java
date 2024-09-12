@@ -49,8 +49,4 @@ public class RecycleEntity {
     @Column(name = "update_date", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime updateDate;
 
-    public Object getTitle() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getTitle'");
-    }
 }

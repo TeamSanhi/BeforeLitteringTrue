@@ -81,10 +81,6 @@ public class ShareBoardEntity {
     @Column(name = "bookmark_count", columnDefinition = "INTEGER DEFAULT 0")
     private Integer bookmarkCount = 0;
 
-    // 사진이름
-    @Column(name = "image_file_name", length = 100)
-    private String imageFileName;
-
     // 해당글 번호를 외래키로 들고있는 사진들을 저장할 엔티티
     @OneToMany(mappedBy = "shareBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ImageEntity> imageList;

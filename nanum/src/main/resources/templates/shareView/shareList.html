@@ -19,17 +19,17 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
     <!-- 지도 script -->
     <script>
-        var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
             mapOption = { 
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 4 // 지도의 확대 레벨
             };
 
         // 지도를 생성합니다
-        var map = new kakao.maps.Map(mapContainer, mapOption); 
+        let map = new kakao.maps.Map(mapContainer, mapOption); 
 
         // 마커 클러스터러를 생성 (지도에 표시할 마커 배열을 비워둠)
-        var clusterer = new kakao.maps.MarkerClusterer({
+        let clusterer = new kakao.maps.MarkerClusterer({
             map: map, // 마커들을 클러스터로 관리할 지도 객체
             averageCenter: true, // 클러스터의 중심을 마커들의 평균 좌표로 설정
             minLevel: 4, // 최소 레벨로 클러스터링을 적용
@@ -39,9 +39,9 @@
         //내위치 가져오기
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                var lat = position.coords.latitude; // 위도
-                var lon = position.coords.longitude; // 경도
-                var locPosition = new kakao.maps.LatLng(lat, lon);
+                let lat = position.coords.latitude; // 위도
+                let lon = position.coords.longitude; // 경도
+                let locPosition = new kakao.maps.LatLng(lat, lon);
                 console.log(lat, lon, locPosition);
                 // 지도 중심을 내 위치로 이동
                 map.setCenter(locPosition);
@@ -51,8 +51,8 @@
         }
 
         //마커를 저장할 배열 
-        var markers = [];
-        var openInfoWindow = null;  // 열린 인포윈도우 추적
+        let markers = [];
+        let openInfoWindow = null;  // 열린 인포윈도우 추적
 
         // 초기 로드 시 마커를 불러오기 위해 'idle' 이벤트를 사용
         kakao.maps.event.addListener(map, 'idle', function () {
@@ -72,14 +72,14 @@
 
         // ajax를 발동시키는 트리거 
         function triggerAjax() {
-            var bounds = map.getBounds();
-            var swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
-            var swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
-            var neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
-            var neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
+            let bounds = map.getBounds();
+            let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
+            let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
+            let neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
+            let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
 
             // data에 위도 경도 정보를 담기
-            var data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
+            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
 
             //지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
@@ -99,11 +99,11 @@
 
                     // 지도에 마커를 찍어 게시글 위치를 표시
                     mapList.forEach(function(share) {
-                        var markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
+                        let markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
 
                         // 마커 중복확인 함수 isMarkerExists가 false일때 실행 (마커가 이미 있으면 true를 반환한다.)
                         if (!isMarkerExists(markerPosition)) {
-                            var marker = new kakao.maps.Marker({
+                            let marker = new kakao.maps.Marker({
                                 position: markerPosition
                             });
                             marker.setMap(map);    // marker를 지도에 표시합니다.
@@ -138,7 +138,7 @@
 
         // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성하는 함수
         function createMarkerWithInfo(marker, share) {
-            var iwContent = `
+            let iwContent = `
                 <div style="padding:5px; width:110px; height:150px;">
                     <span>${share.shareTitle}</span><br>
                     <span>${share.memberNickname}</span>
@@ -147,7 +147,7 @@
             `;
 
             // 인포윈도우를 생성합니다
-            var infowindow = new kakao.maps.InfoWindow({
+            let infowindow = new kakao.maps.InfoWindow({
                 content: iwContent,
                 disableAutoPan: true // 자동 이동 비활성화
             });
@@ -179,17 +179,18 @@
         // 좌표를 기반으로 중복 마커 확인
         function isMarkerExists(position) {
             return markers.some(function(marker) {
-                var markerPosition = marker.getPosition();
+                let markerPosition = marker.getPosition();
                 return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
             });
         }
 
         // 지도 경계 밖 마커를 삭제하는 함수
         function removeMarkersOutOfBounds() {
-            var bounds = map.getBounds(); // 지도의 현재 경계 가져오기
-
+            let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
+            
+            //filter함수를 사용하여 마커배열을 순회해 경게 안에 있으면 유지, 없으면 삭제 
             markers = markers.filter(function(marker) {
-                var position = marker.getPosition();
+                let position = marker.getPosition();
                 // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
                 if (bounds.contain(position)) {
                     return true;  // 경계 안에 있는 마커는 유지

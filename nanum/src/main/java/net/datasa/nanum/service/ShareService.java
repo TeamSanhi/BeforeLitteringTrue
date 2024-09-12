@@ -4,8 +4,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -19,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
 import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
+import net.datasa.nanum.domain.entity.BookMarkEntity;
 import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.repository.BookMarkRepository;
 import net.datasa.nanum.repository.ImageRepository;
 import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
@@ -42,6 +44,8 @@ public class ShareService {
     private final ImageRepository imageRepository;
     // 파일관리를 위한 FileManager 생성자 주입
     private final FileManager fileManager;
+    // 북마크 리퍼지토리에서 테이블 다룸
+    private final BookMarkRepository bookMarkRepository;
 
     /**
      * shareSave 메소드
@@ -55,6 +59,7 @@ public class ShareService {
         // 글작성자가 테이블에 존재하는지 확인
         MemberEntity memberEntity = memberRepository.findById(DTO.getMemberNum())
                 .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
+
         // ShareSave에서 받아온 DTO를 Entity로 변환
         ShareBoardEntity shareBoardEntity = ShareBoardEntity.builder()
                 .shareTitle(DTO.getShareTitle())
@@ -69,8 +74,6 @@ public class ShareService {
 
         // 변환된 shareBoardEnetity를 저장
         shareBoardRepository.save(shareBoardEntity);
-
-        log.debug("Service로 전달받은 이미지 정보 : {}", uploads);
 
         // 첨부파일이 있는 경우 각 파일을 imageEntity로 변환
         if (uploads != null && !uploads.isEmpty()) {
@@ -89,7 +92,6 @@ public class ShareService {
                 }
             }
         }
-
     }
 
     /**
@@ -98,23 +100,29 @@ public class ShareService {
      * @param shareNum 글 번호
      * @return ShareBoardDTO를 반환
      */
-    public ShareBoardDTO read(Integer shareNum) {
+    public ShareBoardDTO read(Integer shareNum, Integer memberNum) {
+        // 전달받은 로그인한 사람의 회원번호 가져온다.
+        MemberEntity memberEntity = memberRepository.findById(memberNum)
+                .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
+
         // 전달된 글 번호로 글 정보 조회
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
                 .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다."));
 
         // 전달된 게시글ShareBoardDTO로 변환해서 반환
         ShareBoardDTO shareBoardDTO = ShareBoardDTO.builder()
-                .memberNum(shareBoardEntity.getMember().getMemberNum())
-                .memberNickname(shareBoardEntity.getMember().getMemberNickname())
-                .shareNum(shareBoardEntity.getShareNum())
-                .shareTitle(shareBoardEntity.getShareTitle())
-                .shareContents(shareBoardEntity.getShareContents())
-                .shareDate(shareBoardEntity.getShareDate())
-                .memberId(shareBoardEntity.getMember().getMemberId())
+                .memberNum(shareBoardEntity.getMember().getMemberNum()) // 작성자 번호
+                .memberNickname(shareBoardEntity.getMember().getMemberNickname()) // 작성자 별명
+                .shareNum(shareBoardEntity.getShareNum()) // 게시글 번호
+                .shareTitle(shareBoardEntity.getShareTitle()) // 게시글 제목
+                .shareContents(shareBoardEntity.getShareContents()) // 게시글 내용
+                .shareDate(shareBoardEntity.getShareDate()) // 게시글 작성 날짜
+                .memberId(shareBoardEntity.getMember().getMemberId()) // 게시글 작성자 이름
+                .shareLat(shareBoardEntity.getShareLat()) // 게시글의 위도
+                .shareLng(shareBoardEntity.getShareLng()) // 게시글의 경도
                 .build();
 
-        // image정보를 shareBoardDTO에 저장하기
+        // ***********image정보를 shareBoardDTO에 저장하기*************************
         // shareBoardDTO의 이미지 리스트에 저장할 ImageDTO List를 생성한다.
         List<ImageDTO> imageList = new ArrayList<ImageDTO>();
         // shareBoardEntity에서 imageList를 하나씩 ImageDTO에 저장한다.
@@ -130,6 +138,15 @@ public class ShareService {
         }
         // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
         shareBoardDTO.setImageList(imageList);
+
+        // ***********북마크 정보 추가*************************
+        // bookMarkRepository에서 게시글 번호와 회원번호를 and 조건으로 검색하여 회원이 이 게시글을 북마크 했는지 찾는다.
+        Optional<BookMarkEntity> bookMarkEntity = bookMarkRepository.findByMemberAndShareBoard(memberEntity,
+                shareBoardEntity);
+
+        // 북마크 여부를 확인하고, DTO에 boolean 값으로 저장
+        boolean isBookmarked = bookMarkEntity.isPresent();
+        shareBoardDTO.setBookmarked(isBookmarked); // DTO에 북마크 여부 추가
 
         // DTO를 반환
         return shareBoardDTO;
@@ -150,9 +167,13 @@ public class ShareService {
         if (!shareBoardEntity.getMember().getMemberId().equals(username)) {
             throw new RuntimeException("삭제 권한이 없습니다.");
         }
+
         // 첨부파일이 있는 경우 파일 삭제
         try {
-            fileManager.deleteFile(uploadPath, shareBoardEntity.getImageFileName());
+            for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+                // 경로와 파일이름을 받아서 일치하는 것을 삭제한다.
+                fileManager.deleteFile(uploadPath, imageEntity.getImageFileName());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

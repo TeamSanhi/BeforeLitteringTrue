@@ -31,29 +31,33 @@ public class MessageController {
 
     /**
      * 사용자의 쪽지 목록으로 이동
+     * 
      * @param user
      * @param model
      * @return
      */
     @GetMapping("messages")
-    public String messages (@AuthenticationPrincipal AuthenticatedUser user, 
-                        Model model) {
+    public String messages(@AuthenticationPrincipal AuthenticatedUser user,
+            Model model) {
 
-        log.debug("messageView/messageList.html로 이동");                    
+        log.debug("messageView/messageList.html로 이동");
 
-        // 게시글별로 주고받은 쪽지 조회 
-        Map<ShareBoardEntity, MessageEntity> messagesByShareNum = messageService.getMessagesGroupedByShareNum(user.getNum());
+        // 게시글별로 주고받은 쪽지 조회
+        // Map<ShareBoardEntity, MessageEntity> messagesByShareNum =
+        // messageService.getMessagesGroupedByShareNum(user.getNum());
 
         // 모델에 담아서 뷰로 전달
-        model.addAttribute("messages", messagesByShareNum);
+        // model.addAttribute("messages", messagesByShareNum);
 
         return "messageView/messageList";
     }
 
+    // 쪽지 내용 페이지
     @GetMapping("/messages/full/{shareNum}")
-    public String viewFullMessagesByPost(@PathVariable("shareNum") Integer shareNum, Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+    public String viewFullMessagesByPost(@PathVariable("shareNum") Integer shareNum, Model model,
+            @AuthenticationPrincipal AuthenticatedUser user) {
 
-        log.debug("messageView/messageRead.html로 이동");  
+        log.debug("messageView/messageRead.html로 이동");
 
         log.debug("게시글 번호: {}", shareNum);
 
@@ -66,9 +70,9 @@ public class MessageController {
         return "messageView/messageRead"; // 전체 쪽지 내역을 보여줄 템플릿
     }
 
-
     /**
      * 작성한 쪽지를 DB에 저장
+     * 
      * @param dto
      * @param user
      * @param messageContents
@@ -76,11 +80,11 @@ public class MessageController {
      * @return
      */
     @PostMapping("send")
-    public String send (@ModelAttribute MessageDTO dto, 
-                        @AuthenticationPrincipal AuthenticatedUser user, 
-                        @RequestParam("messageContents") String messageContents, 
-                        @RequestParam("shareNum") int shareNum) {
-        
+    public String send(@ModelAttribute MessageDTO dto,
+            @AuthenticationPrincipal AuthenticatedUser user,
+            @RequestParam("messageContents") String messageContents,
+            @RequestParam("shareNum") int shareNum) {
+
         dto.setReceiverNum(user.getNum());
         dto.setMessageContents(messageContents);
         dto.setShareNum(shareNum);
