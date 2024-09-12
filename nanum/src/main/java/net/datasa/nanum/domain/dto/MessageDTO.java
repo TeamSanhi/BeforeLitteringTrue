@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class MessageDTO {
     private Integer messageNum;         // 쪽지 번호
     private Integer senderNum;          // 발신자 번호
+    private String senderNickname;      // 발신자 닉네임
     private Integer shareNum;           // 게시글 번호
     private Integer roomNum;            // 쪽지방 번호
     private String messageContents;     // 쪽지 내용

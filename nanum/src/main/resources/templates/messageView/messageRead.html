@@ -13,10 +13,10 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
       $(document).ready(function () {
-        $("#createRoomButton").click(function (event) {
+        $("#createRoom").click(function (event) {
           event.preventDefault(); // 기본 form 동작 방지
-          let messageContents = $("#messageContents").val();
-          let shareNum = $("#shareNum").val();
+          let messageContents = $("#messageContentsNotMe").val();
+          let shareNum = $("#shareNumNotMe").val();
 
           $.ajax({
             url: "/message/createRoom",
@@ -24,19 +24,18 @@
             data: { messageContents: messageContents, shareNum: shareNum },
             success: function () {
               console.log("shareNum: " + shareNum); // 값 확인
-              alert("성공");
               location.href = "/message/read?shareNum=" + shareNum;
             },
             error(e) {
               alert("실패");
             },
           });
-        }); // createRoomButton 클릭 이벤트
+        }); // createRoom 클릭 이벤트
 
-        $("#sendButton").click(function (event) {
+        $("#sendButtonExist").click(function (event) {
           event.preventDefault(); // 기본 form 동작 방지
-          let messageContents = $("#messageContents").val();
-          let roomNum = $("#roomNum").val();
+          let messageContents = $("#messageContentsExist").val();
+          let roomNum = $("#roomNumExist").val();
 
           $.ajax({
             url: "/message/send",
@@ -44,42 +43,58 @@
             data: { messageContents: messageContents, roomNum: roomNum },
             success: function () {
               console.log("roomNum: " + roomNum); // 값 확인
-              alert("성공");
               location.reload(); // 새로고침
             },
             error(e) {
               alert("실패");
             },
           });
-        });
+        }); // sendButtonExist 클릭 이벤트
       });
     </script>
   </head>
   <body>
     <h1>연결됨</h1>
-
     <div th:if="${!roomExist}">
-      <form>
-        <input type="text" id="messageContents" />
-        <input type="hidden" id="shareNum" th:value="${shareNum}" />
-        <button type="submit" id="createRoomButton">보내기</button>
-      </form>
+      <th:block th:if="${#authentication.name != thisBoardId}">
+        <form>
+          <input type="text" id="messageContentsNotMe" />
+          <input type="hidden" id="shareNumNotMe" th:value="${shareNum}" />
+          <button type="submit" id="createRoom">보내기</button>
+        </form>
+        <button>신고하기</button>
+      </th:block>
+
+      <th:block th:if="${#authentication.name == thisBoardId}">
+        <p>신청 내역이 없습니다.</p>
+      </th:block>
     </div>
 
     <div th:if="${roomExist}">
-      <th:block th:each="message : ${messageList}">
-        <span th:text="${message.senderNum} ">발신자</span>
-        <span th:text="${message.messageContents} ">내용</span>
-        <span
-          th:text="${#temporals.format(message.deliverDate, 'yyyy-MM-dd HH:mm')}"
-          >전송일</span
-        >
+
+      <th:block>
+        <th:block th:each="message : ${messageList}">
+          <strong>발신자:</strong>
+          <span th:text="${message.senderNickname}">발신자</span>
+          <span th:text="${message.messageContents} ">내용</span>
+          <span
+            th:text="${#temporals.format(message.deliverDate, 'yyyy-MM-dd HH:mm')}"
+            >전송일</span
+          >
+          <br>
+        </th:block>
+      
+        <form th:if="${room != null}">
+          <input type="text" id="messageContentsExist" />
+          <input type="hidden" id="roomNumExist" th:value="${room.roomNum}" />
+          <button type="submit" id="sendButtonExist">보내기</button>
+        </form>
       </th:block>
-      <form>
-        <input type="text" id="messageContents" />
-        <input type="hidden" id="roomNum" th:value="${room.roomNum}" />
-        <button type="submit" id="sendButton">보내기</button>
-      </form>
-    </div>
+      <th:block th:if="${#authentication.name == thisBoardId}">
+        <button>나눔 완료</button>
+      </th:block>
+
+    </div>   
+
   </body>
 </html>
