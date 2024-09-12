@@ -57,6 +57,9 @@
                 type: 'get',
                 data: { shareNum : shareNum },
                 success: function() { 
+                },
+                error: function(xhr, status, error) {
+                    console.log("로그인하여 주십시오");
                 }
             })
         }

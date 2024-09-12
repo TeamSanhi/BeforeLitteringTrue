@@ -100,10 +100,7 @@ public class ShareService {
      * @param shareNum 글 번호
      * @return ShareBoardDTO를 반환
      */
-    public ShareBoardDTO read(Integer shareNum, Integer memberNum) {
-        // 전달받은 로그인한 사람의 회원번호 가져온다.
-        MemberEntity memberEntity = memberRepository.findById(memberNum)
-                .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
+    public ShareBoardDTO read(Integer shareNum) {
 
         // 전달된 글 번호로 글 정보 조회
         ShareBoardEntity shareBoardEntity = shareBoardRepository.findById(shareNum)
@@ -141,12 +138,19 @@ public class ShareService {
 
         // ***********북마크 정보 추가*************************
         // bookMarkRepository에서 게시글 번호와 회원번호를 and 조건으로 검색하여 회원이 이 게시글을 북마크 했는지 찾는다.
-        Optional<BookMarkEntity> bookMarkEntity = bookMarkRepository.findByMemberAndShareBoard(memberEntity,
-                shareBoardEntity);
+        // if (memberNum != null) {
+        // // 전달받은 로그인한 사람의 회원번호 가져온다.
+        // MemberEntity memberEntity = memberRepository.findById(memberNum)
+        // .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
+        // // 북마크 테이블에서 게시글 번호, 회원번호를 and 조건으로 검색하여 북마크 엔티티에 넣는다.
+        // Optional<BookMarkEntity> bookMarkEntity =
+        // bookMarkRepository.findByMemberAndShareBoard(memberEntity,
+        // shareBoardEntity);
 
-        // 북마크 여부를 확인하고, DTO에 boolean 값으로 저장
-        boolean isBookmarked = bookMarkEntity.isPresent();
-        shareBoardDTO.setBookmarked(isBookmarked); // DTO에 북마크 여부 추가
+        // // 북마크 여부를 확인하고, DTO에 boolean 값으로 저장
+        // boolean isBookmarked = bookMarkEntity.isPresent();
+        // shareBoardDTO.setBookmarked(isBookmarked); // DTO에 북마크 여부 추가
+        // }
 
         // DTO를 반환
         return shareBoardDTO;
