@@ -37,4 +37,20 @@ public class AlarmService {
         }
         return alarmDTOS;
     }
+
+    public Boolean alarmEdit(MemberEntity memberNum, Integer alarmDay, String alarmContents) {
+        Boolean result = false;
+
+        AlarmEntity alarmEntity = new AlarmEntity();
+
+        alarmEntity.setMemberNum(memberNum);
+        alarmEntity.setAlarmDay(alarmDay);
+        alarmEntity.setAlarmContents(alarmContents);
+
+        alarmRepository.save(alarmEntity);
+
+        result = true;
+
+        return result;
+    }
 }
