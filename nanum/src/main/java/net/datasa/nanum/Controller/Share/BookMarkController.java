@@ -35,9 +35,10 @@ public class BookMarkController {
     public void bookmark(
             @RequestParam("shareNum") Integer shareNum,
             @AuthenticationPrincipal AuthenticatedUser user) {
+
         log.debug("전달받은 게시글 번호화 로그인한 유저 정보 : {}, {}", shareNum, user.getNum());
 
         // 북마크요청 처리
-        bookMarkService.bookmark(shareNum, user.getNum());
+        boolean isBookmarked = bookMarkService.bookmark(shareNum, user.getNum());
     }
 }

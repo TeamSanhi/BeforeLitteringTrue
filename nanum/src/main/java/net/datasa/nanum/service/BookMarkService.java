@@ -1,5 +1,7 @@
 package net.datasa.nanum.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -30,26 +32,36 @@ public class BookMarkService {
         private final ShareBoardRepository shareBoardRepository;
 
         /**
-         * 북마크 처리하는 서비스
+         * 북마크 추가/삭제 처리
          * 
-         * @param shareNum  넘겨받은 게시글 번호
-         * @param memberNum 로그인한 유저 넘버
+         * @param shareNum  게시글 번호
+         * @param memberNum 회원 번호
+         * @return 북마크 상태 (true: 북마크 추가됨, false: 북마크 삭제됨)
          */
-        public void bookmark(Integer shareNum, Integer memberNum) {
-                // 게시글 존재유무 검색
+        public boolean bookmark(Integer shareNum, Integer memberNum) {
+                // 회원 정보와 게시글 정보 확인
                 MemberEntity member = memberRepository.findById(memberNum)
-                                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-                // 로그인 존재유무 검색
+                                .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다."));
                 ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
-                                .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
-                // 북마크 entity 생성
-                BookMarkEntity bookMarkEntity = BookMarkEntity.builder()
-                                .member(member)
-                                .shareBoard(shareBoard)
-                                .build();
+                                .orElseThrow(() -> new EntityNotFoundException("게시글이 존재하지 않습니다."));
 
-                // 북마크 엔티티를 리퍼지토리에 저장
-                bookMarkRepository.save(bookMarkEntity);
+                // 북마크가 존재하는지 확인
+                Optional<BookMarkEntity> existingBookmark = bookMarkRepository.findByMemberAndShareBoard(member,
+                                shareBoard);
+
+                if (existingBookmark.isPresent()) {
+                        // 북마크가 존재하면 삭제
+                        bookMarkRepository.delete(existingBookmark.get());
+                        return false; // 삭제된 경우
+                } else {
+                        // 북마크가 없으면 추가
+                        BookMarkEntity newBookmark = BookMarkEntity.builder()
+                                        .member(member)
+                                        .shareBoard(shareBoard)
+                                        .build();
+                        bookMarkRepository.save(newBookmark);
+                        return true; // 추가된 경우
+                }
         }
 
 }

@@ -50,7 +50,7 @@
         function bookmark1() {
             //data에 담겨있는 게시글 번호 가져옴 
             let shareNum = $(this).data('num'); 
-
+            
             // ajax를 이용해 게시글 번호 전송 
             $.ajax({
                 url:'bookmark',
@@ -58,8 +58,9 @@
                 data: { shareNum : shareNum },
                 success: function() { 
                 },
-                error: function(xhr, status, error) {
-                    console.log("로그인하여 주십시오");
+                error: function() {
+                    alert("로그인하여 해주십시오");
+                    window.location.href = '/login'; // 로그인 페이지로 리다이렉트
                 }
             })
         }
