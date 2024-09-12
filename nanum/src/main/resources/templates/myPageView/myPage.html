@@ -89,173 +89,164 @@
 
     </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-        $(document).ready(function () {
-            // 알림 추가 모달
-            $("#alarmEdit").click(function () { // 열기
-                $("#alarmModal").fadeIn();
-            });
-            $("#alarmClose").click(function () { // 닫기 (X 버튼)
-                $("#alarmModal").fadeOut();
-            });
-            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-                if ($(event.target).is("#alarmModal")) {
-                    $("#alarmModal").fadeOut();
-                }
-            });
-            $("#save").click(function () {
-                var alarmDay = $('.alarmDay:checked').val();
-                var alarmContents = $('.alarmContents').val();
-
-                $.ajax({
-                    url: '/myPage/alarmEdit',
-                    type: 'POST',
-                    data: {
-                        alarmDay: alarmDay,
-                        alarmContents : alarmContents
-                    },
-                    success: function(response) {
-                        if(response.alarmEdit){
-                            alert("성공적으로 반영되었습니다.");
-                            $("#alarmModal").fadeOut();
-                        }
-                        else {
-                            alert("반영되지 않았습니다.");
-                        }
-                    },
-                    error: function() {
-                        alert("서버 오류입니다.");
-                    }
-                })
-
-                // 데이터베이스 알림 저장
-
-                    })
-
-            // 멤버 탈퇴 모달
-            $("#deleteId").click(function () { // 열기
-                $("#alertModal").fadeIn();
-            });
-            $("#alertClose").click(function () { // 닫기 (X 버튼)
-                $("#alertModal").fadeOut();
-            });
-            $("#reset").click(function () { // 닫기 (취소 버튼)
-                $("#alertModal").fadeOut();
-            });
-            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-                if ($(event.target).is("#alertModal")) {
-                    $("#alertModal").fadeOut();
-                }
-            });
-
-            // 비밀번호 확인 모달
-            $("#next").click(function () { // 열기
-                $("#checkPassword").fadeIn();
-                var enteredPw = $("#pwCheck").val();
-
-                $.ajax({
-                    url: '/checkPassword',
-                    type: 'POST',
-                    data: {
-                        password: enteredPw
-                    },
-                    success: function (response) {
-                        if (response.passwordMatch) {
-                            $.ajax({
-                                url: '/deleteMember',
-                                type: 'POST',
-                                data: {
-                                    password: enteredPw
-                                },
-                                success: function (result) {
-                                    if (result.success) {
-                                        $("#verifyModal").fadeIn();
-
-                                        $(".verifyClose").click(function () { // 닫기 (X 버튼)
-                                            $(".verifyModal").fadeOut();
-                                            window.location.href = '/logout';
-                                        });
-
-                                        $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-                                            if ($(event.target).is(".verifyModal")) {
-                                                $(".verifyModal").fadeOut();
-                                                window.location.href = '/logout';
-                                            }
-                                        });
-                                    } else {
-                                        alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
-                                    }
-                                },
-                                error: function () {
-                                    alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
-                                }
-                            });
-                        } else {
-                            alert("비밀번호가 일치하지 않습니다.");
-                        }
-                    }
-                })
-            });
-            $("#checkClose").click(function () { // 닫기 (X 버튼)
-                $("#checkPassword").fadeOut();
-            });
-            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-                if ($(event.target).is("#checkPassword")) {
-                    $("#checkPassword").fadeOut();
-                }
-            });
-
-            // 탈퇴 확인 모달
-            $("#delete").click(function () {
-            });
-            $(".verifyClose").click(function () { // 닫기 (X 버튼)
-                $(".verifyModal").fadeOut();
-            });
-            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-                if ($(event.target).is(".verifyModal")) {
-                    $(".verifyModal").fadeOut();
-                }
-            });
-
-            $('#myAlarm').click(showAlarm);
-            $('#myShare').click(showShare);
-            $('#myBookmark').click(showBookmark);
-        });
-
-        // function showAlarm() {
-        //     $.ajax({
-        //         url: 'myPage/alarmSave',
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         success: function (response) {
-        //             // 알림 데이터를 받아서 화면에 표시
-        //             let notifications = '';
-        //             response.forEach(function (notification) {
-        //                 notifications += '<p>' + notification.message + ' (' + notification.createdAt + ')</p>';
-        //             });
-        //             $('#notification-list').html(notifications).show();
-        //         },
-        //         error: function () {
-        //             alert('알림을 가져오는 데 실패했습니다.');
-        //         }
-        //     });
-        // }
-
-        function showAlarm() {
-        }
-
-        function showShare() {
-        }
-
-        function showBookmark() {
-        }
-    </script>
 </head>
 <body>
 <header>
     <!-- 네비게이션 바 -->
     <nav>
         <p><a href="">로고</a></p>
+        <script>
+            $(document).ready(function () {
+                // 알림 추가 모달
+                $("#alarmEdit").click(function () { // 열기
+                    $("#alarmModal").fadeIn();
+                });
+                $("#alarmClose").click(function () { // 닫기 (X 버튼)
+                    $("#alarmModal").fadeOut();
+                });
+                $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                    if ($(event.target).is("#alarmModal")) {
+                        $("#alarmModal").fadeOut();
+                    }
+                });
+                $("#save").click(function () {
+                    var alarmDay = $('.alarmDay:checked').val();
+                    var alarmContents = $('.alarmContents').val();
+
+                    $.ajax({
+                        url: '/myPage/alarmEdit',
+                        type: 'POST',
+                        data: {
+                            alarmDay: alarmDay,
+                            alarmContents: alarmContents
+                        },
+                        success: function (response) {
+                            if (response.alarmEdit) {
+                                alert("성공적으로 반영되었습니다.");
+                                $("#alarmModal").fadeOut();
+                            } else {
+                                alert("반영되지 않았습니다.");
+                            }
+                        },
+                        error: function () {
+                            alert("서버 오류입니다.");
+                        }
+                    })
+
+                    // 데이터베이스 알림 저장
+
+                })
+
+                // 멤버 탈퇴 모달
+                $("#deleteId").click(function () { // 열기
+                    $("#alertModal").fadeIn();
+                });
+                $("#alertClose").click(function () { // 닫기 (X 버튼)
+                    $("#alertModal").fadeOut();
+                });
+                $("#reset").click(function () { // 닫기 (취소 버튼)
+                    $("#alertModal").fadeOut();
+                });
+                $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                    if ($(event.target).is("#alertModal")) {
+                        $("#alertModal").fadeOut();
+                    }
+                });
+
+                // 비밀번호 확인 모달
+                $("#next").click(function () { // 열기
+                    $("#alertModal").fadeOut();
+                    $("#checkModal").fadeIn();
+                })
+                $("#checkClose").click(function () { // 닫기 (X 버튼)
+                    $("#checkModal").fadeOut();
+                });
+                $("#delete").click(function () {
+                    var enteredPw = $("#pwCheck").val();
+
+                    $.ajax({
+                        url: '/myPage/checkPassword',
+                        type: 'POST',
+                        data: {
+                            enteredPw: enteredPw
+                        },
+                        success: function (response) {
+                            if (response.passwordMatch) {
+                                if (confirm("정말 탈퇴하시겠습니까?")) {
+                                    $.ajax({
+                                        url: '/myPage/deleteMember',
+                                        type: 'POST',
+                                        success: function (response) {
+                                            if (response.deleteMember) {
+                                                $("#checkModal").fadeOut();
+                                                $("#verifyModal").fadeIn();
+
+                                                $("#verifyClose").click(function () {
+                                                    $("#verifyModal").fadeOut(function () {
+                                                        window.location.href = '/member/logout';
+                                                    });
+                                                });
+
+                                                $(window).click(function (event) {
+                                                    if ($(event.target).is("#verifyModal")) {
+                                                        $("#verifyModal").fadeOut(function () {
+                                                            window.location.href = '/member/logout';
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
+                                            }
+                                        },
+                                        error: function () {
+                                            alert("서버 오류입니다.");
+                                        }
+                                    });
+                                } else {
+                                    $("#pwCheck").val('');
+                                }
+                            } else {
+                                alert("비밀번호가 일치하지 않습니다.");
+                                $("#pwCheck").val('');
+                            }
+                        }
+
+                    })
+                });
+
+                $('#myAlarm').click(showAlarm);
+                $('#myShare').click(showShare);
+                $('#myBookmark').click(showBookmark);
+            });
+
+            // function showAlarm() {
+            //     $.ajax({
+            //         url: 'myPage/alarmSave',
+            //         type: 'GET',
+            //         dataType: 'json',
+            //         success: function (response) {
+            //             // 알림 데이터를 받아서 화면에 표시
+            //             let notifications = '';
+            //             response.forEach(function (notification) {
+            //                 notifications += '<p>' + notification.message + ' (' + notification.createdAt + ')</p>';
+            //             });
+            //             $('#notification-list').html(notifications).show();
+            //         },
+            //         error: function () {
+            //             alert('알림을 가져오는 데 실패했습니다.');
+            //         }
+            //     });
+            // }
+
+            function showAlarm() {
+            }
+
+            function showShare() {
+            }
+
+            function showBookmark() {
+            }
+        </script>
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
         <p><a th:href="@{/recycle/recycleList}">버려요</a></p>
@@ -302,7 +293,6 @@
         <button id="alarmEdit">알림 추가</button>
 
         <!-- 알림 추가 모달 -->
-        <!--        <form id="alarmModal" class="modal" th:action="@{/myPage/alarm}" method="post">-->
         <div id="alarmModal" class="modal">
             <div class="modal-content">
                 <span id="alarmClose" class="close">&times;</span>
@@ -324,7 +314,6 @@
                 <button type="submit" id="save">저장</button>
             </div>
         </div>
-        <!--        </form>-->
 
         <!--  멤버 탈퇴  -->
         <button id="deleteId">멤버 탈퇴</button>
@@ -333,9 +322,9 @@
         <div id="alertModal" class="modal">
             <div class="modal-content">
                 <span id="alertClose" class="close">&times;</span>
-                <div class="board">
+                <div id="board">
                     <span style="font-weight: bold">탈퇴하시겠습니까?</span>
-                    <div class="button">
+                    <div id="button">
                         <button id="reset">취소</button>
                         <button id="next">탈퇴하기</button>
                     </div>
@@ -344,23 +333,27 @@
         </div>
 
         <!--  비밀번호 확인 모달  -->
-        <!--        <form id="checkModal" class="modal" th:action="@{/myPage/pwCheck}" method="post">-->
         <div id="checkModal" class="modal">
-            <span id="checkClose" class="close">&times;</span>
-            <div id="check">
-                <!--                아이디-->
-                <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
-                비밀번호
-                <input type="password" name="pwCheck" id="pwCheck">
+            <div class="modal-content">
+                <span id="checkClose" class="close">&times;</span>
+                <div id="check">
+                    <!--                아이디-->
+                    <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
+                    <span style="font-weight: bold">비밀번호 확인</span>
+                    <input type="password" name="pwCheck" id="pwCheck">
+                    <button id="delete">탈퇴하기</button>
+                </div>
             </div>
-            <button type="submit" id="delete">탈퇴하기</button>
         </div>
-        <!--        </form>-->
 
         <!--  탈퇴 확인 모달  -->
         <div id="verifyModal" class="modal">
-            <span id="verifyClose" class="close">&times;</span>
-            <span id="verify">탈퇴되셨습니다.</span>
+            <div class="modal-content">
+                <span id="verifyClose" class="close">&times;</span>
+                <div id="verify">
+                    탈퇴되었습니다.
+                </div>
+            </div>
         </div>
 
     </section>

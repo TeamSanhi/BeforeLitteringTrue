@@ -2,6 +2,7 @@ package net.datasa.nanum.Controller.MyPage;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
@@ -41,28 +42,34 @@ public class MyPageRestController {
     }
 
     // 비밀번호 확인 메소드
-//    @PostMapping("/checkPassword")
-//    public ResponseEntity<Map<String, Boolean>> checkPassword(@RequestParam String password, @RequestParam Long userId) {
-//        // 비밀번호가 맞는지 확인하는 로직 실행
-//        boolean isPasswordMatch = memberService.checkPassword(userId, password);
-//
-//        // 결과를 클라이언트로 보냄
-//        Map<String, Boolean> response = new HashMap<>();
-//        response.put("passwordMatch", isPasswordMatch);
-//
-//        return ResponseEntity.ok(response);
-//    }
-//
-//    // 탈퇴 처리 메소드
-//    @PostMapping("/delete-member")
-//    public ResponseEntity<Map<String, Boolean>> deleteMember(@RequestParam Long userId) {
-//        // 탈퇴 처리 로직 실행
-//        boolean isDeleted = memberService.deleteMember(userId);
-//
-//        // 결과를 클라이언트로 보냄
-//        Map<String, Boolean> response = new HashMap<>();
-//        response.put("success", isDeleted);
-//
-//        return ResponseEntity.ok(response);
-//    }
+    @PostMapping("/checkPassword")
+    public ResponseEntity<Map<String, Boolean>> checkPassword(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam  String enteredPw) {
+        Integer userNum = authenticatedUser.getNum();
+
+        log.debug("입력받은 패스워드 : {}", enteredPw);
+
+        Boolean isPasswordMatch = memberService.checkPassword(userNum, enteredPw);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("passwordMatch", isPasswordMatch);
+
+        log.debug("패스워드 일치 여부 : {}", isPasswordMatch);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // 탈퇴 처리 메소드
+    @PostMapping("/deleteMember")
+    public ResponseEntity<Map<String, Boolean>> deleteMember(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        Integer userNum = authenticatedUser.getNum();
+
+        boolean isDeleted = memberService.deleteMember(userNum);
+
+        log.debug("멤버 탈퇴 여부 : {}", isDeleted);
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("deleteMember", isDeleted);
+
+        return ResponseEntity.ok(response);
+    }
 }
