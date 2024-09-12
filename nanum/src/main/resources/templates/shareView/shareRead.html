@@ -59,7 +59,7 @@
                 url: '/share/bookmark/check',  // 북마크 여부 확인을 위한 컨트롤러 URL
                 type: 'get',
                 data: { shareNum: shareNum },
-                success: function(response) {
+                success: function(response) { // 서버로부터 true/false 값 받음
                     if (response) {
                         // 북마크되어 있다면 bookmark2를 보여주고 bookmark1을 숨김
                         $('#bookmark1').hide();
@@ -84,8 +84,7 @@
                 url:'bookmark',
                 type: 'get',
                 data: { shareNum : shareNum },
-                success: function(response) { 
-                    // 서버로부터 true/false 값 받음
+                success: function(response) { // 서버로부터 true/false 값 받음
                     if (response) {
                         // 북마크가 되어있다면 bookmark2를 보여주고 bookmark1을 숨김
                         $('#bookmark1').hide();
@@ -96,7 +95,7 @@
                         $('#bookmark2').hide();
                     }
                 },
-                // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여 
+                // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
                 error: function() {
                     alert("로그인하여 해주십시오");
                     window.location.href = '/login'; // 로그인 페이지로 리다이렉트
