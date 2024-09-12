@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MessageDTO;
 import net.datasa.nanum.domain.dto.RoomDTO;
 import net.datasa.nanum.domain.entity.RoomEntity;
+import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.repository.ShareBoardRepository;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.MessageService;
 
@@ -26,6 +29,7 @@ import net.datasa.nanum.service.MessageService;
 public class MessageController {
 
     private final MessageService messageService;
+    private final ShareBoardRepository shareBoardRepository;
 
     /**
      * 사용자의 쪽지 목록으로 이동
@@ -36,7 +40,7 @@ public class MessageController {
      */
     @GetMapping("messages")
     public String messages(@AuthenticationPrincipal AuthenticatedUser user,
-            Model model) {
+                        Model model) {
 
         log.debug("messageView/messageList.html로 이동");
 
@@ -44,35 +48,61 @@ public class MessageController {
         return "messageView/messageList";
     }
 
+    /**
+     * 주고받은 쪽지 내역 페이지로 이동
+     * @param user      현재 사용자
+     * @param shareNum  게시글 번호
+     * @param model     모델
+     * @return
+     */
     @GetMapping("read")
     public String read (@AuthenticationPrincipal AuthenticatedUser user, @RequestParam("shareNum") int shareNum, Model model) {
 
         log.debug("가져온 shareNum: {}", shareNum);
-        //shareNum = 1;
 
+        ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
+        .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+
+        // 이 게시글에 쪽지방이 있는지 확인
         boolean roomExist = messageService.isRoomExist(user.getNum(), shareNum);
         log.debug("messageView/messageRead.html로 이동");
         log.debug("방 존재 여부: {}", roomExist);
-        RoomEntity room = messageService.findRoom(user.getNum(), shareNum);
-
+        
+        
+        // 쪽지방이 생성되어 있을 시
         if (roomExist) {
-
-            List<MessageDTO> messageList = messageService.getMessage(room);
-
+            // 이 글에 내가 생성한/포함된 쪽지방을 찾음
+            RoomEntity room = messageService.findRoom(user.getNum(), shareNum);
+            log.debug("방번호: {}", room.getRoomNum());
+            // 이 방에서 주고받았던 쪽지 내역을 가져옴
+            List<MessageDTO> messageList = messageService.getMessage(room, user.getUsername());
+            log.debug("쪽지 내용들: {}", messageList);
             model.addAttribute("room", room);
             model.addAttribute("roomExist", roomExist);
             model.addAttribute("messageList", messageList);
+            model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
+            log.debug("게시글 주인 아이디: {}", shareBoard.getMember().getMemberId());
             log.debug("쪽지방이 이미 생성되어 있을 때");
             return "messageView/messageRead";
-        } else {
+        } 
+        // 아직 만들어진 쪽지방이 없을 시
+        else {
             model.addAttribute("shareNum", shareNum);
             model.addAttribute("roomExist", roomExist);
+            model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
+            log.debug("게시글 주인 아이디: {}", shareBoard.getMember().getMemberId());
             log.debug("생성된 쪽지방이 없을 때");
             return "messageView/messageRead";
         }
     }
 
-
+    /**
+     * 처음 쪽지를 썼을 때 쪽지방을 만들고 그 쪽지방에 입력한 쪽지를 저장
+     * @param user              현재 사용자
+     * @param messageContents   작성한 쪽지
+     * @param shareNum          게시글 번호
+     * @return
+     */
     @PostMapping("createRoom")
     @ResponseBody
     public String createRoom(@AuthenticationPrincipal AuthenticatedUser user,
@@ -81,28 +111,28 @@ public class MessageController {
     
     log.debug("쪽지내용: {}", messageContents);
     log.debug("게시글 번호: {}", shareNum);
-
+            
+    // RoomDTO에 지금 사용자번호, 게시글 번호를 담음
     RoomDTO roomDTO = RoomDTO.builder()
                         .creatorNum(user.getNum())
                         .shareNum(shareNum)
                         .build();
-                        
+    
+    // 해당 게시글의 현재 사용자의 정보로 쪽지방을 생성                    
     messageService.createRoom(roomDTO);
-
+    // 방금 생성한 쪽지방을 찾아옴
     RoomEntity roomEntity = messageService.findRoom(user.getNum(), shareNum);
-
+    // 찾아온 쪽지방에 작성한 쪽지 내용을 저장
     messageService.messageSave(user.getNum(), roomEntity.getRoomNum(), messageContents);
 
     return "messageView/messageRead";
     }
 
     /**
-     * 작성한 쪽지를 DB에 저장
-     * 
-     * @param dto
-     * @param user
-     * @param messageContents
-     * @param shareNum
+     * 쪽지방이 이미 생성되어 있을 때, 작성한 쪽지 내용을 저장
+     * @param user              현재 사용자
+     * @param messageContents   작성한 쪽지
+     * @param roomNum           쪽지방 번호
      * @return
      */
     @PostMapping("send")
@@ -110,7 +140,7 @@ public class MessageController {
     public String send(@AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam("messageContents") String messageContents,
             @RequestParam("roomNum") int roomNum) {
-
+        // 작성한 쪽지 내용을 저장
         messageService.messageSave(user.getNum(), roomNum, messageContents);
 
         return "messageView/messageRead";
