@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
 import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
-import net.datasa.nanum.domain.entity.BookMarkEntity;
 import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
-import net.datasa.nanum.repository.BookMarkRepository;
 import net.datasa.nanum.repository.ImageRepository;
 import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
@@ -44,8 +41,6 @@ public class ShareService {
     private final ImageRepository imageRepository;
     // 파일관리를 위한 FileManager 생성자 주입
     private final FileManager fileManager;
-    // 북마크 리퍼지토리에서 테이블 다룸
-    private final BookMarkRepository bookMarkRepository;
 
     /**
      * shareSave 메소드
@@ -135,22 +130,6 @@ public class ShareService {
         }
         // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
         shareBoardDTO.setImageList(imageList);
-
-        // ***********북마크 정보 추가*************************
-        // bookMarkRepository에서 게시글 번호와 회원번호를 and 조건으로 검색하여 회원이 이 게시글을 북마크 했는지 찾는다.
-        // if (memberNum != null) {
-        // // 전달받은 로그인한 사람의 회원번호 가져온다.
-        // MemberEntity memberEntity = memberRepository.findById(memberNum)
-        // .orElseThrow(() -> new EntityNotFoundException("해당 회원이 존재하지 않습니다"));
-        // // 북마크 테이블에서 게시글 번호, 회원번호를 and 조건으로 검색하여 북마크 엔티티에 넣는다.
-        // Optional<BookMarkEntity> bookMarkEntity =
-        // bookMarkRepository.findByMemberAndShareBoard(memberEntity,
-        // shareBoardEntity);
-
-        // // 북마크 여부를 확인하고, DTO에 boolean 값으로 저장
-        // boolean isBookmarked = bookMarkEntity.isPresent();
-        // shareBoardDTO.setBookmarked(isBookmarked); // DTO에 북마크 여부 추가
-        // }
 
         // DTO를 반환
         return shareBoardDTO;
