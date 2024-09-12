@@ -103,8 +103,36 @@
                     $("#alarmModal").fadeOut();
                 }
             });
+            $("#save").click(function () {
+                var alarmDay = $('.alarmDay:checked').val();
+                var alarmContents = $('.alarmContents').val();
 
-            // 탈퇴 경고 모달
+                $.ajax({
+                    url: '/myPage/alarmEdit',
+                    type: 'POST',
+                    data: {
+                        alarmDay: alarmDay,
+                        alarmContents : alarmContents
+                    },
+                    success: function(response) {
+                        if(response.alarmEdit){
+                            alert("성공적으로 반영되었습니다.");
+                            $("#alarmModal").fadeOut();
+                        }
+                        else {
+                            alert("반영되지 않았습니다.");
+                        }
+                    },
+                    error: function() {
+                        alert("서버 오류입니다.");
+                    }
+                })
+
+                // 데이터베이스 알림 저장
+
+                    })
+
+            // 멤버 탈퇴 모달
             $("#deleteId").click(function () { // 열기
                 $("#alertModal").fadeIn();
             });
@@ -121,39 +149,78 @@
             });
 
             // 비밀번호 확인 모달
-            // $(".delete").click(function () { // 열기
-            //     $(".checkPassword").fadeIn();
-            // });
-            // $(".checkClose").click(function () { // 닫기 (X 버튼)
-            //     $(".checkPassword").fadeOut();
-            // });
-            // $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-            //     if ($(event.target).is(".checkPassword")) {
-            //         $(".checkPassword").fadeOut();
-            //     }
-            // });
+            $("#next").click(function () { // 열기
+                $("#checkPassword").fadeIn();
+                var enteredPw = $("#pwCheck").val();
+
+                $.ajax({
+                    url: '/checkPassword',
+                    type: 'POST',
+                    data: {
+                        password: enteredPw
+                    },
+                    success: function (response) {
+                        if (response.passwordMatch) {
+                            $.ajax({
+                                url: '/deleteMember',
+                                type: 'POST',
+                                data: {
+                                    password: enteredPw
+                                },
+                                success: function (result) {
+                                    if (result.success) {
+                                        $("#verifyModal").fadeIn();
+
+                                        $(".verifyClose").click(function () { // 닫기 (X 버튼)
+                                            $(".verifyModal").fadeOut();
+                                            window.location.href = '/logout';
+                                        });
+
+                                        $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                                            if ($(event.target).is(".verifyModal")) {
+                                                $(".verifyModal").fadeOut();
+                                                window.location.href = '/logout';
+                                            }
+                                        });
+                                    } else {
+                                        alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
+                                    }
+                                },
+                                error: function () {
+                                    alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
+                                }
+                            });
+                        } else {
+                            alert("비밀번호가 일치하지 않습니다.");
+                        }
+                    }
+                })
+            });
+            $("#checkClose").click(function () { // 닫기 (X 버튼)
+                $("#checkPassword").fadeOut();
+            });
+            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                if ($(event.target).is("#checkPassword")) {
+                    $("#checkPassword").fadeOut();
+                }
+            });
 
             // 탈퇴 확인 모달
-            // $(탈퇴하게 되면).click(function () { // 열기
-            //     $(".verifyModal").fadeIn();
-            // });
-            // $(".verifyClose").click(function () { // 닫기 (X 버튼)
-            //     $(".verifyModal").fadeOut();
-            // });
-            // $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
-            //     if ($(event.target).is(".verifyModal")) {
-            //         $(".verifyModal").fadeOut();
-            //     }
-            // });
+            $("#delete").click(function () {
+            });
+            $(".verifyClose").click(function () { // 닫기 (X 버튼)
+                $(".verifyModal").fadeOut();
+            });
+            $(window).click(function (event) { // 닫기 (모달 밖을 클릭할 때)
+                if ($(event.target).is(".verifyModal")) {
+                    $(".verifyModal").fadeOut();
+                }
+            });
 
             $('#myAlarm').click(showAlarm);
             $('#myShare').click(showShare);
             $('#myBookmark').click(showBookmark);
         });
-
-        function deleteId() {
-
-        }
 
         // function showAlarm() {
         //     $.ajax({
@@ -235,29 +302,32 @@
         <button id="alarmEdit">알림 추가</button>
 
         <!-- 알림 추가 모달 -->
+        <!--        <form id="alarmModal" class="modal" th:action="@{/myPage/alarm}" method="post">-->
         <div id="alarmModal" class="modal">
             <div class="modal-content">
                 <span id="alarmClose" class="close">&times;</span>
                 <h2>일정 등록</h2>
                 <div id="alarmDay">
                     <span style="font-weight: bold">요일</span>
-                    <input type="radio" name="alarmDay" value="sun">일
-                    <input type="radio" name="alarmDay" value="mon">월
-                    <input type="radio" name="alarmDay" value="tue">화
-                    <input type="radio" name="alarmDay" value="wed">수
-                    <input type="radio" name="alarmDay" value="thu">목
-                    <input type="radio" name="alarmDay" value="fri">금
-                    <input type="radio" name="alarmDay" value="sat">토
+                    <input type="radio" class="alarmDay" name="alarmDay" value=0>일
+                    <input type="radio" class="alarmDay" name="alarmDay" value=1>월
+                    <input type="radio" class="alarmDay" name="alarmDay" value=2>화
+                    <input type="radio" class="alarmDay" name="alarmDay" value=3>수
+                    <input type="radio" class="alarmDay" name="alarmDay" value=4>목
+                    <input type="radio" class="alarmDay" name="alarmDay" value=5>금
+                    <input type="radio" class="alarmDay" name="alarmDay" value=6>토
                 </div>
                 <div id="alarmContents">
                     <span style="font-weight: bold">알림 내용</span>
-                    <input type="text" name="alarmContents">
+                    <input type="text" class="alarmContents" name="alarmContents">
                 </div>
+                <button type="submit" id="save">저장</button>
             </div>
         </div>
+        <!--        </form>-->
 
-        <!--  ID 탈퇴  -->
-        <button id="deleteId">ID 탈퇴</button>
+        <!--  멤버 탈퇴  -->
+        <button id="deleteId">멤버 탈퇴</button>
 
         <!--  탈퇴 경고 모달  -->
         <div id="alertModal" class="modal">
@@ -267,23 +337,31 @@
                     <span style="font-weight: bold">탈퇴하시겠습니까?</span>
                     <div class="button">
                         <button id="reset">취소</button>
-                        <button id="delete">탈퇴하기</button>
+                        <button id="next">탈퇴하기</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!--  비밀번호 확인 모달  -->
-        <!--        <div class="checkModal">-->
-        <!--            <span class="checkClose">&times;</span>-->
-        <!--            <span class="check">비밀번호 확인</span>-->
-        <!--        </div>-->
+        <!--        <form id="checkModal" class="modal" th:action="@{/myPage/pwCheck}" method="post">-->
+        <div id="checkModal" class="modal">
+            <span id="checkClose" class="close">&times;</span>
+            <div id="check">
+                <!--                아이디-->
+                <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
+                비밀번호
+                <input type="password" name="pwCheck" id="pwCheck">
+            </div>
+            <button type="submit" id="delete">탈퇴하기</button>
+        </div>
+        <!--        </form>-->
 
         <!--  탈퇴 확인 모달  -->
-        <!--  <div class="verifyModal">-->
-        <!--  <span class="verifyClose">&times;</span>-->
-        <!--  <span class="verify">탈퇴 확인</span>-->
-        <!--  </div>-->
+        <div id="verifyModal" class="modal">
+            <span id="verifyClose" class="close">&times;</span>
+            <span id="verify">탈퇴되셨습니다.</span>
+        </div>
 
     </section>
 
