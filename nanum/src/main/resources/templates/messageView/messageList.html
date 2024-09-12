@@ -8,59 +8,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>쪽지 목록</title>
-    <style>
-      .message-summary {
-        margin-bottom: 10px;
-        padding: 15px;
-        border: 1px solid #ccc;
-        background-color: #f9f9f9;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
 
-      .message-summary:hover {
-        background-color: #e0e0e0;
-      }
-
-      .message-summary h2,
-      .message-summary p {
-        margin: 0;
-      }
-    </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script></script>
   </head>
-  <body>
-    <main>
-      <h1>내 쪽지 목록</h1>
-
-      <div th:each="entry : ${messages}">
-        <div
-          class="message-summary"
-          th:onclick="'location.href=\'/message/messages/full/' + ${entry.key.shareNum} + '\''"
-        >
-          <h2>게시글: <span th:text="${entry.key.shareTitle}"></span></h2>
-          <!-- 게시글 제목 -->
-          <p>
-            대상:
-            <span
-              th:text="${entry.value.giver.memberNickname == #authentication.principal.username ? entry.value.receiver.memberNickname : entry.value.giver.memberNickname}"
-            ></span>
-          </p>
-          <!-- 주고받는 대상 -->
-          <p>
-            최신 메시지: <span th:text="${entry.value.messageContents}"></span>
-          </p>
-          <!-- 최신 메시지 내용 -->
-          <p>
-            최근 날짜:
-            <span
-              th:text="${#temporals.format(entry.value.deliverDate, 'yyyy-MM-dd HH:mm')}"
-            ></span>
-          </p>
-          <!-- 최근 날짜 표시 -->
-        </div>
-      </div>
-    </main>
-  </body>
+  <body></body>
 </html>

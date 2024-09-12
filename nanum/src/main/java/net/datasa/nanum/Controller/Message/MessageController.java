@@ -1,23 +1,21 @@
 package net.datasa.nanum.Controller.Message;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MessageDTO;
-import net.datasa.nanum.domain.entity.MessageEntity;
-import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.domain.dto.RoomDTO;
+import net.datasa.nanum.domain.entity.RoomEntity;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.MessageService;
 
@@ -42,32 +40,60 @@ public class MessageController {
 
         log.debug("messageView/messageList.html로 이동");
 
-        // 게시글별로 주고받은 쪽지 조회
-        // Map<ShareBoardEntity, MessageEntity> messagesByShareNum =
-        // messageService.getMessagesGroupedByShareNum(user.getNum());
-
-        // 모델에 담아서 뷰로 전달
-        // model.addAttribute("messages", messagesByShareNum);
 
         return "messageView/messageList";
     }
 
-    // 쪽지 내용 페이지
-    @GetMapping("/messages/full/{shareNum}")
-    public String viewFullMessagesByPost(@PathVariable("shareNum") Integer shareNum, Model model,
-            @AuthenticationPrincipal AuthenticatedUser user) {
+    @GetMapping("read")
+    public String read (@AuthenticationPrincipal AuthenticatedUser user, @RequestParam("shareNum") int shareNum, Model model) {
 
+        log.debug("가져온 shareNum: {}", shareNum);
+        //shareNum = 1;
+
+        boolean roomExist = messageService.isRoomExist(user.getNum(), shareNum);
         log.debug("messageView/messageRead.html로 이동");
+        log.debug("방 존재 여부: {}", roomExist);
+        RoomEntity room = messageService.findRoom(user.getNum(), shareNum);
 
-        log.debug("게시글 번호: {}", shareNum);
+        if (roomExist) {
 
-        // 게시글 번호와 사용자의 번호로 모든 메시지 조회
-        List<MessageEntity> fullMessages = messageService.getMessagesByShareNumAndUser(shareNum, user.getNum());
+            List<MessageDTO> messageList = messageService.getMessage(room);
 
-        model.addAttribute("fullMessages", fullMessages);
-        model.addAttribute("shareNum", shareNum);
+            model.addAttribute("room", room);
+            model.addAttribute("roomExist", roomExist);
+            model.addAttribute("messageList", messageList);
+            log.debug("쪽지방이 이미 생성되어 있을 때");
+            return "messageView/messageRead";
+        } else {
+            model.addAttribute("shareNum", shareNum);
+            model.addAttribute("roomExist", roomExist);
+            log.debug("생성된 쪽지방이 없을 때");
+            return "messageView/messageRead";
+        }
+    }
 
-        return "messageView/messageRead"; // 전체 쪽지 내역을 보여줄 템플릿
+
+    @PostMapping("createRoom")
+    @ResponseBody
+    public String createRoom(@AuthenticationPrincipal AuthenticatedUser user,
+                             @RequestParam("messageContents") String messageContents,
+                             @RequestParam("shareNum") int shareNum) {
+    
+    log.debug("쪽지내용: {}", messageContents);
+    log.debug("게시글 번호: {}", shareNum);
+
+    RoomDTO roomDTO = RoomDTO.builder()
+                        .creatorNum(user.getNum())
+                        .shareNum(shareNum)
+                        .build();
+                        
+    messageService.createRoom(roomDTO);
+
+    RoomEntity roomEntity = messageService.findRoom(user.getNum(), shareNum);
+
+    messageService.messageSave(user.getNum(), roomEntity.getRoomNum(), messageContents);
+
+    return "messageView/messageRead";
     }
 
     /**
@@ -80,16 +106,12 @@ public class MessageController {
      * @return
      */
     @PostMapping("send")
-    public String send(@ModelAttribute MessageDTO dto,
-            @AuthenticationPrincipal AuthenticatedUser user,
+    @ResponseBody
+    public String send(@AuthenticationPrincipal AuthenticatedUser user,
             @RequestParam("messageContents") String messageContents,
-            @RequestParam("shareNum") int shareNum) {
+            @RequestParam("roomNum") int roomNum) {
 
-        dto.setReceiverNum(user.getNum());
-        dto.setMessageContents(messageContents);
-        dto.setShareNum(shareNum);
-
-        messageService.saveMessage(dto);
+        messageService.messageSave(user.getNum(), roomNum, messageContents);
 
         return "messageView/messageRead";
     }

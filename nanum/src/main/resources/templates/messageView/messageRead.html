@@ -11,7 +11,75 @@
     <style></style>
 
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script></script>
+    <script>
+      $(document).ready(function () {
+        $("#createRoomButton").click(function (event) {
+          event.preventDefault(); // 기본 form 동작 방지
+          let messageContents = $("#messageContents").val();
+          let shareNum = $("#shareNum").val();
+
+          $.ajax({
+            url: "/message/createRoom",
+            type: "post",
+            data: { messageContents: messageContents, shareNum: shareNum },
+            success: function () {
+              console.log("shareNum: " + shareNum); // 값 확인
+              alert("성공");
+              location.href = "/message/read?shareNum=" + shareNum;
+            },
+            error(e) {
+              alert("실패");
+            },
+          });
+        }); // createRoomButton 클릭 이벤트
+
+        $("#sendButton").click(function (event) {
+          event.preventDefault(); // 기본 form 동작 방지
+          let messageContents = $("#messageContents").val();
+          let roomNum = $("#roomNum").val();
+
+          $.ajax({
+            url: "/message/send",
+            type: "post",
+            data: { messageContents: messageContents, roomNum: roomNum },
+            success: function () {
+              console.log("roomNum: " + roomNum); // 값 확인
+              alert("성공");
+              location.reload(); // 새로고침
+            },
+            error(e) {
+              alert("실패");
+            },
+          });
+        });
+      });
+    </script>
   </head>
-  <body></body>
+  <body>
+    <h1>연결됨</h1>
+
+    <div th:if="${!roomExist}">
+      <form>
+        <input type="text" id="messageContents" />
+        <input type="hidden" id="shareNum" th:value="${shareNum}" />
+        <button type="submit" id="createRoomButton">보내기</button>
+      </form>
+    </div>
+
+    <div th:if="${roomExist}">
+      <th:block th:each="message : ${messageList}">
+        <span th:text="${message.senderNum} ">발신자</span>
+        <span th:text="${message.messageContents} ">내용</span>
+        <span
+          th:text="${#temporals.format(message.deliverDate, 'yyyy-MM-dd HH:mm')}"
+          >전송일</span
+        >
+      </th:block>
+      <form>
+        <input type="text" id="messageContents" />
+        <input type="hidden" id="roomNum" th:value="${room.roomNum}" />
+        <button type="submit" id="sendButton">보내기</button>
+      </form>
+    </div>
+  </body>
 </html>
