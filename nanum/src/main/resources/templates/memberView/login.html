@@ -19,14 +19,17 @@
     <form th:action="@{/member/login}" method="post" id="loginPost">
       <table>
         <tr>
+          <!-- ID 입력창 -->
           <th>ID</th>
           <td><input type="text" name="id" id="id" /></td>
         </tr>
         <tr>
+          <!-- 패스워드 입력창 -->
           <th>Password</th>
           <td><input type="password" name="password" id="password" /></td>
         </tr>
         <tr th:if="${error}">
+          <!-- 에러 발생 시 메세지 출력창 -->
           <td colspan="2">
             <p th:text="${exception}" style="color: red"></p>
           </td>

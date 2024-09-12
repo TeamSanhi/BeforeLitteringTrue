@@ -14,11 +14,11 @@
         let sendCode = opener.$("#sendToChild").val();
 
         $("#showWhat").val(sendCode);
-
+        // showWhat의 값이 i이면 닉네임 확인 영역을 숨긴다.
         if ($("#showWhat").val() == "i") {
           $("#showNick").hide();
         }
-
+        // showWhat의 값이 n이면 아이디 확인 영역을 숨긴다.
         if ($("#showWhat").val() == "n") {
           $("#showId").hide();
         }
@@ -39,7 +39,9 @@
   </head>
   <body>
     <h1>중복 확인 결과</h1>
+    <!-- joinSave.html의 sendToChild에 있는 값을 showWhat에 삽입 -->
     <input type="hidden" id="showWhat" />
+
     <div id="showId">
       <p th:text="'입력한 ID: ' + ${memberId}"></p>
 
