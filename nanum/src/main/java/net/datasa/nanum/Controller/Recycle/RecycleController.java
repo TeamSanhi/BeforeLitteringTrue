@@ -9,6 +9,7 @@ import net.datasa.nanum.domain.dto.RecycleDTO;
 import net.datasa.nanum.service.RecycleService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;  // 올바른 Model import
 import org.springframework.data.domain.Page;  // 페이지네이션을 위한 올바른 import
 
@@ -22,7 +23,7 @@ import org.springframework.data.domain.Page;  // 페이지네이션을 위한 �
 @RequiredArgsConstructor
 public class RecycleController {
 
-//    private final RecycleService recycleService;
+    private final RecycleService recycleService;
 
     // application.properties 파일의 게시판 관련 설정값
 	@Value("${board.pageSize}")
@@ -40,21 +41,29 @@ public class RecycleController {
      * @return
      */
     @GetMapping("list")
-    public String recycleList(
-        // Model model, @RequestParam(name="page", defaultValue="1") int page, 
-        // @RequestParam(name="searchType", defaultValue="") String searchType,
-        // @RequestParam(name="searchWord", defaultValue="") String searchWord
-        ) {
-    //     log.debug("설정값 : pageSize={}, linkSize={}", pageSize, linkSize);
-        
-    //    Page<RecycleDTO> recyclePage = recycleService.getList(page, pageSize, searchType, searchWord);
+    public String recycleList(Model model, @RequestParam(name = "page", defaultValue = "1") int page,
+        @RequestParam(name = "searchType", defaultValue = "") String searchType,
+        @RequestParam(name = "searchWord", defaultValue = "") String searchWord) {
 
-    //     model.addAttribute("recyclePage", recyclePage);
-    //     model.addAttribute("page", page);
-    //     model.addAttribute("searchType", searchType);
-    //     model.addAttribute("searchWord", searchWord);
-    //     model.addAttribute("linkSize", linkSize);
-    
+            log.debug("설정 값 : pageSize={}, linkSize={}", pageSize, linkSize);
+            log.debug("요청파라미터 : page={}, searchType={}, searchWord={}", page, searchType, searchWord);
+
+    // 글 목록 1페이지
+    Page<RecycleDTO> boardPage = recycleService.getList(page, pageSize, searchType, searchWord);
+
+        model.addAttribute("boardPage", boardPage);
+        model.addAttribute("page", page);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchWord", searchWord);
+        model.addAttribute("linkSize", linkSize);
+
+        log.debug("전체 개수 :{}", boardPage.getTotalElements());
+        log.debug("전체 페이지수 :{}", boardPage.getTotalPages());
+        log.debug("현재 페이지 :{}", boardPage.getNumber());
+        log.debug("페이지당 글수 :{}", boardPage.getSize());
+        log.debug("이전페이지 존재 :{}", boardPage.hasPrevious());
+        log.debug("다음페이지 존재 :{}", boardPage.hasNext());
+
         return "recycleView/recycleList";
     }
 
@@ -63,20 +72,13 @@ public class RecycleController {
       * @param param
       * @return
       */
-//     @GetMapping("read")
-//     public String read(Model model, @RequestParam("recycleNum") int recycleNum) {
-//         log.debug("버려요 게시글 조회", recycleNum);
-
-//         try {
-//             RecycleDTO recycleDTO = recycleService.getRecycle(recycleNum);
-//             model.addAttribute("recycle", recycleDTO);
-//             return "recycleView/recycleRead";  // 추가: 조회 후의 뷰로 리턴
-//         } catch (Exception e) {
-//             log.error("게시글 조회 중 오류 발생", e);
-//             model.addAttribute("error", "게시글을 조회하는 중 오류가 발생했습니다.");
-//             return "redirect:list";
-//             }
-// }
+@GetMapping("read")
+@ResponseBody
+public RecycleDTO read(@RequestParam("recycleNum") int recycleNum) {
+    // 게시글 번호로 데이터를 가져온다
+    RecycleDTO recycleDTO = recycleService.getRecycle(recycleNum);
+    return recycleDTO;  // JSON으로 반환
+}
     
 
 }

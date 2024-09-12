@@ -1,123 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
+    <title>recycleList</title>
+    <style type="text/css">
+      @import url("https://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+      html,
       body {
-        font-family: Arial, sans-serif;
+        width: 100%;
+        height: 100%;
+      }
+      body,
+      p,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      ul,
+      li,
+      dl,
+      dt,
+      dd,
+      form,
+      input,
+      button,
+      select,
+      textarea,
+      fieldset,
+      legend,
+      optgroup,
+      option,
+      textarea,
+      th,
+      td {
         margin: 0;
         padding: 0;
-        background-color: #f0f0f0;
       }
-      .container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
+      body,
+      form,
+      input,
+      button,
+      select,
+      textarea {
+        font-family: "Nanum Gothic", sans-serif;
+        font-size: 12px;
       }
-      .header,
-      .footer {
-        width: 100%;
-        padding: 15px;
-        background-color: #eee;
-        text-align: center;
-        margin-bottom: 20px;
+      img,
+      fieldset {
+        border: 0;
       }
-      .menu {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
+      ul,
+      ol {
+        list-style: none;
       }
-      .menu button {
-        margin: 0 10px;
-        padding: 10px 20px;
-        background-color: #ddd;
-        border: 1px solid #ccc;
-        cursor: pointer;
+      em,
+      address {
+        font-style: normal;
       }
-      .grid-container {
-        display: grid;
-        grid-template-columns: repeat(8, 1fr); /* 8개의 열 */
-        gap: 10px;
+      a {
+        text-decoration: none;
       }
-      .grid-item {
-        background-color: #ddd;
-        height: 100px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid #bbb;
-        font-weight: bold;
+      a:hover,
+      a:active,
+      a:focus {
+        color: #000;
+        text-decoration: underline;
       }
-      .search-container {
-        margin: 20px 0;
+      .wrap {
+        width: 1200px;
+        margin: 0 auto;
+        font-family: "Nanum Gothic", sans-serif;
         text-align: center;
       }
-      .search-bar {
-        padding: 10px;
-        width: 300px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
+      .wrap h1 {
+        padding: 10px 0 4 px;
+        border-bottom: 1px solid #aaa;
       }
-      .pagination {
-        margin: 20px 0;
-        display: flex;
-        justify-content: center;
+      .fixed_img_col li {
+        float: left;
+        width: 120px;
+        height: 180px;
+        padding: 20px 5px;
+        margin-bottom: -1px;
+        border-bottom: 1px solid #aaa;
       }
-      .pagination div {
-        width: 10px;
-        height: 10px;
+      .fixed_img_col li a {
+        display: block;
+      }
+      .fixed_img_col li a .thumb {
+        position: relative;
+        display: block;
         background-color: #ccc;
-        border-radius: 50%;
-        margin: 0 5px;
-        cursor: pointer;
+        height: 120px;
+        color: #666;
+        text-align: center;
+        line-height: 120px;
       }
-      .pagination div.active {
-        background-color: #000;
+      .fixed_img_col li a .thumb em {
+        display: none;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #eee;
+        font-weight: bold;
+        text-align: center;
+        line-height: 120px;
+      }
+      .fixed_img_col li a:hover.thumb em {
+        display: block;
+      }
+      .fixed_img_col li a:hover .thumb em {
+        display: block;
+        padding: 8px 0 4px;
+        color: #333;
+        font-weight: bold;
+        line-height: 1.4;
+      }
+      .fixed_img_col li a:hover {
+        text-decoration: none;
+      }
+      .fixed_img_col li p {
+        color: #767676;
+        font-size: 0.9em;
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
       }
     </style>
+    <script>
+      function pagingFormSubmit(currentPage) {
+        $("#page").val(currentPage);
+        $("#pagingForm").submit();
+      }
+    </script>
   </head>
   <body>
-    <div class="container">
-      <div class="header">
-        <button>로그인</button>
-        <button>마이페이지</button>
-      </div>
-
-      <div class="menu">
-        <button>우리는...</button>
-        <button>나눠요</button>
-        <button>버려요</button>
-      </div>
-
-      <!-- 그리드 레이아웃 -->
-      <div class="grid-container">
-        <div class="grid-item" th:each="item : ${items}">
-          <span th:text="${item}"></span>
+    <div class="wrap">
+      <div class="container">
+        <!--  네비게이션 바  -->
+        <div class="nav">
+          <p><a href="">로고</a></p>
+          <p><a th:href="@{/info/service}">우리는..</a></p>
+          <p><a th:href="@{/share/list}">나눠요</a></p>
+          <p><a th:href="@{/recycle/list}">버려요</a></p>
         </div>
       </div>
-
-      <!-- 페이지네이션 모양 -->
-      <div class="pagination">
-        <div class="active"></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-
-      <!-- 검색 바 -->
-      <div class="search-container">
-        <input
-          type="text"
-          class="search-bar"
-          placeholder="검색어를 입력해주세요!"
-        />
-      </div>
-
-      <div class="footer">
-        <p>최종 업데이트 날짜: 2024년 8월 26일</p>
+      <br />
+      <br />
+      <div class="fixed_img_col">
+        <ul>
+          <li>
+            <a href="#">
+              <span class="thumb">
+                <img src="image/list," alt="" />
+                <em>Category</em>
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </body>
