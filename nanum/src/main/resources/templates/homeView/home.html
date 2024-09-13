@@ -1,136 +1,138 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-    <meta charset="UTF-8">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <meta charset="UTF-8" />
     <title>Home Page</title>
     <style>
-        .nav {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-        }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+      }
 
-        .member {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
+      .member {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
 
-        .footer {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-        }
+      .footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+      }
 
-        .modal {
-            display: none; /* 모달을 숨김 */
-            position: fixed; /* 화면에 고정된 위치로 설정 */
-            z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
-            left: 0; /* 화면 왼쪽부터 시작 */
-            top: 0; /* 화면 상단부터 시작 */
-            width: 100%; /* 화면 전체 너비 */
-            height: 100%; /* 화면 전체 높이 */
-            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-        }
+      .modal {
+        display: none; /* 모달을 숨김 */
+        position: fixed; /* 화면에 고정된 위치로 설정 */
+        z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
+        left: 0; /* 화면 왼쪽부터 시작 */
+        top: 0; /* 화면 상단부터 시작 */
+        width: 100%; /* 화면 전체 너비 */
+        height: 100%; /* 화면 전체 높이 */
+        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
+      }
 
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-            padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-            border: 1px solid #888;
-            width: 90%; /* 너비를 화면의 90%로 변경 */
-            max-width: 600px; /* 최대 너비를 600px로 확장 */
-            text-align: center;
-        }
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
+        padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
+        border: 1px solid #888;
+        width: 90%; /* 너비를 화면의 90%로 변경 */
+        max-width: 600px; /* 최대 너비를 600px로 확장 */
+        text-align: center;
+      }
 
-        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
-        .close {
-            color: #aaa; /* 닫기 버튼의 기본 색상 */
-            float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
-            font-size: 28px; /* 닫기 버튼의 글자 크기 */
-            font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
-        }
+      /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
+      .close {
+        color: #aaa; /* 닫기 버튼의 기본 색상 */
+        float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
+        font-size: 28px; /* 닫기 버튼의 글자 크기 */
+        font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
+      }
 
-        /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
-        .close:hover,
-        .close:focus {
-            color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-            text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
-            cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
-        }
+      /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
+      .close:hover,
+      .close:focus {
+        color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
+        text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
+        cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+      }
     </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
-        $(document).ready(function () {
-            $("#messages").click(function () {
-                $("#messagesModal").fadeIn();
-            });
-            $("#messagesClose").click(function () {
-                $("#messagesModal").fadeOut();
-            });
-            $(window).click(function (event) {
-                if ($(event.target).is("#messagesModal")) {
-                    $("#messagesModal").fadeOut();
-                }
-            });
+      $(document).ready(function () {
+        $("#messages").click(function () {
+          $("#messagesModal").fadeIn();
         });
+        $("#messagesClose").click(function () {
+          $("#messagesModal").fadeOut();
+        });
+        $(window).click(function (event) {
+          if ($(event.target).is("#messagesModal")) {
+            $("#messagesModal").fadeOut();
+          }
+        });
+      });
     </script>
-</head>
-<body>
-<div class="container">
-    <!--  네비게이션 바  -->
-    <div class="nav">
+  </head>
+  <body>
+    <div class="container">
+      <!--  네비게이션 바  -->
+      <div class="nav">
         <p><a href="">로고</a></p>
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
         <p><a th:href="@{/recycle/list}">버려요</a></p>
-    </div>
+      </div>
 
-    <!--  회원 기능  -->
-    <div class="member">
+      <!--  회원 기능  -->
+      <div class="member">
         <th:block sec:authorize="not isAuthenticated()">
-            <p>
-                <a th:href="@{/member/join}">회원가입</a>
-            </p>
-            <p>
-                <a th:href="@{/member/loginForm}">로그인</a>
-            </p>
+          <p>
+            <a th:href="@{/member/join}">회원가입</a>
+          </p>
+          <p>
+            <a th:href="@{/member/loginForm}">로그인</a>
+          </p>
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
-            <p>
-                <button id="messages">쪽지</button>
-            </p>
-            <div id="messagesModal" class="modal">
-                <div class="modal-content">
-                    <span id="messagesClose" class="close">&times;</span>
-                    <h2>쪽지 목록</h2>
-                </div>
+          <p>
+            <button id="messages">쪽지</button>
+          </p>
+          <div id="messagesModal" class="modal">
+            <div class="modal-content">
+              <span id="messagesClose" class="close">&times;</span>
+              <h2>쪽지 목록</h2>
             </div>
-            <p>
-                <a th:href="@{/member/logout}">로그아웃</a>
-            </p>
-            <p>
-                <a th:href="@{/myPage/view}">마이페이지</a>
-            </p>
+          </div>
+          <p>
+            <a th:href="@{/member/logout}">로그아웃</a>
+          </p>
+          <p>
+            <a th:href="@{/myPage/view}">마이페이지</a>
+          </p>
         </th:block>
-    </div>
+      </div>
 
-    <!--  사이트맵/FAQ  -->
-    <div class="footer">
+      <!--  사이트맵/FAQ  -->
+      <div class="footer">
         <p><a th:href="@{/info/siteMap}" target="_blank">사이트맵</a></p>
         <p><a th:href="@{/info/faq}" target="_blank">FAQ</a></p>
+      </div>
     </div>
-</div>
-</body>
+  </body>
 </html>
