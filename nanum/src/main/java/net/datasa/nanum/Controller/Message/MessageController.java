@@ -75,7 +75,7 @@ public class MessageController {
             RoomEntity room = messageService.findRoom(user.getNum(), shareNum);
             log.debug("방번호: {}", room.getRoomNum());
             // 이 방에서 주고받았던 쪽지 내역을 가져옴
-            List<MessageDTO> messageList = messageService.getMessage(room, user.getUsername());
+            List<MessageDTO> messageList = messageService.getMessage(room, user.getNum());
             log.debug("쪽지 내용들: {}", messageList);
             model.addAttribute("room", room);
             model.addAttribute("roomExist", roomExist);
