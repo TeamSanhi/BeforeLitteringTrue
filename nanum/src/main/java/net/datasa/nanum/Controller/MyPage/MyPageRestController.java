@@ -43,7 +43,7 @@ public class MyPageRestController {
 
     // 비밀번호 확인 메소드
     @PostMapping("/checkPassword")
-    public ResponseEntity<Map<String, Boolean>> checkPassword(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam  String enteredPw) {
+    public ResponseEntity<Map<String, Boolean>> checkPassword(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("enteredPw")  String enteredPw) {
         Integer userNum = authenticatedUser.getNum();
 
         log.debug("입력받은 패스워드 : {}", enteredPw);
