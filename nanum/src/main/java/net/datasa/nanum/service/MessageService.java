@@ -2,6 +2,7 @@ package net.datasa.nanum.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -42,22 +43,11 @@ public class MessageService {
         ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
         .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
 
-
-        log.debug("나인가 아닌가: {}", num == shareBoard.getMember().getMemberNum());
-
-        // 게시글 주인이 나일 경우
-        if (num == shareBoard.getMember().getMemberNum()) {
-                return roomRepository.existsByReceiverAndShareBoard(member, shareBoard);
-        } 
-        // 게시글 주인이 내가 아닐 경우
-        else {
-                return roomRepository.existsByCreatorAndShareBoard(member, shareBoard);
-        }
-        
+        return roomRepository.existsByCreatorAndShareBoard(member, shareBoard);
     }
 
     /**
-     * 현재 사용자가 포함된 쪽지방을 찾아옴
+     * 현재 사용자가 생성한 쪽지방을 찾아옴
      * @param num       현재 사용자
      * @param shareNum  게시글 번호
      * @return
@@ -70,16 +60,9 @@ public class MessageService {
                 .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
         
         log.debug("서비스 전달값: {}, {}", num, shareNum);        
-        // 게시글 주인이 나일 경우
-        if (num == shareBoard.getMember().getMemberNum()) {
-                RoomEntity room = roomRepository.findByReceiverAndShareBoard(member, shareBoard);
-                return room;
-        } 
-        // 게시글 주인이 내가 아닐 경우
-        else {       
-                RoomEntity room = roomRepository.findByCreatorAndShareBoard(member, shareBoard);
-                return room;
-        }        
+   
+        RoomEntity room = roomRepository.findByCreatorAndShareBoard(member, shareBoard);
+        return room;
     }
 
 
@@ -167,5 +150,19 @@ public List<MessageDTO> getMessage(RoomEntity room, int num) {
         }
 }
 
+public List<RoomDTO> getAllUserRooms(int userNum) {
+        MemberEntity member = memberRepository.findById(userNum)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+    List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member, member);
+    return rooms.stream()
+                .map(room -> RoomDTO.builder()
+                                     .roomNum(room.getRoomNum())
+                                     .creatorNum(room.getCreator().getMemberNum())
+                                     .receiverNum(room.getReceiver().getMemberNum())
+                                     .shareNum(room.getShareBoard().getShareNum())
+                                     .build())
+                .collect(Collectors.toList());
+}
 
 }

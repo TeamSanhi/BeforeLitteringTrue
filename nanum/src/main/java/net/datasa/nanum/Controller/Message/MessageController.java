@@ -16,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MessageDTO;
 import net.datasa.nanum.domain.dto.RoomDTO;
+import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.RoomEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.repository.RoomRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.MessageService;
@@ -30,6 +32,7 @@ public class MessageController {
 
     private final MessageService messageService;
     private final ShareBoardRepository shareBoardRepository;
+    private final RoomRepository roomRepository;
 
     /**
      * 사용자의 쪽지 목록으로 이동
@@ -38,18 +41,23 @@ public class MessageController {
      * @param model
      * @return
      */
-    @GetMapping("messages")
-    public String messages(@AuthenticationPrincipal AuthenticatedUser user,
+    @GetMapping("list")
+    public String list(@AuthenticationPrincipal AuthenticatedUser user,
                         Model model) {
 
+        List<RoomDTO> rooms = messageService.getAllUserRooms(user.getNum());
+
+        model.addAttribute("rooms", rooms);
+                            
         log.debug("messageView/messageList.html로 이동");
+
 
 
         return "messageView/messageList";
     }
 
     /**
-     * 주고받은 쪽지 내역 페이지로 이동
+     * 게시글에서 받을래요 눌렀을 때 쪽지 작성 페이지로 이동
      * @param user      현재 사용자
      * @param shareNum  게시글 번호
      * @param model     모델
@@ -62,6 +70,14 @@ public class MessageController {
 
         ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
         .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
+
+        ShareBoardDTO shareDTO = ShareBoardDTO.builder()
+        .shareNum(shareBoard.getShareNum())
+        .memberNum(shareBoard.getMember().getMemberNum())
+        .shareTitle(shareBoard.getShareTitle())
+        .shareCompleted(shareBoard.getShareCompleted())
+        .memberId(shareBoard.getMember().getMemberId())
+        .build();
 
         // 이 게시글에 쪽지방이 있는지 확인
         boolean roomExist = messageService.isRoomExist(user.getNum(), shareNum);
@@ -76,21 +92,23 @@ public class MessageController {
             log.debug("방번호: {}", room.getRoomNum());
             // 이 방에서 주고받았던 쪽지 내역을 가져옴
             List<MessageDTO> messageList = messageService.getMessage(room, user.getNum());
-            log.debug("쪽지 내용들: {}", messageList);
             model.addAttribute("room", room);
             model.addAttribute("roomExist", roomExist);
             model.addAttribute("messageList", messageList);
-            model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
-            log.debug("게시글 주인 아이디: {}", shareBoard.getMember().getMemberId());
+            model.addAttribute("share", shareDTO);
+            //model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
+            //model.addAttribute("shareCompleted", shareBoard.getShareCompleted());
             log.debug("쪽지방이 이미 생성되어 있을 때");
             return "messageView/messageRead";
         } 
         // 아직 만들어진 쪽지방이 없을 시
         else {
-            model.addAttribute("shareNum", shareNum);
+            model.addAttribute("share",shareDTO);
+            //model.addAttribute("shareNum", shareNum);
+            //model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
+            //model.addAttribute("shareCompleted", shareBoard.getShareCompleted());
             model.addAttribute("roomExist", roomExist);
-            model.addAttribute("thisBoardId", shareBoard.getMember().getMemberId());
-            log.debug("게시글 주인 아이디: {}", shareBoard.getMember().getMemberId());
+
             log.debug("생성된 쪽지방이 없을 때");
             return "messageView/messageRead";
         }
@@ -145,4 +163,25 @@ public class MessageController {
 
         return "messageView/messageRead";
     }
+
+    @GetMapping("readRoomDetails")
+    @ResponseBody
+    public String readRoomDetails(@RequestParam("roomNum") int roomNum, @AuthenticationPrincipal AuthenticatedUser user) {
+        RoomEntity room = roomRepository.findById(roomNum)
+            .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
+
+        List<MessageDTO> messages = messageService.getMessage(room, user.getNum());  
+        StringBuilder sb = new StringBuilder();
+
+        for (MessageDTO message : messages) {
+            sb.append("<div>");
+            sb.append("<strong>").append(message.getSenderNickname()).append("</strong>: ");
+            sb.append(message.getMessageContents());
+            sb.append(message.getDeliverDate());
+            sb.append("</div>");
+        }
+    
+        return sb.toString();  
+    }
+
 }
