@@ -19,7 +19,10 @@
         $("#editButton").click(edit);
         // 북마크 버튼 클릭이벤트 실행 bookmark1 = 북 마크하지않음, bookmark
         $("#bookmark1, #bookmark2").click(bookmark);
+        //북마크여부 확인 함수 실행 
         checkBookmark();
+        //신고버튼 클릭 이벤트 실행 
+        $('#reportButton').click(report);        
       });
 
       //삭제 함수
@@ -104,6 +107,27 @@
           },
         });
       }
+
+      // 신고버튼을 누르면 실행되는 함수
+      function report(){
+        // data 에 저장된 게시글 번호를 가져온다.
+        let shareNum = $(this).data("num");
+        
+        //ajax를 이용해 Contorller에 요청 
+        $.ajax({
+          url: "/share/report",
+          type: "post",
+          data: { shareNum: shareNum },
+          success: function (response) {
+            alert("신고되었습니다.");
+          },
+          // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
+          error: function () {
+            alert("로그인하여 해주십시오");
+            window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+          },
+        })
+      }
     </script>
   </head>
   <body>
@@ -140,6 +164,10 @@
             style="width: 40px; height: 40px; display: none"
             src="/images/bookmark2.png"
           />
+        </td>
+        <!-- 게시글 신고 버튼 -->
+        <td>
+          <button id="reportButton" th:data-num="${shareBoard.shareNum}">신고</button>
         </td>
       </tr>
     </table>
