@@ -36,7 +36,7 @@ public class ReportBoardEntity {
 // member_num INTEGER, -- 신고 대상 번호
 // share_num INTEGER, -- 신고 게시글 번호
 // CONSTRAINT FOREIGN KEY (member_num) REFERENCES MEMBER (member_num) ON DELETE
-// SET NULL,
+// CASCADE,
 // CONSTRAINT FOREIGN KEY (share_num) REFERENCES SHARE_BOARD (share_num) ON
 // DELETE SET NULL
 // )
