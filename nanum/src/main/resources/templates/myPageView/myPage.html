@@ -227,7 +227,6 @@
             $("#myAlarm").click(showAlarm);
             $("#myShare").click(showShare);
             $("#myBookmark").click(showBookmark);
-            $("#myMessages").click(showMessages);
           });
 
           // function showAlarm() {
@@ -254,8 +253,6 @@
           function showShare() {}
 
           function showBookmark() {}
-
-          function showMessages() {}
         </script>
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
@@ -410,8 +407,6 @@
         <button id="myShare">나의 나눔</button>
         <!--  북마크 띄우기  -->
         <button id="myBookmark">북마크</button>
-        <!-- 쪽지 목록 -->
-        <button id="myMessages">쪽지 목록</button>
       </section>
     </main>
     <footer></footer>
