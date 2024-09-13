@@ -38,5 +38,5 @@ public class ReportBoardEntity {
 // CONSTRAINT FOREIGN KEY (member_num) REFERENCES MEMBER (member_num) ON DELETE
 // SET NULL,
 // CONSTRAINT FOREIGN KEY (share_num) REFERENCES SHARE_BOARD (share_num) ON
-// DELETE CASCADE
+// DELETE SET NULL
 // )
