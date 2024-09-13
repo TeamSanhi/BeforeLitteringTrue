@@ -65,8 +65,8 @@ public class ReportBoardService {
             return 0;
         }
 
-        // 신고카운트 수가 3 달성하면 게시글 삭제
-        if (shareBoard.getReportCount() >= 3) {
+        // 신고카운트 수가 5 달성하면 게시글 삭제
+        if (shareBoard.getReportCount() >= 5) {
             // 게시글을 삭제
             shareBoardRepository.delete(shareBoard);
             // true 값을 리턴

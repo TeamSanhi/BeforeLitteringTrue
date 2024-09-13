@@ -43,7 +43,7 @@ public class ReportBoardController {
 
         // 삭제된 결과를 리턴
         // 0 이면 이용자가 중복으로 게시글을 신고 중복메시지 전송
-        // 1 이면 신고 성공하여 게시글 삭제 후 /share/list 로 페이지 이동
+        // 1 이면 신고 성공하여 게시글 신고수가 5회 이상이 되어 게시글 삭제 후 /share/list 로 페이지 이동
         // 2 이면 신고 성공
         return deleteResult;
     }
