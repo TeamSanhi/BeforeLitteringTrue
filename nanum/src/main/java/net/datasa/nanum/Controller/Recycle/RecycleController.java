@@ -77,6 +77,7 @@ public class RecycleController {
 public RecycleDTO read(@RequestParam("recycleNum") int recycleNum) {
     // 게시글 번호로 데이터를 가져온다
     RecycleDTO recycleDTO = recycleService.getRecycle(recycleNum);
+    log.debug("정보연람", recycleDTO);
     return recycleDTO;  // JSON으로 반환
 }
     
