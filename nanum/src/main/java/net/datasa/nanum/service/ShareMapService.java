@@ -41,7 +41,6 @@ public class ShareMapService {
     public List<ShareBoardDTO> mapList(double swLat, double swLng, double neLat, double neLng) {
         // entityList 에 게시글들을 받는다.
         List<ShareBoardEntity> entityList = shareBoardRepository.findMapList(swLat, swLng, neLat, neLng);
-        log.debug("ShareMapService에서 전달받은 entityList : {}", entityList);
         // DTO로 변환할 리스트 생성
         List<ShareBoardDTO> dtoList = new ArrayList<>();
         // entityList를 DTO로 변환해서 dtoList에 저장
