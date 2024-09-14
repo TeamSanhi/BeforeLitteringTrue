@@ -16,6 +16,7 @@
     <!-- 지도 영역 내부에서 검색 -->
     <input type="text" name = "search" id="search" value="">
     <button id="searchButton">검색</button>
+    <button id="resetButton">초기화</button>
     <!-- 지도를 보여줄 div -->
     <div id="map" style="width:93vw;height:70vh;"></div>
     <!-- js로 지도 불러오기 -->
@@ -77,16 +78,24 @@
         // 검색 버튼을 클릭스 ajax를 실행시킨다. 
         $('#searchButton').click(triggerAjax); // trigger
 
+        // 초기화 버튼을 클릭시 search를 공백으로 하여 Ajax를 실행시킨다. 
+        $('#resetButton').click(function() {
+            // 검색 value 를 공백으로 초기화
+            $('#search').val('');
+            // Ajax 함수 실행 
+            triggerAjax();
+        });
+
         // 엔터 입력시 클릭이벤트를 실행해 게시글을 검색하게 한다. 
         $('#search').keydown(function(event) {
             if (event.key === 'Enter') {
                 $('#searchButton').click(); // Enter 키가 눌리면 검색 버튼 클릭이벤트가 실행된다. 
             }
         });
-        //***************************************************************************************************
+        //**********************지도에 이벤트를 등록 ***************************************************
         
 
-        // **************지도 영역내의 게시글을 불러오는 ajax를 발동시키는 트리거 ******************
+        // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
         function triggerAjax() {
             //검색에 사용할 값을 불러옴 
             let search = $('#search').val();
@@ -154,11 +163,11 @@
                     removeMarkersOutOfBounds(); // 경계 밖 마커 제거
                 }              
             });
-        }; //ajaxtrigger 끝 
-        //***************************************************************************************************
+        };
+        //***************************지도 영역내의 게시글을 불러오는 ajax**************************************
 
-
-        // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성하는 함수*********************************
+        
+        // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
         function createMarkerWithInfo(marker, share) {
             let iwContent = `
                 <div style="padding:5px; width:110px; height:150px;">
@@ -197,8 +206,10 @@
                 window.location.href = '/share/read?shareNum=' + share.shareNum;
             });
         }
-        //************************************************************************************************
+        //*************************마커에 인포윈도우를 매치, 마커에 이벤트 등록 ********************************
 
+
+        //***********************기타함수***********************************
         // 좌표를 기반으로 중복 마커 확인하는 함수
         function isMarkerExists(position) {
             return markers.some(function(marker) {
@@ -206,7 +217,7 @@
                 return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
             });
         }
-
+        
         // 지도 경계 밖 마커를 삭제하는 함수
         function removeMarkersOutOfBounds() {
             let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
@@ -231,6 +242,7 @@
         // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
         kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
         kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
+        //*********************기타함수*****************************************************
     </script>
     <p><a href="/share/save">글작성</a></p>
     <!-- ShareMapContorller 게시판 목록 출력 -->
