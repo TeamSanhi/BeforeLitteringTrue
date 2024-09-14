@@ -36,11 +36,12 @@ public class ShareMapService {
      * @param swLng
      * @param neLat
      * @param neLng
+     * @param serach // 검색어를 받아온다.
      * @return
      */
-    public List<ShareBoardDTO> mapList(double swLat, double swLng, double neLat, double neLng) {
+    public List<ShareBoardDTO> mapList(double swLat, double swLng, double neLat, double neLng, String serach) {
         // entityList 에 게시글들을 받는다.
-        List<ShareBoardEntity> entityList = shareBoardRepository.findMapList(swLat, swLng, neLat, neLng);
+        List<ShareBoardEntity> entityList = shareBoardRepository.findMapList(swLat, swLng, neLat, neLng, serach);
         // DTO로 변환할 리스트 생성
         List<ShareBoardDTO> dtoList = new ArrayList<>();
         // entityList를 DTO로 변환해서 dtoList에 저장
@@ -75,6 +76,7 @@ public class ShareMapService {
             // 완성된 imageList를 shareBoardDTO의 imageList에 저장한다.
             dto.setImageList(imageList);
 
+            // 반환할 게시글(dto) 리스트에 게시글 하나를 저장
             dtoList.add(dto);
         }
 

@@ -13,6 +13,9 @@
     </script>
 </head>
 <body>
+    <!-- 지도 영역 내부에서 검색 -->
+    <input type="text" name = "search" id="search" value="">
+    <button id="searchButton">검색</button>
     <!-- 지도를 보여줄 div -->
     <div id="map" style="width:93vw;height:70vh;"></div>
     <!-- js로 지도 불러오기 -->
@@ -54,6 +57,7 @@
         let markers = [];
         let openInfoWindow = null;  // 열린 인포윈도우 추적
 
+        // ************* 지도에 이벤트 등록 ****************************************************************
         // 초기 로드 시 마커를 불러오기 위해 'idle' 이벤트를 사용
         kakao.maps.event.addListener(map, 'idle', function () {
             triggerAjax();  // idle 이벤트가 발생하면 마커를 불러옵니다.
@@ -70,16 +74,25 @@
             triggerAjax();
         });
 
-        // ajax를 발동시키는 트리거 
+        // 검색 버튼을 클릭스 ajax를 실행시킨다. 
+        $('#searchButton').click(triggerAjax); // trigger
+        //***************************************************************************************************
+        
+
+        // **************지도 영역내의 게시글을 불러오는 ajax를 발동시키는 트리거 ******************
         function triggerAjax() {
+            //검색에 사용할 값을 불러옴 
+            let search = $('#search').val();
+            //지도의 영역을 불러온다. 
             let bounds = map.getBounds();
             let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
             let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
             let neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
             let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
 
-            // data에 위도 경도 정보를 담기
-            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
+            // data에 위도, 경도, 검색정보를 담기
+            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng
+                        ,serach : search}
 
             //지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
@@ -89,10 +102,10 @@
                 //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
                 success: function(mapList) {
                     // 기존 마커를 제거하고 클러스터러에서 삭제
-                    clusterer.clear(); // 지도 영역이벤트가 발생할때마다 비우지 않으면 클러스터에 마커가 계속 쌓인다
+                    clusterer.clear(); // ajax가 실행될때마다 클러스터를 비우지 않으면 클러스터에 마커가 계속 쌓인다
                     
                     // 마커 배열을 초기화
-                    markers = []; // 지도 영역이벤트가 발생할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
+                    markers = []; // ajax가 실행할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
 
                     //영역 변경전에 만들어져있는 게시글을 초기화
                     $('#result').empty();
@@ -135,8 +148,10 @@
                 }              
             });
         }; //ajaxtrigger 끝 
+        //***************************************************************************************************
 
-        // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성하는 함수
+
+        // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성하는 함수*********************************
         function createMarkerWithInfo(marker, share) {
             let iwContent = `
                 <div style="padding:5px; width:110px; height:150px;">
@@ -147,7 +162,7 @@
             `;
 
             // 인포윈도우를 생성합니다
-            let infowindow = new kakao.maps.InfoWindow({
+            let infoWindow = new kakao.maps.InfoWindow({
                 content: iwContent,
                 disableAutoPan: true // 자동 이동 비활성화
             });
@@ -159,14 +174,14 @@
                     openInfoWindow.close();
                 }
                 // 인포윈도우를 마커 위에 표시
-                infowindow.open(map, marker);
-                openInfoWindow = infowindow;  // 열린 인포윈도우를 저장
+                infoWindow.open(map, marker);
+                openInfoWindow = infoWindow;  // 열린 인포윈도우를 저장
             });
 
             // 마커에 마우스아웃 이벤트를 등록합니다
             kakao.maps.event.addListener(marker, 'mouseout', function () {
                 // 마우스아웃 이벤트가 발생하면 인포윈도우를 닫습니다
-                infowindow.close();
+                infoWindow.close();
                 openInfoWindow = null;  // 열린 인포윈도우를 없앰
             });
 
@@ -175,8 +190,9 @@
                 window.location.href = '/share/read?shareNum=' + share.shareNum;
             });
         }
+        //************************************************************************************************
 
-        // 좌표를 기반으로 중복 마커 확인
+        // 좌표를 기반으로 중복 마커 확인하는 함수
         function isMarkerExists(position) {
             return markers.some(function(marker) {
                 let markerPosition = marker.getPosition();
