@@ -76,6 +76,13 @@
 
         // 검색 버튼을 클릭스 ajax를 실행시킨다. 
         $('#searchButton').click(triggerAjax); // trigger
+
+        // 엔터 입력시 클릭이벤트를 실행해 게시글을 검색하게 한다. 
+        $('#search').keydown(function(event) {
+            if (event.key === 'Enter') {
+                $('#searchButton').click(); // Enter 키가 눌리면 검색 버튼 클릭이벤트가 실행된다. 
+            }
+        });
         //***************************************************************************************************
         
 
