@@ -8,6 +8,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>글읽기</title>
+    <style>
+      /* 모달 창 스타일 */
+      .modal {
+        display: none; /* 기본적으로 숨김 */
+        position: fixed; /* 화면을 기준으로 고정 */
+        z-index: 1; /* 다른 콘텐츠 위에 표시 */
+        left: 0;
+        top: 0;
+        width: 100%; /* 전체 화면 너비 */
+        height: 100%; /* 전체 화면 높이 */
+        overflow: auto; /* 스크롤 가능 */
+        background-color: rgb(0, 0, 0); /* 배경색 */
+        background-color: rgba(0, 0, 0, 0.4); /* 배경색의 투명도 조정 */
+      }
+
+      /* 모달 콘텐츠 스타일 */
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto; /* 중앙 정렬 */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* 너비 설정 */
+      }
+
+      /* 모달 닫기 버튼 스타일 */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <!-- 게시글 수정 삭제, 북마크 처리 script -->
     <script>
@@ -19,10 +58,29 @@
         $("#editButton").click(edit);
         // 북마크 버튼 클릭이벤트 실행 bookmark1 = 북 마크하지않음, bookmark
         $("#bookmark1, #bookmark2").click(bookmark);
-        //북마크여부 확인 함수 실행 
+        //북마크여부 확인 함수 실행
         checkBookmark();
-        //신고버튼 클릭 이벤트 실행 
-        $('#reportButton').click(report);        
+        //신고버튼 클릭 이벤트 실행
+        $("#reportButton").click(report);
+
+        // '받을래요' 버튼 클릭 시 모달 열기
+        $("#receiveButton").click(showMessage);
+
+        // 모달 닫기
+        $(".close").click(function () {
+          $("#messageModal").hide();
+        });
+
+        $(window).click(function (event) {
+          if ($(event.target).is("#messageModal")) {
+            $("#messageModal").hide();
+          }
+        });
+
+        // 쪽지 보내기 버튼 클릭 시 처리
+        $("#sendMessageButton").click(function () {
+          sendMessage();
+        });
       });
 
       //삭제 함수
@@ -109,28 +167,28 @@
       }
 
       // 신고버튼을 누르면 실행되는 함수
-      function report(){
+      function report() {
         // data 에 저장된 게시글 번호를 가져온다.
         let shareNum = $(this).data("num");
-        
-        //ajax를 이용해 Contorller에 요청 
+
+        //ajax를 이용해 Contorller에 요청
         $.ajax({
           url: "/share/report",
           type: "post",
           data: { shareNum: shareNum },
           success: function (deleteResult) {
-            //같은 사용자가 게시물 중복 신고시 
-            if(deleteResult == 0){
-              alert("이미 신고한 게시글 입니다.")
+            //같은 사용자가 게시물 중복 신고시
+            if (deleteResult == 0) {
+              alert("이미 신고한 게시글 입니다.");
             }
-            // 게시글 신고횟수가 3회 이상되어 삭제되었을 시 
-            else if(deleteResult == 1){
+            // 게시글 신고횟수가 3회 이상되어 삭제되었을 시
+            else if (deleteResult == 1) {
               alert("신고되었습니다.");
-              alert("게시글이 삭제되었습니다.")
+              alert("게시글이 삭제되었습니다.");
               window.location.href = "/share/list";
             }
-            // 게시글이 정상적으로 신고 되었을 시 
-            else if(deleteResult == 2){
+            // 게시글이 정상적으로 신고 되었을 시
+            else if (deleteResult == 2) {
               alert("신고되었습니다.");
             }
           },
@@ -139,7 +197,99 @@
             alert("로그인하여 해주십시오");
             window.location.href = "/login"; // 로그인 페이지로 리다이렉트
           },
-        })
+        });
+      }
+
+      // 받을래요 버튼을 누르면 실행되는 함수
+      function showMessage() {
+        let creatorNum = $(this).data("user-num");
+        let receiverNum = $(this).data("num");
+        let shareNum = $(this).data("share-num");
+        $("#messageModal").show();
+        checkAndLoadRoom(creatorNum, receiverNum, shareNum);
+      }
+
+      // 쪽지방이 존재하는지 체크하고, 존재할 경우 쪽지 내용 로드
+      function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
+        $.ajax({
+          url: "/message/check",
+          type: "get",
+          data: {
+            creatorNum: creatorNum,
+            receiverNum: receiverNum,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            let messages = response.existingMessages;
+            let messageList = $("#existingMessages");
+            messageList.empty(); // 기존 내용을 지우고
+            if (response.roomExists) {
+              // 기존 쪽지방이 있으면 쪽지 내용 로드
+              messages.forEach(function (message) {
+                messageList.append(
+                  `<div class="message">
+                        <strong>${message.senderNickname}</strong>: ${message.messageContents}
+                        <small>${message.deliverDate}</small>
+                    </div>`
+                );
+              });
+            } else {
+              // 쪽지방이 없으면 빈 상태로 유지
+              $("#existingMessages").html("");
+            }
+          },
+        });
+      }
+      // 작성한 쪽지를 보내서 DB에 저장
+      function sendMessage() {
+        let messageContents = $("#messageContents").val();
+        let receiverNum = $("#receiveButton").data("num");
+        let creatorNum = $("#receiveButton").data("user-num");
+        let shareNum = $("#receiveButton").data("share-num");
+
+        console.log(creatorNum);
+
+        $.ajax({
+          url: "/message/send",
+          type: "post",
+          data: {
+            creatorNum: creatorNum,
+            receiverNum: receiverNum,
+            messageContents: messageContents,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            if (response.success) {
+              // 쪽지 전송 후 모달 내역 갱신
+              $.ajax({
+                url: "/message/check",
+                type: "GET",
+                data: {
+                  creatorNum: creatorNum,
+                  receiverNum: receiverNum,
+                  shareNum: shareNum,
+                },
+                success: function (response) {
+                  let messages = response.existingMessages;
+                  let messageList = $("#existingMessages");
+                  messageList.empty(); // 기존 내용을 지우고
+
+                  messages.forEach(function (message) {
+                    messageList.append(
+                      `<div class="message">
+                                    <strong>${message.senderNickname}</strong>: ${message.messageContents}
+                                    <small>${message.deliverDate}</small>
+                                </div>`
+                    );
+                  });
+                  $("#messageContents").val(""); // 쪽지 입력 필드 비우기
+                },
+              });
+            } else {
+              alert("쪽지 전송에 실패했습니다.");
+            }
+          },
+        });
       }
     </script>
   </head>
@@ -180,7 +330,9 @@
         </td>
         <!-- 게시글 신고 버튼 -->
         <td>
-          <button id="reportButton" th:data-num="${shareBoard.shareNum}">신고</button>
+          <button id="reportButton" th:data-num="${shareBoard.shareNum}">
+            신고
+          </button>
         </td>
       </tr>
     </table>
@@ -240,16 +392,31 @@
         </button>
       </p>
     </div>
-
+    <!-- 로그인한 아이디와 게시글 작성자의 memberId가 다르면 작성자와 쪽지를 주고받을 수 있는 창을 띄운다. -->
     <div th:if="${#authentication.name != shareBoard.memberId}">
-      <form th:action="@{/message/read}" method="get" id="messageRead">
-        <input
-          type="hidden"
-          name="shareNum"
-          th:value="${shareBoard.shareNum}"
-        />
-        <button>받을래요</button>
-      </form>
+      <button
+        id="receiveButton"
+        th:data-user-num="${userNum}"
+        th:data-num="${shareBoard.memberNum}"
+        th:data-share-num="${shareBoard.shareNum}"
+      >
+        받을래요
+      </button>
+    </div>
+    <!-- 쪽지 보내기 모달창 -->
+    <div id="messageModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>쪽지 보내기</h2>
+        <!-- 쪽지 내역이 출력되는 곳 -->
+        <div id="existingMessages"></div>
+        <textarea
+          id="messageContents"
+          placeholder="쪽지 내용을 입력하세요"
+        ></textarea
+        ><br />
+        <button id="sendMessageButton">쪽지 보내기</button>
+      </div>
     </div>
   </body>
 </html>
