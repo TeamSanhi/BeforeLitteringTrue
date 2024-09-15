@@ -71,6 +71,7 @@
           $("#messageModal").hide();
         });
 
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
         $(window).click(function (event) {
           if ($(event.target).is("#messageModal")) {
             $("#messageModal").hide();
@@ -80,6 +81,28 @@
         // 쪽지 보내기 버튼 클릭 시 처리
         $("#sendMessageButton").click(function () {
           sendMessage();
+        });
+
+        // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
+        $("#userReportButton").click(function () {
+          $("#reportModal").show();
+        });
+
+        // 신고 모달 닫기
+        $(".close").click(function () {
+          $("#reportModal").hide();
+        });
+
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+        $(window).click(function (event) {
+          if ($(event.target).is("#reportModal")) {
+            $("#reportModal").hide();
+          }
+        });
+
+        // 신고 제출 버튼 클릭 시 신고 내역 제출
+        $("#submitUserReportButton").click(function () {
+          submitReport();
         });
       });
 
@@ -211,6 +234,7 @@
 
       // 쪽지방이 존재하는지 체크하고, 존재할 경우 쪽지 내용 로드
       function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
+        // ajax를 이용해 쪽지방 존재 여부 체크
         $.ajax({
           url: "/message/check",
           type: "get",
@@ -240,6 +264,7 @@
           },
         });
       }
+
       // 작성한 쪽지를 보내서 DB에 저장
       function sendMessage() {
         let messageContents = $("#messageContents").val();
@@ -248,7 +273,7 @@
         let shareNum = $("#receiveButton").data("share-num");
 
         console.log(creatorNum);
-
+        // ajax를 이용해서 DB에 쪽지 내용을 저장
         $.ajax({
           url: "/message/send",
           type: "post",
@@ -273,7 +298,7 @@
                   let messages = response.existingMessages;
                   let messageList = $("#existingMessages");
                   messageList.empty(); // 기존 내용을 지우고
-
+                  // 주고받은 전체 쪽지를 영역에 집어넣음
                   messages.forEach(function (message) {
                     messageList.append(
                       `<div class="message">
@@ -282,12 +307,44 @@
                                 </div>`
                     );
                   });
-                  $("#messageContents").val(""); // 쪽지 입력 필드 비우기
+                  $("#messageContents").val(""); // 쪽지 입력하는 필드 비우기
                 },
               });
             } else {
               alert("쪽지 전송에 실패했습니다.");
             }
+          },
+        });
+      }
+
+      // 신고 데이터 전송 함수
+      function submitReport() {
+        let reportReasons = [];
+        $("input[name='reportReason']:checked").each(function () {
+          reportReasons.push($(this).val());
+        });
+        let additionalReason = $("#additionalReason").val();
+        let shareNum = $("#receiveButton").data("share-num");
+        let reporterNum = $("#receiveButton").data("user-num"); // 사용자의 ID
+        let memberNum = $("#receiveButton").data("num"); // 게시글 작성자의 ID
+
+        // Ajax 요청으로 신고 데이터 전송
+        $.ajax({
+          url: "/report/submit",
+          type: "post",
+          data: {
+            memberNum: memberNum,
+            reporterNum: reporterNum,
+            reportReason: JSON.stringify(reportReasons),
+            additionalReason: additionalReason,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            alert("신고가 접수되었습니다.");
+            $("#reportModal").hide();
+          },
+          error: function () {
+            alert("신고 처리 중 오류가 발생했습니다.");
           },
         });
       }
@@ -393,7 +450,10 @@
       </p>
     </div>
     <!-- 로그인한 아이디와 게시글 작성자의 memberId가 다르면 작성자와 쪽지를 주고받을 수 있는 창을 띄운다. -->
-    <div th:if="${#authentication.name != shareBoard.memberId}">
+    <div
+      th:if="${#authentication.name != shareBoard.memberId}"
+      sec:authorize="isAuthenticated()"
+    >
       <button
         id="receiveButton"
         th:data-user-num="${userNum}"
@@ -416,6 +476,53 @@
         ></textarea
         ><br />
         <button id="sendMessageButton">쪽지 보내기</button>
+        <button id="userReportButton">신고하기</button>
+      </div>
+    </div>
+
+    <!-- 게시글 유저 신고 모달창 -->
+    <div id="reportModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>신고하기</h2>
+        <form id="reportForm">
+          <div>
+            <label
+              ><input
+                type="checkbox"
+                name="reportReason"
+                value="욕설, 인신공격 등 언어적 폭력"
+              />
+              욕설, 인신공격 등 언어적 폭력</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="reportReason"
+                value="부적절한 게시글"
+              />
+              부적절한 게시글</label
+            >
+            <label
+              ><input
+                type="checkbox"
+                name="reportReason"
+                value="사기 또는 허위정보"
+              />
+              사기 또는 허위정보</label
+            >
+            <label
+              ><input type="checkbox" name="reportReason" value="기타" />
+              기타</label
+            >
+          </div>
+          <textarea
+            id="additionalReason"
+            placeholder="기타 사유를 입력하세요"
+          ></textarea
+          ><br />
+          <button type="button" id="submitUserReportButton">신고 제출</button>
+        </form>
       </div>
     </div>
   </body>

@@ -3,6 +3,7 @@ package net.datasa.nanum.Controller.Share;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -128,7 +129,7 @@ public class ShareController {
     public String read(
             Model model,
             @RequestParam("shareNum") Integer shareNum,
-            @AuthenticationPrincipal AuthenticatedUser user
+            Authentication authentication
             ) {
 
         log.debug("share/read 컨트롤러 지나감 shareNum : {}, {}", shareNum);
@@ -139,7 +140,11 @@ public class ShareController {
         // 모델에 저장
         model.addAttribute("shareBoard", shareBoardDTO);
         // 현재 로그인한 회원 번호를 모델에 저장
-        model.addAttribute("userNum", user.getNum());
+        if (authentication != null && authentication.isAuthenticated()) {
+            AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
+            model.addAttribute("userNum", user.getNum());
+        }
+        
 
         // read로 이동
         return "shareView/shareRead";
