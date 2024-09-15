@@ -38,6 +38,7 @@
       .fixed_img_col ul li img {
         width: 300px;
         height: 300px;
+        object-fit: cover;
       }
 
       .popup-overlay {
@@ -189,6 +190,12 @@
             $("#messagesModal").fadeOut();
           }
         });
+      });
+      // Esc 키로 팝업창 닫기
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+          closePopup();
+        }
       });
     </script>
   </head>
