@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import net.datasa.nanum.domain.entity.MessageEntity;
 import net.datasa.nanum.domain.entity.RoomEntity;
 
+/**
+ * 쪽지 기능 처리 Repository
+ */
 @Repository
 public interface MessageRepository extends JpaRepository<MessageEntity, Integer> {
 

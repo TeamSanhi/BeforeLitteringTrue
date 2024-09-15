@@ -9,6 +9,9 @@ import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.RoomEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
 
+/**
+ * ROOM (쪽지방) 처리 repository
+ */
 @Repository
 public interface RoomRepository extends JpaRepository<RoomEntity, Integer> {
 
