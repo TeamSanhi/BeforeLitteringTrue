@@ -98,9 +98,8 @@ public class ShareBoardEntity {
 // share_completed TINYINT(1) DEFAULT 0 CHECK (share_completed IN (0,1)), -- 나눔
 // 완료 여부: 0: 나눔 중, 1: 나눔 완료
 // share_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 게시글 등록일
-// report_count INTEGER DEFAULT 0, -- 신고 횟수: 3번 이상 신고당하면 삭제
+// report_count INTEGER DEFAULT 0, -- 신고 횟수: 5번 이상 신고당하면 삭제
 // bookmark_count INTEGER DEFAULT 0, -- 북마크 개수
-// image_file_name VARCHAR(100), -- 대표사진
 // CONSTRAINT FOREIGN KEY (member_num) REFERENCES MEMBER (member_num) ON DELETE
 // SET NULL,
 // CONSTRAINT FOREIGN KEY (receiver_num) REFERENCES MEMBER (member_num) ON

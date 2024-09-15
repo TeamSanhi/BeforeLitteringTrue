@@ -77,8 +77,6 @@
 
         // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
         function triggerAjax() {
-            //검색에 사용할 값을 불러옴 
-            let search = $('#search').val();
             //지도의 영역을 불러온다. 
             let bounds = map.getBounds();
             let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
@@ -87,12 +85,11 @@
             let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
 
             // data에 위도, 경도, 검색정보를 담기
-            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng
-                        ,serach : search}
+            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng}
 
             //지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
-                url: '/share/mapList',
+                url: '/share/serviceList',
                 type: 'get',
                 data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
                 //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
@@ -102,9 +99,6 @@
                     
                     // 마커 배열을 초기화
                     markers = []; // ajax가 실행할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
-
-                    //영역 변경전에 만들어져있는 게시글을 초기화
-                    $('#result').empty();
 
                     // 지도에 마커를 찍어 게시글 위치를 표시
                     mapList.forEach(function(share) {

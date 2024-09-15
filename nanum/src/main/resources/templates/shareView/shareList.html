@@ -113,7 +113,7 @@
             //지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
                 url: '/share/mapList',
-                type: 'get',
+                type: 'post',
                 data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
                 //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
                 success: function(mapList) {
