@@ -150,6 +150,11 @@
               data.recycleContents;
             document.getElementById("popupCategory").textContent =
               data.recycleCategory;
+            document.getElementById("popupDate").textContent = data.recycleDate;
+
+            // 이미지가 제대로 표시되도록 설정
+            document.getElementById("popupImage").src =
+              `/images/` + data.recycleFileName;
 
             // 팝업 표시
             document.querySelector(".popup-overlay").style.display = "block";
@@ -197,6 +202,20 @@
           closePopup();
         }
       });
+      function pagingFormSubmit(page) {
+        let form = document.createElement("form");
+        form.method = "GET";
+        form.action = "/recycle/list"; // 페이징을 처리할 URL
+
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "page";
+        input.value = page;
+
+        form.appendChild(input);
+        document.body.appendChild(form);
+        form.submit();
+      }
     </script>
   </head>
   <body>
@@ -260,6 +279,49 @@
         </ul>
       </div>
 
+      <!-- 페이지 이동 링크 -->
+      <div class="pagination" style="text-align: center; margin-bottom: 20px">
+        <span th:if="${boardPage.totalPages > 0 and page != 1}">
+          <a href="javascript:pagingFormSubmit(1)">첫페이지</a>
+        </span>
+
+        <a
+          th:if="${page != 1}"
+          th:href="|javascript:pagingFormSubmit(${page - 1})|"
+          >◀</a
+        >
+
+        <span
+          th:if="${boardPage.totalPages > 0}"
+          th:each="counter : ${#numbers.sequence((page - linkSize < 1 ? 1 : page - linkSize), 
+    (page + linkSize > boardPage.totalPages ? boardPage.totalPages : page + linkSize))}"
+        >
+          <th:block th:if="${counter == page}">
+            <b th:text="${counter}"></b>
+          </th:block>
+          <th:block th:if="${counter != page}">
+            <a
+              th:text="${counter}"
+              th:href="|javascript:pagingFormSubmit(${counter})|"
+            ></a>
+          </th:block>
+        </span>
+
+        <a
+          th:if="${page != boardPage.totalPages}"
+          th:href="|javascript:pagingFormSubmit(${page + 1})|"
+          >▶</a
+        >
+
+        <span
+          th:if="${boardPage.totalPages > 0 and page != boardPage.totalPages}"
+        >
+          <a th:href="|javascript:pagingFormSubmit(${boardPage.totalPages})|"
+            >마지막페이지</a
+          >
+        </span>
+      </div>
+
       <!-- 검색 바 -->
       <div class="search-bar">
         <form th:action="@{/recycle/list}" method="get">
@@ -295,9 +357,16 @@
     <div class="popup-overlay">
       <div class="popup-content">
         <span class="close-btn" onclick="closePopup()">X</span>
+        <img
+          id="popupImage"
+          src=""
+          alt="게시물 이미지"
+          style="width: 300px; height: 300px; object-fit: cover"
+        />
         <h2 id="popupTitle">제목</h2>
         <p id="popupCategory">카테고리</p>
         <p id="popupContents">내용</p>
+        <p id="popupDate">갱신일</p>
       </div>
     </div>
   </body>
