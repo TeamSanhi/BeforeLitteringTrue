@@ -1,15 +1,45 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head>
+    <!-- 메타 정보 -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>recycleList</title>
+
+    <!-- jQuery 라이브러리 추가 -->
+    <!-- 로컬에 jQuery 파일이 있는 경우 -->
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- 또는 CDN을 사용하는 경우 -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
+
+    <!-- 스타일 정의 -->
     <style type="text/css">
-      /* 기존 스타일들... */
       .fixed_img_col {
         margin: 0 auto;
         text-align: center;
+        max-width: 1600px; /* 필요에 따라 조정 가능 */
       }
+
+      .fixed_img_col ul {
+        list-style: none;
+        padding: 0;
+        display: inline-block; /* 중앙 정렬을 위해 추가 */
+      }
+
+      .fixed_img_col ul li {
+        display: inline-block;
+        margin: 5px;
+      }
+
+      .fixed_img_col ul li img {
+        width: 300px;
+        height: 300px;
+      }
+
       .popup-overlay {
         display: none;
         position: fixed;
@@ -35,7 +65,77 @@
         float: right;
         cursor: pointer;
       }
+
+      /* 검색 바 스타일 */
+      .search-bar {
+        margin: 20px auto;
+        text-align: center;
+      }
+
+      .search-bar form {
+        display: inline-block;
+      }
+
+      .search-bar select,
+      .search-bar input {
+        padding: 5px;
+        font-size: 16px;
+      }
+
+      .search-bar button {
+        padding: 5px 10px;
+        font-size: 16px;
+      }
+
+      /* 회원 기능 스타일 */
+      .member {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: absolute;
+        top: 0px;
+        right: 10px;
+      }
+
+      /* 모달 스타일 */
+      .modal {
+        display: none; /* 모달을 숨김 */
+        position: fixed; /* 화면에 고정된 위치로 설정 */
+        z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
+        left: 0; /* 화면 왼쪽부터 시작 */
+        top: 0; /* 화면 상단부터 시작 */
+        width: 100%; /* 화면 전체 너비 */
+        height: 100%; /* 화면 전체 높이 */
+        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
+      }
+
+      .modal-content {
+        background-color: #fff;
+        margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
+        padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
+        border: 1px solid #888;
+        width: 90%; /* 너비를 화면의 90%로 변경 */
+        max-width: 600px; /* 최대 너비를 600px로 확장 */
+        text-align: center;
+      }
+
+      /* 닫기 버튼 스타일 */
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+      }
     </style>
+
+    <!-- 스크립트 정의 -->
     <script>
       function openPopup(recycleNum) {
         // AJAX 요청으로 게시글 데이터를 불러온다
@@ -52,27 +152,10 @@
 
             // 팝업 표시
             document.querySelector(".popup-overlay").style.display = "block";
-          });
-      }
-
-      function closePopup() {
-        document.querySelector(".popup-overlay").style.display = "none";
-      }
-      function openPopup(recycleNum) {
-        // AJAX 요청으로 게시글 데이터를 불러온다
-        fetch(`/recycle/read?recycleNum=` + recycleNum)
-          .then((response) => response.json())
-          .then((data) => {
-            // 팝업창의 내용을 동적으로 설정
-            document.getElementById("popupTitle").textContent =
-              data.recycleName;
-            document.getElementById("popupContents").textContent =
-              data.recycleContents;
-            document.getElementById("popupCategory").textContent =
-              data.recycleCategory;
-
-            // 팝업 표시
-            document.querySelector(".popup-overlay").style.display = "block";
+          })
+          .catch((error) => {
+            console.error("데이터를 불러오는 중 오류 발생:", error);
+            alert("데이터를 불러오는 데 실패했습니다.");
           });
       }
 
@@ -85,7 +168,6 @@
         var popupContent = document.querySelector(".popup-content");
         var popupOverlay = document.querySelector(".popup-overlay");
 
-        // 팝업창 외부를 클릭하면 팝업 닫기
         if (
           event.target === popupOverlay &&
           !popupContent.contains(event.target)
@@ -93,182 +175,112 @@
           closePopup();
         }
       });
+
+      // jQuery를 사용하는 모달 제어 코드
+      $(document).ready(function () {
+        $("#messages").click(function () {
+          $("#messagesModal").fadeIn();
+        });
+        $("#messagesClose").click(function () {
+          $("#messagesModal").fadeOut();
+        });
+        $(window).click(function (event) {
+          if ($(event.target).is("#messagesModal")) {
+            $("#messagesModal").fadeOut();
+          }
+        });
+      });
     </script>
   </head>
   <body>
     <div class="wrap">
-      <div class="container"></div>
-      <!--  네비게이션 바  -->
+      <!-- 네비게이션 바 -->
       <div class="nav">
         <a th:href="@{/}">로고</a>
         <a th:href="@{/info/service}">우리는..</a>
         <a th:href="@{/share/list}">나눠요</a>
         <a th:href="@{/recycle/list}">버려요</a>
       </div>
-      <!-- 네비게이션 및 기타 요소들... 리스트로 할것-->
+
+      <!-- 회원 기능 -->
+      <div class="member">
+        <th:block sec:authorize="not isAuthenticated()">
+          <p>
+            <a th:href="@{/member/join}">회원가입</a>
+          </p>
+          <p>
+            <a th:href="@{/member/loginForm}">로그인</a>
+          </p>
+        </th:block>
+        <th:block sec:authorize="isAuthenticated()">
+          <p>
+            <button id="messages">쪽지</button>
+          </p>
+          <div id="messagesModal" class="modal">
+            <div class="modal-content">
+              <span id="messagesClose" class="close">&times;</span>
+              <h2>쪽지 목록</h2>
+              <!-- 쪽지 목록 콘텐츠를 여기에 추가 -->
+            </div>
+          </div>
+          <p>
+            <a th:href="@{/myPage/view}">마이페이지</a>
+          </p>
+          <p>
+            <a th:href="@{/member/logout}">로그아웃</a>
+          </p>
+        </th:block>
+      </div>
+
+      <!-- 이미지 목록 -->
       <div class="fixed_img_col">
         <ul>
-          <a href="javascript:void(0)" onclick="openPopup(1)">
-            <img
-              src="/images/image1.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(2)">
-            <img
-              src="/images/image2.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(3)">
-            <img
-              src="/images/image3.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(4)">
-            <img
-              src="/images/image4.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(5)">
-            <img
-              src="/images/image5.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(6)">
-            <img
-              src="/images/image6.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(7)">
-            <img
-              src="/images/image7.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(8)">
-            <img
-              src="/images/image8.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(9)">
-            <img
-              src="/images/image9.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(10)">
-            <img
-              src="/images/image10.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(11)">
-            <img
-              src="/images/image11.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(12)">
-            <img
-              src="/images/image12.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(13)">
-            <img
-              src="/images/image13.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(14)">
-            <img
-              src="/images/image14.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(15)">
-            <img
-              src="/images/image15.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(16)">
-            <img
-              src="/images/image16.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(17)">
-            <img
-              src="/images/image17.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(18)">
-            <img
-              src="/images/image18.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(19)">
-            <img
-              src="/images/image19.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
-          <a href="javascript:void(0)" onclick="openPopup(20)">
-            <img
-              src="/images/image20.gif"
-              alt="하하"
-              width="300px"
-              height="300px"
-            />
-          </a>
+          <th:block th:each="item : ${recycleList}">
+            <li>
+              <a
+                href="javascript:void(0)"
+                th:onclick="'openPopup(' + ${item.recycleNum} + ')'"
+              >
+                <img
+                  th:src="@{'/images/' + ${item.recycleFileName}}"
+                  alt="이미지"
+                  width="300px"
+                  height="300px"
+                />
+              </a>
+            </li>
+          </th:block>
         </ul>
+      </div>
+
+      <!-- 검색 바 -->
+      <div class="search-bar">
+        <form th:action="@{/recycle/list}" method="get">
+          <select name="searchType">
+            <option value="title" th:selected="${searchType == 'title'}">
+              제목
+            </option>
+            <option value="contents" th:selected="${searchType == 'contents'}">
+              내용
+            </option>
+            <option
+              value="titleAndContents"
+              th:selected="${searchType == 'titleAndContents'}"
+            >
+              제목 및 내용
+            </option>
+            <option value="category" th:selected="${searchType == 'category'}">
+              카테고리
+            </option>
+          </select>
+          <input
+            type="text"
+            name="searchWord"
+            placeholder="검색어를 입력하세요"
+            th:value="${searchWord}"
+          />
+          <button type="submit">검색</button>
+        </form>
       </div>
     </div>
 
