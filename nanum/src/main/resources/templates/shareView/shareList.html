@@ -13,7 +13,7 @@
 
     <!-- script -->
     <script type="text/javascript" th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script type="text/javascript" src="/js/share_list.js"></script>
+    <script type="text/javascript" th:src="@{/js/share_list.js}"></script>
     
 </head>
 <body>
@@ -93,7 +93,7 @@
 
             <!-- 나눔하기 버튼_로그인을 했을 시에만 보이도록 -->
             <div class="wantShareArea">
-                <a href="/share/save" target="_blank">
+                <a href="/share/save">
                     <input type="button" name="wantShare" id="wantShare" class="wantShare" value="나눔하기">
                 </a>
             </div>
@@ -226,7 +226,7 @@
                             //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
                             $('#result').append(`
                                     <div class="sharePosting">
-                                        <a href="/share/read?shareNum=${share.shareNum}" target="_blank">
+                                        <a href="/share/read?shareNum=${share.shareNum}">
                                             <span class="sharePostTitle">${share.shareTitle}</span>
                                         </a>
                                         <div class="shareImage">
@@ -256,11 +256,11 @@
             // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
             function createMarkerWithInfo(marker, share) {
                 let iwContent = `
-                    <div>
+                    <span>
                         <span>${share.memberNickname}</span>
                         <span>${share.shareTitle}</span><br>
                         <img src="/share/download?imageNum=${share.imageList[0].imageNum}">
-                    </div>
+                    </span>
                 `;
 
                 // 인포윈도우를 생성합니다

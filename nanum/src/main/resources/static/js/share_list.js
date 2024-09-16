@@ -44,14 +44,3 @@ document.addEventListener("DOMContentLoaded", function() {
     // setInterval(loadPosts, 2000);
     
 });
-
-
-$(document).ready(function() {
-    // 초기화 버튼 클릭 시 검색창 내용 삭제
-    $("#resetButton").on("click", function() {
-        // 검색창 초기화
-        $("#search").val("");
-        // 검색창에 포커스 유지
-        $("search").focus();
-    });
-});
