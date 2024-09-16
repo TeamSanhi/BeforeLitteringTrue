@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
@@ -37,40 +38,20 @@ public class MyPageController {
 
         Integer shareCount = shareService.getShareCount(member);
         List<AlarmDTO> alarmDTOTotal = alarmService.getAlarmList(member);
+        log.debug("alarmDTO List: {}", alarmDTOTotal);
+
+        String[] daysOfWeek = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+
         List<String> alarmTotal = new ArrayList<>();
 
         for (AlarmDTO alarmDTO : alarmDTOTotal) {
-            String alarmDay = "null";
-            switch (alarmDTO.getAlarmDay()) {
-                case 0:
-                    alarmDay = "일요일";
-                    break;
-                case 1:
-                    alarmDay = "월요일";
-                    break;
-                case 2:
-                    alarmDay = "화요일";
-                    break;
-                case 3:
-                    alarmDay = "수요일";
-                    break;
-                case 4:
-                    alarmDay = "목요일";
-                    break;
-                case 5:
-                    alarmDay = "금요일";
-                    break;
-                case 6:
-                    alarmDay = "토요일";
-                    break;
-            }
+            String alarmDay = daysOfWeek[alarmDTO.getAlarmDay()];  // 배열에서 요일 찾기
             alarmTotal.add(alarmDay);
         }
 
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
         model.addAttribute("alarmTotal", alarmTotal);
-
 
         return "myPageView/myPage";
     }

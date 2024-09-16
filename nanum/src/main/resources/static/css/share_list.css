@@ -130,6 +130,50 @@
         cursor: pointer;
     }
 
+    /* 로그아웃 */
+    .logout {
+        font-size: 120%;
+        font-weight: 500;
+        letter-spacing: 0.1vw;
+        display: inline-block;
+        width: 6vw;
+        height: 6vh;
+        text-align: center;
+        text-decoration: underline;
+        vertical-align: top;
+        line-height: 6vh;
+    }
+
+    /* 로그아웃_hover */
+    .logoutHover:hover {
+        color: white;
+        background-color: black;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    /* 마이페이지 */
+    .myPage {
+        font-size: 120%;
+        font-weight: 500;
+        letter-spacing: 0.1vw;
+        display: inline-block;
+        width: 5vw;
+        height: 6vh;
+        text-align: center;
+        text-decoration: underline;
+        vertical-align: top;
+        line-height: 6vh;
+    }
+
+    /* 마이페이지_hover */
+    .myPageHover:hover {
+        color: white;
+        background-color: black;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
 
 /* 메인 컨텐츠 영역 */
     /* 메인 컨텐츠 컨테이너 */
@@ -310,7 +354,7 @@
 
     /* 나눠요 게시글 영역_div 박스 */
     .sharePosting {
-        width: calc(25% - 2vh);
+        width: 345px;
             /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
         height: 38vh;
         margin-bottom: 5.5vh;
