@@ -354,7 +354,7 @@
 
     /* 나눠요 게시글 영역_div 박스 */
     .sharePosting {
-        width: calc(25% - 2vh);
+        width: 345px;
             /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
         height: 38vh;
         margin-bottom: 5.5vh;
