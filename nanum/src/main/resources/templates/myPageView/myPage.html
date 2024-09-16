@@ -1,301 +1,360 @@
 <!DOCTYPE html>
 <html
-  lang="ko"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+        lang="ko"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Page</title>
     <style>
-      nav {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-      }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
 
-      .member {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-      }
+        .member {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
 
-      .profile-info {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 150px;
-      }
+        .profileInfo {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 150px;
+        }
 
-      .profile-edit {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 350px;
-      }
+        .profileEdit {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 350px;
+        }
 
-      .profile-board {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 500px;
-      }
+        .profileBoard {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 500px;
+        }
 
-      /* .modal 클래스는 모달의 배경을 정의합니다. 처음에는 display: none으로 설정되어 화면에 보이지 않습니다. */
-      .modal {
-        display: none; /* 모달을 숨김 */
-        position: fixed; /* 화면에 고정된 위치로 설정 */
-        z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
-        left: 0; /* 화면 왼쪽부터 시작 */
-        top: 0; /* 화면 상단부터 시작 */
-        width: 100%; /* 화면 전체 너비 */
-        height: 100%; /* 화면 전체 높이 */
-        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-      }
+        .modal {
+            display: none; /* 모달을 숨김 */
+            position: fixed; /* 화면에 고정된 위치로 설정 */
+            z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
+            left: 0; /* 화면 왼쪽부터 시작 */
+            top: 0; /* 화면 상단부터 시작 */
+            width: 100%; /* 화면 전체 너비 */
+            height: 100%; /* 화면 전체 높이 */
+            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
+        }
 
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-        padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-        border: 1px solid #888;
-        width: 90%; /* 너비를 화면의 90%로 변경 */
-        max-width: 600px; /* 최대 너비를 600px로 확장 */
-        text-align: center;
-      }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
+            padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
+            border: 1px solid #888;
+            width: 90%; /* 너비를 화면의 90%로 변경 */
+            max-width: 600px; /* 최대 너비를 600px로 확장 */
+            text-align: center;
+        }
 
-      /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
-      .close {
-        color: #aaa; /* 닫기 버튼의 기본 색상 */
-        float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
-        font-size: 28px; /* 닫기 버튼의 글자 크기 */
-        font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
-      }
+        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
+        .close {
+            color: #aaa; /* 닫기 버튼의 기본 색상 */
+            float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
+            font-size: 28px; /* 닫기 버튼의 글자 크기 */
+            font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
+        }
 
-      /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
-      .close:hover,
-      .close:focus {
-        color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-        text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
-        cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
-      }
+        /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
+        .close:hover,
+        .close:focus {
+            color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
+            text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
+            cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+        }
     </style>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-  </head>
-  <body>
-    <header>
-      <!-- 네비게이션 바 -->
-      <nav>
-        <p><a href="">로고</a></p>
-        <script>
-          $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
+            // 쪽지 목록 모달
+            // $("#messages").click(function () {
+            //     $("#messagesModal").fadeIn();
+            // });
+            // $("#messagesClose").click(function () {
+            //     $("#messagesModal").fadeOut();
+            // });
+            // $(window).click(function (event) {
+            //     if ($(event.target).is("#messagesModal")) {
+            //         $("#messagesModal").fadeOut();
+            //     }
+            // });
+
             // 알림 추가 모달
             $("#alarmEdit").click(function () {
-              // 열기
-              $("#alarmModal").fadeIn();
+                $("#alarmModal").fadeIn();
             });
             $("#alarmClose").click(function () {
-              // 닫기 (X 버튼)
-              $("#alarmModal").fadeOut();
+                $("#alarmModal").fadeOut();
             });
             $(window).click(function (event) {
-              // 닫기 (모달 밖을 클릭할 때)
-              if ($(event.target).is("#alarmModal")) {
-                $("#alarmModal").fadeOut();
-              }
+                if ($(event.target).is("#alarmModal")) {
+                    $("#alarmModal").fadeOut();
+                }
             });
             $("#save").click(function () {
-              var alarmDay = $(".alarmDay:checked").val();
-              var alarmContents = $(".alarmContents").val();
+                var alarmDay = $(".alarmDay:checked").val();
+                var alarmContents = $(".alarmContents").val();
 
-              $.ajax({
-                url: "/myPage/alarmEdit",
-                type: "POST",
-                data: {
-                  alarmDay: alarmDay,
-                  alarmContents: alarmContents,
-                },
-                success: function (response) {
-                  if (response.alarmEdit) {
-                    alert("성공적으로 반영되었습니다.");
-                    $("#alarmModal").fadeOut();
-                  } else {
-                    alert("반영되지 않았습니다.");
-                  }
-                },
-                error: function () {
-                  alert("서버 오류입니다.");
-                },
-              });
-
-              // 데이터베이스 알림 저장
+                $.ajax({
+                    url: "/myPage/alarmEdit",
+                    type: "POST",
+                    data: {
+                        alarmDay: alarmDay,
+                        alarmContents: alarmContents,
+                    },
+                    success: function (response) {
+                        if (response.alarmEdit) {
+                            alert("성공적으로 반영되었습니다.");
+                            $("#alarmModal").fadeOut();
+                        } else {
+                            alert("반영되지 않았습니다.");
+                        }
+                    },
+                    error: function () {
+                        alert("서버 오류입니다.");
+                    },
+                });
             });
 
             // 멤버 탈퇴 모달
             $("#deleteId").click(function () {
-              // 열기
-              $("#alertModal").fadeIn();
+                $("#alertModal").fadeIn();
             });
             $("#alertClose").click(function () {
-              // 닫기 (X 버튼)
-              $("#alertModal").fadeOut();
+                $("#alertModal").fadeOut();
             });
             $("#reset").click(function () {
-              // 닫기 (취소 버튼)
-              $("#alertModal").fadeOut();
+                $("#alertModal").fadeOut();
             });
             $(window).click(function (event) {
-              // 닫기 (모달 밖을 클릭할 때)
-              if ($(event.target).is("#alertModal")) {
-                $("#alertModal").fadeOut();
-              }
+                if ($(event.target).is("#alertModal")) {
+                    $("#alertModal").fadeOut();
+                }
             });
 
             // 비밀번호 확인 모달
             $("#next").click(function () {
-              // 열기
-              $("#alertModal").fadeOut();
-              $("#checkModal").fadeIn();
+                $("#alertModal").fadeOut();
+                $("#checkModal").fadeIn();
             });
             $("#checkClose").click(function () {
-              // 닫기 (X 버튼)
-              $("#checkModal").fadeOut();
+                $("#checkModal").fadeOut();
             });
             $("#delete").click(function () {
-              var enteredPw = $("#pwCheck").val();
+                var enteredPw = $("#pwCheck").val();
 
-              $.ajax({
-                url: "/myPage/checkPassword",
-                type: "POST",
-                data: {
-                  enteredPw: enteredPw,
-                },
-                success: function (response) {
-                  if (response.passwordMatch) {
-                    if (confirm("정말 탈퇴하시겠습니까?")) {
-                      $.ajax({
-                        url: "/myPage/deleteMember",
-                        type: "POST",
-                        success: function (response) {
-                          if (response.deleteMember) {
-                            $("#checkModal").fadeOut();
-                            $("#verifyModal").fadeIn();
+                $.ajax({
+                    url: "/myPage/checkPassword",
+                    type: "POST",
+                    data: {
+                        enteredPw: enteredPw,
+                    },
+                    success: function (response) {
+                        if (response.passwordMatch) {
+                            if (confirm("정말 탈퇴하시겠습니까?")) {
+                                $.ajax({
+                                    url: "/myPage/deleteMember",
+                                    type: "POST",
+                                    success: function (response) {
+                                        if (response.deleteMember) {
+                                            $("#checkModal").fadeOut();
+                                            $("#verifyModal").fadeIn();
 
-                            $("#verifyClose").click(function () {
-                              $("#verifyModal").fadeOut(function () {
-                                window.location.href = "/member/logout";
-                              });
-                            });
+                                            $("#verifyClose").click(function () {
+                                                $("#verifyModal").fadeOut(function () {
+                                                    window.location.href = "/member/logout";
+                                                });
+                                            });
 
-                            $(window).click(function (event) {
-                              if ($(event.target).is("#verifyModal")) {
-                                $("#verifyModal").fadeOut(function () {
-                                  window.location.href = "/member/logout";
+                                            $(window).click(function (event) {
+                                                if ($(event.target).is("#verifyModal")) {
+                                                    $("#verifyModal").fadeOut(function () {
+                                                        window.location.href = "/member/logout";
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            alert(
+                                                "탈퇴 처리에 실패했습니다. 다시 시도해주세요."
+                                            );
+                                        }
+                                    },
+                                    error: function () {
+                                        alert("서버 오류입니다.");
+                                    },
                                 });
-                              }
-                            });
-                          } else {
-                            alert(
-                              "탈퇴 처리에 실패했습니다. 다시 시도해주세요."
-                            );
-                          }
-                        },
-                        error: function () {
-                          alert("서버 오류입니다.");
-                        },
-                      });
-                    } else {
-                      $("#pwCheck").val("");
-                    }
-                  } else {
-                    alert("비밀번호가 일치하지 않습니다.");
-                    $("#pwCheck").val("");
-                  }
-                },
-              });
+                            } else {
+                                $("#pwCheck").val("");
+                            }
+                        } else {
+                            alert("비밀번호가 일치하지 않습니다.");
+                            $("#pwCheck").val("");
+                        }
+                    },
+                });
             });
 
             $("#myAlarm").click(showAlarm);
-            $("#myShare").click(showShare);
+            $("#myShare").click(showGive);
+            $("#give").click(showGive);
+            $("#share").click(showReceive);
             $("#myBookmark").click(showBookmark);
-            $("#myMessages").click(showMessages);
-          });
+        });
 
-          // function showAlarm() {
-          //     $.ajax({
-          //         url: 'myPage/alarmSave',
-          //         type: 'GET',
-          //         dataType: 'json',
-          //         success: function (response) {
-          //             // 알림 데이터를 받아서 화면에 표시
-          //             let notifications = '';
-          //             response.forEach(function (notification) {
-          //                 notifications += '<p>' + notification.message + ' (' + notification.createdAt + ')</p>';
-          //             });
-          //             $('#notification-list').html(notifications).show();
-          //         },
-          //         error: function () {
-          //             alert('알림을 가져오는 데 실패했습니다.');
-          //         }
-          //     });
-          // }
+        // function showAlarm() {
+        //     $.ajax({
+        //         url: 'myPage/alarmSave',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         success: function (response) {
+        //             // 알림 데이터를 받아서 화면에 표시
+        //             let notifications = '';
+        //             response.forEach(function (notification) {
+        //                 notifications += '<p>' + notification.message + ' (' + notification.createdAt + ')</p>';
+        //             });
+        //             $('#notification-list').html(notifications).show();
+        //         },
+        //         error: function () {
+        //             alert('알림을 가져오는 데 실패했습니다.');
+        //         }
+        //     });
+        // }
 
-          function showAlarm() {}
+        function showAlarm() {
+            $.ajax({
+                url: '/myPage/showAlarm',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    alert(JSON.stringify(response));
+                },
+                error: function () {
+                    alert("서버 오류입니다.");
+                }
+            });
+        }
 
-          function showShare() {}
+        function showGive() {
+            $.ajax({
+                url: '/myPage/showGive',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    alert(JSON.stringify(response));
+                },
+                error: function() {
+                    alert("서버 오류입니다.");
+                }
+            })
+        }
 
-          function showBookmark() {}
+        function showReceive() {
+            $.ajax({
+                url: '/myPage/showReceive',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    alert(JSON.stringify(response));
+                },
+                error: function() {
+                    alert("서버 오류입니다.");
+                }
+            })
+        }
 
-          function showMessages() {}
-        </script>
+        function showBookmark() {
+            $.ajax({
+                url: '/myPage/showReceive',
+                type: 'POST',
+                dataType: 'json',
+                success: function (response) {
+                    alert(JSON.stringify(response));
+                },
+                error: function () {
+                    alert("서버 오류입니다.");
+                }
+            })
+        }
+
+    </script>
+</head>
+<body>
+<header>
+    <!-- 네비게이션 바 -->
+    <nav>
+        <p><a href="">로고</a></p>
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
         <p><a th:href="@{/recycle/recycleList}">버려요</a></p>
-      </nav>
-
-      <!--  회원 기능  -->
-      <div class="member">
+    </nav>
+    <!--  회원 기능  -->
+    <div class="member">
         <th:block sec:authorize="not isAuthenticated()">
-          <p>
-            <a th:href="@{/member/join}">회원가입</a>
-          </p>
-          <p>
-            <a th:href="@{/member/loginForm}">로그인</a>
-          </p>
+            <p>
+                <a th:href="@{/member/join}">회원가입</a>
+            </p>
+            <p>
+                <a th:href="@{/member/loginForm}">로그인</a>
+            </p>
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
-          <p>
-            <a th:href="@{/member/logout}">로그아웃</a>
-          </p>
-          <p>
-            <a th:href="@{/myPage/view}">마이페이지</a>
-          </p>
+<!--            <p>-->
+<!--                <button id="messages">쪽지</button>-->
+<!--            </p>-->
+<!--            <div id="messagesModal" class="modal">-->
+<!--                <div class="modal-content">-->
+<!--                    <span id="messagesClose" class="close">&times;</span>-->
+<!--                    <h2>쪽지 목록</h2>-->
+<!--                </div>-->
+<!--            </div>-->
+            <p>
+                <a th:href="@{/member/logout}">로그아웃</a>
+            </p>
+            <p>
+                <a th:href="@{/myPage/view}">마이페이지</a>
+            </p>
         </th:block>
-      </div>
-    </header>
+    </div>
+</header>
 
-    <main>
-      <!--  프로필 정보 제공  -->
-      <section class="profile-info">
+<main>
+    <!--  프로필 정보 제공  -->
+    <section class="profileInfo">
         <!--  닉네임  -->
         <p th:text="${userNickname}">닉네임</p>
         <!--  나눔 수  -->
         <p th:text="${shareCount}">나눔 수</p>
         <!--  나의 알림  -->
         <p th:text="${alarmTotal}">나의 알림</p>
-      </section>
-
-      <!--  프로필 편집  -->
-      <section class="profile-edit">
+    </section>
+\
+    <!--  프로필 편집  -->
+    <section class="profileEdit">
         <!--  프로필 수정  -->
         <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
 
@@ -304,60 +363,25 @@
 
         <!-- 알림 추가 모달 -->
         <div id="alarmModal" class="modal">
-          <div class="modal-content">
-            <span id="alarmClose" class="close">&times;</span>
-            <h2>일정 등록</h2>
-            <div id="alarmDay">
-              <span style="font-weight: bold">요일</span>
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="0"
-              />일
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="1"
-              />월
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="2"
-              />화
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="3"
-              />수
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="4"
-              />목
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="5"
-              />금
-              <input
-                type="radio"
-                class="alarmDay"
-                name="alarmDay"
-                value="6"
-              />토
+            <div class="modal-content">
+                <span id="alarmClose" class="close">&times;</span>
+                <h2>일정 등록</h2>
+                <div id="alarmDay">
+                    <span style="font-weight: bold">요일</span>
+                    <input type="radio" class="alarmDay" name="alarmDay" value=0>일
+                    <input type="radio" class="alarmDay" name="alarmDay" value=1>월
+                    <input type="radio" class="alarmDay" name="alarmDay" value=2>화
+                    <input type="radio" class="alarmDay" name="alarmDay" value=3>수
+                    <input type="radio" class="alarmDay" name="alarmDay" value=4>목
+                    <input type="radio" class="alarmDay" name="alarmDay" value=5>금
+                    <input type="radio" class="alarmDay" name="alarmDay" value=6>토
+                </div>
+                <div id="alarmContents">
+                    <span style="font-weight: bold">알림 내용</span>
+                    <input type="text" class="alarmContents" name="alarmContents">
+                </div>
+                <button type="submit" id="save">저장</button>
             </div>
-            <div id="alarmContents">
-              <span style="font-weight: bold">알림 내용</span>
-              <input type="text" class="alarmContents" name="alarmContents" />
-            </div>
-            <button type="submit" id="save">저장</button>
-          </div>
         </div>
 
         <!--  멤버 탈퇴  -->
@@ -365,55 +389,54 @@
 
         <!--  탈퇴 경고 모달  -->
         <div id="alertModal" class="modal">
-          <div class="modal-content">
-            <span id="alertClose" class="close">&times;</span>
-            <div id="board">
-              <span style="font-weight: bold">탈퇴하시겠습니까?</span>
-              <div id="button">
-                <button id="reset">취소</button>
-                <button id="next">탈퇴하기</button>
-              </div>
+            <div class="modal-content">
+                <span id="alertClose" class="close">&times;</span>
+                <div id="board">
+                    <span style="font-weight: bold">탈퇴하시겠습니까?</span>
+                    <div id="button">
+                        <button id="reset">취소</button>
+                        <button id="next">탈퇴하기</button>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
 
         <!--  비밀번호 확인 모달  -->
         <div id="checkModal" class="modal">
-          <div class="modal-content">
-            <span id="checkClose" class="close">&times;</span>
-            <div id="check">
-              <!--                아이디-->
-              <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
-              <span style="font-weight: bold">비밀번호 확인</span>
-              <input type="password" name="pwCheck" id="pwCheck" />
-              <button id="delete">탈퇴하기</button>
+            <div class="modal-content">
+                <span id="checkClose" class="close">&times;</span>
+                <div id="check">
+                    <!--                아이디-->
+                    <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
+                    <span style="font-weight: bold">비밀번호 확인</span>
+                    <input type="password" name="pwCheck" id="pwCheck"/>
+                    <button id="delete">탈퇴하기</button>
+                </div>
             </div>
-          </div>
         </div>
 
         <!--  탈퇴 확인 모달  -->
         <div id="verifyModal" class="modal">
-          <div class="modal-content">
-            <span id="verifyClose" class="close">&times;</span>
-            <div id="verify">탈퇴되었습니다.</div>
-          </div>
+            <div class="modal-content">
+                <span id="verifyClose" class="close">&times;</span>
+                <div id="verify">탈퇴되었습니다.</div>
+            </div>
         </div>
-      </section>
+    </section>
 
-      <!--  맞춤형 보드 제공  -->
-      <section class="profile-board">
+    <!--  맞춤형 보드 제공  -->
+    <section class="profileBoard">
         <!--  알림 띄우기  -->
         <button id="myAlarm">나의 알림</button>
-        <!--  알림 편집  -->
-        <!--  해당 알람만 편집  -->
         <!--  나눔 현황 띄우기  -->
         <button id="myShare">나의 나눔</button>
+        <button id="give">나눴어요</button>
+        <button id="receive">받았어요</button>
         <!--  북마크 띄우기  -->
         <button id="myBookmark">북마크</button>
-        <!-- 쪽지 목록 -->
-        <button id="myMessages">쪽지 목록</button>
-      </section>
-    </main>
-    <footer></footer>
-  </body>
+        </div>
+    </section>
+</main>
+<footer></footer>
+</body>
 </html>

@@ -38,6 +38,13 @@ public class AlarmService {
         return alarmDTOS;
     }
 
+    /**
+     * 알람 추가
+     * @param memberNum 멤버 엔티티
+     * @param alarmDay 알람 요일
+     * @param alarmContents 알람 내용
+     * @return 알람 추가 여부
+     */
     public Boolean alarmEdit(MemberEntity memberNum, Integer alarmDay, String alarmContents) {
         Boolean result = false;
 
@@ -53,4 +60,5 @@ public class AlarmService {
 
         return result;
     }
+
 }
