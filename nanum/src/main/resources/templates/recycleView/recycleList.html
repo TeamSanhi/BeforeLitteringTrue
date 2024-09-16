@@ -5,29 +5,23 @@
   xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
   <head>
-    <!-- 메타 정보 -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>recycleList</title>
 
-    <!-- jQuery 라이브러리 추가 -->
-    <!-- 로컬에 jQuery 파일이 있는 경우 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <!-- 또는 CDN을 사용하는 경우 -->
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
 
-    <!-- 스타일 정의 -->
     <style type="text/css">
       .fixed_img_col {
         margin: 0 auto;
         text-align: center;
-        max-width: 1600px; /* 필요에 따라 조정 가능 */
+        max-width: 1600px;
       }
 
       .fixed_img_col ul {
         list-style: none;
         padding: 0;
-        display: inline-block; /* 중앙 정렬을 위해 추가 */
+        display: inline-block;
       }
 
       .fixed_img_col ul li {
@@ -59,7 +53,25 @@
         background-color: white;
         padding: 20px;
         border-radius: 10px;
-        width: 600px;
+        display: flex;
+        width: 700px; /* 팝업 너비 조정 */
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .popup-left {
+        flex: 1;
+      }
+
+      .popup-right {
+        flex: 1;
+        padding-left: 15px; /* 이미지와 텍스트 사이 여백 */
+      }
+
+      .popup-left img {
+        width: 100%;
+        height: auto; /* 이미지 비율 유지 */
+        max-height: 400px; /* 최대 높이 설정 */
+        object-fit: cover;
       }
 
       .close-btn {
@@ -67,83 +79,36 @@
         cursor: pointer;
       }
 
-      /* 검색 바 스타일 */
-      .search-bar {
-        margin: 20px auto;
-        text-align: center;
+      /* 텍스트 스타일 */
+      .popup-right h2 {
+        margin: 0;
+        font-size: 22px;
+        border-bottom: 1px solid black;
+        padding-bottom: 10px;
       }
 
-      .search-bar form {
-        display: inline-block;
-      }
-
-      .search-bar select,
-      .search-bar input {
-        padding: 5px;
+      .popup-right p {
         font-size: 16px;
+        margin: 10px 0;
       }
 
-      .search-bar button {
-        padding: 5px 10px;
-        font-size: 16px;
-      }
-
-      /* 회원 기능 스타일 */
-      .member {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 0px;
-        right: 10px;
-      }
-
-      /* 모달 스타일 */
-      .modal {
-        display: none; /* 모달을 숨김 */
-        position: fixed; /* 화면에 고정된 위치로 설정 */
-        z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
-        left: 0; /* 화면 왼쪽부터 시작 */
-        top: 0; /* 화면 상단부터 시작 */
-        width: 100%; /* 화면 전체 너비 */
-        height: 100%; /* 화면 전체 높이 */
-        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-      }
-
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-        padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-        border: 1px solid #888;
-        width: 90%; /* 너비를 화면의 90%로 변경 */
-        max-width: 600px; /* 최대 너비를 600px로 확장 */
-        text-align: center;
-      }
-
-      /* 닫기 버튼 스타일 */
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
+      .popup-right .category {
+        margin-bottom: 15px;
         font-weight: bold;
-        cursor: pointer;
       }
 
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
+      .popup-right .updated-date {
+        font-size: 12px;
+        color: gray;
+        margin-top: 10px;
       }
     </style>
 
-    <!-- 스크립트 정의 -->
     <script>
       function openPopup(recycleNum) {
-        // AJAX 요청으로 게시글 데이터를 불러온다
         fetch(`/recycle/read?recycleNum=` + recycleNum)
           .then((response) => response.json())
           .then((data) => {
-            // 팝업창의 내용을 동적으로 설정
             document.getElementById("popupTitle").textContent =
               data.recycleName;
             document.getElementById("popupContents").textContent =
@@ -152,11 +117,9 @@
               data.recycleCategory;
             document.getElementById("popupDate").textContent = data.recycleDate;
 
-            // 이미지가 제대로 표시되도록 설정
             document.getElementById("popupImage").src =
               `/images/` + data.recycleFileName;
 
-            // 팝업 표시
             document.querySelector(".popup-overlay").style.display = "block";
           })
           .catch((error) => {
@@ -169,7 +132,6 @@
         document.querySelector(".popup-overlay").style.display = "none";
       }
 
-      // 외부 영역 클릭 시 팝업 닫기
       window.addEventListener("click", function (event) {
         var popupContent = document.querySelector(".popup-content");
         var popupOverlay = document.querySelector(".popup-overlay");
@@ -182,83 +144,15 @@
         }
       });
 
-      // jQuery를 사용하는 모달 제어 코드
-      $(document).ready(function () {
-        $("#messages").click(function () {
-          $("#messagesModal").fadeIn();
-        });
-        $("#messagesClose").click(function () {
-          $("#messagesModal").fadeOut();
-        });
-        $(window).click(function (event) {
-          if ($(event.target).is("#messagesModal")) {
-            $("#messagesModal").fadeOut();
-          }
-        });
-      });
-      // Esc 키로 팝업창 닫기
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closePopup();
         }
       });
-      function pagingFormSubmit(page) {
-        let form = document.createElement("form");
-        form.method = "GET";
-        form.action = "/recycle/list"; // 페이징을 처리할 URL
-
-        let input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "page";
-        input.value = page;
-
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
-      }
     </script>
   </head>
   <body>
     <div class="wrap">
-      <!-- 네비게이션 바 -->
-      <div class="nav">
-        <a th:href="@{/}">로고</a>
-        <a th:href="@{/info/service}">우리는..</a>
-        <a th:href="@{/share/list}">나눠요</a>
-        <a th:href="@{/recycle/list}">버려요</a>
-      </div>
-
-      <!-- 회원 기능 -->
-      <div class="member">
-        <th:block sec:authorize="not isAuthenticated()">
-          <p>
-            <a th:href="@{/member/join}">회원가입</a>
-          </p>
-          <p>
-            <a th:href="@{/member/loginForm}">로그인</a>
-          </p>
-        </th:block>
-        <th:block sec:authorize="isAuthenticated()">
-          <p>
-            <button id="messages">쪽지</button>
-          </p>
-          <div id="messagesModal" class="modal">
-            <div class="modal-content">
-              <span id="messagesClose" class="close">&times;</span>
-              <h2>쪽지 목록</h2>
-              <!-- 쪽지 목록 콘텐츠를 여기에 추가 -->
-            </div>
-          </div>
-          <p>
-            <a th:href="@{/myPage/view}">마이페이지</a>
-          </p>
-          <p>
-            <a th:href="@{/member/logout}">로그아웃</a>
-          </p>
-        </th:block>
-      </div>
-
-      <!-- 이미지 목록 -->
       <div class="fixed_img_col">
         <ul>
           <th:block th:each="item : ${recycleList}">
@@ -279,94 +173,28 @@
         </ul>
       </div>
 
-      <!-- 페이지 이동 링크 -->
-      <div class="pagination" style="text-align: center; margin-bottom: 20px">
-        <span th:if="${boardPage.totalPages > 0 and page != 1}">
-          <a href="javascript:pagingFormSubmit(1)">첫페이지</a>
-        </span>
+      <!-- 팝업창 -->
+      <div class="popup-overlay">
+        <div class="popup-content">
+          <!-- 왼쪽: 이미지 -->
+          <div class="popup-left">
+            <img
+              id="popupImage"
+              src=""
+              alt="게시물 이미지"
+              style="width: 300px; height: 300px; object-fit: cover"
+            />
+          </div>
 
-        <a
-          th:if="${page != 1}"
-          th:href="|javascript:pagingFormSubmit(${page - 1})|"
-          >◀</a
-        >
-
-        <span
-          th:if="${boardPage.totalPages > 0}"
-          th:each="counter : ${#numbers.sequence((page - linkSize < 1 ? 1 : page - linkSize), 
-    (page + linkSize > boardPage.totalPages ? boardPage.totalPages : page + linkSize))}"
-        >
-          <th:block th:if="${counter == page}">
-            <b th:text="${counter}"></b>
-          </th:block>
-          <th:block th:if="${counter != page}">
-            <a
-              th:text="${counter}"
-              th:href="|javascript:pagingFormSubmit(${counter})|"
-            ></a>
-          </th:block>
-        </span>
-
-        <a
-          th:if="${page != boardPage.totalPages}"
-          th:href="|javascript:pagingFormSubmit(${page + 1})|"
-          >▶</a
-        >
-
-        <span
-          th:if="${boardPage.totalPages > 0 and page != boardPage.totalPages}"
-        >
-          <a th:href="|javascript:pagingFormSubmit(${boardPage.totalPages})|"
-            >마지막페이지</a
-          >
-        </span>
-      </div>
-
-      <!-- 검색 바 -->
-      <div class="search-bar">
-        <form th:action="@{/recycle/list}" method="get">
-          <select name="searchType">
-            <option value="title" th:selected="${searchType == 'title'}">
-              제목
-            </option>
-            <option value="contents" th:selected="${searchType == 'contents'}">
-              내용
-            </option>
-            <option
-              value="titleAndContents"
-              th:selected="${searchType == 'titleAndContents'}"
-            >
-              제목 및 내용
-            </option>
-            <option value="category" th:selected="${searchType == 'category'}">
-              카테고리
-            </option>
-          </select>
-          <input
-            type="text"
-            name="searchWord"
-            placeholder="검색어를 입력하세요"
-            th:value="${searchWord}"
-          />
-          <button type="submit">검색</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- 팝업창 -->
-    <div class="popup-overlay">
-      <div class="popup-content">
-        <span class="close-btn" onclick="closePopup()">X</span>
-        <img
-          id="popupImage"
-          src=""
-          alt="게시물 이미지"
-          style="width: 300px; height: 300px; object-fit: cover"
-        />
-        <h2 id="popupTitle">제목</h2>
-        <p id="popupCategory">카테고리</p>
-        <p id="popupContents">내용</p>
-        <p id="popupDate">갱신일</p>
+          <!-- 오른쪽: 텍스트 내용 -->
+          <div class="popup-right">
+            <span class="close-btn" onclick="closePopup()">X</span>
+            <h2 id="popupTitle">제목</h2>
+            <p id="popupCategory" class="category">카테고리</p>
+            <p id="popupContents">내용</p>
+            <p id="popupDate" class="updated-date">최종 업데이트 날짜</p>
+          </div>
+        </div>
       </div>
     </div>
   </body>
