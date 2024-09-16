@@ -108,17 +108,17 @@ public class MyPageRestController {
         return ResponseEntity.ok(responseList);
     }
 
-    @PostMapping("showGive")
-    public ResponseEntity<List<Map<String, String>>> showGive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-        Integer userNum = authenticatedUser.getNum();
-        MemberEntity member = memberService.getMemberByNum(userNum);
-
-
-
-
-
-        return ResponseEntity.ok();
-    }
+//    @PostMapping("showGive")
+//    public ResponseEntity<List<Map<String, String>>> showGive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+//        Integer userNum = authenticatedUser.getNum();
+//        MemberEntity member = memberService.getMemberByNum(userNum);
+//
+//
+//
+//
+//
+//        return ResponseEntity.ok();
+//    }
 
 
     //@PostMapping("showBookmark")
