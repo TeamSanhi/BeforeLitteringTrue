@@ -13,8 +13,6 @@
 
     <!-- script -->
     <script type="text/javascript" th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/share_list.js}"></script>
-    
 </head>
 <body>
 
@@ -256,11 +254,11 @@
             // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
             function createMarkerWithInfo(marker, share) {
                 let iwContent = `
-                    <span>
-                        <span>${share.memberNickname}</span>
+                    <div class="mapInfo">
+                        <span>${share.memberNickname}</span><br>
                         <span>${share.shareTitle}</span><br>
-                        <img src="/share/download?imageNum=${share.imageList[0].imageNum}">
-                    </span>
+                        <img style="width:100px; height:100px" src="/share/download?imageNum=${share.imageList[0].imageNum}">
+                    </ㅇ>
                 `;
 
                 // 인포윈도우를 생성합니다

@@ -269,6 +269,14 @@
         box-sizing: border-box;
     }
 
+    /* 지도의 infoWindow영역 */
+    .mapInfo{
+        width: 200px;
+        height: 200px;
+        text-align: left;
+        line-height: 5vh;
+    }
+
 
     /* 나눠요 영역 */
     .shareArea {
