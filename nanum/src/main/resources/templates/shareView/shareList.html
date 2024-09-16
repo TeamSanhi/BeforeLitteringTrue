@@ -7,247 +7,353 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>나눠요</title>
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
 
-    </script>
+    <!-- style -->
+    <link rel="stylesheet" href="/css/share_list.css">
+
+    <!-- script -->
+    <script type="text/javascript" th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" src="/js/share_list.js"></script>
+    
 </head>
 <body>
-    <!-- 지도 영역 내부에서 검색 -->
-    <input type="text" name = "search" id="search" value="">
-    <button id="searchButton">검색</button>
-    <button id="resetButton">초기화</button>
-    <!-- 지도를 보여줄 div -->
-    <div id="map" style="width:93vw;height:70vh;"></div>
-    <!-- js로 지도 불러오기 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
-    <!-- 지도 script -->
-    <script>
-        let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-            mapOption = { 
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 4 // 지도의 확대 레벨
-            };
 
-        // 지도를 생성합니다
-        let map = new kakao.maps.Map(mapContainer, mapOption); 
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
 
-        // 마커 클러스터러를 생성 (지도에 표시할 마커 배열을 비워둠)
-        let clusterer = new kakao.maps.MarkerClusterer({
-            map: map, // 마커들을 클러스터로 관리할 지도 객체
-            averageCenter: true, // 클러스터의 중심을 마커들의 평균 좌표로 설정
-            minLevel: 4, // 최소 레벨로 클러스터링을 적용
-            disableClickZoom: false // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
-        });
+        <!-- 로고 -->
+        <div class="logo">
+            <a href="/">
+                <img src="/images/logo3.png" class="logoImg">
+            </a>
+        </div>
 
-        //내위치 가져오기
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                let lat = position.coords.latitude; // 위도
-                let lon = position.coords.longitude; // 경도
-                let locPosition = new kakao.maps.LatLng(lat, lon);
-                console.log(lat, lon, locPosition);
-                // 지도 중심을 내 위치로 이동
-                map.setCenter(locPosition);
-            });
-        } else {
-            alert("Geolocation을 지원하지 않는 브라우저입니다.");
-        }
+        <!-- 우리는 -->
+        <div class="projectInfo">
+            <a href="/info/service">우리는</a>
+        </div>
 
-        //마커를 저장할 배열 
-        let markers = [];
-        let openInfoWindow = null;  // 열린 인포윈도우 추적
+        <!-- 나눠요 -->
+        <div class="projectInfo">
+            <a href="/share/list">나눠요</a>
+        </div>
 
-        // ************* 지도에 이벤트 등록 ****************************************************************
-        // 초기 로드 시 마커를 불러오기 위해 'idle' 이벤트를 사용
-        kakao.maps.event.addListener(map, 'idle', function () {
-            triggerAjax();  // idle 이벤트가 발생하면 마커를 불러옵니다.
-            kakao.maps.event.removeListener(map, 'idle');  // 한 번 실행 후 제거하여 중복 실행 방지
-        });
+        <!-- 버려요 -->
+        <div class="projectInfo">
+            <a href="/recycle/list">버려요</a>
+        </div>
 
-        // 드래그가 끝난 후 발생하는 'dragend' 이벤트를 사용하여 Ajax 요청을 실행
-        kakao.maps.event.addListener(map, 'dragend', function() {
-            triggerAjax();
-        });
+        <!-- 오른쪽 정렬 -->
+        <div class="rightGroup">
 
-        // 확대/축소가 끝난 후 발생하는 'zoom_changed' 이벤트를 사용하여 Ajax 요청을 실행
-        kakao.maps.event.addListener(map, 'zoom_changed', function() {
-            triggerAjax();
-        });
+            <!-- 회원가입 -->
+            <div class="join">
+                <span class="joinHover">
+                    <a href="/member/join">회원가입</a>
+                </span>
+            </div>
 
-        // 검색 버튼을 클릭스 ajax를 실행시킨다. 
-        $('#searchButton').click(triggerAjax); // trigger
+            <!-- 로그인 -->
+            <div class="login">
+                <a href="/member/loginForm">
+                    <span class="loginHover">
+                        로그인
+                    </span>
+                </a>
+            </div>
 
-        // 초기화 버튼을 클릭시 search를 공백으로 하여 Ajax를 실행시킨다. 
-        $('#resetButton').click(function() {
-            // 검색 value 를 공백으로 초기화
-            $('#search').val('');
-            // Ajax 함수 실행 
-            triggerAjax();
-        });
-
-        // 엔터 입력시 클릭이벤트를 실행해 게시글을 검색하게 한다. 
-        $('#search').keydown(function(event) {
-            if (event.key === 'Enter') {
-                $('#searchButton').click(); // Enter 키가 눌리면 검색 버튼 클릭이벤트가 실행된다. 
-            }
-        });
-        //**********************지도에 이벤트를 등록 ***************************************************
-        
-
-        // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
-        function triggerAjax() {
-            //검색에 사용할 값을 불러옴 
-            let search = $('#search').val();
-            //지도의 영역을 불러온다. 
-            let bounds = map.getBounds();
-            let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
-            let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
-            let neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
-            let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
-
-            // data에 위도, 경도, 검색정보를 담기
-            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng
-                        ,serach : search}
-
-            //지도 영역이 변할때마다 ajax를 실행시킨다.
-            $.ajax({
-                url: '/share/mapList',
-                type: 'post',
-                data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
-                //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
-                success: function(mapList) {
-                    // 기존 마커를 제거하고 클러스터러에서 삭제
-                    clusterer.clear(); // ajax가 실행될때마다 클러스터를 비우지 않으면 클러스터에 마커가 계속 쌓인다
-                    
-                    // 마커 배열을 초기화
-                    markers = []; // ajax가 실행할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
-
-                    //영역 변경전에 만들어져있는 게시글을 초기화
-                    $('#result').empty();
-
-                    // 지도에 마커를 찍어 게시글 위치를 표시
-                    mapList.forEach(function(share) {
-                        let markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
-
-                        // 마커 중복확인 함수 isMarkerExists가 false일때 실행 (마커가 이미 있으면 true를 반환한다.)
-                        if (!isMarkerExists(markerPosition)) {
-                            let marker = new kakao.maps.Marker({
-                                position: markerPosition
-                            });
-                            marker.setMap(map);    // marker를 지도에 표시합니다.
-                            markers.push(marker);  // marker를 markers 배열에 넣는다.
-
-                            // 각 마커에 대한 인포윈도우와 이벤트 등록
-                            createMarkerWithInfo(marker, share);
-                        }
-                        //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
-                        $('#result').append(`
-                                <div style="display: inline-block; width:350px ">
-                                    <a href="/share/read?shareNum=${share.shareNum}">
-                                        <p>제목 : ${share.shareTitle}</p>
-                                        <p>                                                         
-                                            <img style="width:100px; height:100px;" 
-                                                            src="/share/download?imageNum=${share.imageList[0].imageNum}">
-                                        </p>
-                                        <p>내용 : ${share.shareContents}</p>
-                                        <p>별명 : ${share.memberNickname}</p>
-                                        <p>${share.formatDate}</p>
-                                    </a>
-                                </div>
-                        `);
-                    });
-                    
-                    // 클러스터러에 새로 추가된 마커들 등록
-                    clusterer.addMarkers(markers);
-                    removeMarkersOutOfBounds(); // 경계 밖 마커 제거
-                }              
-            });
-        };
-        //***************************지도 영역내의 게시글을 불러오는 ajax**************************************
+        </div>
+    </div>
 
 
-        // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
-        function createMarkerWithInfo(marker, share) {
-            let iwContent = `
-                <div style="padding:5px; width:110px; height:150px;">
-                    <span>${share.shareTitle}</span><br>
-                    <span>${share.memberNickname}</span>
-                    <img style="width:100px; height:100px;" src="/share/download?imageNum=${share.imageList[0].imageNum}">
-                </div>
-            `;
-
-            // 인포윈도우를 생성합니다
-            let infoWindow = new kakao.maps.InfoWindow({
-                content: iwContent,
-                disableAutoPan: true // 자동 이동 비활성화
-            });
-
-            // 마커에 마우스오버 이벤트를 등록합니다
-            kakao.maps.event.addListener(marker, 'mouseover', function () {
-                // 다른 인포윈도우가 열려 있으면 먼저 닫습니다
-                if (openInfoWindow) {
-                    openInfoWindow.close();
-                }
-                // 인포윈도우를 마커 위에 표시
-                infoWindow.open(map, marker);
-                openInfoWindow = infoWindow;  // 열린 인포윈도우를 저장
-            });
-
-            // 마커에 마우스아웃 이벤트를 등록합니다
-            kakao.maps.event.addListener(marker, 'mouseout', function () {
-                // 마우스아웃 이벤트가 발생하면 인포윈도우를 닫습니다
-                infoWindow.close();
-                openInfoWindow = null;  // 열린 인포윈도우를 없앰
-            });
-
-            // 마커 클릭 이벤트 추가
-            kakao.maps.event.addListener(marker, 'click', function () {
-                window.location.href = '/share/read?shareNum=' + share.shareNum;
-            });
-        }
-        //*************************마커에 인포윈도우를 매치, 마커에 이벤트 등록 ********************************
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
 
 
-        //***********************기타함수***********************************
-        // 좌표를 기반으로 중복 마커 확인하는 함수
-        function isMarkerExists(position) {
-            return markers.some(function(marker) {
-                let markerPosition = marker.getPosition();
-                return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
-            });
-        }
-        
-        // 지도 경계 밖 마커를 삭제하는 함수
-        function removeMarkersOutOfBounds() {
-            let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
+    <!-- mainContainer -->
+    <div id="mainContainer">
+
+        <!-- 검색창 영역 -->
+        <div class="searchArea">
             
-            //filter함수를 사용하여 마커배열을 순회해 경게 안에 있으면 유지, 없으면 삭제 
-            markers = markers.filter(function(marker) {
-                let position = marker.getPosition();
-                // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
-                if (bounds.contain(position)) {
-                    return true;  // 경계 안에 있는 마커는 유지
-                } else {
-                    marker.setMap(null);  // 경계 밖의 마커는 지도에서 제거
-                    return false;  // markers 배열에서 삭제
-                }
+            <!-- 왼쪽 공백 -->
+            <div class="serchBlankL"></div>
+            
+            <!-- 검색창 영역_검색 input + button -->
+            <div id="searchContainer">
+                <!-- 검색창 -->
+                <input type="text" class="search" name="search" id="search" value="" placeholder="검색어를 입력해주세요!">
+                <button id="searchButton">검색</button>
+                <!-- 검색어 초기화 버튼 -->
+                <span id="resetButton" class="resetButton">초기화</span>
+            </div>
+
+            <!-- 왼쪽 공백 -->
+            <div class="serchBlankR"></div>
+
+            <!-- 나눔하기 버튼_로그인을 했을 시에만 보이도록 -->
+            <div class="wantShareArea">
+                <a href="/share/save" target="_blank">
+                    <input type="button" name="wantShare" id="wantShare" class="wantShare" value="나눔하기">
+                </a>
+            </div>
+        </div>
+
+        <!-- 지도 영역 -->
+        <div class="mapArea" id="map">
+        </div>
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
+        <!-- 지도 script -->
+        <script>
+            let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+                mapOption = { 
+                    center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                    level: 4 // 지도의 확대 레벨
+                };
+
+            // 지도를 생성합니다
+            let map = new kakao.maps.Map(mapContainer, mapOption); 
+
+            // 마커 클러스터러를 생성 (지도에 표시할 마커 배열을 비워둠)
+            let clusterer = new kakao.maps.MarkerClusterer({
+                map: map, // 마커들을 클러스터로 관리할 지도 객체
+                averageCenter: true, // 클러스터의 중심을 마커들의 평균 좌표로 설정
+                minLevel: 4, // 최소 레벨로 클러스터링을 적용
+                disableClickZoom: false // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
             });
 
-            // 클러스터러에 경계 안의 마커들만 다시 추가
-            clusterer.clear(); // 기존 클러스터 삭제
-            clusterer.addMarkers(markers); // 클러스터에 남은 마커 다시 추가
-        }
+            //내위치 가져오기
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude; // 위도
+                    let lon = position.coords.longitude; // 경도
+                    let locPosition = new kakao.maps.LatLng(lat, lon);
+                    console.log(lat, lon, locPosition);
+                    // 지도 중심을 내 위치로 이동
+                    map.setCenter(locPosition);
+                });
+            } else {
+                alert("Geolocation을 지원하지 않는 브라우저입니다.");
+            }
 
-        // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
-        kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
-        kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
-        //*********************기타함수*****************************************************
-    </script>
-    <p><a href="/share/save">글작성</a></p>
-    <!-- 조건에 해당하는는 게시판 목록 출력 -->
-    <div id="result">
+            //마커를 저장할 배열 
+            let markers = [];
+            let openInfoWindow = null;  // 열린 인포윈도우 추적
+
+            // ************* 지도에 이벤트 등록 ****************************************************************
+            // 초기 로드 시 마커를 불러오기 위해 'idle' 이벤트를 사용
+            kakao.maps.event.addListener(map, 'idle', function () {
+                triggerAjax();  // idle 이벤트가 발생하면 마커를 불러옵니다.
+                kakao.maps.event.removeListener(map, 'idle');  // 한 번 실행 후 제거하여 중복 실행 방지
+            });
+
+            // 드래그가 끝난 후 발생하는 'dragend' 이벤트를 사용하여 Ajax 요청을 실행
+            kakao.maps.event.addListener(map, 'dragend', function() {
+                triggerAjax();
+            });
+
+            // 확대/축소가 끝난 후 발생하는 'zoom_changed' 이벤트를 사용하여 Ajax 요청을 실행
+            kakao.maps.event.addListener(map, 'zoom_changed', function() {
+                triggerAjax();
+            });
+
+            // 검색 버튼을 클릭스 ajax를 실행시킨다. 
+            $('#searchButton').click(triggerAjax); // trigger
+
+            // 초기화 버튼을 클릭시 search를 공백으로 하여 Ajax를 실행시킨다. 
+            $('#resetButton').click(function() {
+                // 검색 value 를 공백으로 초기화
+                $('#search').val('');
+                // Ajax 함수 실행 
+                triggerAjax();
+            });
+
+            // 엔터 입력시 클릭이벤트를 실행해 게시글을 검색하게 한다. 
+            $('#search').keydown(function(event) {
+                if (event.key === 'Enter') {
+                    $('#searchButton').click(); // Enter 키가 눌리면 검색 버튼 클릭이벤트가 실행된다. 
+                }
+            });
+            //**********************지도에 이벤트를 등록 ***************************************************
+            
+
+            // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
+            function triggerAjax() {
+                //검색에 사용할 값을 불러옴 
+                let search = $('#search').val();
+                //지도의 영역을 불러온다. 
+                let bounds = map.getBounds();
+                let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
+                let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
+                let neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
+                let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
+
+                // data에 위도, 경도, 검색정보를 담기
+                let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng
+                            ,serach : search}
+
+                //지도 영역이 변할때마다 ajax를 실행시킨다.
+                $.ajax({
+                    url: '/share/mapList',
+                    type: 'post',
+                    data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
+                    //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
+                    success: function(mapList) {
+                        // 기존 마커를 제거하고 클러스터러에서 삭제
+                        clusterer.clear(); // ajax가 실행될때마다 클러스터를 비우지 않으면 클러스터에 마커가 계속 쌓인다
+                        
+                        // 마커 배열을 초기화
+                        markers = []; // ajax가 실행할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
+
+                        //영역 변경전에 만들어져있는 게시글을 초기화
+                        $('#result').empty();
+
+                        // 지도에 마커를 찍어 게시글 위치를 표시
+                        mapList.forEach(function(share) {
+                            let markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
+
+                            // 마커 중복확인 함수 isMarkerExists가 false일때 실행 (마커가 이미 있으면 true를 반환한다.)
+                            if (!isMarkerExists(markerPosition)) {
+                                let marker = new kakao.maps.Marker({
+                                    position: markerPosition
+                                });
+                                marker.setMap(map);    // marker를 지도에 표시합니다.
+                                markers.push(marker);  // marker를 markers 배열에 넣는다.
+
+                                // 각 마커에 대한 인포윈도우와 이벤트 등록
+                                createMarkerWithInfo(marker, share);
+                            }
+                            //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
+                            $('#result').append(`
+                                    <div class="sharePosting">
+                                        <a href="/share/read?shareNum=${share.shareNum}" target="_blank">
+                                            <span class="sharePostTitle">${share.shareTitle}</span>
+                                        </a>
+                                        <div class="shareImage">
+                                            <img src="/share/download?imageNum=${share.imageList[0].imageNum}">
+                                        </div>
+                                        <div class="postContentArea">
+                                            <span clas="postContent">${share.shareContents}</span>
+                                        </div>
+                                        <div class="postInfo">
+                                            <span class="userName">${share.memberNickname}</span>
+                                            <span class="postDate">${share.formatDate}</span>
+                                        </div>
+                                    </div>
+                            `);
+                            
+                        });
+                        
+                        // 클러스터러에 새로 추가된 마커들 등록
+                        clusterer.addMarkers(markers);
+                        removeMarkersOutOfBounds(); // 경계 밖 마커 제거
+                    }              
+                });
+            };
+            //***************************지도 영역내의 게시글을 불러오는 ajax**************************************
+
+
+            // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
+            function createMarkerWithInfo(marker, share) {
+                let iwContent = `
+                    <div>
+                        <span>${share.memberNickname}</span>
+                        <span>${share.shareTitle}</span><br>
+                        <img src="/share/download?imageNum=${share.imageList[0].imageNum}">
+                    </div>
+                `;
+
+                // 인포윈도우를 생성합니다
+                let infoWindow = new kakao.maps.InfoWindow({
+                    content: iwContent,
+                    disableAutoPan: true // 자동 이동 비활성화
+                });
+
+                // 마커에 마우스오버 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseover', function () {
+                    // 다른 인포윈도우가 열려 있으면 먼저 닫습니다
+                    if (openInfoWindow) {
+                        openInfoWindow.close();
+                    }
+                    // 인포윈도우를 마커 위에 표시
+                    infoWindow.open(map, marker);
+                    openInfoWindow = infoWindow;  // 열린 인포윈도우를 저장
+                });
+
+                // 마커에 마우스아웃 이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, 'mouseout', function () {
+                    // 마우스아웃 이벤트가 발생하면 인포윈도우를 닫습니다
+                    infoWindow.close();
+                    openInfoWindow = null;  // 열린 인포윈도우를 없앰
+                });
+
+                // 마커 클릭 이벤트 추가
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    window.location.href = '/share/read?shareNum=' + share.shareNum;
+                });
+            }
+            //*************************마커에 인포윈도우를 매치, 마커에 이벤트 등록 ********************************
+
+
+            //***********************기타함수***********************************
+            // 좌표를 기반으로 중복 마커 확인하는 함수
+            function isMarkerExists(position) {
+                return markers.some(function(marker) {
+                    let markerPosition = marker.getPosition();
+                    return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
+                });
+            }
+            
+            // 지도 경계 밖 마커를 삭제하는 함수
+            function removeMarkersOutOfBounds() {
+                let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
+                
+                //filter함수를 사용하여 마커배열을 순회해 경게 안에 있으면 유지, 없으면 삭제 
+                markers = markers.filter(function(marker) {
+                    let position = marker.getPosition();
+                    // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
+                    if (bounds.contain(position)) {
+                        return true;  // 경계 안에 있는 마커는 유지
+                    } else {
+                        marker.setMap(null);  // 경계 밖의 마커는 지도에서 제거
+                        return false;  // markers 배열에서 삭제
+                    }
+                });
+
+                // 클러스터러에 경계 안의 마커들만 다시 추가
+                clusterer.clear(); // 기존 클러스터 삭제
+                clusterer.addMarkers(markers); // 클러스터에 남은 마커 다시 추가
+            }
+
+            // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
+            kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
+            kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
+            //*********************기타함수*****************************************************
+        </script>
+
+        <!-- 나눠요 영역 -->
+        <div class="shareArea">
+            <!-- 나눠요 타이틀 -->
+            <div class="shareTitle">
+                나눠요!
+            </div>
+            <!-- 나눠요 게시글 목록 -->
+            <div class="sharePostingList">
+
+                <!-- 나눠요 게시글 목록 -->
+                <div class="sharePostingList" id="result">
+
+                </div>
+
+            </div>
+        </div>
+    
+        <!-- 저작권 정보 -->
+        <div class="rightContainer">
+            © 2024 Team San, Hai. All rights reserved.
+        </div>
 
     </div>
+    <!-- mainContainer -->
 </body>
 </html>
