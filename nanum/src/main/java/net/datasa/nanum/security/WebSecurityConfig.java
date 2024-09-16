@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                         , "/find/idFind" // ID 찾기
                         , "/find/pwFind" // 비밀번호 찾기
                         , "/find/idCheck" // ID 중복 확인
+                        , "/find/nickCheck" // 닉네임 중복 확인
                         , "/share/list" // 나눔 리스트
                         , "/share/read" // 나눔글 읽기
                         , "/share/download" // shareBoard 테이블 파일이름 기준 다운로드
