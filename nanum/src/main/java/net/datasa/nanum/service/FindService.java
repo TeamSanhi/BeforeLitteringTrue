@@ -11,26 +11,23 @@ import net.datasa.nanum.repository.MemberRepository;
 @RequiredArgsConstructor
 public class FindService {
     private final MemberRepository memberRepository;
+
+
     /**
      * 입력한 아이디가 DB에 존재하는지 확인
-     * @param memberId  입력한 아이디
-     * @return MemberController -> idCheck()
+     * @param memberId
+     * @return
      */
-    public boolean idDuplicate(String memberId) {
-        
-        log.debug("ID가 DB에 존재하는지 여부: {}", memberRepository.existsByMemberId(memberId));
-
-        return memberRepository.existsByMemberId(memberId);
+    public boolean isIdAvailable(String memberId) {
+        return !memberRepository.existsByMemberId(memberId);
     }
 
     /**
-    * 입력한 닉네임이 DB에 존재하는지 확인
-    * @param memberNickname  입력한 닉네임
-    * @return MemberController -> idCheck()
-    */
-    public boolean nickDuplicate(String memberNickname) {
-        log.debug("닉네임이 DB에 존재하는지 여부: {}", memberRepository.existsByMemberNickname(memberNickname));
-
-        return memberRepository.existsByMemberNickname(memberNickname);
+     * 입력한 닉네임이 DB에 존재하는지 확인
+     * @param memberNickname
+     * @return
+     */
+    public boolean isNicknameAvailable(String memberNickname) {
+        return !memberRepository.existsByMemberNickname(memberNickname);
     }
 }
