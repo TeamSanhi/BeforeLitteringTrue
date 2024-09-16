@@ -9,32 +9,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>recycleList</title>
 
+    <!-- jQuery 스크립트 파일 불러오기 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
 
     <style type="text/css">
+      /* 중앙 정렬 및 최대 너비 설정 */
       .fixed_img_col {
         margin: 0 auto;
         text-align: center;
         max-width: 1600px;
       }
 
+      /* 리스트 스타일 초기화 및 수평 정렬 */
       .fixed_img_col ul {
         list-style: none;
         padding: 0;
         display: inline-block;
       }
 
+      /* 각 이미지 항목에 대한 마진 설정 */
       .fixed_img_col ul li {
         display: inline-block;
         margin: 5px;
       }
 
+      /* 이미지 크기 설정 및 비율 유지 */
       .fixed_img_col ul li img {
         width: 300px;
         height: 300px;
         object-fit: cover;
       }
 
+      /* 팝업 오버레이 (배경) 스타일 설정 */
       .popup-overlay {
         display: none;
         position: fixed;
@@ -45,6 +51,7 @@
         background: rgba(0, 0, 0, 0.7);
       }
 
+      /* 팝업창 스타일 설정 */
       .popup-content {
         position: absolute;
         top: 50%;
@@ -58,15 +65,18 @@
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
       }
 
+      /* 팝업창 왼쪽 영역: 이미지 */
       .popup-left {
         flex: 1;
       }
 
+      /* 팝업창 오른쪽 영역: 텍스트 내용 */
       .popup-right {
         flex: 1;
         padding-left: 15px; /* 이미지와 텍스트 사이 여백 */
       }
 
+      /* 팝업 이미지 스타일 */
       .popup-left img {
         width: 100%;
         height: auto; /* 이미지 비율 유지 */
@@ -74,12 +84,13 @@
         object-fit: cover;
       }
 
+      /* 닫기 버튼 스타일 */
       .close-btn {
         float: right;
         cursor: pointer;
       }
 
-      /* 텍스트 스타일 */
+      /* 텍스트 스타일 설정 */
       .popup-right h2 {
         margin: 0;
         font-size: 22px;
@@ -105,10 +116,12 @@
     </style>
 
     <script>
+      // 팝업창 열기 함수: 아이템 번호에 따라 데이터 불러오기
       function openPopup(recycleNum) {
         fetch(`/recycle/read?recycleNum=` + recycleNum)
           .then((response) => response.json())
           .then((data) => {
+            // 팝업 내용 업데이트
             document.getElementById("popupTitle").textContent =
               data.recycleName;
             document.getElementById("popupContents").textContent =
@@ -117,9 +130,11 @@
               data.recycleCategory;
             document.getElementById("popupDate").textContent = data.recycleDate;
 
+            // 팝업 이미지 업데이트
             document.getElementById("popupImage").src =
               `/images/` + data.recycleFileName;
 
+            // 팝업창 표시
             document.querySelector(".popup-overlay").style.display = "block";
           })
           .catch((error) => {
@@ -128,10 +143,12 @@
           });
       }
 
+      // 팝업창 닫기 함수
       function closePopup() {
         document.querySelector(".popup-overlay").style.display = "none";
       }
 
+      // 팝업 외부 클릭 시 닫기
       window.addEventListener("click", function (event) {
         var popupContent = document.querySelector(".popup-content");
         var popupOverlay = document.querySelector(".popup-overlay");
@@ -144,6 +161,7 @@
         }
       });
 
+      // ESC 키 누르면 팝업 닫기
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closePopup();
@@ -155,6 +173,7 @@
     <div class="wrap">
       <div class="fixed_img_col">
         <ul>
+          <!-- 이미지 리스트 출력 -->
           <th:block th:each="item : ${recycleList}">
             <li>
               <a
@@ -173,7 +192,7 @@
         </ul>
       </div>
 
-      <!-- 팝업창 -->
+      <!-- 팝업창 구조 -->
       <div class="popup-overlay">
         <div class="popup-content">
           <!-- 왼쪽: 이미지 -->
