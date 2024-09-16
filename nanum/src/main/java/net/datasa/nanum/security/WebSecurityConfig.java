@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         , "/share/read" // 나눔글 읽기
                         , "/share/download" // shareBoard 테이블 파일이름 기준 다운로드
                         , "/share/mapList" // 나눔 지도 리스트
+                        , "/share/serviceList" // 나눔 완료 지도 리스트
                         , "/info/service" // 서비스 소개
                         , "/info/siteMap" // 사이트맵
                         , "/info/faq" // FAQ

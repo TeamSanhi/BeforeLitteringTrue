@@ -15,8 +15,8 @@
       $(document).ready(function () {
         $("#createRoom").click(function (event) {
           event.preventDefault(); // 기본 form 동작 방지
-          let messageContents = $("#messageContentsNotMe").val();
-          let shareNum = $("#shareNumNotMe").val();
+          let messageContents = $("#messageContentsNoRoom").val();
+          let shareNum = $("#shareNum").val();
 
           $.ajax({
             url: "/message/createRoom",
@@ -32,10 +32,10 @@
           });
         }); // createRoom 클릭 이벤트
 
-        $("#sendButtonExist").click(function (event) {
+        $("#sendButton").click(function (event) {
           event.preventDefault(); // 기본 form 동작 방지
           let messageContents = $("#messageContentsExist").val();
-          let roomNum = $("#roomNumExist").val();
+          let roomNum = $("#roomNum").val();
 
           $.ajax({
             url: "/message/send",
@@ -49,25 +49,23 @@
               alert("실패");
             },
           });
-        }); // sendButtonExist 클릭 이벤트
+        }); // sendButton 클릭 이벤트
       });
     </script>
   </head>
   <body>
-    <h1>연결됨</h1>
+    <h1>나눔 이야기</h1>
+    <h2 th:text="${share.shareTitle}">게시글 제목</h2>
     <div th:if="${!roomExist}">
-      <th:block th:if="${#authentication.name != thisBoardId}">
+      <th:block>
         <form>
-          <input type="text" id="messageContentsNotMe" />
-          <input type="hidden" id="shareNumNotMe" th:value="${shareNum}" />
+          <input type="text" id="messageContentsNoRoom" />
+          <input type="hidden" id="shareNum" th:value="${share.shareNum}" />
           <button type="submit" id="createRoom">보내기</button>
         </form>
         <button>신고하기</button>
       </th:block>
 
-      <th:block th:if="${#authentication.name == thisBoardId}">
-        <p>신청 내역이 없습니다.</p>
-      </th:block>
     </div>
 
     <div th:if="${roomExist}">
@@ -86,12 +84,13 @@
       
         <form th:if="${room != null}">
           <input type="text" id="messageContentsExist" />
-          <input type="hidden" id="roomNumExist" th:value="${room.roomNum}" />
-          <button type="submit" id="sendButtonExist">보내기</button>
+          <input type="hidden" id="roomNum" th:value="${room.roomNum}" />
+          <button type="submit" id="sendButton">보내기</button>
         </form>
+        <button>신고하기</button>
       </th:block>
-      <th:block th:if="${#authentication.name == thisBoardId}">
-        <button>나눔 완료</button>
+      <th:block th:if="${#authentication.name == share.memberId}">
+        <button th:disabled="${share.shareCompleted}">나눔 완료</button>
       </th:block>
 
     </div>   

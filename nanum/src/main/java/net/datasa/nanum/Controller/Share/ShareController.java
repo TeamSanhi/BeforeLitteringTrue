@@ -3,11 +3,13 @@ package net.datasa.nanum.Controller.Share;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.ShareService;
-
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 나눔 게시판 컨트롤러
@@ -128,7 +128,9 @@ public class ShareController {
     @GetMapping("read")
     public String read(
             Model model,
-            @RequestParam("shareNum") Integer shareNum) {
+            @RequestParam("shareNum") Integer shareNum,
+            Authentication authentication
+            ) {
 
         log.debug("share/read 컨트롤러 지나감 shareNum : {}, {}", shareNum);
 
@@ -137,6 +139,13 @@ public class ShareController {
         log.debug("전달받은 DTO : {}", shareBoardDTO);
         // 모델에 저장
         model.addAttribute("shareBoard", shareBoardDTO);
+        // 현재 로그인한 회원 번호를 모델에 저장
+        if (authentication != null && authentication.isAuthenticated()) {
+            AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
+            model.addAttribute("userNum", user.getNum());
+        }
+        
+
         // read로 이동
         return "shareView/shareRead";
     }
