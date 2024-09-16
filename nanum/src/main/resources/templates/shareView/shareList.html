@@ -124,7 +124,7 @@
             </th:block>
             <!-- 로그인 하였을시 보여줄 페이지 -->
             <th:block sec:authorize="isAuthenticated()">
-                <div>
+                <div class="messages">
                     <button id="messages">쪽지</button>
                 </div>
                 <div id="messagesModal" class="modal">
@@ -133,13 +133,13 @@
                         <h2>쪽지 목록</h2>
                     </div>
                 </div>
-                <div>
-                    <span>
+                <div class="logout">
+                    <span class="logoutHover">
                       <a th:href="@{/member/logout}">로그아웃</a>
                     </span>
                 </div>
-                <div>
-                    <span>
+                <div class="myPage">
+                    <span class="myPageHover">
                       <a th:href="@{/myPage/view}">마이페이지</a>
                     </span>
                 </div>
