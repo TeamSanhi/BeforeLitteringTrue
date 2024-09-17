@@ -115,4 +115,10 @@ public class MessageController {
          return ResponseEntity.ok(response);
     }    
 
+    @GetMapping("rooms")
+    @ResponseBody
+    public List<MessageDTO> getUserRoomsWithLatestMessages(@RequestParam("memberNum") Integer memberNum) {
+        return messageService.getUserRoomsWithLatestMessages(memberNum);
+    }
+
 }

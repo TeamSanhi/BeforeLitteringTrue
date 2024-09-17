@@ -77,12 +77,85 @@
       $(document).ready(function () {
         $("#messages").click(function () {
           $("#messagesModal").fadeIn();
+
+          let memberNum = $("#messages").data("num");
+
+          // 회원 번호를 통해 속한 쪽지방을 모두 가져옴
+          $.ajax({
+            url: "/message/rooms",
+            method: "get",
+            data: { memberNum: memberNum },
+            success: function (data) {
+              console.log("서버에서 반환된 데이터:", data);
+              let messageList = "<ul>";
+              data.forEach(function (room) {
+                messageList += `
+                <li>
+                  <div>
+                    <strong>상대방:</strong> ${
+                      room.senderNickname
+                    } <!-- 상대방 이름 -->
+                    <br/>
+                    <strong>최신 메시지:</strong> ${room.messageContents}
+                    <br/>
+                    <strong>시간:</strong> ${new Date(
+                      room.deliverDate
+                    ).toLocaleString()}
+                    <br/>
+                    <button class="view-details" th:data-room="${
+                      room.roomNum
+                    }">상세보기</button>
+                  </div>
+                </li>`;
+              });
+              messageList += "</ul>";
+              $("#messageListContainer").html(messageList);
+            },
+            error: function (xhr, status, error) {
+              console.error("AJAX 요청 오류:", status, error);
+            },
+          });
         });
+
+        // 상세보기 버튼 클릭 시
+        $(document).on("click", ".view-details", function () {
+          let roomNum = $(this).data("room");
+          $("#detailsModal").fadeIn();
+
+          $.ajax({
+            url: "/message/details",
+            method: "GET",
+            data: { roomNum: roomNum },
+            success: function (data) {
+              let detailsList = "<ul>";
+              data.forEach(function (message) {
+                detailsList += `
+              <li>
+                <strong>${message.sender.memberName}:</strong> ${
+                  message.messageContents
+                }
+                <br/>
+                <small>${new Date(message.deliverDate).toLocaleString()}</small>
+              </li>`;
+              });
+              detailsList += "</ul>";
+              $("#messageDetailsContainer").html(detailsList);
+            },
+          });
+        });
+
         $("#messagesClose").click(function () {
           $("#messagesModal").fadeOut();
         });
+
+        $("#detailsClose").click(function () {
+          $("#detailsModal").fadeOut();
+        });
         $(window).click(function (event) {
-          if ($(event.target).is("#messagesModal")) {
+          if (
+            $(event.target).is("#messagesModal") ||
+            $(event.target).is("#detailsModal")
+          ) {
             $("#messagesModal").fadeOut();
           }
         });
@@ -111,12 +184,18 @@
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
           <p>
-            <button id="messages">쪽지</button>
+            <button
+              id="messages"
+              th:data-num="${#authentication.principal.num}"
+            >
+              쪽지
+            </button>
           </p>
           <div id="messagesModal" class="modal">
             <div class="modal-content">
               <span id="messagesClose" class="close">&times;</span>
               <h2>쪽지 목록</h2>
+              <div id="messageListContainer"></div>
             </div>
           </div>
           <p>
