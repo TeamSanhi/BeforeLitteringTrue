@@ -51,6 +51,14 @@
             top: 500px;
         }
 
+        .boardPage {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            position: absolute;
+            top: 600px;
+        }
+
         .modal {
             display: none; /* 모달을 숨김 */
             position: fixed; /* 화면에 고정된 위치로 설정 */
@@ -92,17 +100,17 @@
     <script>
         $(document).ready(function () {
             // 쪽지 목록 모달
-            // $("#messages").click(function () {
-            //     $("#messagesModal").fadeIn();
-            // });
-            // $("#messagesClose").click(function () {
-            //     $("#messagesModal").fadeOut();
-            // });
-            // $(window).click(function (event) {
-            //     if ($(event.target).is("#messagesModal")) {
-            //         $("#messagesModal").fadeOut();
-            //     }
-            // });
+            $("#messages").click(function () {
+                $("#messagesModal").fadeIn();
+            });
+            $("#messagesClose").click(function () {
+                $("#messagesModal").fadeOut();
+            });
+            $(window).click(function (event) {
+                if ($(event.target).is("#messagesModal")) {
+                    $("#messagesModal").fadeOut();
+                }
+            });
 
             // 알림 추가 모달
             $("#alarmEdit").click(function () {
@@ -222,28 +230,9 @@
             $("#myAlarm").click(showAlarm);
             $("#myShare").click(showGive);
             $("#give").click(showGive);
-            $("#share").click(showReceive);
+            $("#receive").click(showReceive);
             $("#myBookmark").click(showBookmark);
         });
-
-        // function showAlarm() {
-        //     $.ajax({
-        //         url: 'myPage/alarmSave',
-        //         type: 'GET',
-        //         dataType: 'json',
-        //         success: function (response) {
-        //             // 알림 데이터를 받아서 화면에 표시
-        //             let notifications = '';
-        //             response.forEach(function (notification) {
-        //                 notifications += '<p>' + notification.message + ' (' + notification.createdAt + ')</p>';
-        //             });
-        //             $('#notification-list').html(notifications).show();
-        //         },
-        //         error: function () {
-        //             alert('알림을 가져오는 데 실패했습니다.');
-        //         }
-        //     });
-        // }
 
         function showAlarm() {
             $.ajax({
@@ -252,6 +241,20 @@
                 dataType: 'json',
                 success: function (response) {
                     alert(JSON.stringify(response));
+                    if (response.length > 0) {
+                        $("#showData").html("");
+                        for (let i = 0; i < response.length; i++) {
+                            var item = response[i];
+                            $("#showData").append(`
+                <p>
+                    ${item.alarmDay},
+                    ${item.alarmContents}
+                </p>
+            `);
+                        }
+                    } else {
+                        $("#showData").html("<p>No data available</p>");
+                    }
                 },
                 error: function () {
                     alert("서버 오류입니다.");
@@ -266,8 +269,24 @@
                 dataType: 'json',
                 success: function (response) {
                     alert(JSON.stringify(response));
+                    if (response.length > 0) {
+                        $("#showData").html("");  // 기존 내용을 비우기
+                        for (let i = 0; i < response.length; i++) {  // int 대신 let 사용
+                            var item = response[i];
+                            $("#showData").append(`
+                <p>
+                    ${item.shareTitle},
+                    ${item.shareCompleted},
+                    ${item.shareDate},
+                    ${item.shareContents}
+                </p>
+            `);
+                        }
+                    } else {
+                        $("#showData").html("<p>No data available</p>");
+                    }
                 },
-                error: function() {
+                error: function () {
                     alert("서버 오류입니다.");
                 }
             })
@@ -280,8 +299,23 @@
                 dataType: 'json',
                 success: function (response) {
                     alert(JSON.stringify(response));
+                    if (response.length > 0) {
+                        $("#showData").html("");
+                        for (let i = 0; i < response.length; i++) {
+                            var item = response[i];
+                            $("#showData").append(`
+                <p>
+                    ${item.shareTitle},
+                    ${item.shareDate},
+                    ${item.shareContents}
+                </p>
+            `);
+                        }
+                    } else {
+                        $("#showData").html("<p>No data available</p>");
+                    }
                 },
-                error: function() {
+                error: function () {
                     alert("서버 오류입니다.");
                 }
             })
@@ -289,11 +323,26 @@
 
         function showBookmark() {
             $.ajax({
-                url: '/myPage/showReceive',
+                url: '/myPage/showBookmark',
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
                     alert(JSON.stringify(response));
+                    if (response.length > 0) {
+                        $("#showData").html("");
+                        for (let i = 0; i < response.length; i++) {
+                            var item = response[i];
+                            $("#showData").append(`
+                <p>
+                    ${item.shareTitle},
+                    ${item.shareDate},
+                    ${item.shareContents}
+                </p>
+            `);
+                        }
+                    } else {
+                        $("#showData").html("<p>No data available</p>");
+                    }
                 },
                 error: function () {
                     alert("서버 오류입니다.");
@@ -323,15 +372,15 @@
             </p>
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
-<!--            <p>-->
-<!--                <button id="messages">쪽지</button>-->
-<!--            </p>-->
-<!--            <div id="messagesModal" class="modal">-->
-<!--                <div class="modal-content">-->
-<!--                    <span id="messagesClose" class="close">&times;</span>-->
-<!--                    <h2>쪽지 목록</h2>-->
-<!--                </div>-->
-<!--            </div>-->
+            <p>
+                <button id="messages">쪽지</button>
+            </p>
+            <div id="messagesModal" class="modal">
+                <div class="modal-content">
+                    <span id="messagesClose" class="close">&times;</span>
+                    <h2>쪽지 목록</h2>
+                </div>
+            </div>
             <p>
                 <a th:href="@{/member/logout}">로그아웃</a>
             </p>
@@ -352,7 +401,7 @@
         <!--  나의 알림  -->
         <p th:text="${alarmTotal}">나의 알림</p>
     </section>
-\
+
     <!--  프로필 편집  -->
     <section class="profileEdit">
         <!--  프로필 수정  -->
@@ -434,7 +483,9 @@
         <button id="receive">받았어요</button>
         <!--  북마크 띄우기  -->
         <button id="myBookmark">북마크</button>
-        </div>
+    </section>
+    <section class="boardPage">
+        <div id="showData"></div>
     </section>
 </main>
 <footer></footer>

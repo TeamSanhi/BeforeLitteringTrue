@@ -17,7 +17,19 @@ public interface ShareBoardRepository extends JpaRepository<ShareBoardEntity, In
         @Query("select count(*) from ShareBoardEntity where member = :memberNum")
         Integer shareCount(@Param("memberNum") MemberEntity memberNum);
 
-        // // 남서 북동 좌펴안의 게시판 글들을 부러오는 함수
+        // 사용자가 작성한 나눔글
+        @Query("select s from ShareBoardEntity s where s.member = :memberNum")
+        List<ShareBoardEntity> findGiveListByMemberNum(@Param("memberNum") MemberEntity memberNum);
+
+        // 사용자가 수령한 나눔글
+        @Query("select s from ShareBoardEntity s where s.receiver = :memberNum")
+        List<ShareBoardEntity> findReceiveListByMemberNum(@Param("memberNum") MemberEntity memberNum);
+
+        // 사용자가 북마크한 나눔글
+        @Query("SELECT s FROM ShareBoardEntity s JOIN BookMarkEntity b ON s = b.shareBoard WHERE b.member = :memberNum")
+        List<ShareBoardEntity> findBookmarkListByMemberNum(@Param("memberNum") MemberEntity memberNum);
+
+        // 남서 북동 좌펴안의 게시판 글들을 부러오는 함수
         // @Query("SELECT e FROM ShareBoardEntity e WHERE e.shareLat > :swLat AND
         // e.shareLat < :neLat AND e.shareLng > :swLng AND e.shareLng < :neLng ORDER BY
         // e.shareNum DESC")

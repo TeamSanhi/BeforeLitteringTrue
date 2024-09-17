@@ -41,7 +41,7 @@ public class ShareController {
     /**
      * 나눔 list 페이지로 이동
      * 
-     * @param param
+     * @param model
      * @return
      */
     @GetMapping("list")
@@ -66,7 +66,7 @@ public class ShareController {
      * 
      * @param DTO    정보를 받아옴
      * @param user   로그인한 유저 정보를 받아옴
-     * @param upload 업로드할 파일 정보를 받아옴
+     * @param uploads 업로드할 파일 정보를 받아옴
      * @return
      */
     @PostMapping("save")
@@ -106,7 +106,7 @@ public class ShareController {
     /**
      * image테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
      * 
-     * @param shareNum
+     * @param imageNum
      * @param response
      */
     @GetMapping("download")
@@ -203,7 +203,7 @@ public class ShareController {
     /**
      * 게시글 수정 처리
      * 
-     * @param boardDTO 수정할 글 정보
+     * @param shareBoardDTO 수정할 글 정보
      * @param user     로그인한 사용자 정보
      * @return
      */

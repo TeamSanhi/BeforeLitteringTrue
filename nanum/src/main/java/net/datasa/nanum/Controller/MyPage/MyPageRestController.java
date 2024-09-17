@@ -4,15 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
 import net.datasa.nanum.domain.dto.MemberDTO;
+import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
 import net.datasa.nanum.service.MemberService;
+import net.datasa.nanum.service.ShareService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +29,7 @@ public class MyPageRestController {
 
     private final AlarmService alarmService;
     private final MemberService memberService;
+    private final ShareService shareService;
 
     // 알람 추가 메소드
     @PostMapping("/alarmEdit")
@@ -77,7 +81,7 @@ public class MyPageRestController {
         return ResponseEntity.ok(response);
     }
 
-
+    // 알람 현황 제공 메소드
     @PostMapping("showAlarm")
     public ResponseEntity<List<Map<String, String>>> showAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
@@ -108,21 +112,113 @@ public class MyPageRestController {
         return ResponseEntity.ok(responseList);
     }
 
-//    @PostMapping("showGive")
-//    public ResponseEntity<List<Map<String, String>>> showGive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
-//        Integer userNum = authenticatedUser.getNum();
-//        MemberEntity member = memberService.getMemberByNum(userNum);
-//
-//
-//
-//
-//
-//        return ResponseEntity.ok();
-//    }
+    // 나눔한 현황 제공 메소드
+    @PostMapping("showGive")
+    public ResponseEntity<List<Map<String, String>>> showGive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
 
+        List<ShareBoardDTO> giveListDTOTotal = shareService.getGiveList(member);
 
-    //@PostMapping("showBookmark")
+        log.debug("giveListDTOTotal: {}", giveListDTOTotal);
 
-    //@PostMapping("showMessages")
+        List<Map<String, String>> responseList = new ArrayList<>();
+
+        for (ShareBoardDTO giveListDTO : giveListDTOTotal) {
+            Map<String, String> response = new HashMap<>();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String shareDate = giveListDTO.getShareDate().format(formatter);
+
+            String shareCompleted;
+            if(giveListDTO.getShareCompleted())
+                shareCompleted = "나눴어요";
+            else
+                shareCompleted = "나눠요";
+
+            log.debug("shareDate: {}", shareDate);
+
+            response.put("shareTitle", giveListDTO.getShareTitle());
+            response.put("shareContents", giveListDTO.getShareContents());
+            response.put("shareDate", shareDate);
+            response.put("shareCompleted", shareCompleted);
+            // response.put("shareImageList", giveListDTO.getImageList());
+            responseList.add(response);
+        }
+
+        log.debug("responseList: {}", responseList);
+
+        return ResponseEntity.ok(responseList);
+    }
+
+    // 나눔받은 현황 제공 메소드
+    @PostMapping("showReceive")
+    public ResponseEntity<List<Map<String, String>>> showReceive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        List<ShareBoardDTO> receiveListDTOTotal = shareService.getReceiveList(member);
+
+        log.debug("receiveListDTOTotal: {}", receiveListDTOTotal);
+
+        List<Map<String, String>> responseList = new ArrayList<>();
+
+        for (ShareBoardDTO receiveListDTO : receiveListDTOTotal) {
+            Map<String, String> response = new HashMap<>();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String shareDate = receiveListDTO.getShareDate().format(formatter);
+
+            log.debug("shareDate: {}", shareDate);
+
+            response.put("shareTitle", receiveListDTO.getShareTitle());
+            response.put("shareContents", receiveListDTO.getShareContents());
+            response.put("shareDate", shareDate);
+            // response.put("shareImageList", receiveListDTO.getImageList());
+            responseList.add(response);
+        }
+
+        log.debug("responseList: {}", responseList);
+
+        return ResponseEntity.ok(responseList);
+    }
+
+    // 북마크 현황 제공 메소드
+    @PostMapping("showBookmark")
+    public ResponseEntity<List<Map<String, String>>> showBookmark(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        List<ShareBoardDTO> bookmarkListDTOTotal = shareService.getBookmarkList(member);
+        log.debug("bookmarkListDTOTotal: {}", bookmarkListDTOTotal);
+
+        List<Map<String, String>> responseList = new ArrayList<>();
+
+        for (ShareBoardDTO bookmarkListDTO : bookmarkListDTOTotal) {
+            Map<String, String> response = new HashMap<>();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String shareDate = bookmarkListDTO.getShareDate().format(formatter);
+
+            String shareCompleted;
+            if(bookmarkListDTO.getShareCompleted())
+                shareCompleted = "나눴어요";
+            else
+                shareCompleted = "나눠요";
+
+            log.debug("shareDate: {}", shareDate);
+
+            response.put("shareTitle", bookmarkListDTO.getShareTitle());
+            response.put("shareContents", bookmarkListDTO.getShareContents());
+            response.put("shareDate", shareDate);
+            response.put("shareCompleted", shareCompleted);
+            // response.put("shareImageList", receiveListDTO.getImageList());
+            responseList.add(response);
+        }
+
+        log.debug("responseList: {}", responseList);
+
+        return ResponseEntity.ok(responseList);
+    }
 
 }
