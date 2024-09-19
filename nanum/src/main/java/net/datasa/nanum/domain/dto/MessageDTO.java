@@ -16,6 +16,7 @@ public class MessageDTO {
     private Integer senderNum;          // 발신자 번호
     private String senderNickname;      // 발신자 닉네임
     private Integer shareNum;           // 게시글 번호
+    private String shareTitle;          // 게시글 제목
     private Integer roomNum;            // 쪽지방 번호
     private String messageContents;     // 쪽지 내용
     private LocalDateTime deliverDate;  // 전송일
