@@ -381,7 +381,7 @@
         gap: 2vh;
             /* 게시글 사이에 일정 간격을 둠 */
     }
-
+    
     /* 나눠요 게시글 영역_div 박스 */
     .sharePosting {
         width: 345px;
@@ -421,9 +421,8 @@
 
     /* 나눠요 게시글_제목 */
     .sharePostTitle {
-        font-size: 130%;
+        font-size: 2.4vh;
         font-weight: 700;
-        letter-spacing: 0.1vw;
         overflow: hidden; /* 넘치는 텍스트 숨김 */
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -444,8 +443,7 @@
 
     /* 나눠요 게시글_본문 글 */
     .postContent {
-        font-size: 100%;
-        letter-spacing: 0.05vw;
+        font-size: 1.8vh;
         line-height: 2.5vh;
     }
 
@@ -457,15 +455,13 @@
 
     /* 게시글 정보_작성자 닉네임 */
     .userName {
-        font-size: 90%;
-        letter-spacing: 0.05vw;
+        font-size: 1.6vh;
         float: left;
     }
 
     /* 게시글 정보_작성 일시 */
     .postDate {
-        font-size: 90%;
-        letter-spacing: 0.05vw;
+        font-size: 1.6vh;
         float: right;
     }
 
@@ -487,7 +483,7 @@
         white-space: nowrap;
         text-align: center;
         line-height: 3vh;
-        font-size: 80%;
+        font-size: 1.4vh;
         font-weight: 500;
         text-decoration: underline;
         color: gray;
