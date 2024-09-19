@@ -8,6 +8,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>글읽기</title>
+    <!-- style -->
+    <link rel="stylesheet" href="/css/share_Read.css">
     <style>
       /* 모달 창 스타일 */
       .modal {
@@ -228,7 +230,6 @@
         let creatorNum = $(this).data("user-num");
         let receiverNum = $(this).data("num");
         let shareNum = $(this).data("share-num");
-        $("#messageModal").show();
         checkAndLoadRoom(creatorNum, receiverNum, shareNum);
       }
 
@@ -244,6 +245,8 @@
             shareNum: shareNum,
           },
           success: function (response) {
+            //쪽지내역 모달 창 출력
+            $("#messageModal").show();
             let messages = response.existingMessages;
             let messageList = $("#existingMessages");
             messageList.empty(); // 기존 내용을 지우고
@@ -262,6 +265,11 @@
               $("#existingMessages").html("");
             }
           },
+          error: function(){
+            //로그인하지 않았을시 ajax실패! 로그인 화면으로 이동
+            alert("로그인하여 주십시오");
+            window.location.href = "/login";
+          }
         });
       }
 
@@ -351,64 +359,210 @@
     </script>
   </head>
   <body>
-    <h1>나눠요 글읽기</h1>
-    <table>
-      <tr style="height: 100px">
-        <th>제목</th>
-        <th>내용</th>
-        <th>닉네임</th>
-        <th>작성일</th>
-        <th>북마크</th>
-      </tr>
-      <tr>
-        <td th:text="${shareBoard.shareTitle}"></td>
-        <td th:text="${shareBoard.shareContents}"></td>
-        <td th:text="${shareBoard.memberNickname}"></td>
-        <!-- 타임리프 이용해 날짜 데이터 포멧 -->
-        <td
-          th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"
-        ></td>
-        <!-- 북마크 기능 -->
-        <td>
-          <!-- 북마크 하지않았을때  -->
-          <img
-            id="bookmark1"
-            th:data-num="${shareBoard.shareNum}"
-            style="width: 40px; height: 40px"
-            src="/images/bookmark1.png"
-          />
-          <!-- 북마크 하였을때  -->
-          <img
-            id="bookmark2"
-            th:data-num="${shareBoard.shareNum}"
-            style="width: 40px; height: 40px; display: none"
-            src="/images/bookmark2.png"
-          />
-        </td>
-        <!-- 게시글 신고 버튼 -->
-        <td>
-          <button id="reportButton" th:data-num="${shareBoard.shareNum}">
-            신고
-          </button>
-        </td>
-      </tr>
-    </table>
-    <!-- 이미지 경로를 설정하여 이미지를 다운로드하여 가져온다. -->
-    <div
-      th:each="image : ${shareBoard.imageList}"
-      style="display: inline-block"
-    >
-      <img
-        style="width: 200px; height: 200px"
-        th:src="|download?imageNum=${image.imageNum}|"
-      />
+    <!-- ********************************추가해야할 기능들 ***************************************-->
+    <!-- 버튼 클릭시 카카오맵 사이트로 현재 위치에서 거래 위치까지의 경로를 검색해 보여준다.  -->
+    <!-- ********************************추가해야할 기능들 ***************************************-->
+
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+
+      <!-- 로고 -->
+      <div class="logo">
+          <a href="/">
+              <img src="/images/logo.png" class="logoImg">
+          </a>
+      </div>
+
+      <!-- 우리는 -->
+      <div class="projectInfo">
+          <a href="/info/service">우리는</a>
+      </div>
+
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+          <a href="/share/list">나눠요</a>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+          <a href="/recycle/list">버려요</a>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+          <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+          <th:block sec:authorize="not isAuthenticated()">
+              <!-- 회원가입 -->
+              <div class="join">
+                  <span class="joinHover">
+                      <a href="/member/join">회원가입</a>
+                  </span>
+              </div>
+
+              <!-- 로그인 -->
+              <div class="login">
+                  <a href="/member/loginForm">
+                      <span class="loginHover">
+                          로그인
+                      </span>
+                  </a>
+              </div>
+          </th:block>
+
+          <!-- 로그인 하였을시 보여줄 페이지 -->
+          <th:block sec:authorize="isAuthenticated()">
+              <!-- 나눔 쪽지 -->
+              <div class="message" id="messages">
+                  <span class="messageHover">
+                      나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
+                  </span>
+              </div>
+
+              <div id="messagesModal" class="modal">
+                  <div class="modal-content">
+                      <span id="messagesClose" class="close">&times;</span>
+                      <h2>쪽지 목록</h2>
+                  </div>
+              </div>
+
+              <div class="mypage">
+                  <a th:href="@{/myPage/view}">
+                      <span class="mypageHover">
+                          마이페이지
+                      </span>
+                  </a>
+              </div>
+              
+              <!-- 로그아웃 -->
+              <div class="logout">
+                  <a th:href="@{/member/logout}">
+                      <span class="logoutHover">
+                          로그아웃
+                      </span>
+                  </a>
+              </div>
+
+          </th:block>
+
+      </div>
+  </div>
+
+  <!-- 공백 -->
+  <div class="blankContainer"></div>
+
+  <!-- 나눔글 전체 영역 -->
+  <div id="mainArea">
+    <!-- 왼쪽 영역 -->
+    <div class="leftContainer">
+      <!-- 나눔글 제목 영역 -->
+      <div class="titleArea">
+          <!-- 나눔글 제목 -->
+          <div class="postingTitle">
+             <span th:text="${shareBoard.shareTitle}"></span>
+          </div>
+      </div>
+      <!-- 나눔글 사진 영역 -->
+      <div class="imgArea">
+          <img th:src="|download?imageNum=${shareBoard.imageList[0].imageNum}|">
+          <!-- 여러장의 이미지를 이미지 경로를 설정하여 다운로드하여 가져온다.
+                      <div
+            th:each="image : ${shareBoard.imageList}"
+            style="display: inline-block"
+          >
+            <img
+              style="width: 200px; height: 200px"
+              th:src="|download?imageNum=${image.imageNum}|"
+            />
+          </div>-->
+      </div>    
     </div>
 
-    <!--지도 -->
-    <div id="map" style="width: 100%; height: 350px"></div>
-    <!-- 위도 경도 정보 -->
+    <!-- 오른쪽 영역 -->
+    <div class="rightContainer">
+      <!-- 상단 영역 -->
+      <div class="rightUpside">
+          <!-- 프로필 -->
+          <div class="profile">
+            <!-- 작성자 프로필 사진 -->
+            <img class="infoImage" src="./img/user.png" alt="User Photo">
+            <!-- 작성자 이름 -->
+            <div class="writerName">
+              <span th:text="${shareBoard.memberNickname}"></span>
+            </div>
+          </div>
+          <!-- 날짜 영역 --> 
+          <div class="uploadDateArea">   
+            <!-- 타임리프 이용해 날짜 데이터 포멧 -->
+            <span class="uploadDate" th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></span>
+          </div>
+      </div>
+
+      <!-- 본문 영역 -->
+      <div class="mainTextArea">
+          <!-- 나눔글 본문 -->
+          <div class="mainText">
+              <span th:text="${shareBoard.shareContents}"></span>
+          </div>
+      </div>
+
+      <!-- 거래 위치 지도 -->
+      <div class="textMap" id="map">
+      </div>
+
+      <!-- 하단 영역 -->
+      <div class="postBottom">
+          <!-- 북마크 영역 -->
+          <div class="bookmarkArea">
+              <!-- 북마크 하지않았을때  -->
+                <img
+                id="bookmark1"
+                th:data-num="${shareBoard.shareNum}"
+                style="width: 47px; height: 47px"
+                src="/images/bookmark1.png"
+              />
+              <!-- 북마크 하였을때  -->
+              <img
+                id="bookmark2"
+                th:data-num="${shareBoard.shareNum}"
+                style="width: 47px; height: 47px; display: none"
+                src="/images/bookmark2.png"
+              />
+          </div>
+          <!-- 신고 이미지 -->
+          <span id="reportButton" th:data-num="${shareBoard.shareNum}">
+            <img style="width: 47px; height: 47px" src="/images/siren.png">   
+          </span>
+
+          <!-- 하단 우측 영역 -->
+          <div class="bottomRight">
+              <!-- 받을래요 버튼 -->
+              <!-- 로그인한 아이디와 게시글 작성자의 memberId가 다르면 작성자와 쪽지를 주고받을 수 있는 창을 띄운다. -->
+              <th:block th:if="${#authentication.name != shareBoard.memberId}">
+                <button class="wantShareButton" id="receiveButton"
+                th:data-user-num="${userNum}"
+                th:data-num="${shareBoard.memberNum}"
+                th:data-share-num="${shareBoard.shareNum}">
+                받을래요
+                </button>
+              </th:block>
+              <th:block th:if="${#authentication.name == shareBoard.memberId}">
+                <button class="wantShareButton" id="deleteButton" th:data-num="${shareBoard.shareNum}">
+                  삭제
+                </button>        
+                <button class="wantShareButton" id="editButton" th:data-num="${shareBoard.shareNum}">
+                  수정
+                </button>
+              </th:block>
+          </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- 위도 경도 정보 출발 도착 지를 찍어서 카카오맵으로 보여준다. -->
     <input id="shareLat" type="hidden" th:value="${shareBoard.shareLat}" />
     <input id="shareLng" type="hidden" th:value="${shareBoard.shareLng}" />
+    
     <!-- 게시글 거래위치 지도 스크립트  -->
     <script
       type="text/javascript"
@@ -434,35 +588,6 @@
       marker.setMap(map);
     </script>
 
-    <!-- 삭제 수정  -->
-    <div>
-      <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 삭제가 보이도록 한다.  -->
-      <p th:if="${#authentication.name == shareBoard.memberId}">
-        <button id="deleteButton" th:data-num="${shareBoard.shareNum}">
-          삭제
-        </button>
-      </p>
-      <!-- 로그인한 아이디와 게시글 작성자의 memberId가 같을때 수정이 보이도록 한다.  -->
-      <p th:if="${#authentication.name == shareBoard.memberId}">
-        <button id="editButton" th:data-num="${shareBoard.shareNum}">
-          수정
-        </button>
-      </p>
-    </div>
-    <!-- 로그인한 아이디와 게시글 작성자의 memberId가 다르면 작성자와 쪽지를 주고받을 수 있는 창을 띄운다. -->
-    <div
-      th:if="${#authentication.name != shareBoard.memberId}"
-      sec:authorize="isAuthenticated()"
-    >
-      <button
-        id="receiveButton"
-        th:data-user-num="${userNum}"
-        th:data-num="${shareBoard.memberNum}"
-        th:data-share-num="${shareBoard.shareNum}"
-      >
-        받을래요
-      </button>
-    </div>
     <!-- 쪽지 보내기 모달창 -->
     <div id="messageModal" class="modal">
       <div class="modal-content">
@@ -525,5 +650,11 @@
         </form>
       </div>
     </div>
+
+    <!-- 저작권 정보 -->
+    <div class="rightArea">
+      © 2024 Team San, Hai. All rights reserved.
+    </div>
+
   </body>
 </html>
