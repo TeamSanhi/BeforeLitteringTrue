@@ -130,7 +130,8 @@ public class MessageService {
                 .map(room -> {
                         List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
                         MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
-                
+                        log.debug("방 번호: {}", room.getRoomNum());
+                        log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
                         int creator = room.getCreator().getMemberNum();
                         int receiver = room.getReceiver().getMemberNum();
 
@@ -145,6 +146,8 @@ public class MessageService {
                                 .messageContents(latestMessage != null ? latestMessage.getMessageContents() : null)
                                 .deliverDate(latestMessage != null ? latestMessage.getDeliverDate() : null)
                                 .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
+                                .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
+                                .shareCompleted(room.getShareBoard().getShareCompleted())
                                 .build();
 
                                 return dto;

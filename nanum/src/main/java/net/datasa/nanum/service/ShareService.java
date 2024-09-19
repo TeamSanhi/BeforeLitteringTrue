@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.datasa.nanum.domain.entity.ImageEntity;
-import net.datasa.nanum.domain.dto.ImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -19,7 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
+import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
+import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
 import net.datasa.nanum.repository.ImageRepository;
@@ -338,6 +338,20 @@ public class ShareService {
         return shareBoardEntities.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    // 게시글의 나눔 완료 여부를 "완료"로 변경
+    public void completeShare(Integer shareNum, Integer receiverNum) {
+
+    ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
+    .orElseThrow(() -> new EntityNotFoundException("게시글 정보가 없습니다."));
+
+    MemberEntity receiver = memberRepository.findById(receiverNum)
+    .orElseThrow(() -> new EntityNotFoundException("나눔받는 회원 정보가 없습니다."));
+
+    shareBoard.setShareCompleted(true);
+    shareBoard.setReceiver(receiver);
+    shareBoardRepository.save(shareBoard);
     }
 
 }

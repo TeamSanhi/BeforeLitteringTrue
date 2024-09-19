@@ -33,7 +33,7 @@ public class RecycleService {
         // 페이지는 0부터 시작하므로 1을 빼줍니다.
         page--;
 
-        // 변경된 코드: 조회수(viewCount)를 기준으로 내림차순 정렬하도록 수정
+        // 조회수(viewCount)를 기준으로 내림차순 정렬
         Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "viewCount"));
 
         Page<RecycleEntity> entityPage;
@@ -70,6 +70,7 @@ public class RecycleService {
                 .recycleCategory(recycleEntity.getRecycleCategory())    // 카테고리
                 .recycleContents(recycleEntity.getRecycleContents())    // 내용
                 .recycleFileName(recycleEntity.getRecycleFileName())    // 이미지 파일명
+                .recyclePossible(recycleEntity.getRecyclePossible())    // 재활용 여부 추가
                 .viewCount(recycleEntity.getViewCount())                // 조회수
                 .updateDate(recycleEntity.getUpdateDate())              // 마지막 수정 날짜
                 .build();

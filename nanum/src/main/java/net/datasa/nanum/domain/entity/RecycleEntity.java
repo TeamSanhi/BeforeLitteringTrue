@@ -40,6 +40,9 @@ public class RecycleEntity {
     @Column(name = "recycle_contents", nullable = false, columnDefinition = "TEXT")
     private String recycleContents;
 
+    @Column(name = "recycle_possible", nullable = false, length = 10)
+    private String recyclePossible;
+
     @Column(name = "view_count", columnDefinition = "integer default 0")
     private Integer viewCount = 0; // 기본값 설정
 

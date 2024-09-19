@@ -106,7 +106,9 @@
                   <div class="message-room" data-room="${
                     room.roomNum
                   }" data-share-num="${room.shareNum}">
-                    <div>
+                    <div class="shareBoard" data-write="${
+                      room.shareWriteNum
+                    }" data-complete="${room.shareCompleted}">
                       <strong>게시글:</strong> ${room.shareTitle}
                     </div>
                     <div class="sender" data-num="${room.receiverNum}">
@@ -134,9 +136,22 @@
 
         // 쪽지방 클릭 시 상세보기 및 쪽지 전송 모달 표시
         $(document).on("click", ".message-room", function () {
+          // 다른 방에서 active 클래스 제거
+          $(".message-room").removeClass("active");
+          // 현재 선택한 방에 active 클래스 추가
+          $(this).addClass("active");
+
           let roomNum = $(this).data("room");
           let userNum = $("#messages").data("num");
-          console.log(roomNum, userNum);
+          let shareNum = $(this).data("share-num");
+          console.log(
+            "방번호:",
+            roomNum,
+            "로그인한 유저번호:",
+            userNum,
+            "게시글 번호:",
+            shareNum
+          );
           $("#detailsModal").fadeIn();
 
           // 쪽지 상세 내역 가져오기
@@ -160,6 +175,42 @@
                   <hr />`;
               });
               $("#messageDetailsContainer").html(detailsList);
+
+              // 현재 선택한 방의 정보를 가져옴
+              let selectedRoom = $(
+                ".message-room[data-room='" + roomNum + "']"
+              );
+              let thisShareNum = parseInt(
+                selectedRoom.find(".message-room").data("share-num")
+              );
+              let shareWriteNum = parseInt(
+                selectedRoom.find(".shareBoard").data("write")
+              );
+              let shareCompletedData = selectedRoom
+                .find(".shareBoard")
+                .data("complete");
+              let shareCompleted =
+                shareCompletedData === true || shareCompletedData === "true";
+              console.log(
+                "게시글 번호:",
+                thisShareNum,
+                "게시글주인:",
+                shareWriteNum,
+                "완료여부:",
+                shareCompleted
+              );
+              // 나눔 완료 버튼 표시 및 비활성화 설정
+              if (userNum === shareWriteNum) {
+                $("#shareComplete").show();
+
+                if (shareCompleted) {
+                  $("#shareComplete").prop("disabled", true);
+                } else {
+                  $("#shareComplete").prop("disabled", false);
+                }
+              } else {
+                $("#shareComplete").hide();
+              }
             },
             error: function (xhr, status, error) {
               console.error("AJAX 요청 오류:", status, error);
@@ -251,6 +302,25 @@
         $("#submitUserReportBtn").click(function () {
           submitReport();
         });
+
+        // 나눔 완료 버튼 클릭 시
+        $("#shareComplete").click(function () {
+          let shareNum = $(".message-room").data("share-num");
+          let receiverNum = $(".sender").data("num");
+
+          $.ajax({
+            url: "/share/complete",
+            method: "POST",
+            data: { shareNum: shareNum, receiverNum: receiverNum },
+            success: function (response) {
+              alert("나눔이 완료되었습니다.");
+              $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+            },
+            error: function () {
+              alert("나눔 완료 처리 중 오류가 발생했습니다.");
+            },
+          });
+        });
       });
 
       // 신고 데이터 전송 함수
@@ -337,6 +407,9 @@
               ></textarea>
               <button id="sendMessageBtn">보내기</button>
               <button id="userReportBtn">신고하기</button>
+              <button id="shareComplete" style="display: none">
+                나눔 완료
+              </button>
             </div>
           </div>
 
