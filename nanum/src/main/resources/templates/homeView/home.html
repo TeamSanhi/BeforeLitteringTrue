@@ -109,7 +109,7 @@
                     <div>
                       <strong>게시글:</strong> ${room.shareTitle}
                     </div>
-                    <div>
+                    <div class="sender" data-num="${room.receiverNum}">
                       <strong>상대방:</strong> ${room.senderNickname}
                     </div>
                     <div>
@@ -211,10 +211,12 @@
           });
         });
 
+        // 나눔 이야기 닫기
         $("#messagesClose").click(function () {
           $("#messagesModal").fadeOut();
         });
 
+        // 쪽지 상세내역 닫기
         $("#detailsClose").click(function () {
           $("#detailsModal").fadeOut();
         });
@@ -227,7 +229,61 @@
             $("#detailsModal").fadeOut();
           }
         });
+
+        // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
+        $("#userReportBtn").click(function () {
+          $("#reportModal").show();
+        });
+
+        // 신고 모달 닫기
+        $(".close").click(function () {
+          $("#reportModal").hide();
+        });
+
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+        $(window).click(function (event) {
+          if ($(event.target).is("#reportModal")) {
+            $("#reportModal").hide();
+          }
+        });
+
+        // 신고 제출 버튼 클릭 시 신고 내역 제출
+        $("#submitUserReportBtn").click(function () {
+          submitReport();
+        });
       });
+
+      // 신고 데이터 전송 함수
+      function submitReport() {
+        let reportReasons = [];
+        $("input[name='reportReason']:checked").each(function () {
+          reportReasons.push($(this).val());
+        });
+        let additionalReason = $("#additionalReason").val();
+        let shareNum = $(".message-room").data("share-num");
+        let reporterNum = $("#messages").data("num"); // 사용자의 ID
+        let memberNum = $(".sender").data("num"); // 상대 ID
+
+        // Ajax 요청으로 신고 데이터 전송
+        $.ajax({
+          url: "/report/submit",
+          type: "post",
+          data: {
+            memberNum: memberNum,
+            reporterNum: reporterNum,
+            reportReason: JSON.stringify(reportReasons),
+            additionalReason: additionalReason,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            alert("신고가 접수되었습니다.");
+            $("#reportModal").hide();
+          },
+          error: function () {
+            alert("신고 처리 중 오류가 발생했습니다.");
+          },
+        });
+      }
     </script>
   </head>
   <body>
@@ -281,6 +337,54 @@
               ></textarea>
               <button id="sendMessageBtn">보내기</button>
               <button id="userReportBtn">신고하기</button>
+            </div>
+          </div>
+
+          <!-- 게시글 유저 신고 모달창 -->
+          <div id="reportModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>신고하기</h2>
+              <form id="reportForm">
+                <div>
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="욕설, 인신공격 등 언어적 폭력"
+                    />
+                    욕설, 인신공격 등 언어적 폭력</label
+                  >
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="부적절한 게시글"
+                    />
+                    부적절한 게시글</label
+                  >
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="사기 또는 허위정보"
+                    />
+                    사기 또는 허위정보</label
+                  >
+                  <label
+                    ><input type="checkbox" name="reportReason" value="기타" />
+                    기타</label
+                  >
+                </div>
+                <textarea
+                  id="additionalReason"
+                  placeholder="기타 사유를 입력하세요"
+                ></textarea
+                ><br />
+                <button type="button" id="submitUserReportBtn">
+                  신고 제출
+                </button>
+              </form>
             </div>
           </div>
 
