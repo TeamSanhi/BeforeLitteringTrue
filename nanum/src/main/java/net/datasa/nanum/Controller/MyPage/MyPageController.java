@@ -3,6 +3,7 @@ package net.datasa.nanum.Controller.MyPage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
+import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
@@ -56,7 +57,23 @@ public class MyPageController {
     }
 
     @GetMapping("profileEdit")
-    public String profileEdit() {
+    public String profileEdit(Model model, @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        MemberEntity member = memberService.getMemberByNum(authenticatedUser.getNum());
+
+        log.debug("member", member);
+
+        model.addAttribute("member", member);
+
+        return "myPageView/profileEdit";
+    }
+
+    @PostMapping("profileEdit")
+    public String profileEdit(MemberDTO dto) {
+
+        log.debug("회원 가입 정보 입력값: {}", dto);
+
+        memberService.modify(dto);
+
         return "myPageView/profileEdit";
     }
 }

@@ -10,121 +10,146 @@
     <title>Document</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
-        $(document).ready(function () {
-            $("#joinPost").submit(check);
-        });
+        // $(document).ready(function () {
+        //     $("#idDuplicationCheck").val("");
+        //     $("#nickDuplicationCheck").val("");
+        //
+        //     // 아이디 중복 확인
+        //     $("#idCheck").click(function () {
+        //         let memberId = $("#memberId").val().trim();
+        //         if (memberId === "") {
+        //             alert("아이디를 입력하세요.");
+        //             return;
+        //         }
+        //         $.get(`/find/idCheck`, { memberId: memberId }, function (data) {
+        //             let message = data.available
+        //                 ? "사용 가능한 아이디입니다."
+        //                 : "아이디가 이미 존재합니다.";
+        //             $("#idModalMessage").text(message);
+        //             $("#idModal").show();
+        //         });
+        //     });
+        //
+        //     // 닉네임 중복 확인
+        //     $("#nickCheck").click(function () {
+        //         let memberNickname = $("#memberNickname").val().trim();
+        //         console.log(memberNickname);
+        //         if (memberNickname === "") {
+        //             alert("닉네임을 입력하세요.");
+        //             return;
+        //         }
+        //         $.get(
+        //             `/find/nickCheck`,
+        //             { memberNickname: memberNickname },
+        //             function (data) {
+        //                 let message = data.available
+        //                     ? "사용 가능한 닉네임입니다."
+        //                     : "닉네임이 이미 존재합니다.";
+        //                 $("#nickModalMessage").text(message);
+        //                 $("#nickModal").show();
+        //             }
+        //         );
+        //     });
+        //
+        //     // 모달 닫기
+        //     $(".close").click(function () {
+        //         $(this).parent().parent().hide();
+        //     });
+        //     $(window).click(function (event) {
+        //         if ($(event.target).hasClass("modal")) {
+        //             $(event.target).hide();
+        //         }
+        //     });
+        //
+        //     // 아이디 중복 체크를 했는지 여부
+        //     $("#idConfirm").click(function () {
+        //         // 아이디 중복 확인 메시지가 "사용 가능한 아이디입니다."일 경우에만
+        //         if ($("#idModalMessage").text() === "사용 가능한 아이디입니다.") {
+        //             $("#idDuplicationCheck").val("y");
+        //         } else {
+        //             $("#idDuplicationCheck").val(""); // 중복된 경우 값을 비움
+        //         }
+        //         $("#idModal").hide();
+        //     });
+        //
+        //     // 닉네임 중복 체크를 했는지 여부
+        //     $("#nickConfirm").click(function () {
+        //         // 닉네임 중복 확인 메시지가 "사용 가능한 닉네임입니다."일 경우에만
+        //         if ($("#nickModalMessage").text() === "사용 가능한 닉네임입니다.") {
+        //             $("#nickDuplicationCheck").val("y");
+        //         } else {
+        //             $("#nickDuplicationCheck").val(""); // 중복된 경우 값을 비움
+        //         }
+        //         $("#nickModal").hide();
+        //     });
+        //
+        //     // 입력한 내용을 확인하고 DB에 저장
+        //     $("#joinPost").submit(check);
+        // });
 
-        function onlyAlphaNum(input) {
-            const regex = /^[A-Za-z0-9_]*$/; // 영문, 숫자, 언더바만 허용하는 정규 표현식
-            if (!regex.test(input.value)) {
-                // 입력된 값이 정규 표현식과 맞지 않으면 값을 수정
-                input.value = input.value.replace(/[^A-Za-z0-9_]/g, "");
-            }
-        }
-
-        function winOpenId() {
-            let memberId = $("#memberId").val().trim();
-            let memberNickname = $("#memberNickname").val().trim();
-            let divide = "i";
-
-            if (memberId == "") {
-                alert("ID를 입력하세요.");
-                return false;
-            }
-
-            if (memberId.length < 4 || memberId.length > 12) {
-                alert("아이디는 4자 이상 12자 이하로 입력해주세요.");
-                return false;
-            }
-
-            $("#sendToChild").val(divide);
-
-            let w = window.open(
-                "/find/idCheck?memberId=" +
-                memberId +
-                "&memberNickname=" +
-                memberNickname,
-                "win",
-                "top=100, left=400, width=500, height=600"
-            );
-        }
-
-        function winOpenNick() {
-            let memberId = $("#memberId").val().trim();
-            let memberNickname = $("#memberNickname").val().trim();
-            let divide = "n";
-
-            if (memberNickname == "") {
-                alert("닉네임을 입력하세요.");
-                return false;
-            }
-
-            $("#sendToChild").val(divide);
-
-            let w = window.open(
-                "/find/idCheck?memberId=" +
-                memberId +
-                "&memberNickname=" +
-                memberNickname,
-                "win",
-                "top=100, left=400, width=500, height=600"
-            );
-        }
-
-        function check() {
-            let id = $("#memberId").val();
-            let pw = $("#memberPw").val();
-            let pwCheck = $("#pwCheck").val();
-            let email = $("#memberEmail").val();
-            let nickname = $("#memberNickname").val();
-            let idDuplicationCheck = $("#idDuplicationCheck").val();
-            let nickDuplicationCheck = $("#nickDuplicationCheck").val();
-
-            if (id == "") {
-                alert("아이디를 입력해주세요.");
-                return false;
-            }
-
-            if (id.length < 4 || id.length > 12) {
-                alert("아이디는 4자 이상 12자 이하로 입력해주세요.");
-                return false;
-            }
-
-            if (pw == "") {
-                alert("비밀번호를 입력해주세요.");
-                return false;
-            }
-
-            if (pw.length < 8) {
-                alert("비밀번호는 8자 이상으로 입력해주세요.");
-                return false;
-            }
-
-            // if (email == "") {
-            //   alert("이메일을 입력해주세요.");
-            //   return false;
-            // }
-
-            if (nickname == "") {
-                alert("닉네임을 입력해주세요.");
-                return false;
-            }
-
-            if (pw != pwCheck) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return false;
-            }
-
-            if (idDuplicationCheck != "y" || nickDuplicationCheck != "y") {
-                alert("아이디 혹은 닉네임 중복 확인이 이루어지지 않았습니다");
-                return false;
-            }
-        }
+        // 아이디 입력 란에 영문만 입력 가능
+        // function onlyAlphaNum(input) {
+        //     const regex = /^[A-Za-z0-9_]*$/; // 영문, 숫자, 언더바만 허용하는 정규 표현식
+        //     if (!regex.test(input.value)) {
+        //         // 입력된 값이 정규 표현식과 맞지 않으면 값을 수정
+        //         input.value = input.value.replace(/[^A-Za-z0-9_]/g, "");
+        //     }
+        // }
+        //
+        // function check() {
+        //     let id = $("#memberId").val();
+        //     let pw = $("#memberPw").val();
+        //     let pwCheck = $("#pwCheck").val();
+        //     let email = $("#memberEmail").val();
+        //     let nickname = $("#memberNickname").val();
+        //     let idDuplicationCheck = $("#idDuplicationCheck").val();
+        //     let nickDuplicationCheck = $("#nickDuplicationCheck").val();
+        //
+        //     if (id == "") {
+        //         alert("아이디를 입력해주세요.");
+        //         return false;
+        //     }
+        //
+        //     if (id.length < 4 || id.length > 12) {
+        //         alert("아이디는 4자 이상 12자 이하로 입력해주세요.");
+        //         return false;
+        //     }
+        //
+        //     if (pw == "") {
+        //         alert("비밀번호를 입력해주세요.");
+        //         return false;
+        //     }
+        //
+        //     if (pw.length < 8) {
+        //         alert("비밀번호는 8자 이상으로 입력해주세요.");
+        //         return false;
+        //     }
+        //
+        //     // if (email == "") {
+        //     //   alert("이메일을 입력해주세요.");
+        //     //   return false;
+        //     // }
+        //
+        //     if (nickname == "") {
+        //         alert("닉네임을 입력해주세요.");
+        //         return false;
+        //     }
+        //
+        //     if (pw != pwCheck) {
+        //         alert("비밀번호가 일치하지 않습니다.");
+        //         return false;
+        //     }
+        //
+        //     if (idDuplicationCheck != "y" || nickDuplicationCheck != "y") {
+        //         alert("아이디 혹은 닉네임 중복 확인이 이루어지지 않았습니다");
+        //         return false;
+        //     }
+        // }
     </script>
 </head>
 <body>
 <h1>[ 프로필 수정 ]</h1>
-<!--<form th:action="@{/member/join}" method="post" id="joinPost">-->
+<!--<form th:action="@{/myPage/profileEdit}" method="post">-->
 <!--    <table>-->
 <!--        <tr>-->
 <!--            <th>ID</th>-->
@@ -135,6 +160,7 @@
 <!--                        id="memberId"-->
 <!--                        maxlength="12"-->
 <!--                        oninput="onlyAlphaNum(this)"-->
+<!--                        th:placeholder="${#strings.isEmpty(member?.memberId) ? '아이디를 입력하세요' : member.memberId}"-->
 <!--                />-->
 <!--                <input-->
 <!--                        type="button"-->
@@ -157,13 +183,13 @@
 <!--            <td><input type="password" id="pwCheck" /></td>-->
 <!--        </tr>-->
 
-<!--        <tr>-->
-<!--            <th>이메일</th>-->
-<!--            <td>-->
-<!--                <input type="text" name="memberEmail" id="memberEmail" />-->
-<!--                <input type="button" value="인증번호 전송" id="emailButton" />-->
-<!--            </td>-->
-<!--        </tr>-->
+<!--&lt;!&ndash;        <tr>&ndash;&gt;-->
+<!--&lt;!&ndash;            <th>이메일</th>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="text" name="memberEmail" id="memberEmail" />&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="button" value="인증번호 전송" id="emailButton" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </td>&ndash;&gt;-->
+<!--&lt;!&ndash;        </tr>&ndash;&gt;-->
 
 <!--        <tr>-->
 <!--            <th>닉네임</th>-->
@@ -172,6 +198,7 @@
 <!--                        type="text"-->
 <!--                        name="memberNickname"-->
 <!--                        id="memberNickname"-->
+<!--                        th:placeholder="${#strings.isEmpty(member?.memberNickname) ? '아이디를 입력하세요' : member.memberNickname}"-->
 <!--                        onkeyup="this.value=this.value.replace(' ','')"-->
 <!--                />-->
 <!--                <input-->
@@ -186,7 +213,7 @@
 <!--    <input type="hidden" id="sendToChild" />-->
 <!--    <input type="hidden" id="idDuplicationCheck" />-->
 <!--    <input type="hidden" id="nickDuplicationCheck" />-->
-<!--    <input type="submit" value="회원가입" id="postButton" />-->
+<!--    <input type="submit" value="프로필 수정" id="postButton" />-->
 <!--</form>-->
 </body>
 </html>

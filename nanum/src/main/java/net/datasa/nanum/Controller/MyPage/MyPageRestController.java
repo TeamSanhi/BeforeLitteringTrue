@@ -31,7 +31,7 @@ public class MyPageRestController {
 
     // 알람 추가 메소드
     @PostMapping("/alarmEdit")
-    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam Integer alarmDay, @RequestParam String alarmContents) {
+    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") Integer alarmDay, @RequestParam("alarmContents") String alarmContents) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
