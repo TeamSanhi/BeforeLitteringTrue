@@ -64,9 +64,8 @@
     /* 메뉴 감싸는 div_우리는 / 나눠요 / 버려요 */
     .projectInfo {
         margin-left: 1vw;
-        font-size: 140%;
+        font-size: 2.5vh;
         font-weight: 700;
-        letter-spacing: 0.15vw;
         display: inline-block;
         width: 7vw;
         height: 6vh;
@@ -86,13 +85,12 @@
         float: right;
     }
 
+/* 로그인 안했을 시 */
     /* 회원가입 */
     .join {
-        font-size: 120%;
+        font-size: 2.1vh;
         font-weight: 500;
-        letter-spacing: 0.1vw;
         display: inline-block;
-        width: 6vw;
         height: 6vh;
         text-align: center;
         text-decoration: underline;
@@ -102,19 +100,17 @@
 
     /* 회원가입_hover */
     .joinHover:hover {
-        color: white;
-        background-color: black;
+        color: #00FF00;
         text-decoration: underline;
         cursor: pointer;
     }
 
     /* 로그인 */
     .login {
-        font-size: 120%;
+        font-size: 2.1vh;
         font-weight: 500;
-        letter-spacing: 0.1vw;
         display: inline-block;
-        width: 5vw;
+        margin-left: 2vw;
         height: 6vh;
         text-align: center;
         text-decoration: underline;
@@ -124,19 +120,69 @@
 
     /* 로그인_hover */
     .loginHover:hover {
-        color: white;
-        background-color: black;
+        color: #00FF00;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    
+/* 로그인 하였을 때 */
+    /* 나눔 이야기 (쪽지) */
+    .message {
+        font-size: 1.8vh;
+        font-weight: 500;
+        display: inline-block;
+        margin-top: 0.2vh;
+        margin-right: 5vh;
+        height: 6vh;
+        text-align: center;
+        vertical-align: top;
+        line-height: 6vh;
+        position: relative;
+    }
+
+    /* 나눔 이야기 */
+    .messageHover {
+        background-color: #00FF00;
+        cursor: pointer;
+    }
+
+    /* 나눔 이야기_hover */
+    .messageHover:hover {
+        text-decoration: underline;
+    }
+
+    /* 나눔 이야기 알림 뱃지 */
+    .badge {
+        color: black;
+        font-size: 1.8vh;
+        position: relative;
+    }
+
+    /* 마이페이지 */
+    .mypage {
+        font-size: 2.1vh;
+        font-weight: 500;
+        display: inline-block;
+        height: 6vh;
+        text-align: center;
+        text-decoration: underline;
+        vertical-align: top;
+        line-height: 6vh;
+    }
+
+    /* 마이페이지_hover */
+    .mypageHover:hover {
+        color: #00FF00;
         text-decoration: underline;
         cursor: pointer;
     }
 
     /* 로그아웃 */
     .logout {
-        font-size: 120%;
+        font-size: 2.1vh;
         font-weight: 500;
-        letter-spacing: 0.1vw;
         display: inline-block;
-        width: 6vw;
+        margin-left: 2vw;
         height: 6vh;
         text-align: center;
         text-decoration: underline;
@@ -146,32 +192,16 @@
 
     /* 로그아웃_hover */
     .logoutHover:hover {
-        color: white;
-        background-color: black;
+        color: #00FF00;
         text-decoration: underline;
         cursor: pointer;
     }
 
-    /* 마이페이지 */
-    .myPage {
-        font-size: 120%;
-        font-weight: 500;
-        letter-spacing: 0.1vw;
-        display: inline-block;
-        width: 5vw;
-        height: 6vh;
-        text-align: center;
-        text-decoration: underline;
-        vertical-align: top;
-        line-height: 6vh;
-    }
 
-    /* 마이페이지_hover */
-    .myPageHover:hover {
-        color: white;
-        background-color: black;
-        text-decoration: underline;
-        cursor: pointer;
+    /* Blank_네비게이션 & 슬라이드 사이 공백 */
+    .blankContainer {
+        height: 2vh;
+        width: 93vw;
     }
 
 
@@ -268,7 +298,7 @@
     }
 
     .resetButton:hover {
-        color: magenta;
+        color: #00FF00;
     }
 
     /* 나눔하기 버튼 영역 */
@@ -351,7 +381,7 @@
         gap: 2vh;
             /* 게시글 사이에 일정 간격을 둠 */
     }
-
+    
     /* 나눠요 게시글 영역_div 박스 */
     .sharePosting {
         width: 345px;
@@ -391,9 +421,8 @@
 
     /* 나눠요 게시글_제목 */
     .sharePostTitle {
-        font-size: 130%;
+        font-size: 2.4vh;
         font-weight: 700;
-        letter-spacing: 0.1vw;
         overflow: hidden; /* 넘치는 텍스트 숨김 */
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -414,8 +443,7 @@
 
     /* 나눠요 게시글_본문 글 */
     .postContent {
-        font-size: 100%;
-        letter-spacing: 0.05vw;
+        font-size: 1.8vh;
         line-height: 2.5vh;
     }
 
@@ -427,15 +455,13 @@
 
     /* 게시글 정보_작성자 닉네임 */
     .userName {
-        font-size: 90%;
-        letter-spacing: 0.05vw;
+        font-size: 1.6vh;
         float: left;
     }
 
     /* 게시글 정보_작성 일시 */
     .postDate {
-        font-size: 90%;
-        letter-spacing: 0.05vw;
+        font-size: 1.6vh;
         float: right;
     }
 
@@ -457,7 +483,7 @@
         white-space: nowrap;
         text-align: center;
         line-height: 3vh;
-        font-size: 80%;
+        font-size: 1.4vh;
         font-weight: 500;
         text-decoration: underline;
         color: gray;
