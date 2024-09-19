@@ -33,8 +33,8 @@ public class RecycleService {
         // 페이지는 0부터 시작하므로 1을 빼줍니다.
         page--;
 
-        // Pageable 객체를 생성 (현재 페이지, 페이지당 글 수, 정렬 순서)
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.Direction.ASC, "recycleNum");
+        // 조회수(viewCount)를 기준으로 내림차순 정렬
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "viewCount"));
 
         Page<RecycleEntity> entityPage;
 
@@ -42,11 +42,7 @@ public class RecycleService {
         if (searchWord != null && !searchWord.trim().isEmpty()) {
             String trimmedSearchWord = searchWord.trim();
             // 검색 유형에 따라 다른 검색 방식 적용
-            if ("title".equals(searchType)) {
-                entityPage = recycleRepository.findByRecycleNameContaining(trimmedSearchWord, pageable);
-            } else if ("contents".equals(searchType)) {
-                entityPage = recycleRepository.findByRecycleContentsContaining(trimmedSearchWord, pageable);
-            } else if ("category".equals(searchType)) {
+            if ("category".equals(searchType)) {
                 entityPage = recycleRepository.findByRecycleCategoryContaining(trimmedSearchWord, pageable);
             } else {
                 // 제목 또는 내용에서 검색
@@ -74,6 +70,7 @@ public class RecycleService {
                 .recycleCategory(recycleEntity.getRecycleCategory())    // 카테고리
                 .recycleContents(recycleEntity.getRecycleContents())    // 내용
                 .recycleFileName(recycleEntity.getRecycleFileName())    // 이미지 파일명
+                .recyclePossible(recycleEntity.getRecyclePossible())    // 재활용 여부 추가
                 .viewCount(recycleEntity.getViewCount())                // 조회수
                 .updateDate(recycleEntity.getUpdateDate())              // 마지막 수정 날짜
                 .build();

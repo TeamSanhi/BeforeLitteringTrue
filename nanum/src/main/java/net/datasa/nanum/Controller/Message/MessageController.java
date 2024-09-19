@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +24,7 @@ import net.datasa.nanum.domain.entity.ShareBoardEntity;
 import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.repository.RoomRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
+import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.MessageService;
 
 @Slf4j
@@ -74,7 +76,7 @@ public class MessageController {
     }
 
     /**
-     * 작성한 쪽지를 DB에 저장
+     * 받을래요에서 작성한 쪽지를 DB에 저장
      * @param creatorNum        현재 로그인한(&쪽지를 작성한) 회원 번호
      * @param receiverNum       게시글 주인 번호
      * @param messageContents   작성한 쪽지 내용
@@ -108,6 +110,7 @@ public class MessageController {
                 .isRead(false)
                 .build();
         
+                
         // 엔티티를 DB에 저장
          messageService.saveMessage(message);
          
@@ -115,4 +118,48 @@ public class MessageController {
          return ResponseEntity.ok(response);
     }    
 
+    // 홈에서 쪽지 버튼 클릭시 쪽지방을 조회
+    @GetMapping("rooms")
+    @ResponseBody
+    public List<MessageDTO> getUserRoomsWithLatestMessages(@RequestParam("memberNum") Integer memberNum) {
+
+        log.debug("가져오는 쪽지 정보: {}", messageService.getUserRoomsWithLatestMessages(memberNum));
+
+        return messageService.getUserRoomsWithLatestMessages(memberNum);
+    }
+
+
+    // 홈 모달창의 쪽지방을 눌렀을 때 해당 쪽지방의 내역을 모두 출력
+    @GetMapping("details")
+    @ResponseBody
+    public List<MessageDTO> getMessageDetails (@RequestParam("roomNum") int roomNum, @RequestParam("userNum") int userNum) {
+        RoomEntity room = roomRepository.findById(roomNum).orElseThrow(()-> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
+
+        return messageService.getMessage(room, userNum);
+    }
+
+    @PostMapping("detailSend")
+    @ResponseBody
+    public ResponseEntity<String> sendMessage(@RequestParam("roomNum") int roomNum,
+                                            @RequestParam("messageContents") String messageContents,
+                                            @AuthenticationPrincipal AuthenticatedUser user){
+
+        MemberEntity member = memberRepository.findById(user.getNum())
+            .orElseThrow(() -> new EntityNotFoundException("회원 정보가 존재하지 않습니다."));                                        
+
+        RoomEntity room = roomRepository.findById(roomNum)
+            .orElseThrow(()-> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
+
+        MessageEntity message = MessageEntity.builder()
+        .sender(member)
+        .room(room)
+        .messageContents(messageContents)
+        .isRead(false)
+        .build();
+
+        messageService.saveMessage(message);
+
+
+        return ResponseEntity.ok("success");
+    }
 }

@@ -3,6 +3,7 @@ package net.datasa.nanum.Controller.Share;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -224,4 +225,14 @@ public class ShareController {
             return "redirect:list";
         }
     }
+
+    // 쪽지에서 나눔 완료 버튼을 클릭하면 나눔이 완료된 상태로 변경
+@PostMapping("complete")
+public ResponseEntity<String> completeShare(@RequestParam("shareNum") Integer shareNum, @RequestParam("receiverNum") Integer receiverNum) {
+    
+    shareService.completeShare(shareNum, receiverNum);
+    
+    return ResponseEntity.ok("나눔 완료");
+}
+
 }

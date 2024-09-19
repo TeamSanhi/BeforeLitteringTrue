@@ -15,6 +15,7 @@ public class RecycleDTO {
     private String recycleFileName;             // 파일 이름
     private String recycleCategory;             // 카테고리
     private String recycleName;                 // 게시글 이름 (제목)
+    private String recyclePossible;
     private String recycleContents;             // 게시글 내용
     private Integer viewCount;                  // 조회수
     private LocalDateTime updateDate;           // 수정 시간

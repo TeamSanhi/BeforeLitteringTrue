@@ -56,6 +56,18 @@
         text-align: center;
       }
 
+      .message-room {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        background-color: #f9f9f9;
+      }
+
+      .message-room:hover {
+        background-color: #e9e9e9;
+      }
+
       /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
       .close {
         color: #aaa; /* 닫기 버튼의 기본 색상 */
@@ -75,18 +87,273 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
       $(document).ready(function () {
+        // 쪽지 목록 열기 모달
         $("#messages").click(function () {
           $("#messagesModal").fadeIn();
+
+          let memberNum = $("#messages").data("num");
+
+          // 회원 번호를 통해 속한 쪽지방을 모두 가져옴
+          $.ajax({
+            url: "/message/rooms",
+            method: "get",
+            data: { memberNum: memberNum },
+            success: function (data) {
+              console.log("서버에서 반환된 데이터:", data);
+              let messageList = "";
+              data.forEach(function (room) {
+                messageList += `
+                  <div class="message-room" data-room="${
+                    room.roomNum
+                  }" data-share-num="${room.shareNum}">
+                    <div class="shareBoard" data-write="${
+                      room.shareWriteNum
+                    }" data-complete="${room.shareCompleted}">
+                      <strong>게시글:</strong> ${room.shareTitle}
+                    </div>
+                    <div class="sender" data-num="${room.receiverNum}">
+                      <strong>상대방:</strong> ${room.senderNickname}
+                    </div>
+                    <div>
+                      <strong>메시지:</strong> ${
+                        room.messageContents || "메시지가 없습니다."
+                      }
+                    </div>
+                    <div>
+                      <strong>시간:</strong> ${new Date(
+                        room.deliverDate
+                      ).toLocaleString()}
+                    </div>
+                  </div>`;
+              });
+              $("#messageListContainer").html(messageList);
+            },
+            error: function (xhr, status, error) {
+              console.error("AJAX 요청 오류:", status, error);
+            },
+          });
         });
+
+        // 쪽지방 클릭 시 상세보기 및 쪽지 전송 모달 표시
+        $(document).on("click", ".message-room", function () {
+          // 다른 방에서 active 클래스 제거
+          $(".message-room").removeClass("active");
+          // 현재 선택한 방에 active 클래스 추가
+          $(this).addClass("active");
+
+          let roomNum = $(this).data("room");
+          let userNum = $("#messages").data("num");
+          let shareNum = $(this).data("share-num");
+          console.log(
+            "방번호:",
+            roomNum,
+            "로그인한 유저번호:",
+            userNum,
+            "게시글 번호:",
+            shareNum
+          );
+          $("#detailsModal").fadeIn();
+
+          // 쪽지 상세 내역 가져오기
+          $.ajax({
+            url: "/message/details",
+            method: "GET",
+            data: { roomNum: roomNum, userNum: userNum },
+            success: function (data) {
+              let detailsList = "";
+              data.forEach(function (message) {
+                detailsList += `
+                  <div class="message-detail">
+                    <strong>${message.senderNickname}:</strong> ${
+                  message.messageContents
+                }
+                    <br/>
+                    <small>${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</small>
+                  </div>
+                  <hr />`;
+              });
+              $("#messageDetailsContainer").html(detailsList);
+
+              // 현재 선택한 방의 정보를 가져옴
+              let selectedRoom = $(
+                ".message-room[data-room='" + roomNum + "']"
+              );
+              let thisShareNum = parseInt(
+                selectedRoom.find(".message-room").data("share-num")
+              );
+              let shareWriteNum = parseInt(
+                selectedRoom.find(".shareBoard").data("write")
+              );
+              let shareCompletedData = selectedRoom
+                .find(".shareBoard")
+                .data("complete");
+              let shareCompleted =
+                shareCompletedData === true || shareCompletedData === "true";
+              console.log(
+                "게시글 번호:",
+                thisShareNum,
+                "게시글주인:",
+                shareWriteNum,
+                "완료여부:",
+                shareCompleted
+              );
+              // 나눔 완료 버튼 표시 및 비활성화 설정
+              if (userNum === shareWriteNum) {
+                $("#shareComplete").show();
+
+                if (shareCompleted) {
+                  $("#shareComplete").prop("disabled", true);
+                } else {
+                  $("#shareComplete").prop("disabled", false);
+                }
+              } else {
+                $("#shareComplete").hide();
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("AJAX 요청 오류:", status, error);
+            },
+          });
+        });
+
+        // 메시지 보내기
+        $("#sendMessageBtn").click(function () {
+          let roomNum = $(".message-room").data("room");
+          let messageContents = $("#messageInput").val();
+          console.log("방번호:", roomNum, "내용:", messageContents);
+
+          $.ajax({
+            url: "/message/detailSend",
+            method: "POST",
+            data: { roomNum: roomNum, messageContents: messageContents },
+            success: function (response) {
+              $("#messageInput").val(""); // 입력 필드 초기화
+
+              // 메시지 전송 후 상세 내역을 다시 가져오기
+              $.ajax({
+                url: "/message/details",
+                method: "GET",
+                data: { roomNum: roomNum, userNum: $("#messages").data("num") },
+                success: function (data) {
+                  let detailsList = "";
+                  data.forEach(function (message) {
+                    detailsList += `
+              <div class="message-detail">
+                <strong>${message.senderNickname}:</strong> ${
+                      message.messageContents
+                    }
+                <br/>
+                <small>${new Date(message.deliverDate).toLocaleString()}</small>
+              </div>
+              <hr />`;
+                  });
+                  $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
+                },
+                error: function (xhr, status, error) {
+                  console.error("상세 메시지 가져오기 오류:", status, error);
+                },
+              });
+            },
+            error: function (xhr, status, error) {
+              console.error("메시지 전송 오류:", status, error);
+            },
+          });
+        });
+
+        // 나눔 이야기 닫기
         $("#messagesClose").click(function () {
           $("#messagesModal").fadeOut();
         });
+
+        // 쪽지 상세내역 닫기
+        $("#detailsClose").click(function () {
+          $("#detailsModal").fadeOut();
+        });
         $(window).click(function (event) {
-          if ($(event.target).is("#messagesModal")) {
+          if (
+            $(event.target).is("#messagesModal") ||
+            $(event.target).is("#detailsModal")
+          ) {
             $("#messagesModal").fadeOut();
+            $("#detailsModal").fadeOut();
           }
         });
+
+        // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
+        $("#userReportBtn").click(function () {
+          $("#reportModal").show();
+        });
+
+        // 신고 모달 닫기
+        $(".close").click(function () {
+          $("#reportModal").hide();
+        });
+
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+        $(window).click(function (event) {
+          if ($(event.target).is("#reportModal")) {
+            $("#reportModal").hide();
+          }
+        });
+
+        // 신고 제출 버튼 클릭 시 신고 내역 제출
+        $("#submitUserReportBtn").click(function () {
+          submitReport();
+        });
+
+        // 나눔 완료 버튼 클릭 시
+        $("#shareComplete").click(function () {
+          let shareNum = $(".message-room").data("share-num");
+          let receiverNum = $(".sender").data("num");
+
+          $.ajax({
+            url: "/share/complete",
+            method: "POST",
+            data: { shareNum: shareNum, receiverNum: receiverNum },
+            success: function (response) {
+              alert("나눔이 완료되었습니다.");
+              $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+            },
+            error: function () {
+              alert("나눔 완료 처리 중 오류가 발생했습니다.");
+            },
+          });
+        });
       });
+
+      // 신고 데이터 전송 함수
+      function submitReport() {
+        let reportReasons = [];
+        $("input[name='reportReason']:checked").each(function () {
+          reportReasons.push($(this).val());
+        });
+        let additionalReason = $("#additionalReason").val();
+        let shareNum = $(".message-room").data("share-num");
+        let reporterNum = $("#messages").data("num"); // 사용자의 ID
+        let memberNum = $(".sender").data("num"); // 상대 ID
+
+        // Ajax 요청으로 신고 데이터 전송
+        $.ajax({
+          url: "/report/submit",
+          type: "post",
+          data: {
+            memberNum: memberNum,
+            reporterNum: reporterNum,
+            reportReason: JSON.stringify(reportReasons),
+            additionalReason: additionalReason,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            alert("신고가 접수되었습니다.");
+            $("#reportModal").hide();
+          },
+          error: function () {
+            alert("신고 처리 중 오류가 발생했습니다.");
+          },
+        });
+      }
     </script>
   </head>
   <body>
@@ -111,14 +378,89 @@
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
           <p>
-            <button id="messages">쪽지</button>
+            <button
+              id="messages"
+              th:data-num="${#authentication.principal.num}"
+            >
+              쪽지
+            </button>
           </p>
+
+          <!-- 쪽지 목록 모달 -->
           <div id="messagesModal" class="modal">
             <div class="modal-content">
               <span id="messagesClose" class="close">&times;</span>
-              <h2>쪽지 목록</h2>
+              <h2>나눔 이야기</h2>
+              <div id="messageListContainer"></div>
             </div>
           </div>
+
+          <!-- 쪽지 상세보기 모달 -->
+          <div id="detailsModal" class="modal">
+            <div class="modal-content">
+              <span id="detailsClose" class="close">&times;</span>
+              <h2>쪽지 상세보기</h2>
+              <div id="messageDetailsContainer"></div>
+              <textarea
+                id="messageInput"
+                placeholder="메시지를 입력하세요"
+              ></textarea>
+              <button id="sendMessageBtn">보내기</button>
+              <button id="userReportBtn">신고하기</button>
+              <button id="shareComplete" style="display: none">
+                나눔 완료
+              </button>
+            </div>
+          </div>
+
+          <!-- 게시글 유저 신고 모달창 -->
+          <div id="reportModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>신고하기</h2>
+              <form id="reportForm">
+                <div>
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="욕설, 인신공격 등 언어적 폭력"
+                    />
+                    욕설, 인신공격 등 언어적 폭력</label
+                  >
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="부적절한 게시글"
+                    />
+                    부적절한 게시글</label
+                  >
+                  <label
+                    ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="사기 또는 허위정보"
+                    />
+                    사기 또는 허위정보</label
+                  >
+                  <label
+                    ><input type="checkbox" name="reportReason" value="기타" />
+                    기타</label
+                  >
+                </div>
+                <textarea
+                  id="additionalReason"
+                  placeholder="기타 사유를 입력하세요"
+                ></textarea
+                ><br />
+                <button type="button" id="submitUserReportBtn">
+                  신고 제출
+                </button>
+              </form>
+            </div>
+          </div>
+
           <p>
             <a th:href="@{/member/logout}">로그아웃</a>
           </p>

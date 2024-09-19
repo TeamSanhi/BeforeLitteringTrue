@@ -2,6 +2,8 @@ package net.datasa.nanum.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -28,21 +30,6 @@ public class MessageService {
         private final MessageRepository messageRepository;
         private final RoomRepository roomRepository;
 
-        // /**
-        // * 해당 게시글에 현재 사용자의 정보가 있는 쪽지방이 존재하는지 확인
-        // * @param num
-        // * @param shareNum
-        // * @return
-        // */
-        // public boolean isRoomExist(int num, int shareNum) {
-        // MemberEntity member = memberRepository.findById(num)
-        // .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
-        // ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
-        // .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
-
-        // return roomRepository.existsByCreatorAndShareBoard(member, shareBoard);
-        // }
 
         /**
          * 현재 사용자가 생성한 쪽지방을 찾아옴
@@ -64,41 +51,6 @@ public class MessageService {
                 return room;
         }
 
-        // public void createRoom(RoomDTO roomDTO) {
-        // MemberEntity member = memberRepository.findById(roomDTO.getCreatorNum())
-        // .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
-        // ShareBoardEntity shareBoard =
-        // shareBoardRepository.findById(roomDTO.getShareNum())
-        // .orElseThrow(() -> new EntityNotFoundException("게시글을 찾을 수 없습니다."));
-
-        // RoomEntity roomEntity = RoomEntity.builder()
-        // .creator(member)
-        // .receiver(shareBoard.getMember())
-        // .shareBoard(shareBoard)
-        // .build();
-
-        // roomRepository.save(roomEntity);
-
-        // }
-
-        // public void messageSave(int num, Integer roomNum, String messageContents) {
-        // MemberEntity member = memberRepository.findById(num)
-        // .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
-        // RoomEntity room = roomRepository.findById(roomNum)
-        // .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
-
-        // MessageEntity messageEntity = MessageEntity.builder()
-        // .sender(member)
-        // .room(room)
-        // .messageContents(messageContents)
-        // .isRead(false)
-        // .build();
-
-        // messageRepository.save(messageEntity);
-
-        // }
 
         public List<MessageDTO> getMessage(RoomEntity room, int num) {
                 List<MessageEntity> messageList = messageRepository.findAllByRoom(room);
@@ -146,27 +98,14 @@ public class MessageService {
                 return dtoList;
         }
 
-        // public List<RoomDTO> getAllUserRooms(int userNum) {
-        // MemberEntity member = memberRepository.findById(userNum)
-        // .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
-
-        // List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member,
-        // member);
-        // return rooms.stream()
-        // .map(room -> RoomDTO.builder()
-        // .roomNum(room.getRoomNum())
-        // .creatorNum(room.getCreator().getMemberNum())
-        // .receiverNum(room.getReceiver().getMemberNum())
-        // .shareNum(room.getShareBoard().getShareNum())
-        // .build())
-        // .collect(Collectors.toList());
-        // }
 
         public RoomEntity findOrCreateRoom(MemberEntity creator, ShareBoardEntity shareBoard) {
 
                 RoomEntity room = findRoom(creator.getMemberNum(), shareBoard.getShareNum());
                 MemberEntity receiver = memberRepository.findById(shareBoard.getMember().getMemberNum())
                                 .orElseThrow(() -> new EntityNotFoundException("게시자 정보를 찾을 수 없습니다."));
+
+                                                
                 if (room == null) {
                         room = new RoomEntity();
                         room.setCreator(creator);
@@ -180,5 +119,64 @@ public class MessageService {
         public void saveMessage(MessageEntity message) {
                 messageRepository.save(message);
         }
+
+        public List<MessageDTO> getUserRoomsWithLatestMessages(Integer memberNum) {
+                MemberEntity member = memberRepository.findById(memberNum)
+                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+
+                List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member, member);
+
+                List<MessageDTO> result = rooms.stream()
+                .map(room -> {
+                        List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
+                        MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
+                        log.debug("방 번호: {}", room.getRoomNum());
+                        log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
+                        int creator = room.getCreator().getMemberNum();
+                        int receiver = room.getReceiver().getMemberNum();
+
+                        if (memberNum == creator || memberNum == receiver) {
+                                MessageDTO dto = MessageDTO.builder()
+                                .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
+                                .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
+                                .receiverNum(memberNum == creator ? room.getReceiver().getMemberNum() : room.getCreator().getMemberNum())
+                                .shareNum(room.getShareBoard().getShareNum())
+                                .shareTitle(room.getShareBoard().getShareTitle())
+                                .roomNum(room.getRoomNum())
+                                .messageContents(latestMessage != null ? latestMessage.getMessageContents() : null)
+                                .deliverDate(latestMessage != null ? latestMessage.getDeliverDate() : null)
+                                .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
+                                .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
+                                .shareCompleted(room.getShareBoard().getShareCompleted())
+                                .build();
+
+                                return dto;
+                        }
+                        else {
+                                return null;
+                        }
+                })
+                .filter(Objects::nonNull)   // null값 필터링
+                .collect(Collectors.toList());
+                return result;
+        }
+
+        // public void saveMessage(int roomNum, String messageContents, int senderNum) {
+        //         RoomEntity room = roomRepository.findById(roomNum)
+        //             .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
+            
+        //         MemberEntity sender = memberRepository.findById(senderNum)
+        //             .orElseThrow(() -> new EntityNotFoundException("발신자를 찾을 수 없습니다."));
+            
+        //         MessageEntity message = MessageEntity.builder()
+        //             .room(room)
+        //             .sender(sender)
+        //             .messageContents(messageContents)
+        //             .isRead(false)
+        //             .build();
+            
+        //         messageRepository.save(message);
+        //     }
+            
 
 }
