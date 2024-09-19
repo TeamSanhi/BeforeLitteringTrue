@@ -483,7 +483,7 @@
       <div class="rightUpside">
           <!-- 프로필 -->
           <div class="profile">
-            <!-- 작성자 프로필 사진 -->
+            <!-- ****************************작성자 프로필 사진 *******************-->
             <img class="infoImage" src="./img/user.png" alt="User Photo">
             <!-- 작성자 이름 -->
             <div class="writerName">
@@ -512,7 +512,7 @@
       <!-- 하단 영역 -->
       <div class="postBottom">
           <!-- 북마크 영역 -->
-          <div class="bookmarkArea">
+          <div class="markArea">
               <!-- 북마크 하지않았을때  -->
                 <img
                 id="bookmark1"
@@ -528,11 +528,14 @@
                 src="/images/bookmark2.png"
               />
           </div>
+          <!-- 길찾기 이미지 -->
+          <div class="markArea" id="routeButton" alt="길찾기 이미지">
+              <img style="width:47px; height: 47px" src="/images/findRoute.png">
+          </div>
           <!-- 신고 이미지 -->
-          <span id="reportButton" th:data-num="${shareBoard.shareNum}">
-            <img style="width: 47px; height: 47px" src="/images/siren.png">   
-          </span>
-
+          <div class="markArea" id="reportButton" alt="신고 이미지" th:data-num="${shareBoard.shareNum}">
+              <img style="width: 47px; height: 47px" src="/images/siren.png">   
+          </div>
           <!-- 하단 우측 영역 -->
           <div class="bottomRight">
               <!-- 받을래요 버튼 -->
@@ -569,6 +572,7 @@
       src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"
     ></script>
     <script>
+      // 게시글 거래위치
       let shareLat = $("#shareLat").val();
       let shareLng = $("#shareLng").val();
       // 지도를 표시할 div
