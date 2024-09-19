@@ -50,3 +50,15 @@ public class RecycleEntity {
     @Column(name = "update_date", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime updateDate; // 수정 시간
 }
+
+// CREATE TABLE RECYCLE_BOARD (
+// recycle_num INTEGER AUTO_INCREMENT PRIMARY KEY, -- 목록 번호
+// recycle_file_name VARCHAR(100) NOT NULL, -- 이미지
+// recycle_category VARCHAR(50) NOT NULL, -- 카테고리
+// recycle_name VARCHAR(50) NOT NULL, -- 이름
+// recycle_possible VARCHAR(10) NOT NULL, -- 재활용 여부
+// recycle_contents TEXT NOT NULL, -- 분리수거 규정
+// view_count INTEGER DEFAULT 0, -- 조회수
+// update_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+// -- 갱신일
+// );
