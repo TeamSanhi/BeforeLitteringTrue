@@ -22,5 +22,9 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
 
     // 사용자의 이메일로 DB 검색
     MemberEntity findByMemberEmail(String to);
+
+    // 사용자의 일련번호로 DB 검색
+    MemberEntity findByMemberNumEquals(Integer num);
+
     
 }
