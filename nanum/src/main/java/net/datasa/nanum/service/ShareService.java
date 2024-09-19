@@ -4,9 +4,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import net.datasa.nanum.domain.dto.AlarmDTO;
-import net.datasa.nanum.domain.entity.AlarmEntity;
+import net.datasa.nanum.domain.entity.ImageEntity;
+import net.datasa.nanum.domain.dto.ImageDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -18,9 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.Util.FileManager;
-import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
-import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
 import net.datasa.nanum.repository.ImageRepository;
@@ -46,7 +45,7 @@ public class ShareService {
 
     /**
      * shareSave 메소드
-     * 
+     *
      * @param uploads    업로드한 파일
      * @param uploadPath 파일 저장할 경로
      * @param DTO        저장할 글 정보
@@ -93,7 +92,7 @@ public class ShareService {
 
     /**
      * 글 상세 조회
-     * 
+     *
      * @param shareNum 글 번호
      * @return ShareBoardDTO를 반환
      */
@@ -139,7 +138,7 @@ public class ShareService {
 
     /**
      * 게시글 삭제
-     * 
+     *
      * @param shareNum   삭제할 글번호
      * @param username   로그인한 아이디
      * @param uploadPath 파일 저장경로
@@ -168,11 +167,11 @@ public class ShareService {
 
     /**
      * 게시글 수정
-     * 
+     *
      * @param shareBoardDTO 수정할 글정보
      * @param username      로그인한 아이디
      * @param uploadPath    파일 저장할 경로
-     * @param uploads        업로드된 파일
+     * @param uploads       업로드된 파일
      */
     public void edit(ShareBoardDTO shareBoardDTO, String username, String uploadPath, List<MultipartFile> uploads)
             throws Exception {
@@ -256,7 +255,7 @@ public class ShareService {
 
     /**
      * 나눔글 수 합산
-     * 
+     *
      * @param memberNum 멤버 엔티티
      * @return 멤버 나눔글 수 합산
      */
@@ -266,86 +265,79 @@ public class ShareService {
     }
 
     /**
-     * 작성한 나눔글 리스트 entity에서 dto로 변환
-     * @param member 멤버 엔티티
-     * @return 나눔글 리스트 반환
+     * 나눔글 entity에서 dto로 변환
+     * @param shareBoardEntity 나눔글 엔티티
+     * @return 나눔글 DTO
      */
-    public List<ShareBoardDTO> getGiveList(MemberEntity member) {
-        List<ShareBoardEntity> shareBoardEntities = shareBoardRepository.findGiveListByMemberNum(member);
-        List<ShareBoardDTO> shareBoardDTOS = new ArrayList<>();
+    private ShareBoardDTO convertToDTO(ShareBoardEntity shareBoardEntity) {
+        ShareBoardDTO shareBoardDTO = new ShareBoardDTO();
+        shareBoardDTO.setShareNum(shareBoardEntity.getShareNum());
+        shareBoardDTO.setMemberNum(shareBoardEntity.getMember().getMemberNum());
 
-        for (ShareBoardEntity shareBoardEntity : shareBoardEntities) {
-            ShareBoardDTO shareBoardDTO = new ShareBoardDTO();
-            shareBoardDTO.setShareNum(shareBoardEntity.getShareNum());
-            shareBoardDTO.setMemberNum(shareBoardEntity.getMember().getMemberNum());
+        if (shareBoardEntity.getReceiver() != null) {
             shareBoardDTO.setReceiverNum(shareBoardEntity.getReceiver().getMemberNum());
-            shareBoardDTO.setShareTitle(shareBoardEntity.getShareTitle());
-            shareBoardDTO.setShareContents(shareBoardEntity.getShareContents());
-            shareBoardDTO.setShareLat(shareBoardEntity.getShareLat());
-            shareBoardDTO.setShareLng(shareBoardEntity.getShareLng());
-            shareBoardDTO.setShareCompleted(shareBoardEntity.getShareCompleted());
-            shareBoardDTO.setShareDate(shareBoardEntity.getShareDate());
-            shareBoardDTO.setReportCount(shareBoardEntity.getReportCount());
-            shareBoardDTO.setBookmarkCount(shareBoardEntity.getBookmarkCount());
-            // shareBoardDTO.setImageList(shareBoardEntity.getImageList());
-            shareBoardDTOS.add(shareBoardDTO);
+        } else {
+            shareBoardDTO.setReceiverNum(null);
         }
-        return shareBoardDTOS;
+        shareBoardDTO.setShareTitle(shareBoardEntity.getShareTitle());
+        shareBoardDTO.setShareContents(shareBoardEntity.getShareContents());
+        shareBoardDTO.setShareLat(shareBoardEntity.getShareLat());
+        shareBoardDTO.setShareLng(shareBoardEntity.getShareLng());
+        shareBoardDTO.setShareCompleted(shareBoardEntity.getShareCompleted());
+        shareBoardDTO.setShareDate(shareBoardEntity.getShareDate());
+        shareBoardDTO.setReportCount(shareBoardEntity.getReportCount());
+        shareBoardDTO.setBookmarkCount(shareBoardEntity.getBookmarkCount());
+
+        List<ImageDTO> imageDTOList = new ArrayList<>();
+        for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
+            if (imageEntity != null) {
+                ImageDTO imageDTO = new ImageDTO(
+                        imageEntity.getImageNum(),
+                        imageEntity.getShareBoard().getShareNum(),
+                        imageEntity.getImageFileName()
+                );
+                imageDTOList.add(imageDTO);
+            }
+        }
+        shareBoardDTO.setImageList(imageDTOList);
+
+        return shareBoardDTO;
     }
 
     /**
-     * 수령한 나눔글 리스트 entity에서 dto로 변환
+     * 작성한 나눔글 리스트 entity에서 dto로 변환
      * @param member 멤버 엔티티
-     * @return 나눔글 리스트 반환
+     * @return 나눔글 DTO 리스트
+     */
+    public List<ShareBoardDTO> getGiveList(MemberEntity member) {
+        List<ShareBoardEntity> shareBoardEntities = shareBoardRepository.findGiveListByMemberNum(member);
+        return shareBoardEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 받은 나눔글 리스트 entity에서 dto로 변환
+     * @param member 멤버 엔티티
+     * @return 나눔글 DTO 리스트
      */
     public List<ShareBoardDTO> getReceiveList(MemberEntity member) {
         List<ShareBoardEntity> shareBoardEntities = shareBoardRepository.findReceiveListByMemberNum(member);
-        List<ShareBoardDTO> shareBoardDTOS = new ArrayList<>();
-
-        for (ShareBoardEntity shareBoardEntity : shareBoardEntities) {
-            ShareBoardDTO shareBoardDTO = new ShareBoardDTO();
-            shareBoardDTO.setShareNum(shareBoardEntity.getShareNum());
-            shareBoardDTO.setMemberNum(shareBoardEntity.getMember().getMemberNum());
-            shareBoardDTO.setReceiverNum(shareBoardEntity.getReceiver().getMemberNum());
-            shareBoardDTO.setShareTitle(shareBoardEntity.getShareTitle());
-            shareBoardDTO.setShareContents(shareBoardEntity.getShareContents());
-            shareBoardDTO.setShareLat(shareBoardEntity.getShareLat());
-            shareBoardDTO.setShareLng(shareBoardEntity.getShareLng());
-            shareBoardDTO.setShareCompleted(shareBoardEntity.getShareCompleted());
-            shareBoardDTO.setShareDate(shareBoardEntity.getShareDate());
-            shareBoardDTO.setReportCount(shareBoardEntity.getReportCount());
-            shareBoardDTO.setBookmarkCount(shareBoardEntity.getBookmarkCount());
-            // shareBoardDTO.setImageList(shareBoardEntity.getImageList());
-            shareBoardDTOS.add(shareBoardDTO);
-        }
-        return shareBoardDTOS;
+        return shareBoardEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
      * 북마크한 나눔글 리스트 entity에서 dto로 변환
      * @param member 멤버 엔티티
-     * @return 나눔글 리스트 반환
+     * @return 나눔글 DTO 리스트
      */
     public List<ShareBoardDTO> getBookmarkList(MemberEntity member) {
         List<ShareBoardEntity> shareBoardEntities = shareBoardRepository.findBookmarkListByMemberNum(member);
-        List<ShareBoardDTO> shareBoardDTOS = new ArrayList<>();
-
-        for (ShareBoardEntity shareBoardEntity : shareBoardEntities) {
-            ShareBoardDTO shareBoardDTO = new ShareBoardDTO();
-            shareBoardDTO.setShareNum(shareBoardEntity.getShareNum());
-            shareBoardDTO.setMemberNum(shareBoardEntity.getMember().getMemberNum());
-            shareBoardDTO.setReceiverNum(shareBoardEntity.getReceiver().getMemberNum());
-            shareBoardDTO.setShareTitle(shareBoardEntity.getShareTitle());
-            shareBoardDTO.setShareContents(shareBoardEntity.getShareContents());
-            shareBoardDTO.setShareLat(shareBoardEntity.getShareLat());
-            shareBoardDTO.setShareLng(shareBoardEntity.getShareLng());
-            shareBoardDTO.setShareCompleted(shareBoardEntity.getShareCompleted());
-            shareBoardDTO.setShareDate(shareBoardEntity.getShareDate());
-            shareBoardDTO.setReportCount(shareBoardEntity.getReportCount());
-            shareBoardDTO.setBookmarkCount(shareBoardEntity.getBookmarkCount());
-            // shareBoardDTO.setImageList(shareBoardEntity.getImageList());
-            shareBoardDTOS.add(shareBoardDTO);
-        }
-        return shareBoardDTOS;
+        return shareBoardEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
+
 }
