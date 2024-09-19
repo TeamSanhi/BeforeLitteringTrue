@@ -240,7 +240,6 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
-                    alert(JSON.stringify(response));
                     if (response.length > 0) {
                         $("#showData").html("");
                         for (let i = 0; i < response.length; i++) {
@@ -248,7 +247,8 @@
                             $("#showData").append(`
                 <p>
                     ${item.alarmDay},
-                    ${item.alarmContents}
+                    ${item.alarmContents},
+                    <button id="alarmEdit">알림 편집</button>
                 </p>
             `);
                         }
@@ -268,18 +268,17 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
-                    alert(JSON.stringify(response));
                     if (response.length > 0) {
                         $("#showData").html("");  // 기존 내용을 비우기
                         for (let i = 0; i < response.length; i++) {  // int 대신 let 사용
                             var item = response[i];
                             $("#showData").append(`
-                <p>
+                <p><a href="/share/read?shareNum=${item.shareNum}">
                     ${item.shareTitle},
                     ${item.shareCompleted},
                     ${item.shareDate},
                     ${item.shareContents}
-                </p>
+                </a></p>
             `);
                         }
                     } else {
@@ -298,17 +297,16 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
-                    alert(JSON.stringify(response));
                     if (response.length > 0) {
                         $("#showData").html("");
                         for (let i = 0; i < response.length; i++) {
                             var item = response[i];
                             $("#showData").append(`
-                <p>
+                <p><a href="/share/read?shareNum=${item.shareNum}">
                     ${item.shareTitle},
                     ${item.shareDate},
                     ${item.shareContents}
-                </p>
+                </a></p>
             `);
                         }
                     } else {
@@ -327,17 +325,16 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function (response) {
-                    alert(JSON.stringify(response));
                     if (response.length > 0) {
                         $("#showData").html("");
                         for (let i = 0; i < response.length; i++) {
                             var item = response[i];
                             $("#showData").append(`
-                <p>
+                <p><a href="/share/read?shareNum=${item.shareNum}">
                     ${item.shareTitle},
                     ${item.shareDate},
                     ${item.shareContents}
-                </p>
+                </a></p>
             `);
                         }
                     } else {
@@ -359,7 +356,7 @@
         <p><a href="">로고</a></p>
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
-        <p><a th:href="@{/recycle/recycleList}">버려요</a></p>
+        <p><a th:href="@{/recycle/list}">버려요</a></p>
     </nav>
     <!--  회원 기능  -->
     <div class="member">
