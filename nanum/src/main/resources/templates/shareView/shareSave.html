@@ -7,6 +7,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글작성</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/share_Save.css">
+
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
@@ -89,16 +92,128 @@
     </script>
 </head>
 <body>
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+
+        <!-- 로고 -->
+        <div class="logo">
+            <a href="/">
+                <img src="/images/logo.png" class="logoImg">
+            </a>
+        </div>
+  
+        <!-- 우리는 -->
+        <div class="projectInfo">
+            <a href="/info/service">우리는</a>
+        </div>
+  
+        <!-- 나눠요 -->
+        <div class="projectInfo">
+            <a href="/share/list">나눠요</a>
+        </div>
+  
+        <!-- 버려요 -->
+        <div class="projectInfo">
+            <a href="/recycle/list">버려요</a>
+        </div>
+  
+        <!-- 오른쪽 정렬 -->
+        <div class="rightGroup">
+            <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+            <th:block sec:authorize="not isAuthenticated()">
+                <!-- 회원가입 -->
+                <div class="join">
+                    <span class="joinHover">
+                        <a href="/member/join">회원가입</a>
+                    </span>
+                </div>
+  
+                <!-- 로그인 -->
+                <div class="login">
+                    <a href="/member/loginForm">
+                        <span class="loginHover">
+                            로그인
+                        </span>
+                    </a>
+                </div>
+            </th:block>
+  
+            <!-- 로그인 하였을시 보여줄 페이지 -->
+            <th:block sec:authorize="isAuthenticated()">
+                <!-- 나눔 쪽지 -->
+                <div class="message" id="messages">
+                    <span class="messageHover">
+                        나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
+                    </span>
+                </div>
+  
+                <div id="messagesModal" class="modal">
+                    <div class="modal-content">
+                        <span id="messagesClose" class="close">&times;</span>
+                        <h2>쪽지 목록</h2>
+                    </div>
+                </div>
+  
+                <div class="mypage">
+                    <a th:href="@{/myPage/view}">
+                        <span class="mypageHover">
+                            마이페이지
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- 로그아웃 -->
+                <div class="logout">
+                    <a th:href="@{/member/logout}">
+                        <span class="logoutHover">
+                            로그아웃
+                        </span>
+                    </a>
+                </div>
+            </th:block>
+  
+        </div>
+    </div>
+  
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
+
+    <!-- 게시글 작성 폼  -->
     <form id="Save" method="post" action="save" enctype="multipart/form-data">
-        <p>제목 <input type="text" name="shareTitle" id="title"></p>
-        <p>내용 <textarea type="text" name="shareContents" id="content"></textarea></p>
-        <!-- 지도 태그 -->
-        <div id="map" style="width:50%;height:350px;"></div>
-        <p><em>지도를 클릭해주세요!</em></p> 
-        
-        <!-- 위도경도 태그 숨김처리-->
-        <input type="text" name="shareLat" id="lat">
-        <input type="text" name="shareLng" id="lng">
+
+        <!-- 게시글 작성 전체 영역 -->
+        <div class="mainContainer">
+            <!-- 왼쪽 영역_게시글 작성 (제목 / 본문 / 사진) -->
+            <div class="leftContainer">            
+                <!-- 제목 작성 영역 -->
+                <div class="writeTitleArea">
+                    <!-- 제목 -->
+                    <input type="text" name="shareTitle" id="writeTitle" placeholder="제목을 입력해주세요!" required>
+                </div>
+
+                <!-- 제목, 본문 구분선 -->
+                <hr>
+
+                <!-- 본문 작성 영역 -->
+                <div class="postContentArea">               
+                    <!-- 본문 작성 -->
+                    <textarea class="postContent" name="shareContents" id="postContent" placeholder="내용을 입력해주세요!" required></textarea>
+                </div> 
+            </div>   
+            
+            <!-- 오른쪽 영역_지도 -->
+            <div class="rightContainer">
+                <!-- 지도 영역 -->
+                <div class="mapArea" id="map">
+                    <!-- 위도경도 태그 숨김처리-->
+                    <input type="hidden" name="shareLat" id="lat">
+                    <input type="hidden" name="shareLng" id="lng">
+                </div>
+            </div>
+            
+        </div>
+
+
 
         <!-- 파일첨부 태그 이미지가 올라가면 올라온 이미지의 갯수를 확인하는 스크립트 함수를 실행 -->
         <p>사진첨부<input type="file" name="uploads" id="file" multiple onchange="checkFileLimit(event)"></p>
@@ -109,6 +224,24 @@
         <!-- form Save Controller 로 전송  -->
         <p><input type="submit" value="저장"></p>
     </form>
+
+
+
+    <!-- 모달 팝업 -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span>나누실래요?</span>
+            <div class="modal-buttons">
+                <button id="cancelButton">잠시만요</button>
+                <button id="confirmButton">나눌래요</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 저작권 정보 -->
+    <div class="rightArea">
+        © 2024 Team San, Hai. All rights reserved.
+    </div>
 
     <!-- 지도 자바스크립트 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
