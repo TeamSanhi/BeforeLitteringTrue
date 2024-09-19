@@ -64,8 +64,8 @@ public class ShareController {
     /**
      * 나눔 게시글 작성 후 저장
      * 
-     * @param DTO    정보를 받아옴
-     * @param user   로그인한 유저 정보를 받아옴
+     * @param DTO     정보를 받아옴
+     * @param user    로그인한 유저 정보를 받아옴
      * @param uploads 업로드할 파일 정보를 받아옴
      * @return
      */
@@ -129,8 +129,7 @@ public class ShareController {
     public String read(
             Model model,
             @RequestParam("shareNum") Integer shareNum,
-            Authentication authentication
-            ) {
+            Authentication authentication) {
 
         log.debug("share/read 컨트롤러 지나감 shareNum : {}, {}", shareNum);
 
@@ -144,7 +143,6 @@ public class ShareController {
             AuthenticatedUser user = (AuthenticatedUser) authentication.getPrincipal();
             model.addAttribute("userNum", user.getNum());
         }
-        
 
         // read로 이동
         return "shareView/shareRead";
@@ -204,7 +202,7 @@ public class ShareController {
      * 게시글 수정 처리
      * 
      * @param shareBoardDTO 수정할 글 정보
-     * @param user     로그인한 사용자 정보
+     * @param user          로그인한 사용자 정보
      * @return
      */
     @PostMapping("edit")
