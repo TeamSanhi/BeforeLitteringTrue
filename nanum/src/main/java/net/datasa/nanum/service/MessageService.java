@@ -104,6 +104,8 @@ public class MessageService {
                 RoomEntity room = findRoom(creator.getMemberNum(), shareBoard.getShareNum());
                 MemberEntity receiver = memberRepository.findById(shareBoard.getMember().getMemberNum())
                                 .orElseThrow(() -> new EntityNotFoundException("게시자 정보를 찾을 수 없습니다."));
+
+                                                
                 if (room == null) {
                         room = new RoomEntity();
                         room.setCreator(creator);
@@ -118,39 +120,60 @@ public class MessageService {
                 messageRepository.save(message);
         }
 
-    public List<MessageDTO> getUserRoomsWithLatestMessages(Integer memberNum) {
-        MemberEntity member = memberRepository.findById(memberNum)
-        .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+        public List<MessageDTO> getUserRoomsWithLatestMessages(Integer memberNum) {
+                MemberEntity member = memberRepository.findById(memberNum)
+                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
-        List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member, member);
+                List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member, member);
 
-        List<MessageDTO> result = rooms.stream()
-        .map(room -> {
-            List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
-            MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
+                List<MessageDTO> result = rooms.stream()
+                .map(room -> {
+                        List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
+                        MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
                 
-                int creator = room.getCreator().getMemberNum();
-                int receiver = room.getReceiver().getMemberNum();
+                        int creator = room.getCreator().getMemberNum();
+                        int receiver = room.getReceiver().getMemberNum();
 
-                if (memberNum == creator || memberNum == receiver) {
-                        MessageDTO dto = MessageDTO.builder()
-                        .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
-                        .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
-                        .roomNum(room.getRoomNum())
-                        .messageContents(latestMessage != null ? latestMessage.getMessageContents() : null)
-                        .deliverDate(latestMessage != null ? latestMessage.getDeliverDate() : null)
-                        .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
-                        .build();
+                        if (memberNum == creator || memberNum == receiver) {
+                                MessageDTO dto = MessageDTO.builder()
+                                .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
+                                .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
+                                .receiverNum(memberNum == creator ? room.getReceiver().getMemberNum() : room.getCreator().getMemberNum())
+                                .shareNum(room.getShareBoard().getShareNum())
+                                .shareTitle(room.getShareBoard().getShareTitle())
+                                .roomNum(room.getRoomNum())
+                                .messageContents(latestMessage != null ? latestMessage.getMessageContents() : null)
+                                .deliverDate(latestMessage != null ? latestMessage.getDeliverDate() : null)
+                                .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
+                                .build();
 
-                        return dto;                        
-                }
-                else {
-                        return null;
-                }       
-            })
-            .filter(Objects::nonNull)   // null값 필터링
-            .collect(Collectors.toList());
-        return result;
-    }        
+                                return dto;
+                        }
+                        else {
+                                return null;
+                        }
+                })
+                .filter(Objects::nonNull)   // null값 필터링
+                .collect(Collectors.toList());
+                return result;
+        }
+
+        // public void saveMessage(int roomNum, String messageContents, int senderNum) {
+        //         RoomEntity room = roomRepository.findById(roomNum)
+        //             .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
+            
+        //         MemberEntity sender = memberRepository.findById(senderNum)
+        //             .orElseThrow(() -> new EntityNotFoundException("발신자를 찾을 수 없습니다."));
+            
+        //         MessageEntity message = MessageEntity.builder()
+        //             .room(room)
+        //             .sender(sender)
+        //             .messageContents(messageContents)
+        //             .isRead(false)
+        //             .build();
+            
+        //         messageRepository.save(message);
+        //     }
+            
 
 }
