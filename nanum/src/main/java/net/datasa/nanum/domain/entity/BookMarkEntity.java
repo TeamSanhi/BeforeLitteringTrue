@@ -41,3 +41,13 @@ public class BookMarkEntity {
     @JoinColumn(name = "share_num", referencedColumnName = "share_num")
     private ShareBoardEntity shareBoard;
 }
+
+// CREATE TABLE BOOKMARK (
+// bookmark_num INTEGER AUTO_INCREMENT PRIMARY KEY, -- 북마크 키
+// member_num INTEGER, -- 회원 번호
+// share_num INTEGER, -- 게시글 번호
+// CONSTRAINT FOREIGN KEY (member_num) REFERENCES MEMBER (member_num) ON DELETE
+// CASCADE,
+// CONSTRAINT FOREIGN KEY (share_num) REFERENCES SHARE_BOARD (share_num) ON
+// DELETE CASCADE
+// );
