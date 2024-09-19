@@ -24,4 +24,6 @@ public class MessageDTO {
 
     // entity에 없는 변수명
     private Integer receiverNum;        // 수신자 번호
+    private Integer shareWriteNum;      // 게시글 작성자 번호
+    private Boolean shareCompleted;     // 나눔 완료 여부
 }

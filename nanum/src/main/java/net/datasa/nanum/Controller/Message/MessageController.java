@@ -110,6 +110,7 @@ public class MessageController {
                 .isRead(false)
                 .build();
         
+                
         // 엔티티를 DB에 저장
          messageService.saveMessage(message);
          
@@ -121,6 +122,9 @@ public class MessageController {
     @GetMapping("rooms")
     @ResponseBody
     public List<MessageDTO> getUserRoomsWithLatestMessages(@RequestParam("memberNum") Integer memberNum) {
+
+        log.debug("가져오는 쪽지 정보: {}", messageService.getUserRoomsWithLatestMessages(memberNum));
+
         return messageService.getUserRoomsWithLatestMessages(memberNum);
     }
 
