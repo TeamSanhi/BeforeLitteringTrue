@@ -18,6 +18,7 @@
 
     <!-- 스타일 정의 -->
     <style type="text/css">
+      /* 기본 스타일 */
       .fixed_img_col {
         margin: 0 auto;
         text-align: center;
@@ -41,6 +42,7 @@
         object-fit: cover;
       }
 
+      /* 팝업 오버레이 스타일 */
       .popup-overlay {
         display: none;
         position: fixed;
@@ -49,8 +51,10 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
+        z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
       }
 
+      /* 팝업 콘텐츠 스타일 */
       .popup-content {
         position: absolute;
         top: 50%;
@@ -60,47 +64,82 @@
         padding: 20px;
         border-radius: 10px;
         display: flex;
-        width: 700px; /* 팝업 너비 조정 */
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        width: 900px; /* 팝업 너비를 900px로 증가 */
+        max-width: 90vw; /* 뷰포트 너비의 90%로 제한 */
+        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
       }
 
+      /* 팝업 왼쪽 이미지 영역 */
       .popup-left {
         flex: 1;
-      }
-
-      .popup-right {
-        flex: 1;
-        padding-left: 15px; /* 이미지와 텍스트 사이 여백 */
+        max-width: 50%; /* 이미지 영역의 최대 너비를 50%로 설정 */
       }
 
       .popup-left img {
         width: 100%;
         height: auto; /* 이미지 비율 유지 */
-        max-height: 400px; /* 최대 높이 설정 */
+        max-height: 500px; /* 최대 높이 설정 */
         object-fit: cover;
+        border-radius: 5px;
       }
 
+      /* 팝업 오른쪽 텍스트 영역 */
+      .popup-right {
+        flex: 1;
+        padding-left: 20px; /* 이미지와 텍스트 사이 여백 */
+        max-width: 50%; /* 텍스트 영역의 최대 너비를 50%로 설정 */
+      }
+
+      /* 닫기 버튼 스타일 */
       .close-btn {
         float: right;
         cursor: pointer;
+        font-size: 24px; /* 폰트 크기 증가 */
+        font-weight: bold;
       }
 
-      /* 텍스트 스타일 */
+      .close-btn:hover {
+        color: red;
+      }
+
+      /* 제목과 카테고리의 Flexbox 컨테이너 */
+      .popup-right .title-category {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: 10px;
+      }
+
+      /* 제목 스타일 */
       .popup-right h2 {
         margin: 0;
-        font-size: 22px;
-        border-bottom: 1px solid black;
-        padding-bottom: 10px;
+        font-size: 24px; /* 폰트 크기 증가 */
       }
 
+      /* 카테고리 스타일 */
+      .popup-right .category {
+        margin-left: 10px;
+        font-size: 16px; /* 제목보다 작은 폰트 크기 */
+        color: #666; /* 회색 색상 */
+      }
+
+      /* 재활용 여부 스타일 */
+      .popup-right .possible {
+        margin-bottom: 15px;
+        font-weight: bold;
+        color: #000; /* 텍스트 색상 검정 */
+      }
+
+      /* 구분선 스타일 */
+      .popup-right .divider {
+        border: none;
+        border-top: 1px solid #ccc;
+        margin: 15px 0;
+      }
+
+      /* 기타 기존 스타일 유지 */
       .popup-right p {
         font-size: 16px;
         margin: 10px 0;
-      }
-
-      .popup-right .category {
-        margin-bottom: 15px;
-        font-weight: bold;
       }
 
       .popup-right .updated-date {
@@ -136,7 +175,7 @@
         justify-content: space-between;
         gap: 20px;
         position: absolute;
-        top: 0px;
+        top: 10px;
         right: 10px;
       }
 
@@ -176,6 +215,24 @@
         color: black;
         text-decoration: none;
       }
+
+      /* 네비게이션 바 스타일 (추가 가능) */
+      .nav {
+        background-color: #f8f9fa;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .nav a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+
+      .nav a:hover {
+        color: #007bff;
+      }
     </style>
 
     <!-- 스크립트 정의 -->
@@ -185,6 +242,7 @@
         fetch(`/recycle/read?recycleNum=` + recycleNum)
           .then((response) => response.json())
           .then((data) => {
+            console.log(data); // 데이터 확인
             // 팝업창의 내용을 동적으로 설정
             document.getElementById("popupTitle").textContent =
               data.recycleName;
@@ -192,7 +250,10 @@
               data.recycleContents;
             document.getElementById("popupCategory").textContent =
               data.recycleCategory;
-            document.getElementById("popupDate").textContent = data.recycleDate;
+            document.getElementById("popupPossible").textContent =
+              data.recyclePossible;
+            document.getElementById("popupDate").textContent =
+              data.updateDate || data.recycleDate;
 
             // 이미지가 제대로 표시되도록 설정
             document.getElementById("popupImage").src =
@@ -238,12 +299,14 @@
           }
         });
       });
+
       // Esc 키로 팝업창 닫기
       document.addEventListener("keydown", function (event) {
         if (event.key === "Escape") {
           closePopup();
         }
       });
+
       function pagingFormSubmit(page) {
         let form = document.createElement("form");
         form.method = "GET";
@@ -336,7 +399,7 @@
         <span
           th:if="${boardPage.totalPages > 0}"
           th:each="counter : ${#numbers.sequence((page - linkSize < 1 ? 1 : page - linkSize), 
-    (page + linkSize > boardPage.totalPages ? boardPage.totalPages : page + linkSize))}"
+(page + linkSize > boardPage.totalPages ? boardPage.totalPages : page + linkSize))}"
         >
           <th:block th:if="${counter == page}">
             <b th:text="${counter}"></b>
@@ -406,15 +469,23 @@
             id="popupImage"
             src=""
             alt="게시물 이미지"
-            style="width: 300px; height: 300px; object-fit: cover"
+            style="width: 100%; height: auto; object-fit: cover"
           />
         </div>
 
         <!-- 오른쪽: 텍스트 내용 -->
         <div class="popup-right">
           <span class="close-btn" onclick="closePopup()">X</span>
-          <h2 id="popupTitle">제목</h2>
-          <p id="popupCategory" class="category">카테고리</p>
+          <!-- 제목과 카테고리를 같은 줄에 배치 -->
+          <div class="title-category">
+            <h2 id="popupTitle">제목</h2>
+            <span id="popupCategory" class="category">카테고리</span>
+          </div>
+          <!-- 재활용 여부를 제목과 카테고리 아래에 배치 -->
+          <p id="popupPossible" class="possible">재활용 여부</p>
+          <!-- 구분선 추가 -->
+          <hr class="divider" />
+          <!-- 내용과 최종 업데이트 날짜는 그대로 유지 -->
           <p id="popupContents">내용</p>
           <p id="popupDate" class="updated-date">최종 업데이트 날짜</p>
         </div>
