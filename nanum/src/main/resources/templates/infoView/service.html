@@ -8,15 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>에코나비 - 환경 보호 플랫폼</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-        // 여기에 기존의 JavaScript 코드를 유지하세요
-    </script>
     <style>
-        /* 간단한 스타일 추가 (필요 시 프론트엔드 개발자와 협업하여 CSS를 분리하세요) */
+        /* 기본 스타일 설정 */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            line-height: 1.6;
+            color: #333;
         }
         header, nav, main, footer {
             padding: 20px;
@@ -30,22 +29,48 @@
         nav {
             background-color: #f2f2f2;
             text-align: center;
+            padding: 10px 0;
         }
         nav a {
             margin: 0 15px;
             text-decoration: none;
             color: #333;
+            font-weight: bold;
+        }
+        nav a:hover {
+            color: #4CAF50;
         }
         section {
             margin-bottom: 40px;
         }
         h2 {
             color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #4CAF50;
+        }
+        ul, dl {
+            margin-left: 20px;
         }
         .map-container {
             width: 100%;
             height: 70vh;
             margin-bottom: 40px;
+        }
+        footer {
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.9em;
+        }
+        a.email-link {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        a.email-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -53,7 +78,7 @@
     <!-- 헤더 섹션 -->
     <header>
         <h1>환경을 지키는 실천, 우리가 함께합니다</h1>
-        <p>물품 나눔과 올바른 분리수거 정보를 제공하여 일상 속에서 환경 보호를 실천할 수 있는 기회를 제공합니다.</p>
+        <p>에코나비는 물품 나눔과 올바른 분리수거 정보를 제공하여 일상 속에서 환경 보호를 실천할 수 있는 기회를 드립니다.</p>
     </header>
 
     <!-- 내비게이션 바 -->
@@ -71,9 +96,12 @@
         <!-- 프로젝트 소개 섹션 -->
         <section id="project-intro">
             <h2>팀 프로젝트 소개</h2>
-            <p><strong>환경 보호 플랫폼</strong>은 저희 팀의 혁신적인 아이디어로 탄생한 지속 가능한 미래를 위한 디지털 솔루션입니다. 나눔과 분리수거의 가치를 극대화하여, 일상 속 작은 실천이 큰 변화를 이끌어낼 수 있는 서비스를 제공합니다.</p>
+            <p><strong>에코나비(EcoNavi)</strong>는 저희 팀의 혁신적인 아이디어로 탄생한 지속 가능한 미래를 위한 디지털 솔루션입니다. **에코(Eco)**는 환경을, **네비(Navi)**는 네비게이션을 의미하며, 이는 사용자들이 환경 보호를 향한 길을 안내받을 수 있다는 의미를 담고 있습니다. 현대 사회에서 급격히 증가하는 자원 낭비와 환경 오염 문제를 해결하고자, 나눔과 분리수거의 가치를 극대화하여 일상 속 작은 실천이 큰 변화를 이끌어낼 수 있는 서비스를 제공합니다.</p>
             
-            <h3>플랫폼의 주요 목표</h3>
+            <h3>왜 에코나비를 시작했는가?</h3>
+            <p>현대인의 바쁜 일상 속에서 환경 보호는 종종 간과되기 쉽습니다. 저희 팀은 이러한 현실을 목격하고, 더 많은 사람들이 쉽게 환경 보호에 참여할 수 있는 방법을 찾고자 했습니다. 자원의 낭비를 줄이고, 커뮤니티 내에서의 협력을 촉진함으로써 지속 가능한 삶을 지원하는 플랫폼을 개발하게 되었습니다. **에코나비**는 이러한 문제를 해결하고자 개발되었으며, 사용자들이 물품을 쉽게 나누고, 올바르게 분리수거할 수 있도록 돕습니다.</p>
+            
+            <h3>에코나비의 주요 목표</h3>
             <ul>
                 <li><strong>자원 순환의 가치 재발견</strong>: 나눔을 통해 물건을 재사용하고 환경 보호를 실천합니다.</li>
                 <li><strong>올바른 분리수거</strong>: 정확한 분리수거 정보를 제공하여 지속 가능한 생활을 돕습니다.</li>
@@ -114,19 +142,13 @@
         <section id="map-section">
             <h2>나눔 장소 지도</h2>
             <div id="map" class="map-container"></div>
+            <p><a href="https://map.kakao.com/" target="_blank">2km Kakao Map으로 이동 (새창 열림)</a></p>
         </section>
 
         <!-- 팀원 소개 섹션 -->
         <section id="team">
             <h2>팀원 소개</h2>
-            <ul>
-                <li><strong>상하</strong>: 팀장, 버려요/마이페이지 기능 담당 개발자. 서비스 전반의 기능 구현과 상하이 햄버거를 담당합니다.</li>
-                <li><strong>현영</strong>: 버려요/마이페이지 기능 개발 담당. 상하이와 함께 빅맥 개발 및 유지 보수를 담당합니다.</li>
-                <li><strong>용원</strong>: 중국어 번역을 담당하며, 나눠요 기능 개발자. 글로벌 사용자를 위한 언어 지원과 기능 개발을 맡고 있습니다.</li>
-                <li><strong>연규</strong>: 나눠요 기능 서프라이즈 개발자. 위치 기반 나눔 기능을 설계하고 사용자 인터페이스를 최적화합니다.</li>
-                <li><strong>혜리</strong>: 서비스 전반 디자인 담당. 마블 히어로 이미지와 버려요 관련 그래픽 디자인을 제작하여 서비스의 비주얼 아이덴티티를 담당합니다.</li>
-                <li><strong>재현</strong>: 프로젝트 제안서 작성 및 서비스 효과 분석 담당. 프로젝트 발표 준비 및 간식을 총괄합니다.</li>
-            </ul>
+            <ul> <li><strong>상하</strong>: 팀장 & 코드의 슈퍼히어로! 에코나비의 모든 기능을 마법처럼 구현하며, 팀의 웃음 폭탄 발사기. 커피 없이는 절대 개발을 시작하지 않는 커피 중독자.</li> <li><strong>현영</strong>: 버려요/마이페이지 기능 개발의 닌자. 상하와 함께 버그를 한 방에 처리하며, 가끔씩 팀원들에게 비밀리에 초콜릿을 나눠주는 달콤한 비밀 요원.</li> <li><strong>용원</strong>: 일본어 번역의 닌자 & 나눠요 개발자. 글로벌 사용자를 위해 언어 장벽을 부숴버리고, 스시 먹방 챔피언으로도 유명. 번역할 때마다 사케 한 잔!</li> <li><strong>연규</strong>: 나눔 기능의 GPS 마스터. 위치 기반 나눔을 설계하며, 항상 지도를 들고 다녀 길을 잃지 않는 인간 나침반. 길 찾기 퀴즈 대회 우승자!</li> <li><strong>혜리</strong>: 디자인의 요정 & 그래픽 마법사. 히어로 이미지와 버려요 관련 그래픽을 마법처럼 창조하며, 색상의 여왕. 팀의 비주얼 스파크!</li> <li><strong>재현</strong>: 제안서의 마술사 & QA 탐정. 프로젝트 발표 준비를 마법처럼 완벽하게 만들어주며, 모든 오류를 찾아내는 탐정 역할. 간식 챙기기 대가로 팀의 에너지를 책임집니다.</li> </ul>
         </section>
 
         <!-- 서비스의 가치 섹션 -->
@@ -160,7 +182,7 @@
             <p>서비스에 대한 궁금증이 있으시다면 <a href="#faq">FAQ 페이지</a>를 참조하시거나, 고객센터에 문의해 주세요.</p>
             <ul>
                 <li><strong>고객센터 전화</strong>: 010-3016-8935</li>
-                <li><strong>이메일</strong>: <a href="mailto:support@greenplatform.com">jaehyeon8935@naver.com</a></li>
+                <li><strong>이메일</strong>: <a href="mailto:jaehyeon8935@naver.com" class="email-link">jaehyeon8935@naver.com</a></li>
             </ul>
         </section>
     </main>
@@ -191,7 +213,7 @@
             disableClickZoom: false // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
         });
 
-        //내위치 가져오기
+        // 내 위치 가져오기
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                 let lat = position.coords.latitude; // 위도
@@ -205,7 +227,7 @@
             alert("Geolocation을 지원하지 않는 브라우저입니다.");
         }
 
-        //마커를 저장할 배열 
+        // 마커를 저장할 배열 
         let markers = [];
         let openInfoWindow = null;  // 열린 인포윈도우 추적
 
@@ -229,7 +251,7 @@
 
         // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
         function triggerAjax() {
-            //지도의 영역을 불러온다. 
+            // 지도의 영역을 불러온다. 
             let bounds = map.getBounds();
             let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
             let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
@@ -239,12 +261,12 @@
             // data에 위도, 경도, 검색정보를 담기
             let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng}
 
-            //지도 영역이 변할때마다 ajax를 실행시킨다.
+            // 지도 영역이 변할때마다 ajax를 실행시킨다.
             $.ajax({
                 url: '/share/serviceList',
                 type: 'get',
-                data: data, //남서 북서 끝단의 위도 경도 정보를 보낸다. 
-                //성공시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
+                data: data, // 남서 북서 끝단의 위도 경도 정보를 보낸다. 
+                // 성공 시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
                 success: function(mapList) {
                     // 기존 마커를 제거하고 클러스터러에서 삭제
                     clusterer.clear(); // ajax가 실행될때마다 클러스터를 비우지 않으면 클러스터에 마커가 계속 쌓인다
@@ -283,7 +305,7 @@
                 <div style="padding:5px; width:110px; height:150px;">
                     <span>${share.shareTitle}</span><br>
                     <span>${share.memberNickname}</span>
-                    <img style="width:100px; height:100px;" src="/share/download?imageNum=${share.imageList[0].imageNum}">
+                    <img style="width:100px; height:100px;" src="/share/download?imageNum=${share.imageList[0].imageNum}" alt="${share.shareTitle}">
                 </div>
             `;
 
@@ -327,7 +349,7 @@
         function removeMarkersOutOfBounds() {
             let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
             
-            //filter함수를 사용하여 마커배열을 순회해 경게 안에 있으면 유지, 없으면 삭제 
+            // filter 함수를 사용하여 마커 배열을 순회해 경계 안에 있으면 유지, 없으면 삭제 
             markers = markers.filter(function(marker) {
                 let position = marker.getPosition();
                 // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
