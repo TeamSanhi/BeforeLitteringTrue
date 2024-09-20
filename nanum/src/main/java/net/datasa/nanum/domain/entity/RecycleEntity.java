@@ -1,6 +1,8 @@
 package net.datasa.nanum.domain.entity;
 
 import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
@@ -46,7 +48,7 @@ public class RecycleEntity {
     @Column(name = "view_count", columnDefinition = "integer default 0")
     private Integer viewCount = 0; // 기본값 설정
 
-    @LastModifiedDate
+    @CreatedDate
     @Column(name = "update_date", columnDefinition = "timestamp default current_timestamp")
     private LocalDateTime updateDate; // 수정 시간
 }
