@@ -220,7 +220,7 @@
 
         // 메시지 보내기
         $("#sendMessageBtn").click(function () {
-          let roomNum = $(".message-room").data("room");
+          let roomNum = $(".message-room.active").data("room");
           let messageContents = $("#messageInput").val();
           console.log("방번호:", roomNum, "내용:", messageContents);
 
@@ -315,6 +315,45 @@
             success: function (response) {
               alert("나눔이 완료되었습니다.");
               $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+              // 나눔 완료 후 쪽지 목록 갱신
+              let memberNum = $("#messages").data("num");
+              $.ajax({
+                url: "/message/rooms",
+                method: "get",
+                data: { memberNum: memberNum },
+                success: function (data) {
+                  let messageList = "";
+                  data.forEach(function (room) {
+                    messageList += `
+              <div class="message-room" data-room="${
+                room.roomNum
+              }" data-share-num="${room.shareNum}">
+                <div class="shareBoard" data-write="${
+                  room.shareWriteNum
+                }" data-complete="${room.shareCompleted}">
+                  <strong>게시글:</strong> ${room.shareTitle}
+                </div>
+                <div class="sender" data-num="${room.receiverNum}">
+                  <strong>상대방:</strong> ${room.senderNickname}
+                </div>
+                <div>
+                  <strong>메시지:</strong> ${
+                    room.messageContents || "메시지가 없습니다."
+                  }
+                </div>
+                <div>
+                  <strong>시간:</strong> ${new Date(
+                    room.deliverDate
+                  ).toLocaleString()}
+                </div>
+              </div>`;
+                  });
+                  $("#messageListContainer").html(messageList);
+                },
+                error: function (xhr, status, error) {
+                  console.error("AJAX 요청 오류:", status, error);
+                },
+              });
             },
             error: function () {
               alert("나눔 완료 처리 중 오류가 발생했습니다.");
