@@ -154,6 +154,12 @@
           );
           $("#detailsModal").fadeIn();
 
+          // 쪽지 상세 목록에서 게시글로 이동하는 클릭 이벤트
+          $("#goToShareBoard").click(function () {
+            let shareBoardUrl = `/share/read?shareNum=${shareNum}`; // 게시글 상세 페이지로 이동하는 URL
+            window.open(shareBoardUrl, "_blank"); // 새 창에서 열기
+          });
+
           // 쪽지 상세 내역 가져오기
           $.ajax({
             url: "/message/details",
@@ -220,7 +226,7 @@
 
         // 메시지 보내기
         $("#sendMessageBtn").click(function () {
-          let roomNum = $(".message-room").data("room");
+          let roomNum = $(".message-room.active").data("room");
           let messageContents = $("#messageInput").val();
           console.log("방번호:", roomNum, "내용:", messageContents);
 
@@ -315,6 +321,45 @@
             success: function (response) {
               alert("나눔이 완료되었습니다.");
               $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+              // 나눔 완료 후 쪽지 목록 갱신
+              let memberNum = $("#messages").data("num");
+              $.ajax({
+                url: "/message/rooms",
+                method: "get",
+                data: { memberNum: memberNum },
+                success: function (data) {
+                  let messageList = "";
+                  data.forEach(function (room) {
+                    messageList += `
+              <div class="message-room" data-room="${
+                room.roomNum
+              }" data-share-num="${room.shareNum}">
+                <div class="shareBoard" data-write="${
+                  room.shareWriteNum
+                }" data-complete="${room.shareCompleted}">
+                  <strong>게시글:</strong> ${room.shareTitle}
+                </div>
+                <div class="sender" data-num="${room.receiverNum}">
+                  <strong>상대방:</strong> ${room.senderNickname}
+                </div>
+                <div>
+                  <strong>메시지:</strong> ${
+                    room.messageContents || "메시지가 없습니다."
+                  }
+                </div>
+                <div>
+                  <strong>시간:</strong> ${new Date(
+                    room.deliverDate
+                  ).toLocaleString()}
+                </div>
+              </div>`;
+                  });
+                  $("#messageListContainer").html(messageList);
+                },
+                error: function (xhr, status, error) {
+                  console.error("AJAX 요청 오류:", status, error);
+                },
+              });
             },
             error: function () {
               alert("나눔 완료 처리 중 오류가 발생했습니다.");
@@ -387,7 +432,15 @@
           </p>
 
           <!-- 쪽지 목록 모달 -->
-          <div id="messagesModal" class="modal">
+          <div
+            id="messagesModal"
+            class="modal"
+            style="
+              max-height: calc(100vh - 50px);
+              overflow-x: hidden;
+              overflow-y: auto;
+            "
+          >
             <div class="modal-content">
               <span id="messagesClose" class="close">&times;</span>
               <h2>나눔 이야기</h2>
@@ -400,6 +453,20 @@
             <div class="modal-content">
               <span id="detailsClose" class="close">&times;</span>
               <h2>쪽지 상세보기</h2>
+
+              <!-- 게시글로 이동하는 영역 추가 -->
+              <div id="goToShareBoard" style="cursor: pointer">
+                <div
+                  id="shareBoardLink"
+                  style="
+                    padding: 10px;
+                    border: 1px solid #ccc;
+                    text-align: center;
+                  "
+                >
+                  게시글로 이동
+                </div>
+              </div>
               <div id="messageDetailsContainer"></div>
               <textarea
                 id="messageInput"
