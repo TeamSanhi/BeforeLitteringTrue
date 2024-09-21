@@ -1,6 +1,7 @@
 package net.datasa.nanum.Controller.Message;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,11 @@ public class ReportRestController {
             MemberEntity reporter = memberRepository.findById(reporterNum)
                 .orElseThrow(() -> new EntityNotFoundException("신고자 정보를 찾을 수 없습니다."));
         
+            // 회원이 신고한 유저 찾기    
+            Optional<ReportEntity> isReported = reportRepository.findByMemberAndReporter(member, reporter);
+
+            // 현재 로그인한 회원이 해당 회원을 신고한 적이 없다면
+            if(!isReported.isPresent()){
             // 신고 내용을 DB에 저장
             ReportEntity report = ReportEntity.builder()
                 .member(member)
@@ -60,6 +66,9 @@ public class ReportRestController {
             reportRepository.save(report);
 
             return ResponseEntity.ok("신고가 접수되었습니다.");
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 해당 유저를 신고하였습니다.");
+            }
         } catch (JsonProcessingException e) {
             log.error("JSON 파싱 오류", e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 신고 사유 형식입니다.");
