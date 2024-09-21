@@ -433,7 +433,12 @@
           </th:block>
         </ul>
       </div>
-
+      <!-- 검색 결과가 없을 때 -->
+      <th:block th:if="${#lists.size(recycleList) == 0}">
+        <p style="text-align: center; font-size: 18px; color: red">
+          해당 품목이 없습니다.
+        </p>
+      </th:block>
       <!-- 페이지 이동 링크 -->
       <div class="pagination" style="text-align: center; margin-bottom: 20px">
         <span th:if="${boardPage.totalPages > 0 and page != 1}">
