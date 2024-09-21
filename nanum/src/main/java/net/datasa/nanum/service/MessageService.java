@@ -177,6 +177,10 @@ public class MessageService {
             
         //         messageRepository.save(message);
         //     }
-            
+        
+        public long countRoomsWithUnreadMessagesByMemberNum(int memberNum) {
+                log.debug("레포지토리에서 계산한 값: {}", messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum));
+                return messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum);
+            }
 
 }

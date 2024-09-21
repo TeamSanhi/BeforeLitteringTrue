@@ -87,9 +87,13 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
       $(document).ready(function () {
+        // 읽지 않은 쪽지 개수 가져오기
+        updateUnreadCount();
+
         // 쪽지 목록 열기 모달
         $("#messages").click(function () {
           $("#messagesModal").fadeIn();
+          updateUnreadCount(); // 쪽지 모달 열릴 때마다 개수 업데이트
 
           let memberNum = $("#messages").data("num");
 
@@ -311,8 +315,11 @@
 
         // 나눔 완료 버튼 클릭 시
         $("#shareComplete").click(function () {
-          let shareNum = $(".message-room").data("share-num");
-          let receiverNum = $(".sender").data("num");
+          let shareNum = $(".message-room.active").data("share-num");
+          let receiverNum = $(".message-room.active")
+            .find(".sender")
+            .data("num");
+          console.log("게시글:", shareNum, "받는사람:", receiverNum);
 
           $.ajax({
             url: "/share/complete",
@@ -375,10 +382,20 @@
           reportReasons.push($(this).val());
         });
         let additionalReason = $("#additionalReason").val();
-        let shareNum = $(".message-room").data("share-num");
+        let shareNum = $(".message-room.active").data("share-num");
         let reporterNum = $("#messages").data("num"); // 사용자의 ID
-        let memberNum = $(".sender").data("num"); // 상대 ID
+        let memberNum = $(".message-room.active").find(".sender").data("num"); // 상대 ID
 
+        console.log(
+          "사유:",
+          additionalReason,
+          "게시글번호:",
+          shareNum,
+          "나:",
+          reporterNum,
+          "신고당한 사람:",
+          memberNum
+        );
         // Ajax 요청으로 신고 데이터 전송
         $.ajax({
           url: "/report/submit",
@@ -394,8 +411,28 @@
             alert("신고가 접수되었습니다.");
             $("#reportModal").hide();
           },
-          error: function () {
-            alert("신고 처리 중 오류가 발생했습니다.");
+          error: function (xhr) {
+            if (xhr.status === 409) {
+              // Conflict 상태일 때
+              alert(xhr.responseText); // 이미 신고한 유저에 대한 메시지 출력
+            } else {
+              alert("신고 처리 중 오류가 발생했습니다.");
+            }
+          },
+        });
+      }
+
+      function updateUnreadCount() {
+        let memberNum = $("#messages").data("num");
+        console.log("로그인한 번호:", memberNum);
+        $.ajax({
+          url: "/message/rooms/unreadCount/" + memberNum, // 현재 로그인한 사용자의 쪽지 개수 API 호출
+          method: "get",
+          success: function (count) {
+            $("#badge").text(`(${count})`); // 읽지 않은 쪽지 개수를 badge에 업데이트
+          },
+          error: function (xhr, status, error) {
+            console.error("읽지 않은 쪽지 개수 가져오기 오류:", status, error);
           },
         });
       }
@@ -422,14 +459,24 @@
           </p>
         </th:block>
         <th:block sec:authorize="isAuthenticated()">
-          <p>
+          <!--/* <p>
             <button
               id="messages"
               th:data-num="${#authentication.principal.num}"
             >
               쪽지
             </button>
-          </p>
+          </p> */-->
+          <div
+            class="message"
+            id="messages"
+            th:data-num="${#authentication.principal.num}"
+          >
+            <span class="messageHover">
+              나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span>
+              <!-- 알림 기본값 0 -->
+            </span>
+          </div>
 
           <!-- 쪽지 목록 모달 -->
           <div
