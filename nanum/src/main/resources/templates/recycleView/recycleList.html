@@ -239,7 +239,7 @@
     <script>
       function openPopup(recycleNum) {
         // AJAX 요청으로 게시글 데이터를 불러온다
-        fetch(`/recycle/read?recycleNum=` + recycleNum)
+        fetch(`/recycle/read?recycleNum=${recycleNum}`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data); // 데이터 확인
@@ -384,6 +384,7 @@
         <ul>
           <th:block th:each="item : ${recycleList}">
             <li>
+              <p th:text="${item.recycleNum}"><!-- 항목 번호 표시 --></p>
               <a
                 href="javascript:void(0)"
                 th:onclick="'openPopup(' + ${item.recycleNum} + ')'"
