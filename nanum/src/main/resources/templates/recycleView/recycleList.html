@@ -337,6 +337,40 @@
         document.body.appendChild(form);
         form.submit();
       }
+      document.addEventListener("DOMContentLoaded", function () {
+        // 검색어 저장 함수
+        function saveSearchWord() {
+          const searchWord = document.querySelector(
+            'input[name="searchWord"]'
+          ).value;
+          if (searchWord) {
+            localStorage.setItem("lastSearchWord", searchWord); // 검색어를 localStorage에 저장
+            console.log("검색어 저장: ", searchWord); // 디버그용 콘솔 로그
+          }
+        }
+
+        // 검색창에 포커스가 갔을 때 저장된 검색어를 불러오는 함수
+        function loadSearchWord() {
+          const lastSearchWord = localStorage.getItem("lastSearchWord");
+          if (lastSearchWord) {
+            document.querySelector('input[name="searchWord"]').value =
+              lastSearchWord; // 저장된 검색어를 입력 필드에 넣음
+            console.log("이전 검색어 불러오기: ", lastSearchWord); // 디버그용 콘솔 로그
+          } else {
+            console.log("저장된 검색어가 없습니다."); // 디버그용 콘솔 로그
+          }
+        }
+
+        // 검색 폼 제출 시 검색어 저장
+        document
+          .querySelector(".search-bar form")
+          .addEventListener("submit", saveSearchWord);
+
+        // 검색창 클릭 시(포커스) 이전 검색어 불러오기
+        document
+          .querySelector('input[name="searchWord"]')
+          .addEventListener("focus", loadSearchWord);
+      });
     </script>
   </head>
   <body>
@@ -471,6 +505,7 @@
             name="searchWord"
             placeholder="검색어를 입력하세요"
             th:value="${searchWord}"
+            onfocus="loadSearchWord()"
           />
           <button type="submit">검색</button>
         </form>
