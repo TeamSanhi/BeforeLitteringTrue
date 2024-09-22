@@ -1,5 +1,19 @@
 package net.datasa.nanum.Controller.MyPage;
 
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
@@ -9,15 +23,6 @@ import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
 import net.datasa.nanum.service.MemberService;
 import net.datasa.nanum.service.ShareService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -45,6 +50,15 @@ public class MyPageRestController {
         log.debug("알림 저장 여부 : {}", isAlarmEdited);
 
         return ResponseEntity.ok(response);
+    }
+
+    // 알람 편집 메소드
+    @PostMapping("alarmChange")
+    public ResponseEntity<Map<String, Object>> alarmChange(@RequestBody AlarmDTO alarmDTO) {
+        
+    Map<String, Object> response = alarmService.alarmChange(alarmDTO);
+
+    return ResponseEntity.ok(response);
     }
 
     // 비밀번호 확인 메소드
