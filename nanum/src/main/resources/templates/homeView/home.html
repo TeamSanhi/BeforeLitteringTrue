@@ -275,12 +275,14 @@
         // 나눔 이야기 닫기
         $("#messagesClose").click(function () {
           $("#messagesModal").fadeOut();
+          updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
         });
 
         // 쪽지 상세내역 닫기
         $("#detailsClose").click(function () {
           $("#detailsModal").fadeOut();
         });
+
         $(window).click(function (event) {
           if (
             $(event.target).is("#messagesModal") ||
@@ -288,6 +290,7 @@
           ) {
             $("#messagesModal").fadeOut();
             $("#detailsModal").fadeOut();
+            updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
           }
         });
 
