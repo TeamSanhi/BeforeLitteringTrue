@@ -60,9 +60,47 @@ public class MessageService {
                 log.debug("쪽지방 만든 유저: {}", room.getCreator().getMemberNum());
                 log.debug("게시글 유저: {}", room.getReceiver().getMemberNum());
 
-                // 내가 쓴 쪽지일때
-                if (num == room.getCreator().getMemberNum()) {
-                        for (MessageEntity message : messageList) {
+                // // 내가 쓴 쪽지일때
+                // if (num == room.getCreator().getMemberNum()) {
+                //         for (MessageEntity message : messageList) {
+                //                 MessageDTO dto = MessageDTO.builder()
+                //                                 .messageNum(message.getMessageNum())
+                //                                 .senderNum(message.getSender().getMemberNum())
+                //                                 .senderNickname(message.getSender().getMemberNickname())
+                //                                 .roomNum(message.getRoom().getRoomNum())
+                //                                 .messageContents(message.getMessageContents())
+                //                                 .deliverDate(message.getDeliverDate())
+                //                                 .isRead(message.getIsRead())
+                //                                 .build();
+                //                 dtoList.add(dto);
+                //         }
+                // }
+                // // 내가 받은 쪽지일때
+                // else if (num == room.getReceiver().getMemberNum()) {
+                //         for (MessageEntity message : messageList) {
+                //                 message.setIsRead(true);
+                //                 messageRepository.save(message);
+
+                //                 MessageDTO dto = MessageDTO.builder()
+                //                                 .messageNum(message.getMessageNum())
+                //                                 .senderNum(message.getSender().getMemberNum())
+                //                                 .senderNickname(message.getSender().getMemberNickname())
+                //                                 .roomNum(message.getRoom().getRoomNum())
+                //                                 .messageContents(message.getMessageContents())
+                //                                 .deliverDate(message.getDeliverDate())
+                //                                 .isRead(message.getIsRead())
+                //                                 .build();
+                //                 dtoList.add(dto);
+                //         }
+                // } else {
+                //         return null;
+                // }
+
+                for (MessageEntity message : messageList) {
+                        log.debug("발신자: {}", message.getSender().getMemberNum());
+
+                        // 쪽지를 보낸 게 나일 때
+                        if (num == message.getSender().getMemberNum()){
                                 MessageDTO dto = MessageDTO.builder()
                                                 .messageNum(message.getMessageNum())
                                                 .senderNum(message.getSender().getMemberNum())
@@ -73,11 +111,9 @@ public class MessageService {
                                                 .isRead(message.getIsRead())
                                                 .build();
                                 dtoList.add(dto);
-                        }
-                }
-                // 내가 받은 쪽지일때
-                else if (num == room.getReceiver().getMemberNum()) {
-                        for (MessageEntity message : messageList) {
+                        } 
+                        // 쪽지를 받은 게 나일 때
+                        else {
                                 message.setIsRead(true);
                                 messageRepository.save(message);
 
@@ -92,9 +128,8 @@ public class MessageService {
                                                 .build();
                                 dtoList.add(dto);
                         }
-                } else {
-                        return null;
                 }
+
                 return dtoList;
         }
 
