@@ -36,9 +36,11 @@ public class MyPageRestController {
 
     // 알람 추가 메소드
     @PostMapping("/alarmEdit")
-    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") Integer alarmDay, @RequestParam("alarmContents") String alarmContents) {
+    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestBody AlarmDTO alarmDTO) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
+        Integer alarmDay = alarmDTO.getAlarmDay();
+        String alarmContents = alarmDTO.getAlarmContents();
 
         log.debug("요일 : {}, 알림 내용 : {}", alarmDay, alarmContents);
 
@@ -111,9 +113,12 @@ public class MyPageRestController {
             Map<String, String> response = new HashMap<>();
             String alarmDay = daysOfWeek[alarmDTO.getAlarmDay()]; // 배열에서 요일 찾기
 
+            log.debug("alarmNum: {}", alarmDTO.getAlarmNum());
             log.debug("alarmDay: {}", alarmDay);
             log.debug("alarmContents: {}", alarmDTO.getAlarmContents());
 
+            response.put("alarmNum", String.valueOf(alarmDTO.getAlarmNum()));
+            response.put("alarmDayNum", String.valueOf(alarmDTO.getAlarmDay()));
             response.put("alarmDay", alarmDay);
             response.put("alarmContents", alarmDTO.getAlarmContents());
             responseList.add(response);

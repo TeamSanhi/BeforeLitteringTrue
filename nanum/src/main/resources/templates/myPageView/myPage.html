@@ -114,6 +114,9 @@
 
         // 알림 추가 모달
         $("#alarmEdit").click(function () {
+          $("#currentAlarmNum").val(""); // hidden input 초기화
+          $(".alarmDay").prop("checked", false); // 라디오 버튼 초기화
+          $(".alarmContents").val(""); // 입력 필드 초기화
           $("#alarmModal").fadeIn();
         });
         $("#alarmClose").click(function () {
@@ -151,11 +154,15 @@
           $.ajax({
             url: url,
             type: "POST",
-            data: data,
+            contentType: "application/json", // JSON 형식으로 전송
+            data: JSON.stringify(data), // 데이터를 JSON 문자열로 변환
             success: function (response) {
               if (response.alarmEdit || response.alarmChange) {
                 alert("성공적으로 반영되었습니다.");
                 $("#alarmModal").fadeOut();
+
+                // 나의 알림 목록 갱신
+                showAlarm(); // 나의 알림 목록을 갱신
               } else {
                 alert("반영되지 않았습니다.");
               }
@@ -250,6 +257,9 @@
       });
 
       function showAlarm() {
+        var alarmNum = $("#currentAlarmNum").val();
+
+        console.log("알람번호:", alarmNum);
         $.ajax({
           url: "/myPage/showAlarm",
           type: "POST",
@@ -261,9 +271,10 @@
                 var item = response[i];
                 $("#showData").append(`
                 <p>
+                    ${item.alarmNum},
                     ${item.alarmDay},
                     ${item.alarmContents},
-                    <button class="alarmEditButton" data-num="${item.alarmNum}" data-day="${item.alarmDay}" data-contents="${item.alarmContents}">알림 편집</button>
+                    <button class="alarmEditButton" data-num="${item.alarmNum}" data-day="${item.alarmDayNum}" data-contents="${item.alarmContents}">알림 편집</button>
                 </p>
             `);
               }
@@ -272,6 +283,8 @@
                 const alarmNum = $(this).data("num");
                 const alarmDay = $(this).data("day");
                 const alarmContents = $(this).data("contents");
+
+                console.log("알람번호:", alarmNum, "요일:", alarmDay);
                 // 모달에 값 세팅
                 $(`input[name="alarmDay"][value="${alarmDay}"]`).prop(
                   "checked",
