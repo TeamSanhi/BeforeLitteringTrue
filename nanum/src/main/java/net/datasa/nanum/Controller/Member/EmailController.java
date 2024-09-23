@@ -54,6 +54,30 @@ public class EmailController {
     }
 
     /**
+     * 전송한 이메일 확인하는 컨트롤러
+     * 
+     * @param inputCode
+     * @param session
+     * @return
+     */
+    @PostMapping("verifyEmail")
+    @ResponseBody
+    public String verifyCode(@RequestParam("emailCode") String emailCode, HttpSession session) {
+
+        // 세션에 인증번호를 가져온다.
+        String sessionCode = (String) session.getAttribute("verificationCode");
+
+        // 인증번호 맞는지 안맞는지 확인
+        if (sessionCode != null && sessionCode.equals(emailCode)) {
+            // 인증 성공, 세션에서 인증번호 삭제
+            session.removeAttribute("verificationCode");
+            return "인증 성공";
+        } else {
+            return "인증 실패";
+        }
+    }
+
+    /**
      * 6자리의 무작위 숫자를 생성하기 위한 함수
      * 
      * @return
