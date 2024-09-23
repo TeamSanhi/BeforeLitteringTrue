@@ -167,12 +167,17 @@ public class MessageService {
                         MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
                         log.debug("방 번호: {}", room.getRoomNum());
                         log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
+
+                        // 해당 방에 읽지 않은 쪽지가 있는지 체크
+                        boolean hasUnreadMessages = messages.stream().anyMatch(message -> !message.getIsRead());
+
                         int creator = room.getCreator().getMemberNum();
                         int receiver = room.getReceiver().getMemberNum();
 
                         if (memberNum == creator || memberNum == receiver) {
                                 MessageDTO dto = MessageDTO.builder()
                                 .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
+                                .senderNum(latestMessage != null ? latestMessage.getSender().getMemberNum() : null)
                                 .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
                                 .receiverNum(memberNum == creator ? room.getReceiver().getMemberNum() : room.getCreator().getMemberNum())
                                 .shareNum(room.getShareBoard().getShareNum())
@@ -183,6 +188,7 @@ public class MessageService {
                                 .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
                                 .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
                                 .shareCompleted(room.getShareBoard().getShareCompleted())
+                                .hasUnreadMessages(hasUnreadMessages) // 읽지 않은 쪽지 여부를 전달
                                 .build();
 
                                 return dto;

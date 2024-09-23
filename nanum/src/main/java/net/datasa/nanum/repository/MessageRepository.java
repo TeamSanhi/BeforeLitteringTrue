@@ -21,10 +21,11 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Integer>
     // 쪽지방의 최신 쪽지 하나를 가져온다.
     @Query("SELECT m FROM MessageEntity m WHERE m.room = :room ORDER BY m.deliverDate DESC")
     List<MessageEntity> findLatestMessageByRoom(@Param("room") RoomEntity room);
-    // 현재 회원이 읽지 않은 쪽지가 있는 방의 개수를 구한다.
+    // 현재 회원이 읽지 않은 쪽지가 있는 방의 개수를 구한다. 단, 그 방에 읽지 않은 쪽지가 내가 보낸 쪽지만 있다면, 세지 않는다.
     @Query("SELECT COUNT(DISTINCT m.room) FROM MessageEntity m " +
     "WHERE m.isRead = false " +
-    "AND (m.room.creator.memberNum = :memberNum OR m.room.receiver.memberNum = :memberNum)")
+    "AND (m.room.creator.memberNum = :memberNum OR m.room.receiver.memberNum = :memberNum) " +
+    "AND m.sender.memberNum != :memberNum")
     long countRoomsWithUnreadMessagesByMemberNum(@Param("memberNum") int memberNum);
     // 안읽은 쪽지가 있는 방을 찾는다.
     List<MessageEntity> findByRoom_RoomNumAndIsReadFalse(Integer roomNum);

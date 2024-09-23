@@ -104,8 +104,21 @@
             data: { memberNum: memberNum },
             success: function (data) {
               console.log("서버에서 반환된 데이터:", data);
+              let currentUserNum = $("#messages").data("num"); // 현재 로그인한 사용자의 번호
               let messageList = "";
               data.forEach(function (room) {
+                console.log("발신자 번호 (senderNum):", room.senderNum);
+                console.log(
+                  "현재 사용자 번호 (currentUserNum):",
+                  currentUserNum
+                );
+
+                // 쪽지를 보낸 사람이 현재 로그인한 사용자가 아니고, 읽지 않은 쪽지가 있을 때 'New!' 표시
+                let newBadge =
+                  room.hasUnreadMessages && room.senderNum !== currentUserNum
+                    ? "<span style='color: red;'>New!</span>"
+                    : "";
+
                 messageList += `
                   <div class="message-room" data-room="${
                     room.roomNum
@@ -113,7 +126,7 @@
                     <div class="shareBoard" data-write="${
                       room.shareWriteNum
                     }" data-complete="${room.shareCompleted}">
-                      <strong>게시글:</strong> ${room.shareTitle}
+                      <strong>게시글:</strong> ${room.shareTitle} ${newBadge} 
                     </div>
                     <div class="sender" data-num="${room.receiverNum}">
                       <strong>상대방:</strong> ${room.senderNickname}
@@ -281,6 +294,8 @@
         // 쪽지 상세내역 닫기
         $("#detailsClose").click(function () {
           $("#detailsModal").fadeOut();
+          // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+          updateMessageRooms();
         });
 
         $(window).click(function (event) {
@@ -291,6 +306,8 @@
             $("#messagesModal").fadeOut();
             $("#detailsModal").fadeOut();
             updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+            // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+            updateMessageRooms();
           }
         });
 
@@ -436,6 +453,56 @@
           },
           error: function (xhr, status, error) {
             console.error("읽지 않은 쪽지 개수 가져오기 오류:", status, error);
+          },
+        });
+      }
+
+      function updateMessageRooms() {
+        let memberNum = $("#messages").data("num");
+
+        $.ajax({
+          url: "/message/rooms",
+          method: "get",
+          data: { memberNum: memberNum },
+          success: function (data) {
+            console.log("갱신된 쪽지방 데이터:", data);
+            let currentUserNum = $("#messages").data("num"); // 현재 로그인한 사용자의 번호
+            let messageList = "";
+            data.forEach(function (room) {
+              // 쪽지를 보낸 사람이 현재 로그인한 사용자가 아니고, 읽지 않은 쪽지가 있을 때 'New!' 표시
+              let newBadge =
+                room.hasUnreadMessages && room.senderNum !== currentUserNum
+                  ? "<span style='color: red;'>New!</span>"
+                  : "";
+
+              messageList += `
+                  <div class="message-room" data-room="${
+                    room.roomNum
+                  }" data-share-num="${room.shareNum}">
+                    <div class="shareBoard" data-write="${
+                      room.shareWriteNum
+                    }" data-complete="${room.shareCompleted}">
+                      <strong>게시글:</strong> ${room.shareTitle} ${newBadge}
+                    </div>
+                    <div class="sender" data-num="${room.receiverNum}">
+                      <strong>상대방:</strong> ${room.senderNickname}
+                    </div>
+                    <div>
+                      <strong>메시지:</strong> ${
+                        room.messageContents || "메시지가 없습니다."
+                      }
+                    </div>
+                    <div>
+                      <strong>시간:</strong> ${new Date(
+                        room.deliverDate
+                      ).toLocaleString()}
+                    </div>
+                  </div>`;
+            });
+            $("#messageListContainer").html(messageList);
+          },
+          error: function (xhr, status, error) {
+            console.error("AJAX 요청 오류:", status, error);
           },
         });
       }
