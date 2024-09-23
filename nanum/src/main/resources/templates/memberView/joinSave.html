@@ -120,15 +120,39 @@
         // 입력한 내용을 확인하고 DB에 저장
         $("#joinPost").submit(check);
 
+        //*************************************** 이메일 ****************************************************
+        //*************************************** 이메일 ****************************************************
+        // 이메일 전송 버튼을 처음에 비활성화 상태로 설정
+        $("#emailButton").prop('disabled', true);
+
+        // 이메일 입력란에 실시간으로 이메일 형식 검사
+        $("#memberEmail").on('input', function () {
+            const email = $(this).val().trim();
+            if (isValidEmail(email)) {
+                $("#emailButton").prop('disabled', false); // 이메일 형식이 맞으면 버튼 활성화
+            } else {
+                $("#emailButton").prop('disabled', true);  // 이메일 형식이 틀리면 버튼 비활성화
+            }
+        });
+
         // 이메일을 사용해 인증번호 받는다.
         $("#emailButton").click(function () {
-            const email = $("#memberEmail").val();
+            // 전송할 email 값을 가져온다. 
+            const email = $("#memberEmail").val().trim();
+            
+            //이메일 형식에 맞지 않으면 alert 창 표시 
+            if (!isValidEmail(email)) {  // 이메일 형식이 맞지 않으면
+            alert("유효한 이메일 주소를 입력하세요.");  // 경고 메시지
+            return;  // 전송 중단
+            }
+
+            // ajax로 받은 이메일에 이메일 전송 요청
             $.ajax({
-                url: '/sendEmail',
-                type: 'POST',
+                url: '/member/sendEmail', 
+                type: 'post',
                 data: { email: email },
-                success: function () {
-                    alert("인증번호가 전송되었습니다.");
+                success: function (e) {
+                    alert(e);
                 },
                 error: function () {
                     alert("이메일 전송에 실패했습니다.");
@@ -153,6 +177,12 @@
         });
 
       });
+
+      // 이메일 형식을 확인하는 정규 표현식 함수
+      function isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+      }
 
       // 아이디 입력 란에 영문만 입력 가능
       function onlyAlphaNum(input) {
@@ -212,6 +242,8 @@
           return false;
         }
       }
+
+
     </script>
   </head>
   <body>
