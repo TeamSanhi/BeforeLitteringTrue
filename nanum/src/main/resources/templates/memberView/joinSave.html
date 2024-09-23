@@ -119,6 +119,39 @@
 
         // 입력한 내용을 확인하고 DB에 저장
         $("#joinPost").submit(check);
+
+        // 이메일을 사용해 인증번호 받는다.
+        $("#emailButton").click(function () {
+            const email = $("#memberEmail").val();
+            $.ajax({
+                url: '/sendEmail',
+                type: 'POST',
+                data: { email: email },
+                success: function () {
+                    alert("인증번호가 전송되었습니다.");
+                },
+                error: function () {
+                    alert("이메일 전송에 실패했습니다.");
+                }
+            });
+        });
+
+         // 받은 인증번호를 확인한다. 
+        $("#codeButton").click(function () {
+            const inputCode = $("#emailCode").val();
+            $.ajax({
+                url: '/verifyCode',
+                type: 'POST',
+                data: { code: inputCode },
+                success: function (response) {
+                    alert(response.message);
+                },
+                error: function () {
+                    alert("인증번호 확인에 실패했습니다.");
+                }
+            });
+        });
+
       });
 
       // 아이디 입력 란에 영문만 입력 가능
