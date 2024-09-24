@@ -12,22 +12,23 @@ import net.datasa.nanum.repository.MemberRepository;
 public class FindService {
     private final MemberRepository memberRepository;
 
-
     /**
      * 입력한 아이디가 DB에 존재하는지 확인
+     * 
      * @param memberId
      * @return
      */
     public boolean isIdAvailable(String memberId) {
-        return !memberRepository.existsByMemberId(memberId);
+        return memberRepository.existsByMemberId(memberId);
     }
 
     /**
      * 입력한 닉네임이 DB에 존재하는지 확인
+     * 
      * @param memberNickname
      * @return
      */
     public boolean isNicknameAvailable(String memberNickname) {
-        return !memberRepository.existsByMemberNickname(memberNickname);
+        return memberRepository.existsByMemberNickname(memberNickname);
     }
 }

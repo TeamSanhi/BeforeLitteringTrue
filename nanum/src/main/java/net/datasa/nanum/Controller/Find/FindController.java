@@ -26,6 +26,7 @@ public class FindController {
     public boolean checkId(@RequestParam("memberId") String memberId) {
 
         log.debug("입력한 아이디: {}", memberId);
+        // 아이디가 있으면 true, 없으면 false리턴
         boolean available = findService.isIdAvailable(memberId);
 
         log.debug("아이디 중복인가? {}", available);
@@ -36,13 +37,15 @@ public class FindController {
 
     @GetMapping("nickCheck")
     @ResponseBody
-    public Map<String, Object> checkNickname(@RequestParam("memberNickname") String memberNickname) {
+    public boolean checkNickname(@RequestParam("memberNickname") String memberNickname) {
+
         log.debug("입력한 닉네임: {}", memberNickname);
-        Map<String, Object> response = new HashMap<>();
+        // 닉네임이 있으면 true, 없으면 false 리턴받음
         boolean available = findService.isNicknameAvailable(memberNickname);
+
         log.debug("닉네임 중복인가? {}", available);
-        response.put("available", available);
-        return response;
+        // 아이디가 있으면 true, 없으면 false리턴
+        return available;
     }
 
     /**
