@@ -8,6 +8,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/join.css">
     <style>
       /* 모달 스타일 */
       .modal {
@@ -58,6 +60,8 @@
             alert("아이디를 입력하세요.");
             return;
           }
+          
+          //ajax 실행 
           $.get(`/find/idCheck`, { memberId: memberId }, function (data) {
             let message = data.available
               ? "사용 가능한 아이디입니다."
@@ -189,6 +193,7 @@
         });
 
       });
+      //****************************ready 함수 종료 **********************************
 
       // 이메일 형식을 확인하는 정규 표현식 함수
       function isValidEmail(email) {
@@ -205,6 +210,42 @@
         }
       }
 
+      // 아이디 중복확인 클릭시 실행되는 함수
+      function idDoubleCheck() {
+        let memberId = $("#memberId").val().trim();
+          if (memberId === "") {
+            alert("아이디를 입력하세요.");
+            return;
+          }
+
+          // 아이디 중복확인 ajax 요청 
+          $.ajax({
+            url: '/find/idCheck',
+            type: 'GET',
+            data: { memberId: memberId },
+            success: function (available) {
+                // 서버 응답 성공 시 처리
+                if (!available) {
+                    // 이미 존재하는 아이디일 때
+                    $(".idError").text("이미 존재하는 아이디입니다.").show().css("color", "red");
+                } else {
+                    // 사용 가능한 아이디일 때
+                    $(".idError").text("사용 가능한 아이디입니다.").show().css("color","blue");
+                    // 인증절차 승인을 위해서 값을 "y"로 변경시킨다. 
+                    $("#idDuplicationCheck").val("y");
+                    // id input태그를 비활성화 
+                    $('#memberId').attr('readonly', true);
+                }
+            },
+            error: function () {
+              alert("아이디 중복체크에 실패하였습니다.");
+            }
+          })
+
+      }
+
+
+      //제출전 체크 
       function check() {
         let id = $("#memberId").val();
         let pw = $("#memberPw").val();
@@ -267,8 +308,137 @@
     </script>
   </head>
   <body>
-    <h1>[ 회원 가입 ]</h1>
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+
+      <!-- 로고 -->
+      <div class="logo">
+          <a href="/">
+              <img src="/images/logo.png" class="logoImg">
+          </a>
+      </div>
+
+      <!-- 우리는 -->
+      <div class="projectInfo">
+          <a href="/info/service">우리는</a>
+      </div>
+
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+          <a href="/share/list">나눠요</a>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+          <a href="/recycle/list">버려요</a>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+          <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+          <th:block sec:authorize="not isAuthenticated()">
+              <!-- 회원가입 -->
+              <div class="join">
+                  <span class="joinHover">
+                      <a href="/member/join">회원가입</a>
+                  </span>
+              </div>
+
+              <!-- 로그인 -->
+              <div class="login">
+                  <a href="/member/loginForm">
+                      <span class="loginHover">
+                          로그인
+                      </span>
+                  </a>
+              </div>
+          </th:block>
+
+          <!-- 로그인 하였을시 보여줄 페이지 -->
+          <th:block sec:authorize="isAuthenticated()">
+              <!-- 나눔 쪽지 -->
+              <div class="message" id="messages">
+                  <span class="messageHover">
+                      나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
+                  </span>
+              </div>
+
+              <div id="messagesModal" class="modal">
+                  <div class="modal-content">
+                      <span id="messagesClose" class="close">&times;</span>
+                      <h2>쪽지 목록</h2>
+                  </div>
+              </div>
+
+              <div class="mypage">
+                  <a th:href="@{/myPage/view}">
+                      <span class="mypageHover">
+                          마이페이지
+                      </span>
+                  </a>
+              </div>
+              
+              <!-- 로그아웃 -->
+              <div class="logout">
+                  <a th:href="@{/member/logout}">
+                      <span class="logoutHover">
+                          로그아웃
+                      </span>
+                  </a>
+              </div>
+
+          </th:block>
+
+      </div>
+  </div>
+
     <form th:action="@{/member/join}" method="post" id="joinPost">
+
+      <!-- mainContainer -->
+      <div id="mainContainer">
+
+          <!-- 회원가입 영역 -->
+          <div class="joinArea">
+               <!-- 회원가입 타이틀 영역 -->
+              <div class="joinTitleArea">
+                <!-- 회원가입 타이틀 -->
+                <div class="joinTitle">
+                  회원가입
+                </div>
+              </div>
+            
+              
+              <!-- 아이디 영역 -->
+              <div class="idArea">
+                <!-- 아이디 상단 영역 -->
+                <div class="idUpsideArea">
+                    <!-- 아이디 타이틀 -->
+                    <div class="idTitle">
+                        아이디   
+                    </div>
+                     <!-- 아이디 중복확인 -->
+                    <div class="idDoubleCheck" onclick="idDoubleCheck()">
+                        아이디 중복확인
+                    </div>
+                </div>
+                
+                <!-- 아이디_input 영역 -->
+                <div class="idInputArea">
+                    <!-- 아이디_input -->
+                    <input
+                        type="text" name="memberId" id="memberId" class="memberId" maxlength="12" oninput="onlyAlphaNumForId(this)">
+                    <!-- 아이디 입력 메시지 출력 -->
+                    <div class="idError" id="idError"></div>
+                </div>
+              </div>
+
+              
+
+          </div>
+            
+      </div>
+
+
       <table>
         <tr>
           <th>ID</th>
@@ -277,7 +447,7 @@
             <input
               type="text"
               name="memberId"
-              id="memberId"
+              id="memberIdasd"
               maxlength="12"
               oninput="onlyAlphaNum(this)"
             />
@@ -285,6 +455,8 @@
             <input type="button" id="idCheck" value="ID중복확인" />
           </td>
         </tr>
+
+
 
         <tr>
           <!-- 패스워드 입력창 -->
@@ -357,5 +529,13 @@
         <button id="nickConfirm">확인</button>
       </div>
     </div>
+
+    
+    <!-- 저작권 정보 -->
+    <div class="rightContainer">
+      © 2024 Team San, Hai. All rights reserved.
+    </div>
+  
   </body>
+
 </html>

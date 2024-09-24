@@ -23,15 +23,15 @@ public class FindController {
 
     @GetMapping("idCheck")
     @ResponseBody
-    public Map<String, Object> checkId(@RequestParam("memberId") String memberId) {
+    public boolean checkId(@RequestParam("memberId") String memberId) {
 
         log.debug("입력한 아이디: {}", memberId);
-        Map<String, Object> response = new HashMap<>();
         boolean available = findService.isIdAvailable(memberId);
 
         log.debug("아이디 중복인가? {}", available);
-        response.put("available", available);
-        return response;
+
+        // 아이디가 있으면 true, 없으면 false리턴
+        return available;
     }
 
     @GetMapping("nickCheck")
