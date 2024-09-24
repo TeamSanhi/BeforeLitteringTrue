@@ -29,19 +29,60 @@ public class MyPageRestController {
     private final MemberService memberService;
     private final ShareService shareService;
 
+    // 기존 알람 존재 여부 확인 메소드
+    @PostMapping("/checkAlarm")
+    public ResponseEntity<Map<String, Boolean>> checkAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay) {
+
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        log.debug("요일 : {}", alarmDay);
+
+        Boolean alarmExists = alarmService.isAlarmExists(member, alarmDay);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("alarmExists", alarmExists);
+
+        log.debug("알림 저장 여부 : {}", alarmExists);
+
+        return ResponseEntity.ok(response);
+    }
+
     // 알람 추가 메소드
-    @PostMapping("/alarmEdit")
-    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") Integer alarmDay, @RequestParam("alarmContents") String alarmContents) {
+    @PostMapping("/alarmAdd")
+    public ResponseEntity<Map<String, Boolean>> alarmAdd(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
+        Boolean isAlarmAdded = false;
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
         log.debug("요일 : {}, 알림 내용 : {}", alarmDay, alarmContents);
 
-        boolean isAlarmEdited = alarmService.alarmEdit(member, alarmDay, alarmContents);
+        isAlarmAdded = alarmService.alarmAdd(member, alarmDay, alarmContents);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("alarmAdd", isAlarmAdded);
+
+        log.debug("알림 저장 여부 : {}", isAlarmAdded);
+
+        return ResponseEntity.ok(response);
+    }
+
+    // 알람 편집 메소드
+    @PostMapping("/alarmEdit")
+    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
+        Boolean isAlarmEdited = false;
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        log.debug("요일 : {}, 알림 내용 : {}", alarmDay, alarmContents);
+
+        if (alarmService.alarmEdit(member, alarmDay, alarmContents))
+
+        isAlarmEdited = true;
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("alarmEdit", isAlarmEdited);
-        
+
         log.debug("알림 저장 여부 : {}", isAlarmEdited);
 
         return ResponseEntity.ok(response);

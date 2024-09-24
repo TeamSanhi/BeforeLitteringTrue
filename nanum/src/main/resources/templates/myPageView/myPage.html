@@ -9,23 +9,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Page</title>
     <style>
+        /* 기존 스타일 */
         nav {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
+            display: flex; /* Flexbox 사용 */
+            align-items: center; /* 수직 정렬 */
+            gap: 20px; /* 항목 간 간격 */
+            position: fixed; /* 네비게이션을 고정 위치로 설정 */
             top: 10px;
             left: 10px;
+            right: 10px; /* 좌우 여백 설정 */
+            padding: 10px 20px; /* 내부 여백 추가 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+            z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
+            background: #ffffff;
         }
 
-        .member {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        nav .member {
+            margin-left: auto; /* .member를 오른쪽으로 밀어냄 */
+            display: flex; /* Flexbox 사용 */
+            gap: 20px; /* 항목 간 간격 */
+            padding: 5px 10px; /* 내부 여백 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
         }
+
+        /*footer {*/
+        /*    display: flex;*/
+        /*    justify-content: space-between;*/
+        /*    gap: 20px;*/
+        /*    position: absolute;*/
+        /*    bottom: 10px;*/
+        /*    left: 10px;*/
+        /*}*/
 
         .profileInfo {
             display: flex;
@@ -59,122 +73,129 @@
             top: 600px;
         }
 
+        /* 모달 스타일 */
         .modal {
-            display: none; /* 모달을 숨김 */
-            position: fixed; /* 화면에 고정된 위치로 설정 */
-            z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
-            left: 0; /* 화면 왼쪽부터 시작 */
-            top: 0; /* 화면 상단부터 시작 */
-            width: 100%; /* 화면 전체 너비 */
-            height: 100%; /* 화면 전체 높이 */
-            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
         .modal-content {
             background-color: #fff;
-            margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-            padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
+            margin: 10% auto;
+            padding: 30px;
             border: 1px solid #888;
-            width: 90%; /* 너비를 화면의 90%로 변경 */
-            max-width: 600px; /* 최대 너비를 600px로 확장 */
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+
+        /* 페이징 스타일 추가 */
+        .pagination {
+            margin-top: 20px;
             text-align: center;
         }
 
-        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
-        .close {
-            color: #aaa; /* 닫기 버튼의 기본 색상 */
-            float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
-            font-size: 28px; /* 닫기 버튼의 글자 크기 */
-            font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
+        .pagination .page-btn {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #f1f1f1;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
         }
 
-        /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
-        .close:hover,
-        .close:focus {
-            color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-            text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
-            cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+        .pagination .page-btn:hover {
+            background-color: #ddd;
+        }
+
+        .pagination .current-page {
+            margin: 0 5px;
+            padding: 5px 10px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 3px;
         }
     </style>
+    <!-- jQuery 라이브러리 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
         $(document).ready(function () {
-            // 쪽지 목록 모달
-            $("#messages").click(function () {
-                $("#messagesModal").fadeIn();
-            });
-            $("#messagesClose").click(function () {
-                $("#messagesModal").fadeOut();
-            });
-            $(window).click(function (event) {
-                if ($(event.target).is("#messagesModal")) {
-                    $("#messagesModal").fadeOut();
-                }
-            });
+            const dataManager = {
+                data: {},
+                currentPage: {},
+                perPage: {
+                    'alarm': 9,
+                    'give': 9,
+                    'pendingGive': 9,
+                    'receive': 9,
+                    'bookmark': 9
+                },
+                listType: ''
+            };
 
-            // 알림 추가 모달
-            $("#alarmEdit").click(function () {
-                $("#alarmModal").fadeIn();
-            });
-            $("#alarmClose").click(function () {
-                $("#alarmModal").fadeOut();
-            });
-            $(window).click(function (event) {
-                if ($(event.target).is("#alarmModal")) {
-                    $("#alarmModal").fadeOut();
-                }
-            });
-            $("#save").click(function () {
-                var alarmDay = $(".alarmDay:checked").val();
-                var alarmContents = $(".alarmContents").val();
-
-                $.ajax({
-                    url: "/myPage/alarmEdit",
-                    type: "POST",
-                    data: {
-                        alarmDay: alarmDay,
-                        alarmContents: alarmContents,
-                    },
-                    success: function (response) {
-                        if (response.alarmEdit) {
-                            alert("성공적으로 반영되었습니다.");
-                            $("#alarmModal").fadeOut();
-                        } else {
-                            alert("반영되지 않았습니다.");
-                        }
-                    },
-                    error: function () {
-                        alert("서버 오류입니다.");
-                    },
+            // 모달 초기화 함수
+            function initModal(triggerSelector, modalSelector) {
+                $(triggerSelector).click(function () {
+                    $(modalSelector).fadeIn();
                 });
+
+                $(modalSelector).on('click', '.close', function () {
+                    $(modalSelector).fadeOut();
+                });
+
+                $(window).click(function (event) {
+                    if ($(event.target).is(modalSelector)) {
+                        $(modalSelector).fadeOut();
+                    }
+                });
+            }
+
+            // 모달 초기화
+            initModal('#messages', '#messagesModal');
+            initModal('#alarmAdd', '#alarmAddModal');
+            initModal('.alarmEdit', '#alarmEditModal');
+            initModal('#deleteId', '#alertModal');
+
+            // 탈퇴 단계 처리
+            $('#next').click(function () {
+                $('#alertModal').fadeOut();
+                $('#checkModal').fadeIn();
             });
 
-            // 멤버 탈퇴 모달
-            $("#deleteId").click(function () {
-                $("#alertModal").fadeIn();
-            });
-            $("#alertClose").click(function () {
-                $("#alertModal").fadeOut();
-            });
-            $("#reset").click(function () {
-                $("#alertModal").fadeOut();
-            });
-            $(window).click(function (event) {
-                if ($(event.target).is("#alertModal")) {
-                    $("#alertModal").fadeOut();
-                }
+            $('#reset').click(function () {
+                $('#alertModal').fadeOut();
             });
 
-            // 비밀번호 확인 모달
-            $("#next").click(function () {
-                $("#alertModal").fadeOut();
-                $("#checkModal").fadeIn();
+            $('#checkModal').on('click', '.close', function () {
+                $('#checkModal').fadeOut();
             });
-            $("#checkClose").click(function () {
-                $("#checkModal").fadeOut();
-            });
-            $("#delete").click(function () {
-                var enteredPw = $("#pwCheck").val();
+
+            // 탈퇴 처리
+            $('#delete').click(function () {
+                const enteredPw = $('#pwCheck').val();
 
                 $.ajax({
                     url: "/myPage/checkPassword",
@@ -190,26 +211,10 @@
                                     type: "POST",
                                     success: function (response) {
                                         if (response.deleteMember) {
-                                            $("#checkModal").fadeOut();
-                                            $("#verifyModal").fadeIn();
-
-                                            $("#verifyClose").click(function () {
-                                                $("#verifyModal").fadeOut(function () {
-                                                    window.location.href = "/member/logout";
-                                                });
-                                            });
-
-                                            $(window).click(function (event) {
-                                                if ($(event.target).is("#verifyModal")) {
-                                                    $("#verifyModal").fadeOut(function () {
-                                                        window.location.href = "/member/logout";
-                                                    });
-                                                }
-                                            });
+                                            $('#checkModal').fadeOut();
+                                            $('#verifyModal').fadeIn();
                                         } else {
-                                            alert(
-                                                "탈퇴 처리에 실패했습니다. 다시 시도해주세요."
-                                            );
+                                            alert("탈퇴 처리에 실패했습니다. 다시 시도해주세요.");
                                         }
                                     },
                                     error: function () {
@@ -217,136 +222,311 @@
                                     },
                                 });
                             } else {
-                                $("#pwCheck").val("");
+                                $('#pwCheck').val("");
                             }
                         } else {
                             alert("비밀번호가 일치하지 않습니다.");
-                            $("#pwCheck").val("");
+                            $('#pwCheck').val("");
                         }
+                    },
+                    error: function () {
+                        alert("서버 오류입니다.");
                     },
                 });
             });
 
-            $("#myAlarm").click(showAlarm);
-            $("#myShare").click(showGive);
-            $("#give").click(showGive);
-            $("#receive").click(showReceive);
-            $("#myBookmark").click(showBookmark);
-        });
+            $('#verifyModal').on('click', '.close', function () {
+                $('#verifyModal').fadeOut(function () {
+                    window.location.href = "/member/logout";
+                });
+            });
 
-        function showAlarm() {
-            $.ajax({
-                url: '/myPage/showAlarm',
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.length > 0) {
-                        $("#showData").html("");
-                        for (let i = 0; i < response.length; i++) {
-                            var item = response[i];
-                            $("#showData").append(`
-                <p>
-                    ${item.alarmDay},
-                    ${item.alarmContents},
-                    <button id="alarmEdit">알림 편집</button>
-                </p>
-            `);
-                        }
-                    } else {
-                        $("#showData").html("<p>No data available</p>");
-                    }
-                },
-                error: function () {
-                    alert("서버 오류입니다.");
+            $(window).click(function (event) {
+                if ($(event.target).is('#verifyModal')) {
+                    $('#verifyModal').fadeOut(function () {
+                        window.location.href = "/member/logout";
+                    });
                 }
             });
-        }
 
-        function showGive() {
-            $.ajax({
-                url: '/myPage/showGive',
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.length > 0) {
-                        $("#showData").html("");  // 기존 내용을 비우기
-                        for (let i = 0; i < response.length; i++) {  // int 대신 let 사용
-                            var item = response[i];
-                            $("#showData").append(`
-                <p><a href="/share/read?shareNum=${item.shareNum}">
-                    ${item.shareTitle},
-                    ${item.shareCompleted},
-                    ${item.shareDate},
-                    ${item.shareContents}
-                </a></p>
-            `);
+            function addAlarm(alarmDay, alarmContents) {
+                $.ajax({
+                    url: '/myPage/alarmAdd',
+                    type: "POST",
+                    data: {
+                        alarmDay: alarmDay,
+                        alarmContents: alarmContents,
+                    },
+                    success: function (response) {
+                        if (response.alarmAdd) {
+                            alert("성공적으로 반영되었습니다.");
+                            if (dataManager.listType === 'alarm') {
+                                fetchData('alarm', '/myPage/showAlarm');
+                            }
+                        } else {
+                            alert("반영되지 않았습니다.");
                         }
-                    } else {
-                        $("#showData").html("<p>No data available</p>");
+                    },
+                    error: function () {
+                        alert("알림을 추가하는 중 오류가 발생했습니다.");
                     }
-                },
-                error: function () {
-                    alert("서버 오류입니다.");
-                }
-            })
-        }
+                });
+            }
 
-        function showReceive() {
-            $.ajax({
-                url: '/myPage/showReceive',
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.length > 0) {
-                        $("#showData").html("");
-                        for (let i = 0; i < response.length; i++) {
-                            var item = response[i];
-                            $("#showData").append(`
-                <p><a href="/share/read?shareNum=${item.shareNum}">
-                    ${item.shareTitle},
-                    ${item.shareDate},
-                    ${item.shareContents}
-                </a></p>
-            `);
+            function editAlarm(alarmDay, alarmContents) {
+                $.ajax({
+                    url: '/myPage/alarmEdit',
+                    type: "POST",
+                    data: {
+                        alarmDay: alarmDay,
+                        alarmContents: alarmContents,
+                    },
+                    success: function (response) {
+                        if (response.alarmEdit) {
+                            alert("성공적으로 반영되었습니다.");
+                            if (dataManager.listType === 'alarm') {
+                                fetchData('alarm', '/myPage/showAlarm');
+                            }
+                        } else {
+                            alert("반영되지 않았습니다.");
                         }
-                    } else {
-                        $("#showData").html("<p>No data available</p>");
+                    },
+                    error: function () {
+                        alert("알림을 편집하는 중 오류가 발생했습니다.");
                     }
-                },
-                error: function () {
-                    alert("서버 오류입니다.");
-                }
-            })
-        }
+                });
+            }
 
-        function showBookmark() {
-            $.ajax({
-                url: '/myPage/showBookmark',
-                type: 'POST',
-                dataType: 'json',
-                success: function (response) {
-                    if (response.length > 0) {
-                        $("#showData").html("");
-                        for (let i = 0; i < response.length; i++) {
-                            var item = response[i];
-                            $("#showData").append(`
-                <p><a href="/share/read?shareNum=${item.shareNum}">
-                    ${item.shareTitle},
-                    ${item.shareDate},
-                    ${item.shareContents}
-                </a></p>
-            `);
+            // 알림 추가
+            $('#added').click(function () {
+                const alarmDay = $(".addDay:checked").val();
+                const alarmContents = $("#addContents").val();
+
+                $.ajax({
+                    url: "/myPage/checkAlarm",  // 알림 존재 여부를 확인하는 API
+                    type: "POST",
+                    data: {
+                        alarmDay: alarmDay,
+                        alarmContents: alarmContents
+                    },
+                    success: function (response) {
+                        if (response.alarmExists) {
+                            if (confirm("기존 알람이 있습니다. 수정하시겠습니까?"))
+                                editAlarm(alarmDay, alarmContents);
+                            else
+                                addAlarm(alarmDay, alarmContents);
+                            $('#alarmAddModal').fadeOut();
+                            $('.addDay').prop('checked', false);
+                            $('#addContents').val('');
                         }
-                    } else {
-                        $("#showData").html("<p>No data available</p>");
+                    },
+                    error: function () {
+                        alert("알림 상태를 확인하는 중 오류가 발생했습니다.");
                     }
-                },
-                error: function () {
-                    alert("서버 오류입니다.");
-                }
+                });
             })
-        }
 
+
+            // 알림 편집
+            $('#edited').click(function () {
+                const alarmDay = $(".editDay:checked").val();
+                const alarmContents = $("#editContents").val();
+
+                if (confirm("수정하시겠습니까?"))
+                    editAlarm(alarmDay, alarmContents);
+
+                $('#alarmEditModal').fadeOut();
+                $('#editDay').prop('checked', false);
+                $('#editContents').val('');
+            });
+
+            // 알림 편집 버튼
+            $(document).on('click', '.alarmModify', function () {
+                const day = $(this).data('day');
+                const content = $(this).data('contents');
+
+                $('.editDay').prop('disabled', true);
+                $('.editDay[value="' + day + '"]').prop('disabled', false);
+
+                $('.editDay').each(function () {
+                    $(this).prop('checked', $(this).val() === day);
+                });
+
+                $('#editContents').val(content);
+                $('#alarmEditModal').fadeIn();
+            });
+
+            // 데이터 목록 버튼 클릭 이벤트
+            $('button[data-list]').click(function () {
+                const listType = $(this).data('list');
+                const url = $(this).data('url');
+                dataManager.listType = listType;
+                fetchData(listType, url);
+            });
+
+            // 페이지 버튼 클릭 이벤트
+            $(document).on('click', '.page-btn', function () {
+                const selectedPage = parseInt($(this).data('page'));
+                const listType = $(this).data('list');
+
+                if (!listType || !dataManager.data[listType]) {
+                    alert("유효하지 않은 데이터입니다.");
+                    return;
+                }
+
+                dataManager.currentPage[listType] = selectedPage;
+                renderPage(listType, dataManager.currentPage[listType]);
+                renderPaginationSection(listType);
+            });
+
+            // 데이터 가져오기 함수
+            function fetchData(listType, url) {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (listType === 'pendingGive') {
+                            if (Array.isArray(response)) {
+                                dataManager.data[listType] = response.filter(item => item.shareCompleted === '나눠요');
+                            } else if (typeof response === 'object') {
+                                const responseArray = [response];
+                                dataManager.data[listType] = responseArray.filter(item => item.shareCompleted === '나눠요');
+                            } else {
+                                console.error("예상치 못한 응답 형식입니다.");
+                                dataManager.data[listType] = [];
+                            }
+                        } else {
+                            dataManager.data[listType] = response;
+                        }
+                        dataManager.currentPage[listType] = 1;
+                        renderPage(listType, dataManager.currentPage[listType]);
+                        renderPaginationSection(listType);
+                    },
+                    error: function () {
+                        alert("데이터를 가져오는데 실패했습니다.");
+                    }
+                });
+            }
+
+            // 페이지 렌더링 함수
+            function renderPage(listType, page) {
+                $("#showData").html("");
+
+                const dataList = dataManager.data[listType];
+
+                if (!dataList || !Array.isArray(dataList)) {
+                    $("#showData").html("<p>데이터를 불러오지 못했습니다.</p>");
+                    return;
+                }
+
+                const perPage = dataManager.perPage[listType];
+                const start = (page - 1) * perPage;
+                const end = start + perPage;
+                const pagedData = dataList.slice(start, end);
+
+                if (pagedData.length > 0) {
+                    pagedData.forEach(item => {
+                        const itemHtml = generateItemHtml(listType, item);
+                        $("#showData").append(itemHtml);
+                    });
+                } else {
+                    $("#showData").html("<p>데이터가 없습니다.</p>");
+                }
+            }
+
+            // 아이템 HTML 생성 함수
+            function generateItemHtml(listType, item) {
+                switch (listType) {
+                    case 'alarm':
+                        return `
+                        <p>
+                            ${item.alarmDay},
+                            ${item.alarmContents},
+                            <button class="alarmModify" data-day="${item.alarmDay}" data-contents="${item.alarmContents}">알림 편집</button>
+                        </p>
+                    `;
+                    case 'give':
+                        return `
+                        <p><a href="/share/read?shareNum=${item.shareNum}">
+                            ${item.shareTitle},
+                            ${item.shareCompleted},
+                            ${item.shareDate},
+                            ${item.shareContents}
+                        </a></p>
+                    `;
+                    case 'pendingGive':
+                        return `
+                        <p><a href="/share/read?shareNum=${item.shareNum}">
+                            ${item.shareTitle},
+                            ${item.shareDate},
+                            ${item.shareContents}
+                        </a></p>
+                    `;
+                    case 'receive':
+                        return `
+                        <p><a href="/share/read?shareNum=${item.shareNum}">
+                            ${item.shareTitle},
+                            ${item.shareDate},
+                            ${item.shareContents}
+                        </a></p>
+                    `;
+                    case 'bookmark':
+                        return `
+                        <p><a href="/share/read?shareNum=${item.shareNum}">
+                            ${item.shareTitle},
+                            ${item.shareDate},
+                            ${item.shareContents}
+                        </a></p>
+                    `;
+                    default:
+                        return '';
+                }
+            }
+
+            // 페이징 섹션 렌더링 함수
+            function renderPaginationSection(listType) {
+                const dataList = dataManager.data[listType];
+
+                if (!dataList || !Array.isArray(dataList)) {
+                    return;
+                }
+
+                const totalItems = dataList.length;
+                const perPage = dataManager.perPage[listType];
+                const currentPage = dataManager.currentPage[listType];
+                const paginationHtml = renderPagination(totalItems, perPage, currentPage, listType);
+                $("#showData").append(paginationHtml);
+            }
+
+            // 페이징 HTML 생성 함수
+            function renderPagination(totalItems, itemsPerPage, currentPage, listType) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                let paginationHtml = '<div class="pagination">';
+
+                // 이전 버튼
+                if (currentPage > 1) {
+                    paginationHtml += `<button class="page-btn" data-page="${currentPage - 1}" data-list="${listType}">이전</button>`;
+                }
+
+                // 페이지 번호 버튼
+                for (let p = 1; p <= totalPages; p++) {
+                    if (p === currentPage) {
+                        paginationHtml += `<span class="current-page">${p}</span>`;
+                    } else {
+                        paginationHtml += `<button class="page-btn" data-page="${p}" data-list="${listType}">${p}</button>`;
+                    }
+                }
+
+                // 다음 버튼
+                if (currentPage < totalPages) {
+                    paginationHtml += `<button class="page-btn" data-page="${currentPage + 1}" data-list="${listType}">다음</button>`;
+                }
+
+                paginationHtml += '</div>';
+                return paginationHtml;
+            }
+        });
     </script>
 </head>
 <body>
@@ -357,86 +537,185 @@
         <p><a th:href="@{/info/service}">우리는..</a></p>
         <p><a th:href="@{/share/list}">나눠요</a></p>
         <p><a th:href="@{/recycle/list}">버려요</a></p>
-    </nav>
-    <!--  회원 기능  -->
-    <div class="member">
-        <th:block sec:authorize="not isAuthenticated()">
-            <p>
-                <a th:href="@{/member/join}">회원가입</a>
-            </p>
-            <p>
-                <a th:href="@{/member/loginForm}">로그인</a>
-            </p>
-        </th:block>
-        <th:block sec:authorize="isAuthenticated()">
-            <p>
-                <button id="messages">쪽지</button>
-            </p>
-            <div id="messagesModal" class="modal">
-                <div class="modal-content">
-                    <span id="messagesClose" class="close">&times;</span>
-                    <h2>쪽지 목록</h2>
+
+        <!-- 회원 기능 -->
+        <div class="member">
+            <th:block sec:authorize="not isAuthenticated()">
+                <p>
+                    <a th:href="@{/member/join}">회원가입</a>
+                </p>
+                <p>
+                    <a th:href="@{/member/loginForm}">로그인</a>
+                </p>
+            </th:block>
+            <th:block sec:authorize="isAuthenticated()">
+                <p>
+                    <button
+                            id="messages"
+                            th:data-num="${#authentication.principal.num}"
+                    >
+                        쪽지
+                    </button>
+                </p>
+
+                <!-- 쪽지 목록 모달 -->
+                <div id="messagesModal" class="modal">
+                    <div class="modal-content">
+                        <span id="messagesClose" class="close">&times;</span>
+                        <h2>나눔 이야기</h2>
+                        <div id="messageListContainer"></div>
+                    </div>
                 </div>
-            </div>
-            <p>
-                <a th:href="@{/member/logout}">로그아웃</a>
-            </p>
-            <p>
-                <a th:href="@{/myPage/view}">마이페이지</a>
-            </p>
-        </th:block>
-    </div>
+
+                <!-- 쪽지 상세보기 모달 -->
+                <div id="detailsModal" class="modal">
+                    <div class="modal-content">
+                        <span id="detailsClose" class="close">&times;</span>
+                        <h2>쪽지 상세보기</h2>
+                        <div id="messageDetailsContainer"></div>
+                        <textarea
+                                id="messageInput"
+                                placeholder="메시지를 입력하세요"
+                        ></textarea>
+                        <button id="sendMessageBtn">보내기</button>
+                        <button id="userReportBtn">신고하기</button>
+                        <button id="shareComplete" style="display: none">
+                            나눔 완료
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 게시글 유저 신고 모달창 -->
+                <div id="reportModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2>신고하기</h2>
+                        <form id="reportForm">
+                            <div>
+                                <label
+                                ><input
+                                        type="checkbox"
+                                        name="reportReason"
+                                        value="욕설, 인신공격 등 언어적 폭력"
+                                />
+                                    욕설, 인신공격 등 언어적 폭력</label
+                                >
+                                <label
+                                ><input
+                                        type="checkbox"
+                                        name="reportReason"
+                                        value="부적절한 게시글"
+                                />
+                                    부적절한 게시글</label
+                                >
+                                <label
+                                ><input
+                                        type="checkbox"
+                                        name="reportReason"
+                                        value="사기 또는 허위정보"
+                                />
+                                    사기 또는 허위정보</label
+                                >
+                                <label
+                                ><input type="checkbox" name="reportReason" value="기타"/>
+                                    기타</label
+                                >
+                            </div>
+                            <textarea
+                                    id="additionalReason"
+                                    placeholder="기타 사유를 입력하세요"
+                            ></textarea
+                            ><br/>
+                            <button type="button" id="submitUserReportBtn">
+                                신고 제출
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <p>
+                    <a th:href="@{/member/logout}">로그아웃</a>
+                </p>
+                <p>
+                    <a th:href="@{/myPage/view}">마이페이지</a>
+                </p>
+            </th:block>
+        </div>
+    </nav>
 </header>
 
 <main>
-    <!--  프로필 정보 제공  -->
+    <!-- 프로필 정보 제공 -->
     <section class="profileInfo">
-        <!--  닉네임  -->
+        <!-- 닉네임 -->
         <p th:text="${userNickname}">닉네임</p>
-        <!--  나눔 수  -->
+        <!-- 나눔 수 -->
         <p th:text="${shareCount}">나눔 수</p>
-        <!--  나의 알림  -->
+        <!-- 나의 알림 -->
         <p th:text="${alarmTotal}">나의 알림</p>
     </section>
 
-    <!--  프로필 편집  -->
+    <!-- 프로필 편집 -->
     <section class="profileEdit">
-        <!--  프로필 수정  -->
+        <!-- 프로필 수정 -->
         <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
 
-        <!--  알림 추가  -->
-        <button id="alarmEdit">알림 추가</button>
+        <!-- 알림 추가 -->
+        <button id="alarmAdd">알림 추가</button>
 
         <!-- 알림 추가 모달 -->
-        <div id="alarmModal" class="modal">
+        <div id="alarmAddModal" class="modal">
             <div class="modal-content">
-                <span id="alarmClose" class="close">&times;</span>
+                <span class="close" id="alarmAddClose">&times;</span>
                 <h2>일정 등록</h2>
-                <div id="alarmDay">
+                <div class="alarmDay">
                     <span style="font-weight: bold">요일</span>
-                    <input type="radio" class="alarmDay" name="alarmDay" value=0>일
-                    <input type="radio" class="alarmDay" name="alarmDay" value=1>월
-                    <input type="radio" class="alarmDay" name="alarmDay" value=2>화
-                    <input type="radio" class="alarmDay" name="alarmDay" value=3>수
-                    <input type="radio" class="alarmDay" name="alarmDay" value=4>목
-                    <input type="radio" class="alarmDay" name="alarmDay" value=5>금
-                    <input type="radio" class="alarmDay" name="alarmDay" value=6>토
+                    <input type="radio" class="addDay" name="alarmDay" value="일요일">일
+                    <input type="radio" class="addDay" name="alarmDay" value="월요일">월
+                    <input type="radio" class="addDay" name="alarmDay" value="화요일">화
+                    <input type="radio" class="addDay" name="alarmDay" value="수요일">수
+                    <input type="radio" class="addDay" name="alarmDay" value="목요일">목
+                    <input type="radio" class="addDay" name="alarmDay" value="금요일">금
+                    <input type="radio" class="addDay" name="alarmDay" value="토요일">토
                 </div>
-                <div id="alarmContents">
+                <div class="alarmContents">
                     <span style="font-weight: bold">알림 내용</span>
-                    <input type="text" class="alarmContents" name="alarmContents">
+                    <input type="text" id="addContents" class="alarmContents" name="alarmContents">
                 </div>
-                <button type="submit" id="save">저장</button>
+                <button type="submit" id="added">저장</button>
             </div>
         </div>
 
-        <!--  멤버 탈퇴  -->
+        <!-- 알림 편집 모달 -->
+        <div id="alarmEditModal" class="modal">
+            <div class="modal-content">
+                <span class="close" id="alarmEditClose">&times;</span>
+                <h2>일정 등록</h2>
+                <div class="alarmDay">
+                    <span style="font-weight: bold">요일</span>
+                    <input type="radio" class="editDay" name="alarmDay" value="일요일">일
+                    <input type="radio" class="editDay" name="alarmDay" value="월요일">월
+                    <input type="radio" class="editDay" name="alarmDay" value="화요일">화
+                    <input type="radio" class="editDay" name="alarmDay" value="목요일">목
+                    <input type="radio" class="editDay" name="alarmDay" value="수요일">수
+                    <input type="radio" class="editDay" name="alarmDay" value="금요일">금
+                    <input type="radio" class="editDay" name="alarmDay" value="토요일">토
+                </div>
+                <div class="alarmContents">
+                    <span style="font-weight: bold">알림 내용</span>
+                    <input type="text" id="editContents" class="alarmContents" name="alarmContents">
+                </div>
+                <button type="submit" id="edited">수정</button>
+            </div>
+        </div>
+
+        <!-- 멤버 탈퇴 -->
         <button id="deleteId">멤버 탈퇴</button>
 
-        <!--  탈퇴 경고 모달  -->
+        <!-- 탈퇴 경고 모달 -->
         <div id="alertModal" class="modal">
             <div class="modal-content">
-                <span id="alertClose" class="close">&times;</span>
+                <span class="close" id="alertClose">&times;</span>
                 <div id="board">
                     <span style="font-weight: bold">탈퇴하시겠습니까?</span>
                     <div id="button">
@@ -447,13 +726,12 @@
             </div>
         </div>
 
-        <!--  비밀번호 확인 모달  -->
+        <!-- 비밀번호 확인 모달 -->
         <div id="checkModal" class="modal">
             <div class="modal-content">
-                <span id="checkClose" class="close">&times;</span>
+                <span class="close" id="checkClose">&times;</span>
                 <div id="check">
-                    <!--                아이디-->
-                    <!--                <input type="text" name="idCheck" id="idCheck"><br>-->
+                    <!-- 비밀번호 입력 -->
                     <span style="font-weight: bold">비밀번호 확인</span>
                     <input type="password" name="pwCheck" id="pwCheck"/>
                     <button id="delete">탈퇴하기</button>
@@ -461,30 +739,34 @@
             </div>
         </div>
 
-        <!--  탈퇴 확인 모달  -->
+        <!-- 탈퇴 확인 모달 -->
         <div id="verifyModal" class="modal">
             <div class="modal-content">
-                <span id="verifyClose" class="close">&times;</span>
+                <span class="close" id="verifyClose">&times;</span>
                 <div id="verify">탈퇴되었습니다.</div>
             </div>
         </div>
     </section>
 
-    <!--  맞춤형 보드 제공  -->
+    <!-- 맞춤형 보드 제공 -->
     <section class="profileBoard">
-        <!--  알림 띄우기  -->
-        <button id="myAlarm">나의 알림</button>
-        <!--  나눔 현황 띄우기  -->
-        <button id="myShare">나의 나눔</button>
-        <button id="give">나눴어요</button>
-        <button id="receive">받았어요</button>
-        <!--  북마크 띄우기  -->
-        <button id="myBookmark">북마크</button>
+        <!-- 알림 띄우기 -->
+        <button data-list="alarm" data-url="/myPage/showAlarm">나의 알림</button>
+        <!-- 나눔 현황 띄우기 -->
+        <button data-list="give" data-url="/myPage/showGive">나의 나눔</button>
+        <button data-list="give" data-url="/myPage/showGive">나눴어요</button>
+        <button data-list="pendingGive" data-url="/myPage/showGive">나눠요</button>
+        <button data-list="receive" data-url="/myPage/showReceive">받았어요</button>
+        <!-- 북마크 띄우기 -->
+        <button data-list="bookmark" data-url="/myPage/showBookmark">북마크</button>
     </section>
     <section class="boardPage">
         <div id="showData"></div>
     </section>
 </main>
-<footer></footer>
+<!--<footer>-->
+<!--    <p><a th:href="@{/info/siteMap}" target="_blank">사이트맵</a></p>-->
+<!--    <p><a th:href="@{/info/faq}" target="_blank">FAQ</a></p>-->
+<!--</footer>-->
 </body>
 </html>

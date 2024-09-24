@@ -18,6 +18,17 @@ import java.util.List;
 public class AlarmService {
     private final AlarmRepository alarmRepository;
 
+    private static final String[] daysOfWeek = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+
+    private Integer getDayIndex(String alarmDay) {
+        for (int i = 0; i < daysOfWeek.length; i++) {
+            if (daysOfWeek[i].equals(alarmDay)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("유효하지 않은 요일입니다: " + alarmDay);
+    }
+
     /**
      * 알림 리스트 entity에서 dto로 변환
      * @param member 멤버 엔티티
@@ -38,27 +49,38 @@ public class AlarmService {
         return alarmDTOS;
     }
 
-    /**
-     * 알람 추가
-     * @param memberNum 멤버 엔티티
-     * @param alarmDay 알람 요일
-     * @param alarmContents 알람 내용
-     * @return 알람 추가 여부
-     */
-    public Boolean alarmEdit(MemberEntity memberNum, Integer alarmDay, String alarmContents) {
-        Boolean result = false;
+    public Boolean isAlarmExists(MemberEntity member, String alarmDay) {
+        Integer alarmDayInt = getDayIndex(alarmDay);
+
+        if(alarmRepository.findByMemberNumAndAlarmDay(member, alarmDayInt)!=null)
+            return true;
+        return false;
+    }
+
+    public Boolean alarmAdd (MemberEntity member, String alarmDay, String alarmContents) {
+        Integer alarmDayInt = getDayIndex(alarmDay);
 
         AlarmEntity alarmEntity = new AlarmEntity();
 
-        alarmEntity.setMemberNum(memberNum);
-        alarmEntity.setAlarmDay(alarmDay);
+        alarmEntity.setMemberNum(member);
+        alarmEntity.setAlarmDay(alarmDayInt);
         alarmEntity.setAlarmContents(alarmContents);
 
         alarmRepository.save(alarmEntity);
 
-        result = true;
+        return true;
+    }
 
-        return result;
+    public Boolean alarmEdit (MemberEntity memberNum, String alarmDay, String alarmContents) {
+        Integer alarmDayInt = getDayIndex(alarmDay);
+
+        // 기존 알람 조회
+        AlarmEntity alarmEntity = alarmRepository.findByMemberNumAndAlarmDay(memberNum, alarmDayInt);
+
+        if (alarmEntity != null)
+            alarmEntity.setAlarmContents(alarmContents);
+
+        return true;
     }
 
 }
