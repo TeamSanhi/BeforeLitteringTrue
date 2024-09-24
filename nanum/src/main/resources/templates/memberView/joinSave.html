@@ -149,8 +149,15 @@
                 type: 'post',
                 data: { email: email },
                 success: function (response) {
-                    // ajax로 요청 성공시 리턴받은 메시지를 alert 창으로 보여준다. 
-                    $("#emailError").text(response).show().css("color", "blue"); // 경고 메시지
+                    // if문으로 response 값이 true 이면 중복되는 값이 있고 false 면 중복되는 값이 없다.
+                    if(response){
+                      // 전달받은 값이 true 면 중복임으로 경고 메시지 
+                      $("#emailError").text("이미 존재하는 이메일입니다.").show().css("color", "red"); // 경고 메시지
+                    }else{
+                      // 전달받은 값이 false 면 중복되지 않고 이메일이 전송되었음으로 아래 메시지 출력
+                      $("#emailError").text("이메일 전송에 성공하였습니다.").show().css("color", "blue"); 
+                    }
+
                 },
                 error: function () {
                     // ajax 요청 실패시 메시지 보여준다.

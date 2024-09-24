@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.repository.MemberRepository;
 
 /**
  * 이메일 사용을 위한 컨트롤러
@@ -25,6 +26,8 @@ public class EmailController {
 
     // 이메일 전송을 위한 기능
     private final JavaMailSender emailSender;
+    // 이메일 중복확인 하기 위한 리퍼지토리
+    private final MemberRepository memberRepository;
 
     /**
      * 이메일 ajax 요청을 받아 처리하는 부분
@@ -35,9 +38,14 @@ public class EmailController {
      */
     @ResponseBody
     @PostMapping("sendEmail")
-    public String sendEmail(
+    public boolean sendEmail(
             @RequestParam("email") String email,
             HttpSession session) {
+
+        // 이메일 중복확인하기 위해 repository에 검색
+        if (memberRepository.existsByMemberEmail(email)) {
+            return true;
+        }
 
         String code = generateVerificationCode(); // 랜덤 인증번호 생성
         // 이메일 전송을 위한 객체 생성
@@ -50,7 +58,9 @@ public class EmailController {
         // 인증번호를 세션에 저장
         session.setAttribute("verificationCode", code);
 
-        return "인증번호가 전송되었습니다.";
+        // 이메일이 중복이면 true 리턴
+        // 이메일이 중복되지 않으면 false 리턴
+        return false;
     }
 
     /**
