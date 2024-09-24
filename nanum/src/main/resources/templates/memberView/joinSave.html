@@ -185,13 +185,15 @@
               success: function (response) {
                 // 인증성공, 인증실패 결과에 따라 띄워준다.  
                 if(response == "인증 성공"){
+                  // 인증성공 메시지 출력
                   $("#emailCodeError").text(response).show().css("color", "blue");
                   // 성공시 인증확인을 위한 emailDuplicationCheck를 y로 변경  
                   $("#emailDuplicationCheck").val("y");
-                  // 인증성공시 이메일과 인증번호 수정불가 하도록 변경
+                  // 인증성공시 이메일과 인증번호를 수정불가 하도록 변경
                   $('#memberEmail').attr('readonly', true);
                   $('#emailCode').attr('readonly', true);
                 } else{
+                  // 리턴받은 경고메시지를 출력 
                   $("#emailCodeError").text(response).show().css("color", "red"); // 경고 메시지
                 }
               },
@@ -242,9 +244,9 @@
         let emailDuplicationCheck = $("#emailDuplicationCheck").val();
         let passwordDuplicationCheck = $('#passwordDuplicationCheck').val();
 
-        // 아이디, 닉네임 중복확인 절차를 통과햐였는지 확인. 
-        if (idDuplicationCheck != "y" || nickDuplicationCheck != "y") {
-          alert("아이디 혹은 닉네임 중복 확인이 이루어지지 않았습니다");
+        // 아이디 중복확인 절차를 통과햐였는지 확인. 
+        if (idDuplicationCheck != "y") {
+          alert("아이디 중복 확인이 이루어지지 않았습니다");
           return false;
         }
         
@@ -259,10 +261,14 @@
           alert("이메일을 인증하여 주십시오.");
           return false;
         }
-        
+
+        // 닉네임 인증절차를 통과하였는지 확인 
+        if (nickDuplicationCheck != "y") {
+          alert("닉네임 중복확인이 이루어지지 않았습니다.");
+          return false;
+        }        
+
       }
-
-
     </script>
   </head>
   <body>
@@ -348,7 +354,10 @@
           </th:block>
 
       </div>
-  </div>
+    </div>
+    
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
 
     <!-- 회원가입 form  -->
     <form th:action="@{/member/join}" method="post" id="joinPost">
