@@ -17,9 +17,11 @@
       $(document).ready(function () {
           // 회원가입에 필요한 인증절차들의 값을 ""으로 초기화시킨다. 
           // 아래의 id중복확인 nickname 중복확인 email인증이 모두 시행되어야 회원가입이 되도록 한다. 
+          // 비밀번호 규약통과 여부 초기화 
           $("#idDuplicationCheck").val("");
           $("#nickDuplicationCheck").val("");
           $("#emailDuplicationCheck").val("");
+          $('#passwordDuplicationCheck').val("");
 
           // ID 입력시 keyup 이벤트로 유효성 검사 
           $('#memberId').keyup(idCheck);
@@ -49,9 +51,13 @@
               // 비밀번호 일치여부 확인
               if (memberPw === pwCheck) {
                   $(".pwCheckError").text("비밀번호가 일치합니다.").show().css("color", "blue");
+                  // 비밀번호 규약을 제대로 통과하였음으로 통과했다는 의미의 y값을 넣어줌.
+                  $('#passwordDuplicationCheck').val("y");
               }
               if (memberPw !== pwCheck) {
                   $(".pwCheckError").text("비밀번호가 일치하지 않습니다.").show().css("color", "red");
+                  // 비밀번호 규약을 제대로 지키지 못했음으로 초기화
+                  $('#passwordDuplicationCheck').val("");
               }
         });
 
@@ -230,28 +236,30 @@
 
       //제출전 체크 
       function check() {
-        let id = $("#memberId").val();
-        let pw = $("#memberPw").val();
-        let pwCheck = $("#pwCheck").val();
-        let email = $("#memberEmail").val();
-        let nickname = $("#memberNickname").val();
         //3가지 인증절차를 모두 통과하였는지 확인하기 위해 값을 가져온다. 값이 "y"가 아니면 인증이 모두 성공하지 못한것이다. 
         let idDuplicationCheck = $("#idDuplicationCheck").val();
         let nickDuplicationCheck = $("#nickDuplicationCheck").val();
         let emailDuplicationCheck = $("#emailDuplicationCheck").val();
-        console.log(idDuplicationCheck, nickDuplicationCheck ,emailDuplicationCheck)
+        let passwordDuplicationCheck = $('#passwordDuplicationCheck').val();
 
         // 아이디, 닉네임 중복확인 절차를 통과햐였는지 확인. 
         if (idDuplicationCheck != "y" || nickDuplicationCheck != "y") {
           alert("아이디 혹은 닉네임 중복 확인이 이루어지지 않았습니다");
           return false;
         }
+        
+        // 비밀번호 규약을 제대로 인증받았는지 확인 
+        if (passwordDuplicationCheck != "y"){
+          alert("비밀번호를 정확히 입력해 주십시오.");
+          return false;
+        }
+        
         // 이메일 인증절차를 통과하였는지 확인 
         if (emailDuplicationCheck!= "y") {
           alert("이메일을 인증하여 주십시오.");
           return false;
         }
-
+        
       }
 
 
@@ -508,6 +516,9 @@
       <input type="hidden" id="nickDuplicationCheck" />
       <!-- 이메일 인증하였는지 여부 -->
       <input type="hidden" id="emailDuplicationCheck" />
+      <!-- 비밀번호 규약을 제대로 통과하였는지 여부 체크 -->
+      <input type="hidden" id="passwordDuplicationCheck">
+
 
     </form>
 
