@@ -60,9 +60,47 @@ public class MessageService {
                 log.debug("쪽지방 만든 유저: {}", room.getCreator().getMemberNum());
                 log.debug("게시글 유저: {}", room.getReceiver().getMemberNum());
 
-                // 내가 쓴 쪽지일때
-                if (num == room.getCreator().getMemberNum()) {
-                        for (MessageEntity message : messageList) {
+                // // 내가 쓴 쪽지일때
+                // if (num == room.getCreator().getMemberNum()) {
+                //         for (MessageEntity message : messageList) {
+                //                 MessageDTO dto = MessageDTO.builder()
+                //                                 .messageNum(message.getMessageNum())
+                //                                 .senderNum(message.getSender().getMemberNum())
+                //                                 .senderNickname(message.getSender().getMemberNickname())
+                //                                 .roomNum(message.getRoom().getRoomNum())
+                //                                 .messageContents(message.getMessageContents())
+                //                                 .deliverDate(message.getDeliverDate())
+                //                                 .isRead(message.getIsRead())
+                //                                 .build();
+                //                 dtoList.add(dto);
+                //         }
+                // }
+                // // 내가 받은 쪽지일때
+                // else if (num == room.getReceiver().getMemberNum()) {
+                //         for (MessageEntity message : messageList) {
+                //                 message.setIsRead(true);
+                //                 messageRepository.save(message);
+
+                //                 MessageDTO dto = MessageDTO.builder()
+                //                                 .messageNum(message.getMessageNum())
+                //                                 .senderNum(message.getSender().getMemberNum())
+                //                                 .senderNickname(message.getSender().getMemberNickname())
+                //                                 .roomNum(message.getRoom().getRoomNum())
+                //                                 .messageContents(message.getMessageContents())
+                //                                 .deliverDate(message.getDeliverDate())
+                //                                 .isRead(message.getIsRead())
+                //                                 .build();
+                //                 dtoList.add(dto);
+                //         }
+                // } else {
+                //         return null;
+                // }
+
+                for (MessageEntity message : messageList) {
+                        log.debug("발신자: {}", message.getSender().getMemberNum());
+
+                        // 쪽지를 보낸 게 나일 때
+                        if (num == message.getSender().getMemberNum()){
                                 MessageDTO dto = MessageDTO.builder()
                                                 .messageNum(message.getMessageNum())
                                                 .senderNum(message.getSender().getMemberNum())
@@ -73,11 +111,9 @@ public class MessageService {
                                                 .isRead(message.getIsRead())
                                                 .build();
                                 dtoList.add(dto);
-                        }
-                }
-                // 내가 받은 쪽지일때
-                else if (num == room.getReceiver().getMemberNum()) {
-                        for (MessageEntity message : messageList) {
+                        } 
+                        // 쪽지를 받은 게 나일 때
+                        else {
                                 message.setIsRead(true);
                                 messageRepository.save(message);
 
@@ -92,9 +128,8 @@ public class MessageService {
                                                 .build();
                                 dtoList.add(dto);
                         }
-                } else {
-                        return null;
                 }
+
                 return dtoList;
         }
 
@@ -132,12 +167,17 @@ public class MessageService {
                         MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
                         log.debug("방 번호: {}", room.getRoomNum());
                         log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
+
+                        // 해당 방에 읽지 않은 쪽지가 있는지 체크
+                        boolean hasUnreadMessages = messages.stream().anyMatch(message -> !message.getIsRead());
+
                         int creator = room.getCreator().getMemberNum();
                         int receiver = room.getReceiver().getMemberNum();
 
                         if (memberNum == creator || memberNum == receiver) {
                                 MessageDTO dto = MessageDTO.builder()
                                 .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
+                                .senderNum(latestMessage != null ? latestMessage.getSender().getMemberNum() : null)
                                 .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
                                 .receiverNum(memberNum == creator ? room.getReceiver().getMemberNum() : room.getCreator().getMemberNum())
                                 .shareNum(room.getShareBoard().getShareNum())
@@ -148,6 +188,7 @@ public class MessageService {
                                 .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
                                 .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
                                 .shareCompleted(room.getShareBoard().getShareCompleted())
+                                .hasUnreadMessages(hasUnreadMessages) // 읽지 않은 쪽지 여부를 전달
                                 .build();
 
                                 return dto;
@@ -177,6 +218,10 @@ public class MessageService {
             
         //         messageRepository.save(message);
         //     }
-            
+        
+        public long countRoomsWithUnreadMessagesByMemberNum(int memberNum) {
+                log.debug("레포지토리에서 계산한 값: {}", messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum));
+                return messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum);
+            }
 
 }

@@ -34,7 +34,7 @@ public class RecycleService {
         page--;
 
         // 조회수(viewCount)를 기준으로 내림차순 정렬
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "viewCount"));
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(Sort.Direction.DESC, "viewCount").and(Sort.by(Sort.Direction.ASC, "recycleNum")));
 
         Page<RecycleEntity> entityPage;
 

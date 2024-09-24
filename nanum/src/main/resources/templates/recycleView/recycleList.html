@@ -239,7 +239,7 @@
     <script>
       function openPopup(recycleNum) {
         // AJAX 요청으로 게시글 데이터를 불러온다
-        fetch(`/recycle/read?recycleNum=` + recycleNum)
+        fetch(`/recycle/read?recycleNum=${recycleNum}`)
           .then((response) => response.json())
           .then((data) => {
             console.log(data); // 데이터 확인
@@ -252,8 +252,24 @@
               data.recycleCategory;
             document.getElementById("popupPossible").textContent =
               data.recyclePossible;
-            document.getElementById("popupDate").textContent =
-              data.updateDate || data.recycleDate;
+            // 날짜 변환 및 표시
+            const date = new Date(data.updateDate);
+
+            const formattedDate =
+              date.getFullYear() +
+              "년 " +
+              (date.getMonth() + 1).toString().padStart(2, "0") +
+              "월 " +
+              date.getDate().toString().padStart(2, "0") +
+              "일 " +
+              date.getHours().toString().padStart(2, "0") +
+              "시 " +
+              date.getMinutes().toString().padStart(2, "0") +
+              "분 ";
+            // date.getSeconds().toString().padStart(2, "0") +
+            // "초";
+
+            document.getElementById("popupDate").textContent = formattedDate;
 
             // 이미지가 제대로 표시되도록 설정
             document.getElementById("popupImage").src =
@@ -321,6 +337,40 @@
         document.body.appendChild(form);
         form.submit();
       }
+      document.addEventListener("DOMContentLoaded", function () {
+        // 검색어 저장 함수
+        function saveSearchWord() {
+          const searchWord = document.querySelector(
+            'input[name="searchWord"]'
+          ).value;
+          if (searchWord) {
+            localStorage.setItem("lastSearchWord", searchWord); // 검색어를 localStorage에 저장
+            console.log("검색어 저장: ", searchWord); // 디버그용 콘솔 로그
+          }
+        }
+
+        // 검색창에 포커스가 갔을 때 저장된 검색어를 불러오는 함수
+        function loadSearchWord() {
+          const lastSearchWord = localStorage.getItem("lastSearchWord");
+          if (lastSearchWord) {
+            document.querySelector('input[name="searchWord"]').value =
+              lastSearchWord; // 저장된 검색어를 입력 필드에 넣음
+            console.log("이전 검색어 불러오기: ", lastSearchWord); // 디버그용 콘솔 로그
+          } else {
+            console.log("저장된 검색어가 없습니다."); // 디버그용 콘솔 로그
+          }
+        }
+
+        // 검색 폼 제출 시 검색어 저장
+        document
+          .querySelector(".search-bar form")
+          .addEventListener("submit", saveSearchWord);
+
+        // 검색창 클릭 시(포커스) 이전 검색어 불러오기
+        document
+          .querySelector('input[name="searchWord"]')
+          .addEventListener("focus", loadSearchWord);
+      });
     </script>
   </head>
   <body>
@@ -383,7 +433,12 @@
           </th:block>
         </ul>
       </div>
-
+      <!-- 검색 결과가 없을 때 -->
+      <th:block th:if="${#lists.size(recycleList) == 0}">
+        <p style="text-align: center; font-size: 18px; color: red">
+          해당 품목이 없습니다.
+        </p>
+      </th:block>
       <!-- 페이지 이동 링크 -->
       <div class="pagination" style="text-align: center; margin-bottom: 20px">
         <span th:if="${boardPage.totalPages > 0 and page != 1}">
@@ -454,6 +509,7 @@
             name="searchWord"
             placeholder="검색어를 입력하세요"
             th:value="${searchWord}"
+            onfocus="loadSearchWord()"
           />
           <button type="submit">검색</button>
         </form>

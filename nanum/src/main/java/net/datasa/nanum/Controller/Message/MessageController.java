@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -162,4 +163,14 @@ public class MessageController {
 
         return ResponseEntity.ok("success");
     }
+
+    @GetMapping("/rooms/unreadCount/{memberNum}")
+    @ResponseBody
+    public ResponseEntity<Long> getUnreadMessageRoomCountByMember(@PathVariable("memberNum") int memberNum) {
+
+        log.debug("가져온 회원번호: {}", memberNum);
+        long count = messageService.countRoomsWithUnreadMessagesByMemberNum(memberNum);
+        log.debug("안읽은 개수: {}",count);
+        return ResponseEntity.ok(count);
+    } 
 }

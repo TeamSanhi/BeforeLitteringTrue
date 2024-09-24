@@ -22,19 +22,22 @@ public class MemberController {
 
     /**
      * 로그인 화면으로 이동
+     * 
      * @return memberView/login.html
      */
     // @GetMapping("loginForm")
-    // public String login(@RequestParam(value = "error", required = false) String error,
-    //                     @RequestParam(value = "exception", required = false) String exception, Model model) {
-    //     log.debug("login.html 이동");
-    //     log.debug("Error: " + error);
-    //     log.debug("Exception: " + exception);
-    //     if (error != null) {
-    //         model.addAttribute("error", error);
-    //         model.addAttribute("exception", exception);
-    //     }
-    //     return "memberView/login";
+    // public String login(@RequestParam(value = "error", required = false) String
+    // error,
+    // @RequestParam(value = "exception", required = false) String exception, Model
+    // model) {
+    // log.debug("login.html 이동");
+    // log.debug("Error: " + error);
+    // log.debug("Exception: " + exception);
+    // if (error != null) {
+    // model.addAttribute("error", error);
+    // model.addAttribute("exception", exception);
+    // }
+    // return "memberView/login";
     // }
 
     @GetMapping("loginForm")
@@ -54,26 +57,27 @@ public class MemberController {
 
     /**
      * 회원 가입 화면으로 이동
+     * 
      * @return memberView/joinSave.html
-     */ 
+     */
     @GetMapping("join")
-    public String join () {
+    public String join() {
         log.debug("joinSave.html 이동");
         return "memberView/joinSave";
     }
 
-
     /**
      * 가입하려는 회원 정보를 dto에 담아서 DB에 저장
-     * @param dto   입력한 회원 정보
-     * @return      homeView/home.html
+     * 
+     * @param dto 입력한 회원 정보
+     * @return homeView/home.html
      */
     @PostMapping("join")
-    public String join (MemberDTO dto) {
-        
+    public String join(MemberDTO dto) {
+
         log.debug("회원 가입 정보 입력값: {}", dto);
 
-        memberService.join(dto);      
+        memberService.join(dto);
 
         return "redirect:/";
     }

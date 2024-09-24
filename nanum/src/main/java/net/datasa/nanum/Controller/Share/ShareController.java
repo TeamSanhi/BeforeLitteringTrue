@@ -227,7 +227,7 @@ public class ShareController {
     // 쪽지에서 나눔 완료 버튼을 클릭하면 나눔이 완료된 상태로 변경
 @PostMapping("complete")
 public ResponseEntity<String> completeShare(@RequestParam("shareNum") Integer shareNum, @RequestParam("receiverNum") Integer receiverNum) {
-    
+    log.debug("게시글: {}, 받는사람: {}", shareNum, receiverNum);
     shareService.completeShare(shareNum, receiverNum);
     
     return ResponseEntity.ok("나눔 완료");
