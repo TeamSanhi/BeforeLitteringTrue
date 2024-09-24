@@ -9,40 +9,225 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/login.css">
     <script>
       $(document).ready(function () {
-        $("#loginPost").submit(function () {});
-      });
+
+          // 로그인 버튼 클릭 이벤트
+          $('.loginButton').on('click', function(event) {
+                  
+                  // 기본 폼 전송 방지
+                  event.preventDefault();
+
+                  // 입력 값 가져오기
+                  let userId = $('#id').val().trim();
+                  let userPassword = $('#password').val().trim();
+
+                  // 아이디 입력 확인
+                  if (userId === "") {
+                      // 아이디가 비어 있으면 오류 메시지 표시
+                      $('.idError').html("아이디를 입력해주십시오.");
+                      return;
+                  }else{
+                      // 입력했으면 초기화 시켜줌
+                      $('.idError').html("");
+                  }
+
+                  // 비밀번호 입력 확인
+                  if (userPassword === "") {
+                      // 비밀번호가 비어 있으면 오류 메시지 표시
+                      $('.passwordError').html("비밀번호를 입력해주십시오.");
+                      return;
+                  }else{
+                      // 비밀번호가 입력되어 있었으면 공백처리
+                      $('.passwordError').html("");
+                  }
+                  //로그인 진행
+                  $("#loginPost").submit();
+
+          });
+
+      }); // ******************** ready 끝 *********************************
+
     </script>
   </head>
   <body>
+
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+
+      <!-- 로고 -->
+      <div class="logo">
+          <a href="/">
+              <img src="/images/logo.png" class="logoImg">
+          </a>
+      </div>
+
+      <!-- 우리는 -->
+      <div class="projectInfo">
+          <a href="/info/service">우리는</a>
+      </div>
+
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+          <a href="/share/list">나눠요</a>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+          <a href="/recycle/list">버려요</a>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+          <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+          <th:block sec:authorize="not isAuthenticated()">
+              <!-- 회원가입 -->
+              <div class="join">
+                  <span class="joinHover">
+                      <a href="/member/join">회원가입</a>
+                  </span>
+              </div>
+
+              <!-- 로그인 -->
+              <div class="login">
+                  <a href="/member/loginForm">
+                      <span class="loginHover">
+                          로그인
+                      </span>
+                  </a>
+              </div>
+          </th:block>
+
+          <!-- 로그인 하였을시 보여줄 페이지 -->
+          <th:block sec:authorize="isAuthenticated()">
+              <!-- 나눔 쪽지 -->
+              <div class="message" id="messages">
+                  <span class="messageHover">
+                      나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
+                  </span>
+              </div>
+
+              <div id="messagesModal" class="modal">
+                  <div class="modal-content">
+                      <span id="messagesClose" class="close">&times;</span>
+                      <h2>쪽지 목록</h2>
+                  </div>
+              </div>
+
+              <div class="mypage">
+                  <a th:href="@{/myPage/view}">
+                      <span class="mypageHover">
+                          마이페이지
+                      </span>
+                  </a>
+              </div>
+              
+              <!-- 로그아웃 -->
+              <div class="logout">
+                  <a th:href="@{/member/logout}">
+                      <span class="logoutHover">
+                          로그아웃
+                      </span>
+                  </a>
+              </div>
+
+          </th:block>
+
+      </div>
+  </div>
+
+  <!-- 공백 -->
+  <div class="blankContainer"></div>
+
+    <!-- 로그인 폼 -->
     <form th:action="@{/member/login}" method="post" id="loginPost">
-      <table>
-        <tr>
-          <!-- ID 입력창 -->
-          <th>ID</th>
-          <td><input type="text" name="id" id="id" /></td>
-        </tr>
-        <tr>
-          <!-- 패스워드 입력창 -->
-          <th>Password</th>
-          <td><input type="password" name="password" id="password" /></td>
-        </tr>
-        <tr th:if="${error}">
-          <!-- 에러 발생 시 메세지 출력창 -->
-          <td colspan="2">
-            <p th:text="${exception}" style="color: red"></p>
-          </td>
-        </tr>
-        <tr>
-          <td><button type="submit">Login</button></td>
-        </tr>
-      </table>
-    </form>
-    <a href="@{/member/join}">회원가입</a>
-    <div>
-      <a th:href="@{/find/idFind}">아이디 찾기</a>
-      <a th:href="@{/find/pwFind}">비밀번호 찾기</a>
+
+      <!-- mainContainer -->
+      <div id="mainContainer">
+
+        <!-- 로그인 영역 -->
+        <div class="loginArea">
+
+            <!-- 로그인 타이틀 영역 -->
+            <div class="loginTitleArea">
+                <!-- 로그인 타이틀 -->
+                <div class="loginTitle">로그인</div>
+            </div>
+
+            <!-- 아이디 영역 -->
+            <div class="idArea">
+                <!-- 아이디 상단 영역 -->
+                <div class="idUpsideArea">
+                    <!-- 아이디 타이틀 -->
+                    <div class="idTitle">
+                        아이디   
+                    </div>
+                    <!-- 아이디 찾기 -->
+                    <div class="findId" onclick="window.location.href='/find/idFind';">
+                      아이디 찾기
+                    </div>
+                </div>
+                
+                <!-- 아이디_input 영역 -->
+                <div class="idInputArea">
+                    <!-- 아이디_input -->
+                    <input type="text" name="id" id="id" class="userId">
+                    <br>
+                    <!-- 아이디 및 로그인 오류  메시지 출력 -->
+                    <div class="idError" th:if="${error}">
+                          <!-- 로그인이 올바르게 시행되지 않았을 경우 페이지가 새로고침 되며 받아온 오류 exception을 출력한다. -->
+                          <span th:text="${exception}"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 비밀번호 영역 -->
+            <div class="passwordArea">
+                <!-- 비밀번호 상단 영역 -->
+                <div class="passwordUpsideArea">
+                    <!-- 비밀번호 타이틀 -->
+                    <div class="passwordTitle">
+                        비밀번호   
+                    </div>
+                    <!-- 비밀번호 찾기 -->
+                    <div class="findPassword" onclick="window.location.href='/find/pwFind';">
+                        비밀번호 재설정
+                    </div>
+                </div>
+                    
+                <!-- 비밀번호_input 영역 -->
+                <div class="passwordInputArea">
+                    <!-- 비밀번호_input -->
+                    <input type="password" name="password" id="password" class="userPassword">
+                    <br>
+                    <!-- 비밀번호 오류 메시지 출력 -->
+                    <div class="passwordError">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="buttonArea">
+              <!-- 로그인 버튼 -->
+              <button type="submit" class="loginButton">
+                  로그인
+              </button>
+              <!-- 회원가입 버튼 -->
+              <button type="button" class="joinButton" onclick="location.href='/member/join'">
+                  회원가입
+              </button>
+            </div>
+
+        </div>
+
+      </div>
+
+    <!-- 저작권 정보 -->
+    <div class="rightContainer">
+      © 2024 Team San, Hai. All rights reserved.
     </div>
+
   </body>
 </html>
