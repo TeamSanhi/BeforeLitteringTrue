@@ -96,15 +96,15 @@
     /* 형광펜 효과_파란색 */
     .highlighterBlue {
         background: linear-gradient(#8ABAFF 0 100%);
-        background-position: 0 calc(100% - 2px);
-        background-size: 0 14px;
+        background-position: 0 calc(100% - 0.3vh);
+        background-size: 0 1.5vh;
         background-repeat: no-repeat;
         transition: background-size 0.3s;
     }
 
     /* 형광펜 효과_파란색_hover */
     .highlighterBlue:hover {
-        background-size: 100% 14px;
+        background-size: 100% 1.5vh;
     }
 
 
@@ -255,8 +255,8 @@
     /* 형광펜 효과_초록 */
     .highlighterGreen {
         background: linear-gradient(#2DC986 0 100%);
-        background-position: 0 calc(100% - 2px);
-        background-size: 0 9px;
+        background-position: 0 calc(100% - 0.2vh);
+        background-size: 0 0.9vh;
         background-repeat: no-repeat;
         transition: background-size 0.3s;
     }
@@ -264,7 +264,7 @@
     /* 형광펜 효과_초록_hover */
     .highlighterGreen:hover {
         color: black;
-        background-size: 100% 9px;
+        background-size: 100% 0.9vh;
     }
 
 
