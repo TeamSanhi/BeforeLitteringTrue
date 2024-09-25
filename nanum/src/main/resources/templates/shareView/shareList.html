@@ -112,11 +112,9 @@
 
                 <!-- 로그인 -->
                 <div class="login">
-                    <a href="/member/loginForm">
-                        <span class="loginHover">
-                            로그인
-                        </span>
-                    </a>
+                    <span class="loginHover">
+                    <a href="/member/loginForm">로그인</a>
+                    </span>
                 </div>
             </th:block>
 
@@ -137,20 +135,16 @@
                 </div>
 
                 <div class="mypage">
-                    <a th:href="@{/myPage/view}">
-                        <span class="mypageHover">
-                            마이페이지
-                        </span>
-                    </a>
+                    <span class="mypageHover">
+                        <a th:href="@{/myPage/view}">마이페이지</a>
+                    </span>
                 </div>
                 
                 <!-- 로그아웃 -->
                 <div class="logout">
-                    <a th:href="@{/member/logout}">
-                        <span class="logoutHover">
-                            로그아웃
-                        </span>
-                    </a>
+                    <span class="logoutHover">
+                        <a th:href="@{/member/logout}">로그아웃</a>
+                    </span>
                 </div>
 
             </th:block>
