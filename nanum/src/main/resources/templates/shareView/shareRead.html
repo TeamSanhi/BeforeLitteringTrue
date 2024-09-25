@@ -13,7 +13,6 @@
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script type="text/javascript" src="/js/shareRead.js"></script>
-    
   </head>
   <body>
     <!-- 네비게이션 구역 -->
@@ -78,7 +77,7 @@
                   <div class="badge" id="badge">0</div>
               </div>
 
-              <!-- 쪽지 목록 모달 -->
+<!-- ************************************ 쪽지 목록 모달 *************************************-->
               <div
                 id="messagesModal"
                 class="modal"
@@ -86,7 +85,7 @@
                   max-height: calc(100vh - 50px);
                   overflow-x: hidden;
                   overflow-y: auto;
-                "
+                  "
               >
                 <div class="modal-content">
                   <span id="messagesClose" class="close">&times;</span>
@@ -94,7 +93,7 @@
                   <div id="messageListContainer"></div>
                 </div>
               </div>
-
+              
               <!-- 쪽지 상세보기 모달 -->
               <div
                 id="detailsModal"
@@ -103,29 +102,29 @@
                   max-height: calc(100vh - 50px);
                   overflow-x: hidden;
                   overflow-y: auto;
-                "
+                  "
               >
                 <div class="modal-content">
                   <span id="detailsClose" class="close">&times;</span>
                   <h2>쪽지 상세보기</h2>
-
+                  
                   <!-- 게시글로 이동하는 영역 추가 -->
                   <div id="goToShareBoard" style="cursor: pointer">
                     <div
-                      id="shareBoardLink"
-                      style="
+                    id="shareBoardLink"
+                    style="
                         padding: 10px;
                         border: 1px solid #ccc;
                         text-align: center;
-                      "
+                        "
                     >
-                      게시글로 이동
-                    </div>
+                    게시글로 이동
                   </div>
-                  <div id="messageDetailsContainer"></div>
-                  <textarea
-                    id="messageInput"
-                    placeholder="메시지를 입력하세요"
+                </div>
+                <div id="messageDetailsContainer"></div>
+                <textarea
+                id="messageInput"
+                placeholder="메시지를 입력하세요"
                   ></textarea>
                   <button id="sendMessageBtn">보내기</button>
                   <button id="userReportBtn">신고하기</button>
@@ -143,35 +142,35 @@
                   <form id="reportForm">
                     <div>
                       <label
-                        ><input
-                          type="checkbox"
-                          name="reportReason"
-                          value="욕설, 인신공격 등 언어적 폭력"
-                        />
-                        욕설, 인신공격 등 언어적 폭력</label
+                      ><input
+                      type="checkbox"
+                      name="reportReason"
+                      value="욕설, 인신공격 등 언어적 폭력"
+                      />
+                      욕설, 인신공격 등 언어적 폭력</label
                       >
                       <label
-                        ><input
-                          type="checkbox"
+                      ><input
+                      type="checkbox"
                           name="reportReason"
                           value="부적절한 게시글"
-                        />
-                        부적절한 게시글</label
-                      >
-                      <label
-                        ><input
+                          />
+                          부적절한 게시글</label
+                          >
+                          <label
+                          ><input
                           type="checkbox"
                           name="reportReason"
                           value="사기 또는 허위정보"
-                        />
-                        사기 또는 허위정보</label
-                      >
-                      <label
-                        ><input type="checkbox" name="reportReason" value="기타" />
-                        기타</label
-                      >
-                    </div>
-                    <textarea
+                          />
+                          사기 또는 허위정보</label
+                          >
+                          <label
+                          ><input type="checkbox" name="reportReason" value="기타" />
+                          기타</label
+                          >
+                        </div>
+                        <textarea
                       id="additionalReason"
                       placeholder="기타 사유를 입력하세요"
                     ></textarea
@@ -182,6 +181,7 @@
                   </form>
                 </div>
               </div>
+<!-- ************************************ 쪽지 목록 모달 *************************************-->
               
               <!-- 마이페이지  -->
               <div class="mypage">
@@ -234,8 +234,8 @@
     <div class="rightContainer">
       <!-- 상단 영역 -->
       <div class="rightUpside">
-          <!-- 프로필 -->
-          <div class="profile">
+          <!-- 작성자 정보 영역 --> 
+          <div class="writerInfo">  
             <!-- ****************************작성자 프로필 사진 *******************-->
             <img class="infoImage" src="./img/user.png" alt="User Photo">
             <!-- 작성자 이름 -->
@@ -243,9 +243,10 @@
               <span th:text="${shareBoard.memberNickname}"></span>
             </div>
           </div>
-          <!-- 날짜 영역 --> 
-          <div class="uploadDateArea">   
-            <!-- 타임리프 이용해 날짜 데이터 포멧 -->
+
+          <!-- 작성일 영역 -->
+          <div class="postDateArea">
+            <!-- 작성일 타임리프 이용해 날짜 데이터 포멧 -->
             <span class="uploadDate" th:text="${#temporals.format(shareBoard.shareDate, 'yy년 MM월 dd일')}"></span>
           </div>
       </div>
@@ -265,29 +266,21 @@
       <!-- 하단 영역 -->
       <div class="postBottom">
           <!-- 북마크 영역 -->
-          <div class="markArea">
+          <div class="bookmarkArea">
+              <!-- 북마크 버튼 | 클릭 시 색상 변환 -->
               <!-- 북마크 하지않았을때  -->
-                <img
-                id="bookmark1"
-                th:data-num="${shareBoard.shareNum}"
-                style="width: 47px; height: 47px"
-                src="/images/bookmark1.png"
-              />
+              <span class="bookMarkButton" id="bookmark1" th:data-num="${shareBoard.shareNum}">북마크</span>
               <!-- 북마크 하였을때  -->
-              <img
-                id="bookmark2"
-                th:data-num="${shareBoard.shareNum}"
-                style="width: 47px; height: 47px; display: none"
-                src="/images/bookmark2.png"
-              />
+              <span class="bookMarkButton2" id="bookmark2" th:data-num="${shareBoard.shareNum}" style="display: none;">북마크</span>
           </div>
           <!-- 길찾기 이미지 -->
-          <div class="markArea" id="findButton" alt="길찾기 이미지">
-              <img style="width:47px; height: 47px" src="/images/findRoute.png">
+          <div class="roadmarkArea" id="findButton" alt="길찾기 이미지">
+              <!-- 길찾기 버튼 | 클릭 시는 연규짱이 알아서 해줘요 -->
+              <span class="roadMarkButton">길찾기</span>
           </div>
           <!-- 신고 이미지 -->
-          <div class="markArea" id="reportButton" alt="신고 이미지" th:data-num="${shareBoard.shareNum}">
-              <img style="width: 47px; height: 47px" src="/images/siren.png">   
+          <div class="reportButtonArea" id="reportButton" alt="신고 이미지" th:data-num="${shareBoard.shareNum}">
+            <span class="reportButton highlighterRed">신고</span>
           </div>
           <!-- 하단 우측 영역 -->
           <div class="bottomRight">
@@ -345,61 +338,62 @@
       marker.setMap(map);
     </script>
 
-    <!-- 쪽지 보내기 모달창 -->
-    <div id="messageModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>쪽지 보내기</h2>
-        <!-- 쪽지 내역이 출력되는 곳 -->
-        <div id="existingMessages"></div>
-        <textarea
-          id="messageContents"
+<!-- ******************* 받을래요 쪽지 모달창 *********************************** -->
+<!-- 쪽지 보내기 모달창 -->
+<div id="messageModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>쪽지 보내기</h2>
+    <!-- 쪽지 내역이 출력되는 곳 -->
+    <div id="existingMessages"></div>
+    <textarea
+    id="messageContents"
           placeholder="쪽지 내용을 입력하세요"
-        ></textarea
-        ><br />
-        <button id="sendMessageButton">쪽지 보내기</button>
-        <button id="userReportButton">신고하기</button>
+          ></textarea
+          ><br />
+          <button id="sendMessageButton">쪽지 보내기</button>
+          <button id="userReportButton">신고하기</button>
+        </div>
       </div>
-    </div>
-
-    <!-- 게시글 유저 신고 모달창 -->
-    <div id="reportModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>신고하기</h2>
-        <form id="reportForm">
-          <div>
-            <label
+      
+      <!-- 게시글 유저 신고 모달창 -->
+      <div id="reportModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>신고하기</h2>
+          <form id="reportForm">
+            <div>
+              <label
               ><input
-                type="checkbox"
-                name="reportReason"
-                value="욕설, 인신공격 등 언어적 폭력"
+              type="checkbox"
+              name="reportReason"
+              value="욕설, 인신공격 등 언어적 폭력"
               />
               욕설, 인신공격 등 언어적 폭력</label
-            >
-            <label
+              >
+              <label
               ><input
-                type="checkbox"
-                name="reportReason"
-                value="부적절한 게시글"
+              type="checkbox"
+              name="reportReason"
+              value="부적절한 게시글"
               />
               부적절한 게시글</label
-            >
-            <label
+              >
+              <label
               ><input
-                type="checkbox"
+              type="checkbox"
                 name="reportReason"
                 value="사기 또는 허위정보"
-              />
-              사기 또는 허위정보</label
-            >
-            <label
-              ><input type="checkbox" name="reportReason" value="기타" />
-              기타</label
-            >
-          </div>
-          <textarea
-            id="additionalReason"
+                />
+                사기 또는 허위정보</label
+                >
+                <label
+                ><input type="checkbox" name="reportReason" value="기타" />
+                기타</label
+                >
+              </div>
+              <textarea
+              id="additionalReason"
             placeholder="기타 사유를 입력하세요"
           ></textarea
           ><br />
@@ -407,11 +401,13 @@
         </form>
       </div>
     </div>
-
+    <!-- ******************* 받을래요 쪽지 모달창 *********************************** -->
+    
     <!-- 저작권 정보 -->
     <div class="rightArea">
       © 2024 Team San, Hai. All rights reserved.
     </div>
-
+    
   </body>
-</html>
+  </html>
+  

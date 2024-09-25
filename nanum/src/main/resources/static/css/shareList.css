@@ -432,20 +432,53 @@
         margin-top: 2vh;
         width: 93vw;
         height: 70vh;
-        text-align: center;
-        line-height: 70vh;
         border: 0.07vw solid black;
         box-sizing: border-box;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
 
-    /* 지도의 infoWindow영역 */
-    .mapInfo{
-        width: 200px;
-        height: 200px;
-        text-align: left;
-        line-height: 5vh;
-    }
+    /* infoWindow  */
+        /* 마커 전체 영역 */
+        .mapInfo{
+            padding: 2.5vh;
+            width: 15vw;
+            height: 15vw;
+            border: 0.07vw solid black;
+            background-color: white;
+            box-sizing: border-box;
+        }
+
+        /* 마커 내 게시글 제목 */
+        .markerPostName {
+            margin-bottom: 1.5vh;
+            font-size: 2vh;
+            font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            max-width: 13vw;
+        }
+
+        /* 마커 내 작성자 이름 */
+        .markerUserName {
+            margin-bottom: 1.5vh;
+            font-size: 1.7vh;
+        }
+
+        /* 마커 내부 이미지 */
+        .markerImage {
+            width: 12vw;
+            height: 16vh;
+            background-color: antiquewhite;
+        }
+
+        /* 마커 내부 이미지_사진 */
+        .markerImage img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
     /* 나눠요 영역 */
     .shareArea {

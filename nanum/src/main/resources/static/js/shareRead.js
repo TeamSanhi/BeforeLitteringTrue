@@ -165,7 +165,187 @@
       }
 //*********************************************게시판 기능******************************************* */
 
-//*********************************************쪽지 ********************************************
+//************************************************ 받을래요 쪽지 기능 ***************************************** */
+      // 삭제 버튼 클릭 시 실행될 함수
+      $(document).ready(function () {
+      
+        // '받을래요' 버튼 클릭 시 모달 열기
+        $("#receiveButton").click(showMessage);
+
+        // 모달 닫기
+        $(".close").click(function () {
+          $("#messageModal").hide();
+        });
+
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+        $(window).click(function (event) {
+          if ($(event.target).is("#messageModal")) {
+            $("#messageModal").hide();
+          }
+        });
+
+        // 쪽지 보내기 버튼 클릭 시 처리
+        $("#sendMessageButton").click(function () {
+          sendMessage();
+        });
+
+        // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
+        $("#userReportButton").click(function () {
+          $("#reportModal").show();
+        });
+
+        // 신고 모달 닫기
+        $(".close").click(function () {
+          $("#reportModal").hide();
+        });
+
+        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+        $(window).click(function (event) {
+          if ($(event.target).is("#reportModal")) {
+            $("#reportModal").hide();
+          }
+        });
+
+        // 신고 제출 버튼 클릭 시 신고 내역 제출
+        $("#submitUserReportButton").click(function () {
+          submitReport();
+        });
+      });
+
+      // 받을래요 버튼을 누르면 실행되는 함수
+      function showMessage() {
+        let creatorNum = $(this).data("user-num");
+        let receiverNum = $(this).data("num");
+        let shareNum = $(this).data("share-num");
+        checkAndLoadRoom(creatorNum, receiverNum, shareNum);
+      }
+
+      // 쪽지방이 존재하는지 체크하고, 존재할 경우 쪽지 내용 로드
+      function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
+        // ajax를 이용해 쪽지방 존재 여부 체크
+        $.ajax({
+          url: "/message/check",
+          type: "get",
+          data: {
+            creatorNum: creatorNum,
+            receiverNum: receiverNum,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            //쪽지내역 모달 창 출력
+            $("#messageModal").show();
+            let messages = response.existingMessages;
+            let messageList = $("#existingMessages");
+            messageList.empty(); // 기존 내용을 지우고
+            if (response.roomExists) {
+              // 기존 쪽지방이 있으면 쪽지 내용 로드
+              messages.forEach(function (message) {
+                messageList.append(
+                  `<div class="message">
+                        <strong>${message.senderNickname}</strong>: ${message.messageContents}
+                        <small>${message.deliverDate}</small>
+                    </div>`
+                );
+              });
+            } else {
+              // 쪽지방이 없으면 빈 상태로 유지
+              $("#existingMessages").html("");
+            }
+          },
+          error: function(){
+            //로그인하지 않았을시 ajax실패! 로그인 화면으로 이동
+            alert("로그인하여 주십시오");
+            window.location.href = "/login";
+          }
+        });
+      }
+
+      // 작성한 쪽지를 보내서 DB에 저장
+      function sendMessage() {
+        let messageContents = $("#messageContents").val();
+        let receiverNum = $("#receiveButton").data("num");
+        let creatorNum = $("#receiveButton").data("user-num");
+        let shareNum = $("#receiveButton").data("share-num");
+
+        console.log(creatorNum);
+        // ajax를 이용해서 DB에 쪽지 내용을 저장
+        $.ajax({
+          url: "/message/send",
+          type: "post",
+          data: {
+            creatorNum: creatorNum,
+            receiverNum: receiverNum,
+            messageContents: messageContents,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            if (response.success) {
+              // 쪽지 전송 후 모달 내역 갱신
+              $.ajax({
+                url: "/message/check",
+                type: "GET",
+                data: {
+                  creatorNum: creatorNum,
+                  receiverNum: receiverNum,
+                  shareNum: shareNum,
+                },
+                success: function (response) {
+                  let messages = response.existingMessages;
+                  let messageList = $("#existingMessages");
+                  messageList.empty(); // 기존 내용을 지우고
+                  // 주고받은 전체 쪽지를 영역에 집어넣음
+                  messages.forEach(function (message) {
+                    messageList.append(
+                      `<div class="message">
+                                    <strong>${message.senderNickname}</strong>: ${message.messageContents}
+                                    <small>${message.deliverDate}</small>
+                                </div>`
+                    );
+                  });
+                  $("#messageContents").val(""); // 쪽지 입력하는 필드 비우기
+                },
+              });
+            } else {
+              alert("쪽지 전송에 실패했습니다.");
+            }
+          },
+        });
+      }
+
+      // 신고 데이터 전송 함수
+      function submitReport() {
+        let reportReasons = [];
+        $("input[name='reportReason']:checked").each(function () {
+          reportReasons.push($(this).val());
+        });
+        let additionalReason = $("#additionalReason").val();
+        let shareNum = $("#receiveButton").data("share-num");
+        let reporterNum = $("#receiveButton").data("user-num"); // 사용자의 ID
+        let memberNum = $("#receiveButton").data("num"); // 게시글 작성자의 ID
+
+        // Ajax 요청으로 신고 데이터 전송
+        $.ajax({
+          url: "/report/submit",
+          type: "post",
+          data: {
+            memberNum: memberNum,
+            reporterNum: reporterNum,
+            reportReason: JSON.stringify(reportReasons),
+            additionalReason: additionalReason,
+            shareNum: shareNum,
+          },
+          success: function (response) {
+            alert("신고가 접수되었습니다.");
+            $("#reportModal").hide();
+          },
+          error: function () {
+            alert("신고 처리 중 오류가 발생했습니다.");
+          },
+        });
+      }
+//************************************************ 받을래요 쪽지 기능 ***************************************** */
+
+//*********************************************마이페이지 옆 쪽지 ******************************************** */
 $(document).ready(function () {
     // 읽지 않은 쪽지 개수 가져오기
     updateUnreadCount();
