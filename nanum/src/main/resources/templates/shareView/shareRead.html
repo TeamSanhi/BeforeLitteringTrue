@@ -10,399 +10,12 @@
     <title>글읽기</title>
     <!-- style -->
     <link rel="stylesheet" href="/css/shareRead.css">
-    <style>
-      /* 모달 창 스타일 */
-      .modal {
-        display: none; /* 기본적으로 숨김 */
-        position: fixed; /* 화면을 기준으로 고정 */
-        z-index: 1; /* 다른 콘텐츠 위에 표시 */
-        left: 0;
-        top: 0;
-        width: 100%; /* 전체 화면 너비 */
-        height: 100%; /* 전체 화면 높이 */
-        overflow: auto; /* 스크롤 가능 */
-        background-color: rgb(0, 0, 0); /* 배경색 */
-        background-color: rgba(0, 0, 0, 0.4); /* 배경색의 투명도 조정 */
-      }
-
-      /* 모달 콘텐츠 스타일 */
-      .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto; /* 중앙 정렬 */
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%; /* 너비 설정 */
-      }
-
-      /* 모달 닫기 버튼 스타일 */
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-    </style>
+    <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <!-- 게시글 수정 삭제, 북마크 처리 script -->
-    <script>
-      // 삭제 버튼 클릭 시 실행될 함수
-      $(document).ready(function () {
-        //************************ 게시글 기능 ***************************
-        //게시글을 삭제하는 버튼 클릭이벤트 발생
-        $("#deleteButton").click(del);
-        // 게시글을 수정하는 버튼 클릭이벤트 발생
-        $("#editButton").click(edit);
-        // 북마크 버튼 클릭이벤트 실행 bookmark1 = 북 마크하지않음, bookmark
-        $("#bookmark1, #bookmark2").click(bookmark);
-        //북마크여부 확인 함수 실행
-        checkBookmark();
-        // 길찾기 이미지 클릭시 함수실행 
-        $('#findButton').click(findRoute);
-        //신고버튼 클릭 이벤트 실행
-        $("#reportButton").click(report);
-        
-        //************************* 쪽지 *******************************
-        // '받을래요' 버튼 클릭 시 모달 열기
-        $("#receiveButton").click(showMessage);
-
-        // 모달 닫기
-        $(".close").click(function () {
-          $("#messageModal").hide();
-        });
-
-        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
-        $(window).click(function (event) {
-          if ($(event.target).is("#messageModal")) {
-            $("#messageModal").hide();
-          }
-        });
-
-        // 쪽지 보내기 버튼 클릭 시 처리
-        $("#sendMessageButton").click(function () {
-          sendMessage();
-        });
-
-        // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
-        $("#userReportButton").click(function () {
-          $("#reportModal").show();
-        });
-
-        // 신고 모달 닫기
-        $(".close").click(function () {
-          $("#reportModal").hide();
-        });
-
-        // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
-        $(window).click(function (event) {
-          if ($(event.target).is("#reportModal")) {
-            $("#reportModal").hide();
-          }
-        });
-
-        // 신고 제출 버튼 클릭 시 신고 내역 제출
-        $("#submitUserReportButton").click(function () {
-          submitReport();
-        });
-      });
-
-      //******************************* 게시판 함수 *********************************
-      //삭제 함수
-      function del() {
-        //삭제여부 확인
-        if (!confirm("정말 삭제하시겠습니까?")) return;
-        //삭제할 글번호 가져오기
-        let shareNum = $("#deleteButton").data("num");
-        //ajax를 이용해서 삭제 요청 보내기
-        $.ajax({
-          url: "delete",
-          type: "get",
-          data: { shareNum: shareNum },
-          success: function (result) {
-            alert("게시글을 삭제하였습니다.");
-            window.location.href = "/share/list";
-          },
-        });
-      }
-
-      //수정 함수
-      function edit() {
-        //수정여부확인
-        if (confirm("정말 수정하시겠습니까?")) {
-          //수정할 글번호 가져오기
-          let shareNum = $("#editButton").data("num");
-          //수정할 경로 전송
-          window.location.href = "/share/edit?shareNum=" + shareNum;
-        }
-      }
-
-      // 게시글 상세보기 시 작성자가 게시글을 북마크 하고 있는지 아닌지 확인하는 함수
-      function checkBookmark() {
-        var shareNum = $("#bookmark1").data("num"); // 게시글 번호 가져오기
-
-        // 페이지 로드 시 북마크 상태 확인
-        $.ajax({
-          url: "/share/bookmark/check", // 북마크 여부 확인을 위한 컨트롤러 URL
-          type: "get",
-          data: { shareNum: shareNum },
-          success: function (response) {
-            // 서버로부터 true/false 값 받음
-            if (response) {
-              // 북마크되어 있다면 bookmark2를 보여주고 bookmark1을 숨김
-              $("#bookmark1").hide();
-              $("#bookmark2").show();
-            } else {
-              // 북마크가 안 되어 있다면 bookmark1을 보여주고 bookmark2를 숨김
-              $("#bookmark1").show();
-              $("#bookmark2").hide();
-            }
-          },
-        });
-      }
-
-      //북마크 버튼 클릭시 실행되는 함수
-      function bookmark() {
-        //data에 담겨있는 게시글 번호 가져옴
-        let shareNum = $(this).data("num");
-
-        // ajax를 이용해 게시글 번호 전송
-        $.ajax({
-          url: "bookmark",
-          type: "get",
-          data: { shareNum: shareNum },
-          success: function (response) {
-            // 서버로부터 true/false 값 받음
-            if (response) {
-              // 북마크가 되어있다면 bookmark2를 보여주고 bookmark1을 숨김
-              $("#bookmark1").hide();
-              $("#bookmark2").show();
-            } else {
-              // 북마크가 안 되어있다면 bookmark1을 보여주고 bookmark2를 숨김
-              $("#bookmark1").show();
-              $("#bookmark2").hide();
-            }
-          },
-          // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
-          error: function () {
-            alert("로그인하여 해주십시오");
-            window.location.href = "/login"; // 로그인 페이지로 리다이렉트
-          },
-        });
-      }
-
-      // 신고버튼을 누르면 실행되는 함수
-      function report() {
-        // data 에 저장된 게시글 번호를 가져온다.
-        let shareNum = $(this).data("num");
-
-        //ajax를 이용해 Contorller에 요청
-        $.ajax({
-          url: "/share/report",
-          type: "post",
-          data: { shareNum: shareNum },
-          success: function (deleteResult) {
-            //같은 사용자가 게시물 중복 신고시
-            if (deleteResult == 0) {
-              alert("이미 신고한 게시글 입니다.");
-            }
-            // 게시글 신고횟수가 3회 이상되어 삭제되었을 시
-            else if (deleteResult == 1) {
-              alert("신고되었습니다.");
-              alert("게시글이 삭제되었습니다.");
-              window.location.href = "/share/list";
-            }
-            // 게시글이 정상적으로 신고 되었을 시
-            else if (deleteResult == 2) {
-              alert("신고되었습니다.");
-            }
-          },
-          // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
-          error: function () {
-            alert("로그인하여 해주십시오");
-            window.location.href = "/login"; // 로그인 페이지로 리다이렉트
-          },
-        });
-      }
-
-      // 현재 위치에서 게시글의 위치까지의 경로를 새창으로 보여주는 함수 
-      function findRoute() {
-          // 게시글 거래위치
-          let shareLat = $("#shareLat").val(); // 게시글 위도
-          let shareLng = $("#shareLng").val(); // 게시글 경도
-
-          // 현재 나의 위치
-          let myLat;
-          let myLng;
-
-          // geolocation 함수를 이용해 현재 위치를 가져온다.
-          if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function(position) {
-                  // 현재 위치 위도와 경도 저장
-                  myLat = position.coords.latitude;
-                  myLng = position.coords.longitude;
-
-                  console.log("현재 위치 위도:", myLat, "경도:", myLng);
-                  console.log("목적지 위도:", shareLat, "경도:", shareLng);
-
-                  // Google Maps 경로 검색 URL 생성
-                  let url = `https://www.google.com/maps/dir/?api=1&origin=${myLat},${myLng}&destination=${shareLat},${shareLng}`;
-
-                  // 새 창으로 Kakao Map 경로 검색 페이지 열기
-                  window.open(url, '_blank');
-              }, function(error) {
-                  console.error("Error Code: " + error.code + ", Error Message: " + error.message);
-                  alert("위치 정보를 가져올 수 없습니다.");
-              });
-          } else {
-              alert("Geolocation을 지원하지 않는 브라우저입니다.");
-          }
-      }
-
-      //**************************************쪽지 함수 ***********************************************
-      // 받을래요 버튼을 누르면 실행되는 함수
-      function showMessage() {
-        let creatorNum = $(this).data("user-num");
-        let receiverNum = $(this).data("num");
-        let shareNum = $(this).data("share-num");
-        checkAndLoadRoom(creatorNum, receiverNum, shareNum);
-      }
-
-      // 쪽지방이 존재하는지 체크하고, 존재할 경우 쪽지 내용 로드
-      function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
-        // ajax를 이용해 쪽지방 존재 여부 체크
-        $.ajax({
-          url: "/message/check",
-          type: "get",
-          data: {
-            creatorNum: creatorNum,
-            receiverNum: receiverNum,
-            shareNum: shareNum,
-          },
-          success: function (response) {
-            //쪽지내역 모달 창 출력
-            $("#messageModal").show();
-            let messages = response.existingMessages;
-            let messageList = $("#existingMessages");
-            messageList.empty(); // 기존 내용을 지우고
-            if (response.roomExists) {
-              // 기존 쪽지방이 있으면 쪽지 내용 로드
-              messages.forEach(function (message) {
-                messageList.append(
-                  `<div class="message">
-                        <strong>${message.senderNickname}</strong>: ${message.messageContents}
-                        <small>${message.deliverDate}</small>
-                    </div>`
-                );
-              });
-            } else {
-              // 쪽지방이 없으면 빈 상태로 유지
-              $("#existingMessages").html("");
-            }
-          },
-          error: function(){
-            //로그인하지 않았을시 ajax실패! 로그인 화면으로 이동
-            alert("로그인하여 주십시오");
-            window.location.href = "/login";
-          }
-        });
-      }
-
-      // 작성한 쪽지를 보내서 DB에 저장
-      function sendMessage() {
-        let messageContents = $("#messageContents").val();
-        let receiverNum = $("#receiveButton").data("num");
-        let creatorNum = $("#receiveButton").data("user-num");
-        let shareNum = $("#receiveButton").data("share-num");
-
-        console.log(creatorNum);
-        // ajax를 이용해서 DB에 쪽지 내용을 저장
-        $.ajax({
-          url: "/message/send",
-          type: "post",
-          data: {
-            creatorNum: creatorNum,
-            receiverNum: receiverNum,
-            messageContents: messageContents,
-            shareNum: shareNum,
-          },
-          success: function (response) {
-            if (response.success) {
-              // 쪽지 전송 후 모달 내역 갱신
-              $.ajax({
-                url: "/message/check",
-                type: "GET",
-                data: {
-                  creatorNum: creatorNum,
-                  receiverNum: receiverNum,
-                  shareNum: shareNum,
-                },
-                success: function (response) {
-                  let messages = response.existingMessages;
-                  let messageList = $("#existingMessages");
-                  messageList.empty(); // 기존 내용을 지우고
-                  // 주고받은 전체 쪽지를 영역에 집어넣음
-                  messages.forEach(function (message) {
-                    messageList.append(
-                      `<div class="message">
-                                    <strong>${message.senderNickname}</strong>: ${message.messageContents}
-                                    <small>${message.deliverDate}</small>
-                                </div>`
-                    );
-                  });
-                  $("#messageContents").val(""); // 쪽지 입력하는 필드 비우기
-                },
-              });
-            } else {
-              alert("쪽지 전송에 실패했습니다.");
-            }
-          },
-        });
-      }
-
-      // 신고 데이터 전송 함수
-      function submitReport() {
-        let reportReasons = [];
-        $("input[name='reportReason']:checked").each(function () {
-          reportReasons.push($(this).val());
-        });
-        let additionalReason = $("#additionalReason").val();
-        let shareNum = $("#receiveButton").data("share-num");
-        let reporterNum = $("#receiveButton").data("user-num"); // 사용자의 ID
-        let memberNum = $("#receiveButton").data("num"); // 게시글 작성자의 ID
-
-        // Ajax 요청으로 신고 데이터 전송
-        $.ajax({
-          url: "/report/submit",
-          type: "post",
-          data: {
-            memberNum: memberNum,
-            reporterNum: reporterNum,
-            reportReason: JSON.stringify(reportReasons),
-            additionalReason: additionalReason,
-            shareNum: shareNum,
-          },
-          success: function (response) {
-            alert("신고가 접수되었습니다.");
-            $("#reportModal").hide();
-          },
-          error: function () {
-            alert("신고 처리 중 오류가 발생했습니다.");
-          },
-        });
-      }
-    </script>
+    <script type="text/javascript" src="/js/shareRead.js"></script>
+    
   </head>
   <body>
-    <!-- ********************************추가해야할 기능들 ***************************************-->
-    <!-- 버튼 클릭시 카카오맵 사이트로 현재 위치에서 거래 위치까지의 경로를 검색해 보여준다.  -->
-    <!-- ********************************추가해야할 기능들 ***************************************-->
-
     <!-- 네비게이션 구역 -->
     <div class="navigationContainer">
 
@@ -415,77 +28,177 @@
 
       <!-- 우리는 -->
       <div class="projectInfo">
-          <a href="/info/service">우리는</a>
+          <span class="highlighterBlue">
+              <a href="/info/service">우리는</a>
+          </span>
       </div>
 
       <!-- 나눠요 -->
       <div class="projectInfo">
-          <a href="/share/list">나눠요</a>
+          <span class="highlighterBlue">
+              <a href="/share/list">나눠요</a>
+          </span>
+          
       </div>
 
       <!-- 버려요 -->
       <div class="projectInfo">
-          <a href="/recycle/list">버려요</a>
+          <span class="highlighterBlue">
+            <a href="/recycle/list">버려요</a>
+          </span>
       </div>
 
       <!-- 오른쪽 정렬 -->
       <div class="rightGroup">
-          <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+
+          <!-- 로그인을 안했을 시 -->
           <th:block sec:authorize="not isAuthenticated()">
-              <!-- 회원가입 -->
               <div class="join">
-                  <span class="joinHover">
-                      <a href="/member/join">회원가입</a>
-                  </span>
+                <span class="highlighterGreen">
+                  <a href="/member/join">회원가입</a>
+                </span>
               </div>
 
-              <!-- 로그인 -->
               <div class="login">
-                  <a href="/member/loginForm">
-                      <span class="loginHover">
-                          로그인
-                      </span>
-                  </a>
+                <span class="highlighterGreen">
+                  <a href="/member/loginForm">로그인</a>
+                </span>
               </div>
           </th:block>
-
-          <!-- 로그인 하였을시 보여줄 페이지 -->
+          
+      
+          <!-- 로그인을 했을 시 -->
           <th:block sec:authorize="isAuthenticated()">
-              <!-- 나눔 쪽지 -->
-              <div class="message" id="messages">
-                  <span class="messageHover">
-                      나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
-                  </span>
+              
+              <!-- 쪽지 -->
+              <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
+                  <!-- 쪽지 이미지  -->
+                  <img src="/images/post.png" class="postImage">
+                  <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+                  <div class="badge" id="badge">0</div>
               </div>
 
-              <div id="messagesModal" class="modal">
-                  <div class="modal-content">
-                      <span id="messagesClose" class="close">&times;</span>
-                      <h2>쪽지 목록</h2>
+              <!-- 쪽지 목록 모달 -->
+              <div
+                id="messagesModal"
+                class="modal"
+                style="
+                  max-height: calc(100vh - 50px);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                "
+              >
+                <div class="modal-content">
+                  <span id="messagesClose" class="close">&times;</span>
+                  <h2>나눔 이야기</h2>
+                  <div id="messageListContainer"></div>
+                </div>
+              </div>
+
+              <!-- 쪽지 상세보기 모달 -->
+              <div
+                id="detailsModal"
+                class="modal"
+                style="
+                  max-height: calc(100vh - 50px);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                "
+              >
+                <div class="modal-content">
+                  <span id="detailsClose" class="close">&times;</span>
+                  <h2>쪽지 상세보기</h2>
+
+                  <!-- 게시글로 이동하는 영역 추가 -->
+                  <div id="goToShareBoard" style="cursor: pointer">
+                    <div
+                      id="shareBoardLink"
+                      style="
+                        padding: 10px;
+                        border: 1px solid #ccc;
+                        text-align: center;
+                      "
+                    >
+                      게시글로 이동
+                    </div>
                   </div>
+                  <div id="messageDetailsContainer"></div>
+                  <textarea
+                    id="messageInput"
+                    placeholder="메시지를 입력하세요"
+                  ></textarea>
+                  <button id="sendMessageBtn">보내기</button>
+                  <button id="userReportBtn">신고하기</button>
+                  <button id="shareComplete" style="display: none">
+                    나눔 완료
+                  </button>
+                </div>
               </div>
 
+              <!-- 게시글 유저 신고 모달창 -->
+              <div id="reportModal" class="modal">
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <h2>신고하기</h2>
+                  <form id="reportForm">
+                    <div>
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="reportReason"
+                          value="욕설, 인신공격 등 언어적 폭력"
+                        />
+                        욕설, 인신공격 등 언어적 폭력</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="reportReason"
+                          value="부적절한 게시글"
+                        />
+                        부적절한 게시글</label
+                      >
+                      <label
+                        ><input
+                          type="checkbox"
+                          name="reportReason"
+                          value="사기 또는 허위정보"
+                        />
+                        사기 또는 허위정보</label
+                      >
+                      <label
+                        ><input type="checkbox" name="reportReason" value="기타" />
+                        기타</label
+                      >
+                    </div>
+                    <textarea
+                      id="additionalReason"
+                      placeholder="기타 사유를 입력하세요"
+                    ></textarea
+                    ><br />
+                    <button type="button" id="submitUserReportBtn">
+                      신고 제출
+                    </button>
+                  </form>
+                </div>
+              </div>
+              
+              <!-- 마이페이지  -->
               <div class="mypage">
-                  <a th:href="@{/myPage/view}">
-                      <span class="mypageHover">
-                          마이페이지
-                      </span>
-                  </a>
+                <span class="highlighterGreen">
+                  <a th:href="@{/myPage/view}">마이페이지</a>
+                </span>
               </div>
               
               <!-- 로그아웃 -->
               <div class="logout">
-                  <a th:href="@{/member/logout}">
-                      <span class="logoutHover">
-                          로그아웃
-                      </span>
-                  </a>
+                <span class="highlighterGreen">
+                  <a th:href="@{/member/logout}">로그아웃</a>
+                </span>
               </div>
-
           </th:block>
-
       </div>
-  </div>
+    </div>
 
   <!-- 공백 -->
   <div class="blankContainer"></div>
