@@ -10,64 +10,10 @@
 
     <!-- style -->
     <link rel="stylesheet" href="/css/shareList.css">
-    <style>
-        /* 모달 css 추가  */
-        .modal {
-            display: none; /* 모달을 숨김 */
-            position: fixed; /* 화면에 고정된 위치로 설정 */
-            z-index: 2; /* 다른 요소보다 앞에 오도록 설정 */
-            left: 0; /* 화면 왼쪽부터 시작 */
-            top: 0; /* 화면 상단부터 시작 */
-            width: 100%; /* 화면 전체 너비 */
-            height: 100%; /* 화면 전체 높이 */
-            background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-            padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-            border: 1px solid #888;
-            width: 90%; /* 너비를 화면의 90%로 변경 */
-            max-width: 600px; /* 최대 너비를 600px로 확장 */
-            text-align: center;
-        }
-
-        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
-        .close {
-            color: #aaa; /* 닫기 버튼의 기본 색상 */
-            float: right; /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
-            font-size: 28px; /* 닫기 버튼의 글자 크기 */
-            font-weight: bold; /* 닫기 버튼의 글자 두께를 두껍게 설정 */
-        }
-
-        /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
-        .close:hover,
-        .close:focus {
-            color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-            text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
-            cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
-        }
-    </style>
-
     <!-- script -->
     <script type="text/javascript" th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-        // 쪽지 버튼 클릭시 이벤트 처리 
-        $(document).ready(function () {
-          $("#messages").click(function () {
-            $("#messagesModal").fadeIn();
-          });
-          $("#messagesClose").click(function () {
-            $("#messagesModal").fadeOut();
-          });
-          $(window).click(function (event) {
-            if ($(event.target).is("#messagesModal")) {
-              $("#messagesModal").fadeOut();
-            }
-          });
-        });
-    </script>
+    <script type="text/javascript" src="/js/shareList.js"></script>
+
 </head>
 <body>
     <!--****************수정필요 사항 ********************************
@@ -83,79 +29,183 @@
                 <img src="/images/logo.png" class="logoImg">
             </a>
         </div>
-
+  
         <!-- 우리는 -->
         <div class="projectInfo">
-            <a href="/info/service">우리는</a>
+            <span class="highlighterBlue">
+                <a href="/info/service">우리는</a>
+            </span>
         </div>
-
+  
         <!-- 나눠요 -->
         <div class="projectInfo">
-            <a href="/share/list">나눠요</a>
+            <span class="highlighterBlue">
+                <a href="/share/list">나눠요</a>
+            </span>
+            
         </div>
-
+  
         <!-- 버려요 -->
         <div class="projectInfo">
-            <a href="/recycle/list">버려요</a>
+            <span class="highlighterBlue">
+              <a href="/recycle/list">버려요</a>
+            </span>
         </div>
-
+  
         <!-- 오른쪽 정렬 -->
         <div class="rightGroup">
-            <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+  
+            <!-- 로그인을 안했을 시 -->
             <th:block sec:authorize="not isAuthenticated()">
-                <!-- 회원가입 -->
                 <div class="join">
-                    <span class="joinHover">
-                        <a href="/member/join">회원가입</a>
-                    </span>
+                  <span class="highlighterGreen">
+                    <a href="/member/join">회원가입</a>
+                  </span>
                 </div>
-
-                <!-- 로그인 -->
+  
                 <div class="login">
-                    <span class="loginHover">
+                  <span class="highlighterGreen">
                     <a href="/member/loginForm">로그인</a>
-                    </span>
+                  </span>
                 </div>
             </th:block>
-
-            <!-- 로그인 하였을시 보여줄 페이지 -->
+            
+        
+            <!-- 로그인을 했을 시 -->
             <th:block sec:authorize="isAuthenticated()">
-                <!-- 나눔 쪽지 -->
-                <div class="message" id="messages">
-                    <span class="messageHover">
-                        나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
-                    </span>
+                
+                <!-- 쪽지 -->
+                <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
+                    <!-- 쪽지 이미지  -->
+                    <img src="/images/post.png" class="postImage">
+                    <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+                    <div class="badge" id="badge">0</div>
                 </div>
-
-                <div id="messagesModal" class="modal">
-                    <div class="modal-content">
-                        <span id="messagesClose" class="close">&times;</span>
-                        <h2>쪽지 목록</h2>
+  
+                <!-- 쪽지 목록 모달 -->
+                <div
+                  id="messagesModal"
+                  class="modal"
+                  style="
+                    max-height: calc(100vh - 50px);
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                  "
+                >
+                  <div class="modal-content">
+                    <span id="messagesClose" class="close">&times;</span>
+                    <h2>나눔 이야기</h2>
+                    <div id="messageListContainer"></div>
+                  </div>
+                </div>
+  
+                <!-- 쪽지 상세보기 모달 -->
+                <div
+                  id="detailsModal"
+                  class="modal"
+                  style="
+                    max-height: calc(100vh - 50px);
+                    overflow-x: hidden;
+                    overflow-y: auto;
+                  "
+                >
+                  <div class="modal-content">
+                    <span id="detailsClose" class="close">&times;</span>
+                    <h2>쪽지 상세보기</h2>
+  
+                    <!-- 게시글로 이동하는 영역 추가 -->
+                    <div id="goToShareBoard" style="cursor: pointer">
+                      <div
+                        id="shareBoardLink"
+                        style="
+                          padding: 10px;
+                          border: 1px solid #ccc;
+                          text-align: center;
+                        "
+                      >
+                        게시글로 이동
+                      </div>
                     </div>
+                    <div id="messageDetailsContainer"></div>
+                    <textarea
+                      id="messageInput"
+                      placeholder="메시지를 입력하세요"
+                    ></textarea>
+                    <button id="sendMessageBtn">보내기</button>
+                    <button id="userReportBtn">신고하기</button>
+                    <button id="shareComplete" style="display: none">
+                      나눔 완료
+                    </button>
+                  </div>
                 </div>
-
+  
+                <!-- 게시글 유저 신고 모달창 -->
+                <div id="reportModal" class="modal">
+                  <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>신고하기</h2>
+                    <form id="reportForm">
+                      <div>
+                        <label
+                          ><input
+                            type="checkbox"
+                            name="reportReason"
+                            value="욕설, 인신공격 등 언어적 폭력"
+                          />
+                          욕설, 인신공격 등 언어적 폭력</label
+                        >
+                        <label
+                          ><input
+                            type="checkbox"
+                            name="reportReason"
+                            value="부적절한 게시글"
+                          />
+                          부적절한 게시글</label
+                        >
+                        <label
+                          ><input
+                            type="checkbox"
+                            name="reportReason"
+                            value="사기 또는 허위정보"
+                          />
+                          사기 또는 허위정보</label
+                        >
+                        <label
+                          ><input type="checkbox" name="reportReason" value="기타" />
+                          기타</label
+                        >
+                      </div>
+                      <textarea
+                        id="additionalReason"
+                        placeholder="기타 사유를 입력하세요"
+                      ></textarea
+                      ><br />
+                      <button type="button" id="submitUserReportBtn">
+                        신고 제출
+                      </button>
+                    </form>
+                  </div>
+                </div>
+                
+                <!-- 마이페이지  -->
                 <div class="mypage">
-                    <span class="mypageHover">
-                        <a th:href="@{/myPage/view}">마이페이지</a>
-                    </span>
+                  <span class="highlighterGreen">
+                    <a th:href="@{/myPage/view}">마이페이지</a>
+                  </span>
                 </div>
                 
                 <!-- 로그아웃 -->
                 <div class="logout">
-                    <span class="logoutHover">
-                        <a th:href="@{/member/logout}">로그아웃</a>
-                    </span>
+                  <span class="highlighterGreen">
+                    <a th:href="@{/member/logout}">로그아웃</a>
+                  </span>
                 </div>
-
             </th:block>
-
         </div>
-    </div>
-
+      </div>
 
     <!-- 공백 -->
     <div class="blankContainer"></div>
-
 
     <!-- mainContainer -->
     <div id="mainContainer">
