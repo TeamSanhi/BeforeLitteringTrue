@@ -1,113 +1,169 @@
-// onload
-window.onload = function() {
-    // 슬라이드 전체 컨테이너
-    const slideList = document.querySelector('.slide');
-    // 각각의 슬라이드
-    const slideContents = document.querySelectorAll('.slide_content');
-    // 다음 슬라이드 버튼
-    const slideBtnNext = document.querySelector('.arrowRight');
-    // 이전 슬라이드 버튼
-    const slideBtnPrev = document.querySelector('.arrowLeft');
-    // 각각의 페이징 점
-    const pageDots = document.querySelectorAll('.dot');
-    // 슬라이드 너비
-    let sliderWidth = document.getElementById('mainContainer').offsetWidth;
-    // 현재 슬라이드 인덱스
-    let curIndex = 0;
-
-
-    // 알림 갯수 (서버에서 받아올 값, 현재는 테스트용)
-    // let notifications = 3   // 알림이 있을 때 갯수 설정
-    // const badge = document.getElementById("badge");
-
-    // 알림 수에 따라 괄호 안의 숫자를 변경
-    // badge.textContent = `(${notifications})`;
-
-
-    // 메시지 타이핑 효과
-    const messageElement = document.getElementById("mainMessage");
-    const messageText = messageElement.textContent;     // 원래 텍스트
-    let index = 0;                                      // 타이핑 될 텍스트의 인덱스
-
-    messageElement.textContent = '';  // 초기 텍스트 비우기
-
-    // 타이핑 하는 함수
-    function typeText() {
-        if (index < messageText.length) {
-            messageElement.textContent += messageText[index];  // 한 글자씩 추가
-            index++;
-            setTimeout(typeText, 100);          // 다음 글자 타이핑까지 100ms 후에 추가
-        } else {
-            setTimeout(restartTyping, 10000)    // 타이핑 완료 후 10초 대기
-        }
-    }
-
-    // 타이핑 다시 시작하는 함수
-    function restartTyping() {
-        messageElement.textContent = '';         // 텍스트를 다시 비움
-        index = 0;                              // 인덱스를 초기화
-        typeText();                             // 타이핑을 다시 시작
-    }
-
-    typeText();  // 타이핑 효과 시작
-
-
-    function updateSliderWidth() {
-        sliderWidth = document.getElementById("mainContainer").offsetWidth;
-        moveSlide(curIndex);    // 너비 변경 시, 현재 슬라이드로 이동
-    }
-
-
-    /* 슬라이드를 이동시키는 함수_moveSlide */
-    function moveSlide(index) {
-        slideList.style.transform = `translateX(-${sliderWidth * index}px)`;
-        document.querySelector('.dot.active').classList.remove('active');
-        pageDots[index].classList.add('active');
-    };  // moveSlide()
-
-
-    /* 다음 슬라이드로 이동하는 이벤트 */
-    slideBtnNext.addEventListener('click', () => {
-        if(curIndex < slideContents.length - 1) {
-            curIndex++;
-        } 
+//*********************************************게시판 기능******************************************* */
+// 삭제 버튼 클릭 시 실행될 함수
+      $(document).ready(function () {
+        //게시글을 삭제하는 버튼 클릭이벤트 발생
+        $("#deleteButton").click(del);
+        // 게시글을 수정하는 버튼 클릭이벤트 발생
+        $("#editButton").click(edit);
+        // 북마크 버튼 클릭이벤트 실행 bookmark1 = 북 마크하지않음, bookmark
+        $("#bookmark1, #bookmark2").click(bookmark);
+        //북마크여부 확인 함수 실행
+        checkBookmark();
+        // 길찾기 이미지 클릭시 함수실행 
+        $('#findButton').click(findRoute);
+        //신고버튼 클릭 이벤트 실행
+        $("#reportButton").click(report);
         
-        // 슬라이드가 마지막이라면, 첫번째로
-        else {
-            curIndex = 0;
-        }
+      });
 
-        moveSlide(curIndex);
-    });
-
-
-    /* 이전 슬라이드로 이동하는 이벤트 */
-    slideBtnPrev.addEventListener('click', () => {
-        if(curIndex > 0) {
-            curIndex--;
-        }
-
-        // 슬라이드가 첫번째라면, 마지막으로
-        else {
-            curIndex = slideContents.length - 1;
-        }
-        moveSlide(curIndex);
-    });
-
-
-    /* 페이징 버튼 클릭 시 이동 이벤트 */
-    pageDots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            curIndex = index;
-            moveSlide(curIndex);
+      //삭제 함수
+      function del() {
+        //삭제여부 확인
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+        //삭제할 글번호 가져오기
+        let shareNum = $("#deleteButton").data("num");
+        //ajax를 이용해서 삭제 요청 보내기
+        $.ajax({
+          url: "delete",
+          type: "get",
+          data: { shareNum: shareNum },
+          success: function (result) {
+            alert("게시글을 삭제하였습니다.");
+            window.location.href = "/share/list";
+          },
         });
-    });
+      }
 
+      //수정으로 이동 
+      function edit() {
+          // 수정페이지로 이동하기 위한 게시글 번호 
+          let shareNum = $("#editButton").data("num");
+          //수정할 경로 전송
+          window.location.href = "/share/edit?shareNum=" + shareNum;
+      }
 
-    /* 창 크기 변경 시 슬라이드 어비 조정 */
-    window.addEventListener('resize', updateSliderWidth);
+      // 게시글 상세보기 시 작성자가 게시글을 북마크 하고 있는지 아닌지 확인하는 함수
+      function checkBookmark() {
+        var shareNum = $("#bookmark1").data("num"); // 게시글 번호 가져오기
 
-};  // function
+        // 페이지 로드 시 북마크 상태 확인
+        $.ajax({
+          url: "/share/bookmark/check", // 북마크 여부 확인을 위한 컨트롤러 URL
+          type: "get",
+          data: { shareNum: shareNum },
+          success: function (response) {
+            // 서버로부터 true/false 값 받음
+            if (response) {
+              // 북마크되어 있다면 bookmark2를 보여주고 bookmark1을 숨김
+              $("#bookmark1").hide();
+              $("#bookmark2").show();
+            } else {
+              // 북마크가 안 되어 있다면 bookmark1을 보여주고 bookmark2를 숨김
+              $("#bookmark1").show();
+              $("#bookmark2").hide();
+            }
+          },
+        });
+      }
+
+      //북마크 버튼 클릭시 실행되는 함수
+      function bookmark() {
+        //data에 담겨있는 게시글 번호 가져옴
+        let shareNum = $(this).data("num");
+
+        // ajax를 이용해 게시글 번호 전송
+        $.ajax({
+          url: "bookmark",
+          type: "get",
+          data: { shareNum: shareNum },
+          success: function (response) {
+            // 서버로부터 true/false 값 받음
+            if (response) {
+              // 북마크가 되어있다면 bookmark2를 보여주고 bookmark1을 숨김
+              $("#bookmark1").hide();
+              $("#bookmark2").show();
+            } else {
+              // 북마크가 안 되어있다면 bookmark1을 보여주고 bookmark2를 숨김
+              $("#bookmark1").show();
+              $("#bookmark2").hide();
+            }
+          },
+          // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
+          error: function () {
+            alert("로그인하여 해주십시오");
+            window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+          },
+        });
+      }
+
+      // 신고버튼을 누르면 실행되는 함수
+      function report() {
+        // data 에 저장된 게시글 번호를 가져온다.
+        let shareNum = $(this).data("num");
+
+        //ajax를 이용해 Contorller에 요청
+        $.ajax({
+          url: "/share/report",
+          type: "post",
+          data: { shareNum: shareNum },
+          success: function (deleteResult) {
+            //같은 사용자가 게시물 중복 신고시
+            if (deleteResult == 0) {
+              alert("이미 신고한 게시글 입니다.");
+            }
+            // 게시글 신고횟수가 3회 이상되어 삭제되었을 시
+            else if (deleteResult == 1) {
+              alert("신고되었습니다.");
+              alert("게시글이 삭제되었습니다.");
+              window.location.href = "/share/list";
+            }
+            // 게시글이 정상적으로 신고 되었을 시
+            else if (deleteResult == 2) {
+              alert("신고되었습니다.");
+            }
+          },
+          // 로그인 하지 않음 사용자는 로그인 페이지로 이동하여
+          error: function () {
+            alert("로그인하여 해주십시오");
+            window.location.href = "/login"; // 로그인 페이지로 리다이렉트
+          },
+        });
+      }
+
+      // 현재 위치에서 게시글의 위치까지의 경로를 새창으로 보여주는 함수 
+      function findRoute() {
+          // 게시글 거래위치
+          let shareLat = $("#shareLat").val(); // 게시글 위도
+          let shareLng = $("#shareLng").val(); // 게시글 경도
+
+          // 현재 나의 위치
+          let myLat;
+          let myLng;
+
+          // geolocation 함수를 이용해 현재 위치를 가져온다.
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                  // 현재 위치 위도와 경도 저장
+                  myLat = position.coords.latitude;
+                  myLng = position.coords.longitude;
+
+                  console.log("현재 위치 위도:", myLat, "경도:", myLng);
+                  console.log("목적지 위도:", shareLat, "경도:", shareLng);
+
+                  // Google Maps 경로 검색 URL 생성
+                  let url = `https://www.google.com/maps/dir/?api=1&origin=${myLat},${myLng}&destination=${shareLat},${shareLng}`;
+
+                  // 새 창으로 Kakao Map 경로 검색 페이지 열기
+                  window.open(url, '_blank');
+              }, function(error) {
+                  console.error("Error Code: " + error.code + ", Error Message: " + error.message);
+                  alert("위치 정보를 가져올 수 없습니다.");
+              });
+          } else {
+              alert("Geolocation을 지원하지 않는 브라우저입니다.");
+          }
+      }
+//*********************************************게시판 기능******************************************* */
 
 //*********************************************쪽지 ********************************************
 $(document).ready(function () {
@@ -530,4 +586,4 @@ $(document).ready(function () {
       },
     });
   }
-//************************************쪽지 *******************************************************/
+//************************************쪽지*************************************************** */
