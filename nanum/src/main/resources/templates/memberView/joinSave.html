@@ -246,25 +246,25 @@
 
         // 아이디 중복확인 절차를 통과햐였는지 확인. 
         if (idDuplicationCheck != "y") {
-          alert("아이디 중복 확인이 이루어지지 않았습니다");
+          $(".idError").text("아이디 중복 확인이 이루어지지 않았습니다.").show().css("color", "red");
           return false;
         }
         
         // 비밀번호 규약을 제대로 인증받았는지 확인 
         if (passwordDuplicationCheck != "y"){
-          alert("비밀번호를 정확히 입력해 주십시오.");
+          $('.passwordError').text("비밀번호를 정확히 입력해 주십시오.").show().css("color", "red");
           return false;
         }
         
         // 이메일 인증절차를 통과하였는지 확인 
         if (emailDuplicationCheck!= "y") {
-          alert("이메일을 인증하여 주십시오.");
+          $('.emailError').text("이메일을 인증하여 주십시오.").show().css("color", "red");
           return false;
         }
 
         // 닉네임 인증절차를 통과하였는지 확인 
         if (nickDuplicationCheck != "y") {
-          alert("닉네임 중복확인이 이루어지지 않았습니다.");
+          $('.nickError').text("닉네임 중복확인이 이루어지지 않았습니다.").show().css("color", "red");
           return false;
         }        
 
