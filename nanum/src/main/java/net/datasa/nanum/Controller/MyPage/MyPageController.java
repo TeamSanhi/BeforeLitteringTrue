@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -48,6 +47,14 @@ public class MyPageController {
             String alarmDay = daysOfWeek[alarmDTO.getAlarmDay()];  // 배열에서 요일 찾기
             alarmTotal.add(alarmDay);
         }
+
+        Map<String, Integer> dayOrderMap = new HashMap<>();
+        for (int i = 0; i < daysOfWeek.length; i++) {
+            dayOrderMap.put(daysOfWeek[i], i);  // 요일과 그 인덱스를 Map에 저장
+        }
+
+        // 정렬
+        alarmTotal.sort(Comparator.comparingInt(dayOrderMap::get));
 
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
