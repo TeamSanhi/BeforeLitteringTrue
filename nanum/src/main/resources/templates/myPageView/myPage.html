@@ -149,6 +149,7 @@
                 perPage: {
                     'alarm': 9,
                     'give': 9,
+                    'donate': 9,
                     'pendingGive': 9,
                     'receive': 9,
                     'bookmark': 9
@@ -402,6 +403,16 @@
                                 console.error("예상치 못한 응답 형식입니다.");
                                 dataManager.data[listType] = [];
                             }
+                        } else if (listType === 'donate') {
+                            if (Array.isArray(response)) {
+                                dataManager.data[listType] = response.filter(item => item.shareCompleted === '나눴어요');
+                            } else if (typeof response === 'object') {
+                                const responseArray = [response];
+                                dataManager.data[listType] = responseArray.filter(item => item.shareCompleted === '나눴어요');
+                            } else {
+                                console.error("예상치 못한 응답 형식입니다.");
+                                dataManager.data[listType] = [];
+                            }
                         } else {
                             dataManager.data[listType] = response;
                         }
@@ -457,6 +468,14 @@
                         <p><a href="/share/read?shareNum=${item.shareNum}">
                             ${item.shareTitle},
                             ${item.shareCompleted},
+                            ${item.shareDate},
+                            ${item.shareContents}
+                        </a></p>
+                    `;
+                    case 'donate':
+                        return `
+                        <p><a href="/share/read?shareNum=${item.shareNum}">
+                            ${item.shareTitle},
                             ${item.shareDate},
                             ${item.shareContents}
                         </a></p>
@@ -760,7 +779,7 @@
         <button data-list="alarm" data-url="/myPage/showAlarm">나의 알림</button>
         <!-- 나눔 현황 띄우기 -->
         <button data-list="give" data-url="/myPage/showGive">나의 나눔</button>
-        <button data-list="give" data-url="/myPage/showGive">나눴어요</button>
+        <button data-list="donate" data-url="/myPage/showGive">나눴어요</button>
         <button data-list="pendingGive" data-url="/myPage/showGive">나눠요</button>
         <button data-list="receive" data-url="/myPage/showReceive">받았어요</button>
         <!-- 북마크 띄우기 -->
