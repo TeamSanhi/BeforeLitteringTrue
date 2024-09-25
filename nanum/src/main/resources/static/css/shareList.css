@@ -378,7 +378,7 @@
         top: 1.9vh;
         font-size: 1.8vh;
         letter-spacing: 0.1vw;
-        color: gray;
+        color: rgb(66, 66, 66);
         cursor: pointer;
         text-decoration: underline;
     }
@@ -429,7 +429,7 @@
 
     /* 지도 영역 */
     .mapArea {
-        margin-top: 3vh;
+        margin-top: 2vh;
         width: 93vw;
         height: 70vh;
         text-align: center;
@@ -450,7 +450,7 @@
     /* 나눠요 영역 */
     .shareArea {
         display: block;
-        margin-top: 3vh;
+        margin-top: 1.5vh;
         width: 100%;
         padding: 2vh 0;
         padding-bottom: 0;
@@ -462,6 +462,7 @@
         padding-bottom: 5vh;
         font-weight: 900;
         font-size: 3.6vh;
+        letter-spacing: 0.2vw;
     }
 
     /* 나눠요 게시글 리스트 영역 */
