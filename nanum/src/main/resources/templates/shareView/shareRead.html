@@ -131,15 +131,12 @@
         });
       }
 
-      //수정 함수
+      //수정으로 이동 
       function edit() {
-        //수정여부확인
-        if (confirm("정말 수정하시겠습니까?")) {
-          //수정할 글번호 가져오기
+          // 수정페이지로 이동하기 위한 게시글 번호 
           let shareNum = $("#editButton").data("num");
           //수정할 경로 전송
           window.location.href = "/share/edit?shareNum=" + shareNum;
-        }
       }
 
       // 게시글 상세보기 시 작성자가 게시글을 북마크 하고 있는지 아닌지 확인하는 함수

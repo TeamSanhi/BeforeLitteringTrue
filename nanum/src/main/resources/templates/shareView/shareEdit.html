@@ -7,33 +7,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>글작성</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/shareEdit.css">
+
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
+        //읽지 않은 알람 갯수를 저장
+        window.onload = function() {
+
+        // 알림 갯수 (서버에서 받아올 값, 현재는 테스트용)
+        let notifications = 3   // 알림이 있을 때 갯수 설정
+        const badge = document.getElementById("badge");
+
+        // 알림 수에 따라 괄호 안의 숫자를 변경
+        badge.textContent = `(${notifications})`;
+        }
+
         $(document).ready(function () {
-            // 폼 제출 이벤트 핸들러
+            // 폼 제출 이벤트 제어 
             $("#edit").submit(function (event) {
                 // 제목과 내용 입력 여부 확인
-                var title = $("#title").val();
-                var content = $("#content").val();
+                var title = $("#writeTitle").val();
+                var content = $("#postContent").val();
                 var lat = $("#lat").val();
                 var lng = $("#lng").val();
                 var file = $("#file").val();
                 if (title.trim() === "" || content.trim() === "" || lat.trim() === "" || lng.trim() === "" || file.trim() === ""){
-                    alert("제목, 내용, 위도, 경도, 사진을 모두 입력해주세요.");
+                    alert("제목, 내용, 사진, 위치를 모두 입력해주세요.");
                     event.preventDefault(); // 폼 제출 방지
+                    return;
                 }
             })
+
+            // + 버튼을 누르면 사진이 업로드되는 기능 추가 .
+            $('#addPhoto').click(function() {
+                $('#file').click();
+            })
+
+            // // submitButton 클릭시 Save form submit 버튼만으로도 submit 가능함으로 중복이된다.
+            // $('#submitButton').click(function() {
+            //     $('#Save').submit();
+            // });
+            
         })
-        
+
         // 올라오는 파일의 갯수를 제한하는 함수 
         function checkFileLimit(event) {
             // 사용자가 새로 선택한 파일들
-            const newFiles = event.target.files;
+            const files = event.target.files;
             // 최대 업로드 갯수 제한
             const maxFiles = 5;
 
             // 새로 선택한 파일들의 수 확인
-            const totalFiles = newFiles.length;
+            const totalFiles = files.length;
 
             // 만약 새로 선택한 파일 수가 최대 갯수를 초과하면 경고하고 막음
             if (totalFiles > maxFiles) {
@@ -49,7 +75,7 @@
             resetPreview();
             
             // 선택된 파일들이 5개를 초과하지 않았을 경우 이미지 미리보기 함수 실행
-            previewImages(newFiles);
+            previewImages(files);
         }
 
         // 사진 미리보기 함수 
@@ -57,7 +83,6 @@
             
             // 미리보기 이미지를 넣을 태그를 배열로 선택 요소 선택
             let previewContainer = document.querySelectorAll('.preview'); 
-
             //각각의 태그에 미리보기 사진을 넣어준다. 
             for (let i = 0; i < files.length; i++) {
                 const reader = new FileReader();
@@ -90,74 +115,218 @@
     </script>
 </head>
 <body>
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+
+        <!-- 로고 -->
+        <div class="logo">
+            <a href="/">
+                <img src="/images/logo.png" class="logoImg">
+            </a>
+        </div>
+  
+        <!-- 우리는 -->
+        <div class="projectInfo">
+            <a href="/info/service">우리는</a>
+        </div>
+  
+        <!-- 나눠요 -->
+        <div class="projectInfo">
+            <a href="/share/list">나눠요</a>
+        </div>
+  
+        <!-- 버려요 -->
+        <div class="projectInfo">
+            <a href="/recycle/list">버려요</a>
+        </div>
+  
+        <!-- 오른쪽 정렬 -->
+        <div class="rightGroup">
+            <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+            <th:block sec:authorize="not isAuthenticated()">
+                <!-- 회원가입 -->
+                <div class="join">
+                    <span class="joinHover">
+                        <a href="/member/join">회원가입</a>
+                    </span>
+                </div>
+  
+                <!-- 로그인 -->
+                <div class="login">
+                    <a href="/member/loginForm">
+                        <span class="loginHover">
+                            로그인
+                        </span>
+                    </a>
+                </div>
+            </th:block>
+  
+            <!-- 로그인 하였을시 보여줄 페이지 -->
+            <th:block sec:authorize="isAuthenticated()">
+                <!-- 나눔 쪽지 -->
+                <div class="message" id="messages">
+                    <span class="messageHover">
+                        나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
+                    </span>
+                </div>
+  
+                <div id="messagesModal" class="modal">
+                    <div class="modal-content">
+                        <span id="messagesClose" class="close">&times;</span>
+                        <h2>쪽지 목록</h2>
+                    </div>
+                </div>
+  
+                <div class="mypage">
+                    <a th:href="@{/myPage/view}">
+                        <span class="mypageHover">
+                            마이페이지
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- 로그아웃 -->
+                <div class="logout">
+                    <a th:href="@{/member/logout}">
+                        <span class="logoutHover">
+                            로그아웃
+                        </span>
+                    </a>
+                </div>
+            </th:block>
+  
+        </div>
+    </div>
+  
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
+
+    <!-- 게시글 작성 폼  -->
     <form id="edit" method="post" action="edit" enctype="multipart/form-data">
-        <!-- findbyid로 조회하기 위해 hidden 처리한 게시글 번호 -->
-        <input type="hidden" name="shareNum" th:value="${shareBoard.shareNum}">
-        <!-- 제목, 내용 -->
-        <p>제목 <input type="text" name="shareTitle" id="title"></p>
-        <p>내용 <textarea type="text" name="shareContents" id="content"></textarea></p>
-        <!-- 지도 태그 -->
-        <div id="map" style="width:50%;height:350px;"></div>
-        <p><em>지도를 클릭해주세요!</em></p> 
 
-        <!-- 위도경도 태그 -->
-        <p>위도<input type="text" name="shareLat" id="lat"></p>
-        <p>경도<input type="text" name="shareLng" id="lng"></p>
+        <!-- 게시글 작성 전체 영역 -->
+        <div class="mainContainer">
+            <!-- 상단 영역 -->
+            <div class="upsideContainer">
+                <!-- 왼쪽 영역_게시글 작성 (제목 / 본문 / 사진) -->
+                <div class="leftContainer">            
+                    <!-- 수정 게시글을 찾기위해 게시글번호를 hidden 값을 넣어줌 -->
+                    <input type="hidden" name="shareNum" th:value="${shareBoard.shareNum}">
+                    <!-- 제목 작성 영역 -->
+                    <div class="writeTitleArea">
+                        <!-- 제목 -->
+                        <input type="text" name="shareTitle" id="writeTitle" placeholder="제목을 입력해주세요!" required>
+                    </div>
+    
+                    <!-- 제목, 본문 구분선 -->
+                    <hr>
+    
+                    <!-- 본문 작성 영역 -->
+                    <div class="postContentArea">               
+                        <!-- 본문 작성 -->
+                        <textarea class="postContent" name="shareContents" id="postContent" placeholder="내용을 입력해주세요!" required></textarea>
+                    </div> 
+                </div>   
+                
+                <!-- 오른쪽 영역_지도 -->
+                <div class="rightContainer">
+                    <!-- 지도 영역 -->
+                    <div class="mapArea" id="map">
+                        <!-- 위도경도 태그 숨김처리-->
+                        <input type="hidden" name="shareLat" id="lat">
+                        <input type="hidden" name="shareLng" id="lng">
+                    </div>
+                </div>
+            </div>
 
-        <!-- 파일첨부 태그 이미지가 올라가면 올라온 이미지의 갯수를 확인하는 스크립트 함수를 실행 -->
-        <p>사진첨부<input type="file" name="uploads" id="file" multiple onchange="checkFileLimit(event)"></p>
-        <!-- 미리 보기 태그 -->
-        <p class="preview"></p>
-        <p class="preview"></p>
-        <p class="preview"></p>
-        <p class="preview"></p>
-        <p class="preview"></p>
-        <!-- form을 컨트롤러로 전송 -->
-        <p><input type="submit" value="저장"></p>
+            <!-- 하단 영역 -->
+            <div class="downContainer">
+                <!-- 사진 영역 -->
+                <div class="addPhotoArea">
+                    <!-- 사진 추가 -->
+                    <div class="addPhoto" id="addPhoto">
+                        +
+                    </div>
+                    <!-- 숨겨진 파일 입력 태그 -->
+                    <input type="file" name="uploads" id="file" style="display: none;" multiple onchange="checkFileLimit(event)">
+                    <!-- 사진 미리보기 출력 -->
+                    <span class="preview"></span>
+                    <span class="preview"></span>
+                    <span class="preview"></span>
+                    <span class="preview"></span>
+                    <span class="preview"></span>
+                </div>
+                <!-- 버튼 영역 -->
+                <div class="postingButtonArea">
+                    <!-- 버튼 클릭시 form submit하는 js 실행 실행 -->
+                    <button class="postingButton" id="submitButton">
+                        수정하기
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
     </form>
+
+    <!-- 모달 팝업 -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span>나누실래요?</span>
+            <div class="modal-buttons">
+                <button id="cancelButton">잠시만요</button>
+                <button id="confirmButton">나눌래요</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 저작권 정보 -->
+    <div class="rightArea">
+        © 2024 Team San, Hai. All rights reserved.
+    </div>
+
     <!-- 지도 자바스크립트 -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
     <script>
         //gelocation으로 현재 위치 가져오기
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-            var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+            let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
                 mapOption = {                   //geolocation으로 가져온 현재 위치를 기준으로 지도 옵션 설정
-                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude), // 지도의 중심좌표
+                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude   ), // 지도의 중심좌표
                     level: 4 // 지도의 확대 레벨
                 };
             
-            var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+            let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
             
             // 지도를 클릭한 위치에 표출할 마커입니다
-            var marker = new kakao.maps.Marker({ 
+            let marker = new kakao.maps.Marker({ 
                 // 지도 중심좌표에 마커를 생성합니다 
                 position: map.getCenter() 
             }); 
             // 지도에 마커를 표시합니다
             marker.setMap(map);
-            
+
             //form에 현재 위치의 위도 경도값 값 넣어주기 
             $('#lat').val(position.coords.latitude);
             $('#lng').val(position.coords.longitude);
-
+            
             // 지도에 클릭 이벤트를 등록합니다
             // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
             kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
                 
                 // 클릭한 위도, 경도 정보를 가져옵니다 
-                var latlng = mouseEvent.latLng; 
+                let latlng = mouseEvent.latLng; 
                 
                 // 마커 위치를 클릭한 위치로 옮깁니다
                 marker.setPosition(latlng);
                 
-                //form에 마커로 찍은 위도 경도값 값 넣어주기 
+                //form에 위도 경도값 값 넣어주기 
                 $('#lat').val(latlng.getLat());
                 $('#lng').val(latlng.getLng());
             });
         })
     };
     </script>
-    
 </body>
 </html>
