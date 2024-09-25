@@ -311,14 +311,20 @@
                     },
                     success: function (response) {
                         if (response.alarmExists) {
-                            if (confirm("기존 알람이 있습니다. 수정하시겠습니까?"))
+                            if (confirm("기존 알람이 있습니다. 수정하시겠습니까?")){
                                 editAlarm(alarmDay, alarmContents);
-                            else
-                                addAlarm(alarmDay, alarmContents);
-                            $('#alarmAddModal').fadeOut();
-                            $('.addDay').prop('checked', false);
-                            $('#addContents').val('');
+                                $('#alarmAddModal').fadeOut();
+                            }
                         }
+                        else {
+                            addAlarm(alarmDay, alarmContents);
+                            $('#alarmAddModal').fadeOut();
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+                        $('.addDay').prop('checked', false);
+                        $('#addContents').val('');
                     },
                     error: function () {
                         alert("알림 상태를 확인하는 중 오류가 발생했습니다.");
