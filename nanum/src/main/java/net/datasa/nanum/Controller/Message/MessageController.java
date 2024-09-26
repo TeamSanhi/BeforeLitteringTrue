@@ -67,6 +67,13 @@ public class MessageController {
                 List<MessageDTO> messages = messageService.getMessage(room, creatorNum);
                 response.put("roomExists", true);
                 response.put("existingMessages", messages);
+
+                MemberEntity receiver = room.getReceiver();
+                response.put("receiverNickname", receiver.getMemberNickname());
+                response.put("receiverProfileImage", receiver.getMemberFileName()); // 프로필 이미지 URL 필드
+
+                log.debug("프로필사진: {}", receiver.getMemberFileName());
+
             } 
             // 쪽지방이 없을 때
             else {
@@ -131,13 +138,42 @@ public class MessageController {
 
 
     // 홈 모달창의 쪽지방을 눌렀을 때 해당 쪽지방의 내역을 모두 출력
+    // @GetMapping("details")
+    // @ResponseBody
+    // public List<MessageDTO> getMessageDetails (@RequestParam("roomNum") int roomNum, @RequestParam("userNum") int userNum) {
+    //     RoomEntity room = roomRepository.findById(roomNum).orElseThrow(()-> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
+
+    //     return messageService.getMessage(room, userNum);
+    // }
+
     @GetMapping("details")
     @ResponseBody
-    public List<MessageDTO> getMessageDetails (@RequestParam("roomNum") int roomNum, @RequestParam("userNum") int userNum) {
-        RoomEntity room = roomRepository.findById(roomNum).orElseThrow(()-> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
+    public ResponseEntity<Map<String, Object>> getMessageDetails(@RequestParam("roomNum") int roomNum, @RequestParam("userNum") int userNum) {
+        
+        RoomEntity room = roomRepository.findById(roomNum)
+            .orElseThrow(() -> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
+    
+        // 메시지 내역 가져오기
+        List<MessageDTO> messages = messageService.getMessage(room, userNum);
+    
+        // 상대 정보 가져오기
+        String receiverNickname = (userNum == room.getCreator().getMemberNum()) 
+            ? room.getReceiver().getMemberNickname() 
+            : room.getCreator().getMemberNickname();
+    
+        String receiverProfileImage = (userNum == room.getCreator().getMemberNum()) 
+            ? room.getReceiver().getMemberFileName() 
+            : room.getCreator().getMemberFileName();
 
-        return messageService.getMessage(room, userNum);
-    }
+
+        // 응답 데이터 구성
+        Map<String, Object> response = new HashMap<>();
+        response.put("messages", messages);
+        response.put("receiverNickname", receiverNickname);
+        response.put("receiverProfileImage", receiverProfileImage);
+    
+        return ResponseEntity.ok(response);
+    }    
 
     @PostMapping("detailSend")
     @ResponseBody
