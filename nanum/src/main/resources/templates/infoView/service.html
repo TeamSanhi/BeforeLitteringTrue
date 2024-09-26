@@ -4,85 +4,28 @@
     xmlns:sec="http://thymeleaf.org/extras/spring-security"
 >
 <head>
+    <!-- 메타데이터 설정 -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>에코나비 - 환경 보호 플랫폼</title>
+
+    <!-- jQuery 라이브러리 추가 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <style>
-        /* 기본 스타일 설정 */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            color: #333;
-        }
-        header, nav, main, footer {
-            padding: 20px;
-            margin: 10px;
-        }
-        header {
-            background-color: #4CAF50;
-            color: white;
-            text-align: center;
-        }
-        nav {
-            background-color: #f2f2f2;
-            text-align: center;
-            padding: 10px 0;
-        }
-        nav a {
-            margin: 0 15px;
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        nav a:hover {
-            color: #4CAF50;
-        }
-        section {
-            margin-bottom: 40px;
-        }
-        h2 {
-            color: #4CAF50;
-            border-bottom: 2px solid #4CAF50;
-            padding-bottom: 10px;
-        }
-        h3 {
-            color: #4CAF50;
-        }
-        ul, dl {
-            margin-left: 20px;
-        }
-        .map-container {
-            width: 100%;
-            height: 70vh;
-            margin-bottom: 40px;
-        }
-        footer {
-            background-color: #f2f2f2;
-            text-align: center;
-            padding: 20px 0;
-            font-size: 0.9em;
-        }
-        a.email-link {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-        a.email-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <!-- 스타일 시트 제거됨 -->
 </head>
 <body>
-    <!-- 헤더 섹션 -->
+    <!-- 헤더 섹션 시작 -->
     <header>
         <h1>환경을 지키는 실천, 우리가 함께합니다</h1>
-        <p>에코나비는 물품 나눔과 올바른 분리수거 정보를 제공하여 일상 속에서 환경 보호를 실천할 수 있는 기회를 드립니다.</p>
+        <p>
+            에코나비는 물품 나눔과 올바른 분리수거 정보를 제공하여 일상 속에서 환경 보호를 실천할 수 있는 기회를 드립니다.
+        </p>
     </header>
+    <!-- 헤더 섹션 끝 -->
 
-    <!-- 내비게이션 바 -->
+    <!-- 내비게이션 바 시작 -->
     <nav>
+        <!-- 각 섹션으로 이동할 수 있는 링크들 -->
         <a href="#project-intro">프로젝트 소개</a>
         <a href="#service-features">서비스 기능</a>
         <a href="#team">팀원 소개</a>
@@ -90,17 +33,27 @@
         <a href="#faq">FAQ</a>
         <a href="#contact">문의하기</a>
     </nav>
+    <!-- 내비게이션 바 끝 -->
 
-    <!-- 메인 콘텐츠 -->
+    <!-- 메인 콘텐츠 시작 -->
     <main>
-        <!-- 프로젝트 소개 섹션 -->
+        <!-- 프로젝트 소개 섹션 시작 -->
         <section id="project-intro">
             <h2>팀 프로젝트 소개</h2>
-            <p><strong>에코나비(EcoNavi)</strong>는 저희 팀의 혁신적인 아이디어로 탄생한 지속 가능한 미래를 위한 디지털 솔루션입니다. **에코(Eco)**는 환경을, **네비(Navi)**는 네비게이션을 의미하며, 이는 사용자들이 환경 보호를 향한 길을 안내받을 수 있다는 의미를 담고 있습니다. 현대 사회에서 급격히 증가하는 자원 낭비와 환경 오염 문제를 해결하고자, 나눔과 분리수거의 가치를 극대화하여 일상 속 작은 실천이 큰 변화를 이끌어낼 수 있는 서비스를 제공합니다.</p>
-            
+            <p>
+                <strong>에코나비(EcoNavi)</strong>는 저희 팀의 혁신적인 아이디어로 탄생한 지속 가능한 미래를 위한 디지털 솔루션입니다.
+                <strong>에코(Eco)</strong>는 환경을, <strong>네비(Navi)</strong>는 네비게이션을 의미하며, 이는 사용자들이 환경 보호를 향한 길을 안내받을 수 있다는 의미를 담고 있습니다.
+                현대 사회에서 급격히 증가하는 자원 낭비와 환경 오염 문제를 해결하고자, 나눔과 분리수거의 가치를 극대화하여 일상 속 작은 실천이 큰 변화를 이끌어낼 수 있는 서비스를 제공합니다.
+            </p>
+
             <h3>왜 에코나비를 시작했는가?</h3>
-            <p>현대인의 바쁜 일상 속에서 환경 보호는 종종 간과되기 쉽습니다. 저희 팀은 이러한 현실을 목격하고, 더 많은 사람들이 쉽게 환경 보호에 참여할 수 있는 방법을 찾고자 했습니다. 자원의 낭비를 줄이고, 커뮤니티 내에서의 협력을 촉진함으로써 지속 가능한 삶을 지원하는 플랫폼을 개발하게 되었습니다. **에코나비**는 이러한 문제를 해결하고자 개발되었으며, 사용자들이 물품을 쉽게 나누고, 올바르게 분리수거할 수 있도록 돕습니다.</p>
-            
+            <p>
+                현대인의 바쁜 일상 속에서 환경 보호는 종종 간과되기 쉽습니다. 저희 팀은 이러한 현실을 목격하고,
+                더 많은 사람들이 쉽게 환경 보호에 참여할 수 있는 방법을 찾고자 했습니다.
+                자원의 낭비를 줄이고, 커뮤니티 내에서의 협력을 촉진함으로써 지속 가능한 삶을 지원하는 플랫폼을 개발하게 되었습니다.
+                <strong>에코나비</strong>는 이러한 문제를 해결하고자 개발되었으며, 사용자들이 물품을 쉽게 나누고, 올바르게 분리수거할 수 있도록 돕습니다.
+            </p>
+
             <h3>에코나비의 주요 목표</h3>
             <ul>
                 <li><strong>자원 순환의 가치 재발견</strong>: 나눔을 통해 물건을 재사용하고 환경 보호를 실천합니다.</li>
@@ -108,50 +61,74 @@
                 <li><strong>지역 기반 서비스</strong>: 나눔 게시판과 지도를 통해 지역 커뮤니티와 협력하여 자원 순환을 촉진합니다.</li>
             </ul>
         </section>
+        <!-- 프로젝트 소개 섹션 끝 -->
 
-        <!-- 서비스 기능 섹션 -->
+        <!-- 서비스 기능 섹션 시작 -->
         <section id="service-features">
             <h2>서비스 기능</h2>
-            
+
+            <!-- 버려요 기능 소개 -->
             <h3>1. 버려요</h3>
-            <p>환경 보호는 올바른 분리수거에서 시작됩니다. <strong>버려요</strong> 기능은 사용자가 물품을 검색하고, 올바른 분리수거 방법을 제공합니다.</p>
+            <p>
+                환경 보호는 올바른 분리수거에서 시작됩니다. <strong>버려요</strong> 기능은 사용자가 물품을 검색하고, 올바른 분리수거 방법을 제공합니다.
+            </p>
             <ul>
                 <li><strong>검색 기능</strong>: 버리려는 물품의 분리수거 규정과 분류 방법을 손쉽게 검색할 수 있습니다.</li>
                 <li><strong>카테고리별 분리수거 정보</strong>: 전자제품, 플라스틱, 종이 등 다양한 물품별 분리수거 방법을 한눈에 확인할 수 있습니다.</li>
                 <li><strong>지속적인 업데이트</strong>: 분리수거 규정은 최신 정보로 자동 업데이트되어 항상 정확한 정보를 제공합니다.</li>
             </ul>
 
+            <!-- 나눠요 기능 소개 -->
             <h3>2. 나눠요</h3>
-            <p>쓸모없는 물건이지만, 누군가에게는 유용한 자원이 될 수 있습니다. <strong>나눠요</strong> 기능을 통해 물건을 기부하거나 필요한 물품을 무료로 나눔받을 수 있습니다.</p>
+            <p>
+                쓸모없는 물건이지만, 누군가에게는 유용한 자원이 될 수 있습니다. <strong>나눠요</strong> 기능을 통해 물건을 기부하거나 필요한 물품을 무료로 나눔받을 수 있습니다.
+            </p>
             <ul>
                 <li><strong>지역 기반 나눔</strong>: 사용자 위치를 기반으로 가까운 지역에서 나눔을 실천할 수 있습니다.</li>
                 <li><strong>지도를 활용한 나눔 게시글</strong>: 지도에 나눔 장소를 표시하여, 주변의 나눔 활동을 쉽게 확인하고 참여할 수 있습니다.</li>
                 <li><strong>커뮤니티와의 소통</strong>: 나눔을 통해 환경을 보호하면서, 지역 사회와 소통할 수 있습니다.</li>
             </ul>
 
+            <!-- 마이페이지 기능 소개 -->
             <h3>3. 마이페이지</h3>
-            <p>개인 맞춤형 환경 관리 시스템입니다. 나눔 내역을 확인하고, 쓰레기 배출일을 설정하며, 나만의 친환경 생활을 관리할 수 있습니다.</p>
+            <p>
+                개인 맞춤형 환경 관리 시스템입니다. 나눔 내역을 확인하고, 쓰레기 배출일을 설정하며, 나만의 친환경 생활을 관리할 수 있습니다.
+            </p>
             <ul>
                 <li><strong>프로필 관리</strong>: 닉네임, 비밀번호, 이메일을 손쉽게 변경할 수 있으며, 수정 시 유효성 검사를 거칩니다.</li>
                 <li><strong>나눔 기록 확인</strong>: 내가 나눔한 물품, 받은 물품, 북마크한 내역을 한눈에 확인할 수 있습니다.</li>
                 <li><strong>배출일 알림</strong>: 쓰레기 배출 요일을 설정하면, 배출일에 맞춘 알림 서비스가 제공됩니다.</li>
             </ul>
         </section>
+        <!-- 서비스 기능 섹션 끝 -->
 
-        <!-- 지도 섹션 -->
+        <!-- 지도 섹션 시작 -->
         <section id="map-section">
             <h2>나눔 장소 지도</h2>
+            <!-- 지도를 표시할 영역 -->
             <div id="map" class="map-container"></div>
-            <p><a href="https://map.kakao.com/" target="_blank">2km Kakao Map으로 이동 (새창 열림)</a></p>
+            <p>
+                <!-- 카카오 지도 링크 -->
+                <a href="https://map.kakao.com/" target="_blank">2km Kakao Map으로 이동 (새창 열림)</a>
+            </p>
         </section>
+        <!-- 지도 섹션 끝 -->
 
-        <!-- 팀원 소개 섹션 -->
+        <!-- 팀원 소개 섹션 시작 -->
         <section id="team">
             <h2>팀원 소개</h2>
-            <ul> <li><strong>상하</strong>: 팀장 & 코드의 슈퍼히어로! 에코나비의 모든 기능을 마법처럼 구현하며, 팀의 웃음 폭탄 발사기. 커피 없이는 절대 개발을 시작하지 않는 커피 중독자.</li> <li><strong>현영</strong>: 버려요/마이페이지 기능 개발의 닌자. 상하와 함께 버그를 한 방에 처리하며, 가끔씩 팀원들에게 비밀리에 초콜릿을 나눠주는 달콤한 비밀 요원.</li> <li><strong>용원</strong>: 일본어 번역의 닌자 & 나눠요 개발자. 글로벌 사용자를 위해 언어 장벽을 부숴버리고, 스시 먹방 챔피언으로도 유명. 번역할 때마다 사케 한 잔!</li> <li><strong>연규</strong>: 나눔 기능의 GPS 마스터. 위치 기반 나눔을 설계하며, 항상 지도를 들고 다녀 길을 잃지 않는 인간 나침반. 길 찾기 퀴즈 대회 우승자!</li> <li><strong>혜리</strong>: 디자인의 요정 & 그래픽 마법사. 히어로 이미지와 버려요 관련 그래픽을 마법처럼 창조하며, 색상의 여왕. 팀의 비주얼 스파크!</li> <li><strong>재현</strong>: 제안서의 마술사 & QA 탐정. 프로젝트 발표 준비를 마법처럼 완벽하게 만들어주며, 모든 오류를 찾아내는 탐정 역할. 간식 챙기기 대가로 팀의 에너지를 책임집니다.</li> </ul>
+            <ul>
+                <li><strong>상하</strong>: 팀장 & 코드의 슈퍼히어로! 에코나비의 모든 기능을 마법처럼 구현하며, 팀의 웃음 폭탄 발사기. 커피 없이는 절대 개발을 시작하지 않는 커피 중독자.</li>
+                <li><strong>현영</strong>: 버려요/마이페이지 기능 개발의 닌자. 상하와 함께 버그를 한 방에 처리하며, 가끔씩 팀원들에게 비밀리에 초콜릿을 나눠주는 달콤한 비밀 요원.</li>
+                <li><strong>용원</strong>: 일본어 번역의 닌자 & 나눠요 개발자. 글로벌 사용자를 위해 언어 장벽을 부숴버리고, 스시 먹방 챔피언으로도 유명. 번역할 때마다 사케 한 잔!</li>
+                <li><strong>연규</strong>: 나눔 기능의 GPS 마스터. 위치 기반 나눔을 설계하며, 항상 지도를 들고 다녀 길을 잃지 않는 인간 나침반. 길 찾기 퀴즈 대회 우승자!</li>
+                <li><strong>혜리</strong>: 디자인의 요정 & 그래픽 마법사. 히어로 이미지와 버려요 관련 그래픽을 마법처럼 창조하며, 색상의 여왕. 팀의 비주얼 스파크!</li>
+                <li><strong>재현</strong>: 제안서의 마술사 & QA 탐정. 프로젝트 발표 준비를 마법처럼 완벽하게 만들어주며, 모든 오류를 찾아내는 탐정 역할. 간식 챙기기 대가로 팀의 에너지를 책임집니다.</li>
+            </ul>
         </section>
+        <!-- 팀원 소개 섹션 끝 -->
 
-        <!-- 서비스의 가치 섹션 -->
+        <!-- 서비스의 가치 섹션 시작 -->
         <section id="value">
             <h2>서비스의 가치</h2>
             <ul>
@@ -160,43 +137,60 @@
                 <li><strong>커뮤니티 활성화</strong>: 지역 기반의 나눔을 통해 이웃과의 소통을 활성화하고, 지속 가능한 커뮤니티를 형성합니다.</li>
             </ul>
         </section>
+        <!-- 서비스의 가치 섹션 끝 -->
 
-        <!-- FAQ 섹션 -->
+        <!-- FAQ 섹션 시작 -->
         <section id="faq">
             <h2>자주 묻는 질문 (FAQ)</h2>
             <dl>
                 <dt>1. 회원가입 시 필요한 정보는 무엇인가요?</dt>
-                <dd>회원가입을 위해서는 아이디, 비밀번호, 닉네임, 이메일 정보가 필요합니다. 이메일 인증을 통해 안전하게 회원가입을 진행할 수 있습니다.</dd>
+                <dd>
+                    회원가입을 위해서는 아이디, 비밀번호, 닉네임, 이메일 정보가 필요합니다. 이메일 인증을 통해 안전하게 회원가입을 진행할 수 있습니다.
+                </dd>
 
                 <dt>2. 나눔은 어떻게 이루어지나요?</dt>
-                <dd>사용자의 위치를 기반으로, 나눔하고자 하는 물품을 올리고, 다른 사용자가 이를 받을 수 있도록 연결해줍니다.</dd>
+                <dd>
+                    사용자의 위치를 기반으로, 나눔하고자 하는 물품을 올리고, 다른 사용자가 이를 받을 수 있도록 연결해줍니다.
+                </dd>
 
                 <dt>3. 분리수거 정보를 제공하나요?</dt>
-                <dd>네, 검색 기능을 통해 다양한 물품의 분리수거 방법과 규정을 쉽게 찾을 수 있으며, 최신 정보를 지속적으로 업데이트합니다.</dd>
+                <dd>
+                    네, 검색 기능을 통해 다양한 물품의 분리수거 방법과 규정을 쉽게 찾을 수 있으며, 최신 정보를 지속적으로 업데이트합니다.
+                </dd>
             </dl>
         </section>
+        <!-- FAQ 섹션 끝 -->
 
-        <!-- 문의하기 섹션 -->
+        <!-- 문의하기 섹션 시작 -->
         <section id="contact">
             <h2>문의하기</h2>
-            <p>서비스에 대한 궁금증이 있으시다면 <a href="#faq">FAQ 페이지</a>를 참조하시거나, 고객센터에 문의해 주세요.</p>
+            <p>
+                서비스에 대한 궁금증이 있으시다면 <a href="#faq">FAQ 페이지</a>를 참조하시거나, 고객센터에 문의해 주세요.
+            </p>
             <ul>
                 <li><strong>고객센터 전화</strong>: 010-3016-8935</li>
                 <li><strong>이메일</strong>: <a href="mailto:jaehyeon8935@naver.com" class="email-link">jaehyeon8935@naver.com</a></li>
             </ul>
         </section>
+        <!-- 문의하기 섹션 끝 -->
     </main>
+    <!-- 메인 콘텐츠 끝 -->
 
-    <!-- 푸터 섹션 -->
+    <!-- 푸터 섹션 시작 -->
     <footer>
         <p>&copy; 2024 에코나비 - 환경 보호 플랫폼. All rights reserved.</p>
     </footer>
+    <!-- 푸터 섹션 끝 -->
 
-    <!-- js로 지도 불러오기 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
-    <!-- 지도 script -->
+    <!-- Kakao Map API 스크립트 추가 -->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY&libraries=clusterer"></script>
+
+    <!-- 지도 관련 스크립트 시작 -->
     <script>
-        let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        // 지도 표시를 위한 JavaScript 코드
+
+        // 지도를 표시할 div와 옵션 설정
+        let mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = { 
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 7 // 지도의 확대 레벨
@@ -205,7 +199,7 @@
         // 지도를 생성합니다
         let map = new kakao.maps.Map(mapContainer, mapOption); 
 
-        // 마커 클러스터러를 생성 (지도에 표시할 마커 배열을 비워둠)
+        // 마커 클러스터러를 생성합니다 (지도에 표시할 마커 배열을 비워둠)
         let clusterer = new kakao.maps.MarkerClusterer({
             map: map, // 마커들을 클러스터로 관리할 지도 객체
             averageCenter: true, // 클러스터의 중심을 마커들의 평균 좌표로 설정
@@ -227,79 +221,71 @@
             alert("Geolocation을 지원하지 않는 브라우저입니다.");
         }
 
-        // 마커를 저장할 배열 
+        // 마커를 저장할 배열
         let markers = [];
-        let openInfoWindow = null;  // 열린 인포윈도우 추적
+        let openInfoWindow = null; // 열린 인포윈도우를 추적
 
-        // ************* 지도에 이벤트 등록 ****************************************************************
-        // 초기 로드 시 마커를 불러오기 위해 'idle' 이벤트를 사용
+        // 지도에 이벤트 등록 (idle, dragend, zoom_changed)
         kakao.maps.event.addListener(map, 'idle', function () {
-            triggerAjax();  // idle 이벤트가 발생하면 마커를 불러옵니다.
-            kakao.maps.event.removeListener(map, 'idle');  // 한 번 실행 후 제거하여 중복 실행 방지
+            triggerAjax(); // idle 이벤트 발생 시 마커를 불러옵니다.
+            kakao.maps.event.removeListener(map, 'idle'); // 중복 실행 방지
         });
 
-        // 드래그가 끝난 후 발생하는 'dragend' 이벤트를 사용하여 Ajax 요청을 실행
         kakao.maps.event.addListener(map, 'dragend', function() {
-            triggerAjax();
+            triggerAjax(); // 지도 드래그 종료 시 마커 업데이트
         });
 
-        // 확대/축소가 끝난 후 발생하는 'zoom_changed' 이벤트를 사용하여 Ajax 요청을 실행
         kakao.maps.event.addListener(map, 'zoom_changed', function() {
-            triggerAjax();
+            triggerAjax(); // 지도 줌 변경 시 마커 업데이트
         });
-        //**********************지도에 이벤트를 등록 ***************************************************
 
-        // **************지도 영역내의 게시글을 불러오는 ajax*******************************************
+        // 지도 영역 내의 게시글을 불러오는 AJAX 함수
         function triggerAjax() {
-            // 지도의 영역을 불러온다. 
+            // 지도의 현재 영역을 가져옵니다.
             let bounds = map.getBounds();
             let swLat = bounds.getSouthWest().getLat(); // 남서쪽 위도
             let swLng = bounds.getSouthWest().getLng(); // 남서쪽 경도
             let neLat = bounds.getNorthEast().getLat(); // 북동쪽 위도
             let neLng = bounds.getNorthEast().getLng(); // 북동쪽 경도
 
-            // data에 위도, 경도, 검색정보를 담기
-            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng}
+            // 데이터에 위도, 경도 정보를 담습니다.
+            let data = {swLat: swLat, swLng: swLng, neLat: neLat, neLng: neLng};
 
-            // 지도 영역이 변할때마다 ajax를 실행시킨다.
+            // AJAX 요청을 보냅니다.
             $.ajax({
                 url: '/share/serviceList',
                 type: 'get',
-                data: data, // 남서 북서 끝단의 위도 경도 정보를 보낸다. 
-                // 성공 시 반복문을 사용하여 마커들을 지도상에 찍어준다. 
+                data: data,
                 success: function(mapList) {
-                    // 기존 마커를 제거하고 클러스터러에서 삭제
-                    clusterer.clear(); // ajax가 실행될때마다 클러스터를 비우지 않으면 클러스터에 마커가 계속 쌓인다
-                    
-                    // 마커 배열을 초기화
-                    markers = []; // ajax가 실행할때마다 배열을 초기화하고 다시 마커들을 찍어 배열에 저장한다.
+                    // 기존 마커와 클러스터를 초기화합니다.
+                    clusterer.clear();
+                    markers = [];
 
-                    // 지도에 마커를 찍어 게시글 위치를 표시
+                    // 마커를 생성하고 배열에 저장합니다.
                     mapList.forEach(function(share) {
                         let markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
 
-                        // 마커 중복확인 함수 isMarkerExists가 false일때 실행 (마커가 이미 있으면 true를 반환한다.)
+                        // 마커 중복 확인 후 생성
                         if (!isMarkerExists(markerPosition)) {
                             let marker = new kakao.maps.Marker({
                                 position: markerPosition
                             });
-                            marker.setMap(map);    // marker를 지도에 표시합니다.
-                            markers.push(marker);  // marker를 markers 배열에 넣는다.
+                            marker.setMap(map);    // 마커를 지도에 표시합니다.
+                            markers.push(marker);  // 마커를 배열에 추가합니다.
 
-                            // 각 마커에 대한 인포윈도우와 이벤트 등록
+                            // 마커에 인포윈도우와 이벤트를 등록합니다.
                             createMarkerWithInfo(marker, share);
                         }
                     });
-                    
-                    // 클러스터러에 새로 추가된 마커들 등록
+
+                    // 클러스터러에 마커를 추가합니다.
                     clusterer.addMarkers(markers);
                     removeMarkersOutOfBounds(); // 경계 밖 마커 제거
                 }              
             });
-        };
-        //***************************지도 영역내의 게시글을 불러오는 ajax**************************************
+        }
 
-        // ****************마커에 인포윈도우를 매치, 마커에 이벤트 등록 *****************
+        // 마커에 인포윈도우를 매칭하고 이벤트를 등록하는 함수
         function createMarkerWithInfo(marker, share) {
             let iwContent = `
                 <div style="padding:5px; width:110px; height:150px;">
@@ -309,67 +295,62 @@
                 </div>
             `;
 
-            // 인포윈도우를 생성합니다
+            // 인포윈도우를 생성합니다.
             let infoWindow = new kakao.maps.InfoWindow({
                 content: iwContent,
                 disableAutoPan: true // 자동 이동 비활성화
             });
 
-            // 마커에 마우스오버 이벤트를 등록합니다
+            // 마커에 마우스 이벤트를 등록합니다.
             kakao.maps.event.addListener(marker, 'mouseover', function () {
-                // 다른 인포윈도우가 열려 있으면 먼저 닫습니다
+                // 다른 인포윈도우가 열려 있으면 닫습니다.
                 if (openInfoWindow) {
                     openInfoWindow.close();
                 }
-                // 인포윈도우를 마커 위에 표시
+                // 인포윈도우를 마커 위에 표시합니다.
                 infoWindow.open(map, marker);
-                openInfoWindow = infoWindow;  // 열린 인포윈도우를 저장
+                openInfoWindow = infoWindow;
             });
 
-            // 마커에 마우스아웃 이벤트를 등록합니다
             kakao.maps.event.addListener(marker, 'mouseout', function () {
-                // 마우스아웃 이벤트가 발생하면 인포윈도우를 닫습니다
+                // 마우스 아웃 시 인포윈도우를 닫습니다.
                 infoWindow.close();
-                openInfoWindow = null;  // 열린 인포윈도우를 없앰
+                openInfoWindow = null;
             });
-
         }
-        //*************************마커에 인포윈도우를 매치, 마커에 이벤트 등록 ********************************
 
-        //***********************기타함수***********************************
-        // 좌표를 기반으로 중복 마커 확인하는 함수
+        // 마커 중복 여부를 확인하는 함수
         function isMarkerExists(position) {
             return markers.some(function(marker) {
                 let markerPosition = marker.getPosition();
                 return markerPosition.getLat() === position.getLat() && markerPosition.getLng() === position.getLng();
             });
         }
-        
-        // 지도 경계 밖 마커를 삭제하는 함수
+
+        // 지도 경계 밖의 마커를 제거하는 함수
         function removeMarkersOutOfBounds() {
-            let bounds = map.getBounds(); // 지도의 현재 경계 가져오기
-            
-            // filter 함수를 사용하여 마커 배열을 순회해 경계 안에 있으면 유지, 없으면 삭제 
+            let bounds = map.getBounds(); // 지도의 현재 경계를 가져옵니다.
+
+            // 경계 밖의 마커를 필터링하여 제거합니다.
             markers = markers.filter(function(marker) {
                 let position = marker.getPosition();
-                // 마커가 경계 안에 있으면 유지, 경계 밖이면 지도에서 제거
                 if (bounds.contain(position)) {
-                    return true;  // 경계 안에 있는 마커는 유지
+                    return true;  // 경계 안에 있으면 유지
                 } else {
-                    marker.setMap(null);  // 경계 밖의 마커는 지도에서 제거
-                    return false;  // markers 배열에서 삭제
+                    marker.setMap(null);  // 지도에서 제거
+                    return false; // 배열에서 제거
                 }
             });
 
-            // 클러스터러에 경계 안의 마커들만 다시 추가
-            clusterer.clear(); // 기존 클러스터 삭제
-            clusterer.addMarkers(markers); // 클러스터에 남은 마커 다시 추가
+            // 클러스터러를 업데이트합니다.
+            clusterer.clear();
+            clusterer.addMarkers(markers);
         }
 
-        // 지도가 이동되거나 줌이 변경될 때 경계 밖 마커 제거
+        // 지도 이벤트에 마커 제거 함수를 등록합니다.
         kakao.maps.event.addListener(map, 'dragend', removeMarkersOutOfBounds);
         kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
-        //*********************기타함수*****************************************************
     </script>
+    <!-- 지도 관련 스크립트 끝 -->
 </body>
 </html>
