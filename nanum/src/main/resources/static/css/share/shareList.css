@@ -378,14 +378,9 @@
         top: 1.9vh;
         font-size: 1.8vh;
         letter-spacing: 0.1vw;
-        color: rgb(66, 66, 66);
+        color: gray;
         cursor: pointer;
         text-decoration: underline;
-    }
-
-    /* 초기화 버튼_hover */
-    .resetButton:hover {
-        color: #2DC986;
     }
 
     /* 나눔하기 버튼 영역 */
