@@ -301,10 +301,10 @@
                 </button>
               </th:block>
               <th:block th:if="${#authentication.name == shareBoard.memberId}">
-                <button class="wantShareButton" id="deleteButton" th:data-num="${shareBoard.shareNum}">
+                <button class="deleteResetButton" id="deleteButton" th:data-num="${shareBoard.shareNum}">
                   삭제
                 </button>        
-                <button class="wantShareButton" id="editButton" th:data-num="${shareBoard.shareNum}">
+                <button class="deleteResetButton" id="editButton" th:data-num="${shareBoard.shareNum}">
                   수정
                 </button>
               </th:block>

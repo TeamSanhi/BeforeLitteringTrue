@@ -305,6 +305,7 @@
         justify-content: center;    /* 가운데 정렬 */
         align-items: center;        /* 세로 가운데 정렬 */
         position: relative;
+        font-family: 'NEXON Lv1 Gothic OTF';
     }
 
     /* 검색창 input_왼쪽 blank */
@@ -321,12 +322,7 @@
 
     /* 검색창 input 내의 버튼_검색 */
     #searchContainer button {
-        /* 폰트 */
         font-family: 'NEXON Lv1 Gothic OTF';
-        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        /* 폰트 */
         position: absolute;
         text-align: center;
         right: 1.5vh;
@@ -352,12 +348,7 @@
 
     /* 검색 창_input */
     .search {
-        /* 폰트 */
         font-family: 'NEXON Lv1 Gothic OTF';
-        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        /* 폰트 */
         margin: auto;
         margin-top: 1vh;
         margin-bottom: 1vh;
@@ -372,6 +363,7 @@
 
     /* 초기화 버튼 */
     .resetButton {
+        font-family: 'NEXON Lv1 Gothic OTF';
         position: absolute;
         right: -7vh;
             /* 검색 버튼 옆에 위치 */
@@ -393,12 +385,7 @@
 
     /* 나눔하기 버튼 */
     .wantShare {
-        /* 폰트 */
         font-family: 'NEXON Lv1 Gothic OTF';
-        src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        /* 폰트 */
         width: 8vw;
         height: 5vh;
         color: black;
@@ -408,7 +395,7 @@
         margin-top: 0.5vh;
         margin-bottom: 0.5vh;
         font-size: 2.1vh;
-        font-weight: 500;
+        font-weight: 700;
         letter-spacing: 0.1vw;
         cursor: pointer;
         padding-top: 0.5vh;

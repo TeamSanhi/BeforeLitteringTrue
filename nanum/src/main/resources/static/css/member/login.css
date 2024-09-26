@@ -356,9 +356,6 @@ img {
             color: black;
             background: linear-gradient(#8ABAFF 0 100%);
             font-family: 'NEXON Lv1 Gothic OTF';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
         }
 
         /* 로그인 버튼_hover */
@@ -384,9 +381,6 @@ img {
             background-color: white;
             box-sizing: border-box;
             font-family: 'NEXON Lv1 Gothic OTF';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
         }
 
         /* 가입 버튼_hover */

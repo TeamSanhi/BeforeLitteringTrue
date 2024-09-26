@@ -608,7 +608,8 @@
         border: 0.07vw solid black;
         background: linear-gradient(#8ABAFF 0 100%);
         box-sizing: border-box;
-        color: black
+        color: black;
+        font-family: 'NEXON Lv1 Gothic OTF';
     }
 
     /* 가입 버튼_hover */
