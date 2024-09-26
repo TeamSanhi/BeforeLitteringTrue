@@ -50,7 +50,7 @@ public class MemberService {
      */
     public MemberEntity getMemberByNum(Integer memberNum) {
         MemberEntity member = memberRepository.findById(memberNum).orElse(null);
-        ;
+
         return member;
     }
 

@@ -67,7 +67,7 @@ public class MyPageController {
     public String profileEdit(Model model, @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         MemberEntity member = memberService.getMemberByNum(authenticatedUser.getNum());
 
-        log.debug("member", member);
+        log.debug("member : {}", member);
 
         model.addAttribute("member", member);
 
@@ -79,8 +79,9 @@ public class MyPageController {
 
         log.debug("회원 가입 정보 입력값: {}", dto);
 
-        memberService.modify(dto);
+        // memberService.modify(dto);
 
         return "myPageView/profileEdit";
     }
+
 }
