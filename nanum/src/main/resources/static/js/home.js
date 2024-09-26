@@ -107,7 +107,24 @@ window.onload = function() {
     /* 창 크기 변경 시 슬라이드 어비 조정 */
     window.addEventListener('resize', updateSliderWidth);
 
-    // 글내용의 길이가 20자가 넘으면 생략하여 보여준다. 
+    // 글 제목 의 길이가 15자가 넘으면 생략하여 보여준다. 
+    // 모든 postContent 요소들을 가져옴
+    let sharePostTitle = document.querySelectorAll(".sharePostTitle");
+
+    // 각 postContent 요소들에 글자 수 제한 적용
+    sharePostTitle.forEach(function(post) {
+        // 게시글 내용 텍스트 가져오기
+        let text = post.innerText;
+        // 글자 수 제한_공백 포함
+        let maxLength = 15;
+
+        // 글자 수가 40자를 넘으면 자르고 ... 붙이기
+        if (text.length > maxLength) {
+            post.innerText = text.slice(0, maxLength) + "···";
+        };
+    });
+
+    // 글 내용의 길이가 15자가 넘으면 생략하여 보여준다. 
     // 모든 postContent 요소들을 가져옴
     let postContents = document.querySelectorAll(".postContent");
 
@@ -123,7 +140,6 @@ window.onload = function() {
             post.innerText = text.slice(0, maxLength) + "···";
         };
     });
-
 
 };  // function
 
