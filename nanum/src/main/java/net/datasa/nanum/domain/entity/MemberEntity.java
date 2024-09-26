@@ -3,7 +3,6 @@ package net.datasa.nanum.domain.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -16,6 +15,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 회원 정보 엔티티
@@ -48,7 +52,7 @@ public class MemberEntity {
 	private String memberNickname;
 	// 프로필 사진 이름
 	@Column(name = "member_file_name", length = 100)
-	private String memberFileName = "images/profile-basic.png";
+	private String memberFileName = "/images/profile-basic.png";
 	// 회원 가입일
 	@CreatedDate
 	@Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
