@@ -31,18 +31,25 @@ body {
     display: none;
 }
 
-/* 이미지 */
-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+    /* a태그 속성 없애기 */
+    a {
+        color: inherit;
+        text-decoration: inherit;
+    }
 
-/* a태그 속성 없애기 */
-a {
-    color: inherit;
-    text-decoration: inherit;
-}
+
+    /* 슬라이드에서 사용 될 리스트 속성 */
+    li {
+        list-style: none;
+    }
+
+
+    /* 이미지 */
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
 /* 네비게이션 */
 /* 네비게이션이 영역 div */
@@ -281,7 +288,6 @@ a {
         overflow: hidden;
     }
 
-
     /* 왼쪽 영역 | 게시글 제목, 물품 사진 */
     .leftContainer {
         float: left;
@@ -301,16 +307,69 @@ a {
     .postingTitle {
         font-size: 3.5vh;
         font-weight: 600;
+        letter-spacing: 0.2vw;
     }
+
 
     /* 나눔글 이미지 */
     .imgArea {
         display: block;
         width: 100%;
         height: 100%;
-        border: 0.07vw solid black;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        overflow: hidden;
+    }
+
+    /* 나눔글 이미지_img */
+    .imgArea img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     }
+
+    /* 이미지 슬라이더 */
+    .swiper {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .swiper-slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* 사진이 영역 크기에 맞춰 잘리게 */
+    }
+
+    /* 내비게이션 버튼 커스터마이징 */
+    .swiper-button-next, .swiper-button-prev {
+        color: black;
+        font-size: 4vh;
+        font-weight: 500;
+        width: auto;
+        height: auto;
+    }
+
+    /* 내비게이션 화살표 */
+    .swiper-button-next::after {
+        content: '〉';
+    }
+
+    .swiper-button-prev::after {
+        content: '〈';
+    }
+
 
     /* 오른쪽 영역 | 작성자 정보, 본문 등 */
     .rightContainer {
@@ -462,6 +521,7 @@ a {
 
     /* 북마크 버튼_hover */
     .bookMarkButton:hover {
+        color: black;
         background-size: 100% 1.2vh;
     }
 
@@ -490,6 +550,7 @@ a {
 
     /* 길찾기 버튼_hover */
     .roadMarkButton:hover {
+        color: black;
         background-size: 100% 1.2vh;
     }
 
