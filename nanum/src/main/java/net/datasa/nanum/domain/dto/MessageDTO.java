@@ -27,4 +27,5 @@ public class MessageDTO {
     private Integer shareWriteNum;      // 게시글 작성자 번호
     private Boolean shareCompleted;     // 나눔 완료 여부
     private Boolean hasUnreadMessages; // 읽지 않은 쪽지 여부
+    private String memberFileName;      // 프로필 사진
 }
