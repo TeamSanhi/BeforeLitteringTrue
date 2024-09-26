@@ -245,7 +245,7 @@ function check() {
   
   // 이메일 인증절차를 통과하였는지 확인 
   if (emailDuplicationCheck!= "y") {
-    $('.emailError').text("이메일을 인증하여 주십시오.").show().css("color", "red");
+    $('#emailCodeError').text("이메일을 인증하여 주십시오.").show().css("color", "red");
     return false;
   }
 
