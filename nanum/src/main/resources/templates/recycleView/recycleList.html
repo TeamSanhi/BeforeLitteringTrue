@@ -152,6 +152,7 @@
       .search-bar {
         margin: 20px auto;
         text-align: center;
+        position: relative;
       }
 
       .search-bar form {
@@ -232,6 +233,30 @@
 
       .nav a:hover {
         color: #007bff;
+      }
+      #searchWordList {
+        list-style: none;
+        padding: 0;
+        margin-top: 5px;
+        border: 1px solid #ddd;
+        background-color: white;
+        position: absolute; /* 부모 요소인 검색창 아래에 위치 */
+        left: 0;
+        right: 0; /* 양쪽을 0으로 맞춰 중앙 정렬 */
+        max-width: 200px; /* 검색창과 일치하게 설정 */
+        margin: 0 auto; /* 가로 중앙 정렬 */
+        z-index: 1000;
+        border-radius: 10px;
+        left: 5%;
+      }
+
+      #searchWordList li {
+        padding: 3px;
+        cursor: pointer;
+      }
+
+      #searchWordList li:hover {
+        background-color: #f0f0f0;
       }
     </style>
 
@@ -343,33 +368,72 @@
           const searchWord = document.querySelector(
             'input[name="searchWord"]'
           ).value;
+
           if (searchWord) {
-            localStorage.setItem("lastSearchWord", searchWord); // 검색어를 localStorage에 저장
-            console.log("검색어 저장: ", searchWord); // 디버그용 콘솔 로그
+            let searchWords =
+              JSON.parse(localStorage.getItem("searchWords")) || [];
+
+            // 중복 검색어 제거
+            searchWords = searchWords.filter((word) => word !== searchWord);
+
+            // 검색어 배열에 추가
+            searchWords.unshift(searchWord); // 새로운 검색어를 앞에 추가
+
+            // 최대 5개의 검색어만 저장
+            if (searchWords.length > 5) {
+              searchWords = searchWords.slice(0, 5);
+            }
+
+            localStorage.setItem("searchWords", JSON.stringify(searchWords));
           }
         }
 
-        // 검색창에 포커스가 갔을 때 저장된 검색어를 불러오는 함수
-        function loadSearchWord() {
-          const lastSearchWord = localStorage.getItem("lastSearchWord");
-          if (lastSearchWord) {
-            document.querySelector('input[name="searchWord"]').value =
-              lastSearchWord; // 저장된 검색어를 입력 필드에 넣음
-            console.log("이전 검색어 불러오기: ", lastSearchWord); // 디버그용 콘솔 로그
-          } else {
-            console.log("저장된 검색어가 없습니다."); // 디버그용 콘솔 로그
+        // 검색창 클릭 시 검색어 목록을 불러오는 함수
+        function loadSearchWordList() {
+          const searchWords =
+            JSON.parse(localStorage.getItem("searchWords")) || [];
+
+          if (searchWords.length > 0) {
+            let dropdown = document.getElementById("searchWordList");
+
+            // 이전 검색어 목록 삭제
+            dropdown.innerHTML = "";
+
+            // 검색어 목록을 동적으로 추가
+            searchWords.forEach((word) => {
+              const listItem = document.createElement("li");
+              listItem.textContent = word;
+
+              // 클릭한 검색어를 입력 필드에 넣기
+              listItem.addEventListener("click", function () {
+                document.querySelector('input[name="searchWord"]').value = word;
+                dropdown.style.display = "none"; // 목록을 숨기기
+              });
+
+              dropdown.appendChild(listItem);
+            });
+
+            // 검색어 목록 표시
+            dropdown.style.display = "block";
           }
         }
+
+        // 검색창 클릭 시 검색어 목록 불러오기
+        document
+          .querySelector('input[name="searchWord"]')
+          .addEventListener("focus", loadSearchWordList);
 
         // 검색 폼 제출 시 검색어 저장
         document
           .querySelector(".search-bar form")
           .addEventListener("submit", saveSearchWord);
 
-        // 검색창 클릭 시(포커스) 이전 검색어 불러오기
-        document
-          .querySelector('input[name="searchWord"]')
-          .addEventListener("focus", loadSearchWord);
+        // 검색창 외부 클릭 시 목록 닫기
+        document.addEventListener("click", function (event) {
+          if (!event.target.matches('input[name="searchWord"]')) {
+            document.getElementById("searchWordList").style.display = "none";
+          }
+        });
       });
     </script>
   </head>
@@ -510,9 +574,26 @@
             placeholder="검색어를 입력하세요"
             th:value="${searchWord}"
             onfocus="loadSearchWord()"
+            autocomplete="off"
           />
           <button type="submit">검색</button>
         </form>
+        <!-- 검색어 목록을 표시할 리스트 -->
+        <ul
+          id="searchWordList"
+          style="
+            display: none;
+            border: 1px solid #ccc;
+            max-width: 200px;
+            margin: 0 auto;
+            padding: 5px;
+            position: absolute;
+            background-color: white;
+            z-index: 1000;
+          "
+        >
+          <!-- 동적으로 검색어가 추가될 예정 -->
+        </ul>
       </div>
     </div>
 

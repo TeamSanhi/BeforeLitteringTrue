@@ -1,14 +1,15 @@
 package net.datasa.nanum.service;
 
+import java.time.LocalDateTime;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.repository.MemberRepository;
-
-import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -31,6 +32,7 @@ public class MemberService {
                 .memberPw(passwordEncoder.encode(dto.getMemberPw()))
                 .memberEmail(dto.getMemberEmail())
                 .memberNickname(dto.getMemberNickname())
+                .memberFileName("images/profile-basic.png")
                 .roleName("ROLE_USER")
                 .memberStatus(0)
                 .build();
