@@ -133,6 +133,7 @@ function sendEmailVerificationCode(){
       return;  // 전송 중단
       }
       
+      // 이메일 전송시 이메일 전송중 메시지 출력 
       $("#emailError").text("이메일 전송중입니다...").show().css("color", "blue"); 
 
       // ajax로 받은 이메일에 이메일 전송 요청
