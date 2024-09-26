@@ -410,19 +410,19 @@
     display: flex;
     flex-wrap: wrap;
     /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
-    justify-content: flex-start;
+    justify-content: space-between;
     /* 게시글이 왼쪽 정렬되게 설정 */
     gap: 2vh;
     /* 게시글 사이에 일정 간격을 둠 */
-    padding-left: 2vw;
 }
 
 /* 나눠요 게시글 영역_div 박스 */
 .sharePosting {
-    width: 330px; 
+    width: 307px; 
     /* width: calc(25% - 2vh); */
         /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
         /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
+    text-align: left;
     height: 31vh;
     margin-bottom: 1vh;
     border: 0.07vw solid black;
@@ -490,10 +490,14 @@
 
 /* 게시글 정보_작성 일시 */
 .bookmarkCount {
+    color: black;
     font-size: 1.6vh;
     float: right;
     letter-spacing: 0.05vw;
-    color: red
+    background: linear-gradient(#2DC986 0 100%);
+    background-position: 0 calc(100% - 0.3vh);
+    background-size: 100% 1vh;
+    background-repeat: no-repeat;
 }
 
 
