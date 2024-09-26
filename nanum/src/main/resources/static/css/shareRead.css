@@ -122,7 +122,7 @@ a {
     vertical-align: top;
     line-height: 6vh;
     margin-right: 2vw;
-    color: gray;
+    color: rgb(99, 99, 99);
 }
 
 
@@ -137,7 +137,7 @@ a {
     text-decoration: underline;
     vertical-align: top;
     line-height: 6vh;
-    color: gray;
+    color: rgb(99, 99, 99);
 }
 
 
@@ -431,7 +431,7 @@ a {
 
     /* 북마크 */
     .bookMarkButton {
-        color: gray;
+        color: rgb(99, 99, 99);
         cursor: pointer;
         height: 100%;
         font-size: 2.1vh;
@@ -474,7 +474,7 @@ a {
 
     /* 길찾기 */
     .roadMarkButton {
-        color: black;
+        color: rgb(99, 99, 99);
         cursor: pointer;
         height: 100%;
         font-size: 2.1vh;
@@ -503,7 +503,7 @@ a {
 
     /* 신고 버튼 */
     .reportButton {
-        color: rgb(0, 0, 0);
+        color: rgb(99, 99, 99);
         cursor: pointer;
         height: 100%;
         font-size: 2.1vh;

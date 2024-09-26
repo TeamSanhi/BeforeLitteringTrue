@@ -266,6 +266,7 @@ public class ShareService {
 
     /**
      * 나눔글 entity에서 dto로 변환
+     * 
      * @param shareBoardEntity 나눔글 엔티티
      * @return 나눔글 DTO
      */
@@ -294,8 +295,7 @@ public class ShareService {
                 ImageDTO imageDTO = new ImageDTO(
                         imageEntity.getImageNum(),
                         imageEntity.getShareBoard().getShareNum(),
-                        imageEntity.getImageFileName()
-                );
+                        imageEntity.getImageFileName());
                 imageDTOList.add(imageDTO);
             }
         }
@@ -306,6 +306,7 @@ public class ShareService {
 
     /**
      * 작성한 나눔글 리스트 entity에서 dto로 변환
+     * 
      * @param member 멤버 엔티티
      * @return 나눔글 DTO 리스트
      */
@@ -318,6 +319,7 @@ public class ShareService {
 
     /**
      * 받은 나눔글 리스트 entity에서 dto로 변환
+     * 
      * @param member 멤버 엔티티
      * @return 나눔글 DTO 리스트
      */
@@ -330,6 +332,7 @@ public class ShareService {
 
     /**
      * 북마크한 나눔글 리스트 entity에서 dto로 변환
+     * 
      * @param member 멤버 엔티티
      * @return 나눔글 DTO 리스트
      */
@@ -343,15 +346,15 @@ public class ShareService {
     // 게시글의 나눔 완료 여부를 "완료"로 변경
     public void completeShare(Integer shareNum, Integer receiverNum) {
 
-    ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
-    .orElseThrow(() -> new EntityNotFoundException("게시글 정보가 없습니다."));
+        ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
+                .orElseThrow(() -> new EntityNotFoundException("게시글 정보가 없습니다."));
 
-    MemberEntity receiver = memberRepository.findById(receiverNum)
-    .orElseThrow(() -> new EntityNotFoundException("나눔받는 회원 정보가 없습니다."));
+        MemberEntity receiver = memberRepository.findById(receiverNum)
+                .orElseThrow(() -> new EntityNotFoundException("나눔받는 회원 정보가 없습니다."));
 
-    shareBoard.setShareCompleted(true);
-    shareBoard.setReceiver(receiver);
-    shareBoardRepository.save(shareBoard);
+        shareBoard.setShareCompleted(true);
+        shareBoard.setReceiver(receiver);
+        shareBoardRepository.save(shareBoard);
     }
 
 }

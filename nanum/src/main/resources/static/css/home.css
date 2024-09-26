@@ -403,6 +403,106 @@
     }
 
 
+
+
+/* 나눠요 게시글 리스트 영역 */
+.sharePostingList {
+    display: flex;
+    flex-wrap: wrap;
+    /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
+    justify-content: flex-start;
+    /* 게시글이 왼쪽 정렬되게 설정 */
+    gap: 2vh;
+    /* 게시글 사이에 일정 간격을 둠 */
+    padding-left: 2vw;
+}
+
+/* 나눠요 게시글 영역_div 박스 */
+.sharePosting {
+    width: 330px; 
+    /* width: calc(25% - 2vh); */
+        /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
+        /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
+    height: 31vh;
+    margin-bottom: 1vh;
+    border: 0.07vw solid black;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 3vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+/* 나눠요 게시글_제목 */
+.sharePostTitle {
+    font-size: 2.4vh;
+    font-weight: 700;
+    letter-spacing: 0.08vw;
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: linear-gradient(#8ABAFF 0 100%);
+    background-position: 0 calc(100% - 2px);
+    background-size: 0 14px;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s;
+}
+
+/* 나눠요 게시글_제목_hover */
+.sharePostTitle:hover {
+    background-size: 100% 14px;  /* hover 시 배경 확장 */
+}
+
+/* 나눠요 게시글_이미지 영역 */
+.shareImage {
+    width: 100%;
+    height: 18vh;
+    overflow: hidden;
+}
+
+/* 나눠요_본문 영역 */
+.postContentArea {
+    width: 100%;
+    line-height: 2.7vh;
+}
+
+/* 나눠요 게시글_본문 글 */
+.postContent {
+    font-size: 1.8vh;
+    line-height: 2.5vh;
+    letter-spacing: 0.05vw;
+}
+
+/* 게시글 하단 정보 영역 */
+.postInfo {
+    width: 100%;
+    color: gray;
+}
+
+/* 게시글 정보_작성자 닉네임 */
+.userName {
+    font-size: 1.6vh;
+    float: left;
+    letter-spacing: 0.05vw;
+}
+
+/* 게시글 정보_작성 일시 */
+.bookmarkCount {
+    font-size: 1.6vh;
+    float: right;
+    letter-spacing: 0.05vw;
+    color: red
+}
+
+
+/* 게시글 사이 공백_좌, 우측 */
+.postBlank {
+    display: inline-block;
+    width: 3vw;
+}
+
     /* 저작권 영역 */
     .rightContainer {
         margin: auto;
