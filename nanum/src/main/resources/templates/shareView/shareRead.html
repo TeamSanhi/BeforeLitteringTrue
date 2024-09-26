@@ -68,10 +68,11 @@
               </div>
           </th:block>
           
-      
+          
           <!-- 로그인을 했을 시 -->
           <th:block sec:authorize="isAuthenticated()">
-              
+            
+            <!-- ************************************ 쪽지 목록 모달 ************************************* -->
               <!-- 쪽지 -->
               <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
                   <!-- 쪽지 이미지  -->
@@ -80,7 +81,6 @@
                   <div class="badge" id="badge">0</div>
               </div>
 
-<!-- ************************************ 쪽지 목록 모달 *************************************-->
               <div
                 id="messagesModal"
                 class="modal"
