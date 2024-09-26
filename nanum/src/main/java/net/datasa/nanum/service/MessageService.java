@@ -189,6 +189,7 @@ public class MessageService {
                                 .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
                                 .shareCompleted(room.getShareBoard().getShareCompleted())
                                 .hasUnreadMessages(hasUnreadMessages) // 읽지 않은 쪽지 여부를 전달
+                                .memberFileName(memberNum == creator ? room.getReceiver().getMemberFileName() : room.getCreator().getMemberFileName())
                                 .build();
 
                                 return dto;
