@@ -12,46 +12,7 @@
     <link rel="stylesheet" href="/css/member/login.css">
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-      $(document).ready(function () {
-
-          // 로그인 버튼 클릭 이벤트
-          $('.loginButton').on('click', function(event) {
-                  
-                  // 기본 폼 전송 방지
-                  event.preventDefault();
-
-                  // 입력 값 가져오기
-                  let userId = $('#id').val().trim();
-                  let userPassword = $('#password').val().trim();
-
-                  // 아이디 입력 확인
-                  if (userId === "") {
-                      // 아이디가 비어 있으면 오류 메시지 표시
-                      $('.idError').html("아이디를 입력해주십시오.");
-                      return;
-                  }else{
-                      // 입력했으면 초기화 시켜줌
-                      $('.idError').html("");
-                  }
-
-                  // 비밀번호 입력 확인
-                  if (userPassword === "") {
-                      // 비밀번호가 비어 있으면 오류 메시지 표시
-                      $('.passwordError').html("비밀번호를 입력해주십시오.");
-                      return;
-                  }else{
-                      // 비밀번호가 입력되어 있었으면 공백처리
-                      $('.passwordError').html("");
-                  }
-                  //로그인 진행
-                  $("#loginPost").submit();
-
-          });
-
-      }); // ******************** ready 끝 *********************************
-
-    </script>
+    <script type="text/javascript" src="/js/member/login.js"></script>
   </head>
   <body>
     <!-- 네비게이션 구역 -->
@@ -88,153 +49,19 @@
   
         <!-- 오른쪽 정렬 -->
         <div class="rightGroup">
-  
-            <!-- 로그인을 안했을 시 -->
-            <th:block sec:authorize="not isAuthenticated()">
+
+                <!-- 회원가입 -->
                 <div class="join">
                   <span class="highlighterGreen">
                     <a href="/member/join">회원가입</a>
                   </span>
                 </div>
-  
+                <!-- 로그인 -->
                 <div class="login">
                   <span class="highlighterGreen">
                     <a href="/member/loginForm">로그인</a>
                   </span>
                 </div>
-            </th:block>
-            
-        
-            <!-- 로그인을 했을 시 -->
-            <th:block sec:authorize="isAuthenticated()">
-                
-                <!-- 쪽지 -->
-                <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
-                    <!-- 쪽지 이미지  -->
-                    <img src="/images/post.png" class="postImage">
-                    <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
-                    <div class="badge" id="badge">0</div>
-                </div>
-  
-                <!-- 쪽지 목록 모달 -->
-                <div
-                  id="messagesModal"
-                  class="modal"
-                  style="
-                    max-height: calc(100vh - 50px);
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                  "
-                >
-                  <div class="modal-content">
-                    <span id="messagesClose" class="close">&times;</span>
-                    <h2>나눔 이야기</h2>
-                    <div id="messageListContainer"></div>
-                  </div>
-                </div>
-  
-                <!-- 쪽지 상세보기 모달 -->
-                <div
-                  id="detailsModal"
-                  class="modal"
-                  style="
-                    max-height: calc(100vh - 50px);
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                  "
-                >
-                  <div class="modal-content">
-                    <span id="detailsClose" class="close">&times;</span>
-                    <h2>쪽지 상세보기</h2>
-  
-                    <!-- 게시글로 이동하는 영역 추가 -->
-                    <div id="goToShareBoard" style="cursor: pointer">
-                      <div
-                        id="shareBoardLink"
-                        style="
-                          padding: 10px;
-                          border: 1px solid #ccc;
-                          text-align: center;
-                        "
-                      >
-                        게시글로 이동
-                      </div>
-                    </div>
-                    <div id="messageDetailsContainer"></div>
-                    <textarea
-                      id="messageInput"
-                      placeholder="메시지를 입력하세요"
-                    ></textarea>
-                    <button id="sendMessageBtn">보내기</button>
-                    <button id="userReportBtn">신고하기</button>
-                    <button id="shareComplete" style="display: none">
-                      나눔 완료
-                    </button>
-                  </div>
-                </div>
-  
-                <!-- 게시글 유저 신고 모달창 -->
-                <div id="reportModal" class="modal">
-                  <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>신고하기</h2>
-                    <form id="reportForm">
-                      <div>
-                        <label
-                          ><input
-                            type="checkbox"
-                            name="reportReason"
-                            value="욕설, 인신공격 등 언어적 폭력"
-                          />
-                          욕설, 인신공격 등 언어적 폭력</label
-                        >
-                        <label
-                          ><input
-                            type="checkbox"
-                            name="reportReason"
-                            value="부적절한 게시글"
-                          />
-                          부적절한 게시글</label
-                        >
-                        <label
-                          ><input
-                            type="checkbox"
-                            name="reportReason"
-                            value="사기 또는 허위정보"
-                          />
-                          사기 또는 허위정보</label
-                        >
-                        <label
-                          ><input type="checkbox" name="reportReason" value="기타" />
-                          기타</label
-                        >
-                      </div>
-                      <textarea
-                        id="additionalReason"
-                        placeholder="기타 사유를 입력하세요"
-                      ></textarea
-                      ><br />
-                      <button type="button" id="submitUserReportBtn">
-                        신고 제출
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                
-                <!-- 마이페이지  -->
-                <div class="mypage">
-                  <span class="highlighterGreen">
-                    <a th:href="@{/myPage/view}">마이페이지</a>
-                  </span>
-                </div>
-                
-                <!-- 로그아웃 -->
-                <div class="logout">
-                  <span class="highlighterGreen">
-                    <a th:href="@{/member/logout}">로그아웃</a>
-                  </span>
-                </div>
-            </th:block>
         </div>
       </div>
   
