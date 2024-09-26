@@ -9,10 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>글읽기</title>
     <!-- style -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="/css/shareRead.css">
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script type="text/javascript" src="/js/shareRead.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
   </head>
   <body>
     <!-- 네비게이션 구역 -->
@@ -214,20 +217,18 @@
              <span th:text="${shareBoard.shareTitle}"></span>
           </div>
       </div>
+
       <!-- 나눔글 사진 영역 -->
-      <div class="imgArea">
-          <img th:src="|download?imageNum=${shareBoard.imageList[0].imageNum}|">
-          <!-- 여러장의 이미지를 이미지 경로를 설정하여 다운로드하여 가져온다.
-                      <div
-            th:each="image : ${shareBoard.imageList}"
-            style="display: inline-block"
-          >
-            <img
-              style="width: 200px; height: 200px"
-              th:src="|download?imageNum=${image.imageNum}|"
-            />
-          </div>-->
-      </div>    
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+            <!-- 슬라이딩 되는 이미지 영역 -->
+            <div class="swiper-slide" th:each="image : ${shareBoard.imageList}"><img th:src="|download?imageNum=${image.imageNum}|"></div>
+        </div>
+        <!-- 내비게이션 버튼 -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+      </div>   
+
     </div>
 
     <!-- 오른쪽 영역 -->
@@ -306,7 +307,6 @@
       </div>
     </div>
   </div>
-
 
     <!-- 위도 경도 정보 출발 도착 지를 찍어서 카카오맵으로 보여준다. -->
     <input id="shareLat" type="hidden" th:value="${shareBoard.shareLat}" />

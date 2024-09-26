@@ -14,6 +14,15 @@
         //신고버튼 클릭 이벤트 실행
         $("#reportButton").click(report);
         
+        // 슬라이드 초기화 
+        var swiper = new Swiper(".mySwiper", {
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          loop: true, // 슬라이드를 무한 반복하려면 추가
+        });
+
       });
 
       //삭제 함수
