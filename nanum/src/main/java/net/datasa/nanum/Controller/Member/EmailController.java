@@ -80,7 +80,7 @@ public class EmailController {
         // 인증번호 맞는지 안맞는지 확인
         if (sessionCode != null && sessionCode.equals(emailCode)) {
             // 인증 성공, 세션에서 인증번호 삭제
-            session.removeAttribute("verificationCode");
+            // session.removeAttribute("verificationCode");
             return "인증 성공";
         } else {
             return "인증 실패";

@@ -276,7 +276,7 @@ function nickDoubleCheck() {
         // 인증절차 승인을 위해서 값을 "y"로 변경시킨다.
         $("#nickDuplicationCheck").val("y");
         // id input태그를 비활성화
-        $("#memberNick").attr("readonly", true);
+        $("#memberNickname").attr("readonly", true);
       }
     },
     error: function () {
