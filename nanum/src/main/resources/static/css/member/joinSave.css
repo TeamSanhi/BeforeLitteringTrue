@@ -249,6 +249,7 @@
 
     /* 아이디 input */
     .memberId {
+        font-family: 'NEXON Lv1 Gothic OTF';
         margin-top: 1vh;
         padding-bottom: 0.5vh;
         border: none;
@@ -427,6 +428,7 @@
 
     /* 이메일 input */
     .memberEmail {
+        font-family: 'NEXON Lv1 Gothic OTF';
         margin-top: 1vh;
         padding-bottom: 0.5vh;
         border: none;
@@ -496,6 +498,7 @@
 
     /* 이메일 인증 input */
     .emailCode {
+        font-family: 'NEXON Lv1 Gothic OTF';
         margin-top: 1vh;
         padding-bottom: 0.5vh;
         border: none;
@@ -565,6 +568,7 @@
 
     /* 닉네임 input */
     .memberNickname {
+        font-family: 'NEXON Lv1 Gothic OTF';
         margin-top: 1vh;
         padding-bottom: 0.5vh;
         border: none;

@@ -409,11 +409,18 @@
         color: black;
     }
 
+    /* 지도와 게시글 영역 */
+    .mainContentsArea{
+        display: flex;
+        justify-content: space-between; /* 두 영역 사이에 간격을 줌 */
+        align-items: flex-start; /* 높이를 기준으로 위쪽 정렬 */
+    }
+
     /* 지도 영역 */
     .mapArea {
-        margin-top: 2vh;
-        width: 93vw;
-        height: 70vh;
+        margin-top: 1.5vh;
+        width: 60vw;
+        height: 71vh;
         border: 0.07vw solid black;
         box-sizing: border-box;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -464,41 +471,50 @@
 
     /* 나눠요 영역 */
     .shareArea {
-        display: block;
+        display: flex;
+        flex-wrap: wrap;
+        /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
         margin-top: 1.5vh;
-        width: 100%;
-        padding: 2vh 0;
         padding-bottom: 0;
+        justify-content: flex-start;
+        /* 게시글이 왼쪽 정렬되게 설정 */
+        gap: 2vh;
+        /* 게시글 사이에 일정 간격을 둠 */
+        width: 32.5vw;
+        height: 71vh;
+        overflow-y: auto; /* 스크롤을 적용 */
     }
 
     /* 나눠요 타이틀 */
-    .shareTitle {
-        padding-top: 2vh;
-        padding-bottom: 5vh;
+    /* .shareTitle {
+        padding-bottom: 1.5vh;
         font-weight: 900;
-        font-size: 3.6vh;
+        font-size: 3vh;
         letter-spacing: 0.2vw;
-    }
+    } */
 
     /* 나눠요 게시글 리스트 영역 */
-    .sharePostingList {
-        display: flex;
-        flex-wrap: wrap;
+    /* .sharePostingList {  */
+        /* display: flex; */
+        /* flex-wrap: wrap; */
             /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
-        justify-content: flex-start;
+        /* justify-content: flex-start; */
             /* 게시글이 왼쪽 정렬되게 설정 */
-        gap: 2vh;
+        /* gap: 2vh; */
             /* 게시글 사이에 일정 간격을 둠 */
-    }
+            /* overflow-y: auto; 스크롤을 적용 */
+        /* height: 70vh; 게시글 목록의 높이를 지정 (shareArea의 높이에 맞게 설정) */
+        /* background-color: #2DC986; */
+    /* } */
     
     /* 나눠요 게시글 영역_div 박스 */
     .sharePosting {
-        width: 345px; 
+        width: 241.8px; 
         /* width: calc(25% - 2vh); */
             /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
             /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
         height: 38vh;
-        margin-bottom: 5.5vh;
+        margin-bottom: 2vh;
         border: 0.07vw solid black;
         background-color: white;
         box-sizing: border-box;
@@ -507,19 +523,6 @@
         flex-direction: column;
         justify-content: space-between;
         box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-    }
-
-    /* 빈 게시글 박스 */
-    .placeholder {
-        width: calc(25% - 2vh);
-        height: 38vh;
-        margin-bottom: 5.5vh;
-        border: none;
-        background-color: transparent;
-        box-sizing: border-box;
-        padding: 3vh;
-        display: flex;
-        justify-content: space-between;
     }
 
     /* 게시글이 한 줄에 4개 미만일 경우에도 레이아웃을 유지 */
@@ -540,7 +543,7 @@
 
     /* 나눠요 게시글_제목 */
     .sharePostTitle {
-        font-size: 2.4vh;
+        font-size: 2.1vh;
         font-weight: 700;
         letter-spacing: 0.08vw;
         overflow: hidden; /* 넘치는 텍스트 숨김 */

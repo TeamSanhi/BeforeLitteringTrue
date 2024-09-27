@@ -235,10 +235,26 @@
                 </a>
             </div>
         </div>
+      
+      <!-- 지도와 게시글 영역 -->
+      <div class="mainContentsArea">
 
         <!-- 지도 영역 -->
         <div class="mapArea" id="map">
         </div>
+
+        <!-- 나눠요 영역 -->
+        <div class="shareArea" id="result">
+          <!-- 나눠요 타이틀 -->
+          <!-- <div class="shareTitle">
+              나눠요!
+          </div> -->
+          <!-- 나눠요 게시글 목록 -->
+          <!-- <div class="sharePostingList" >
+          </div> -->
+
+        </div>
+      </div>
         <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9&libraries=clusterer"></script>
         <!-- 지도 script -->
         <script>
@@ -379,7 +395,7 @@
                                     </div>
                             `);
 
-                              // 글 제목 의 길이가 13자가 넘으면 생략하여 보여준다. 
+                              // 글 제목 의 길이가 10자가 넘으면 생략하여 보여준다. 
                               // 모든 postContent 요소들을 가져옴
                               let sharePostTitle = document.querySelectorAll(".sharePostTitle");
 
@@ -388,15 +404,15 @@
                                   // 게시글 내용 텍스트 가져오기
                                   let text = post.innerText;
                                   // 글자 수 제한_공백 포함
-                                  let maxLength = 13;
+                                  let maxLength = 11;
 
-                                  // 글자 수가 40자를 넘으면 자르고 ... 붙이기
+                                  // 최대 글자수 넘으면 자르고 ... 붙이기
                                   if (text.length > maxLength) {
                                       post.innerText = text.slice(0, maxLength) + "···";
                                   };
                               });
                               
-                              // 글내용의 길이가 17자가 넘으면 생략하여 보여준다. 
+                              // 글내용의 길이가 23자가 넘으면 생략하여 보여준다. 
                               // 모든 postContent 요소들을 가져옴
                               let postContents = document.querySelectorAll(".postContent");
 
@@ -405,9 +421,9 @@
                                   // 게시글 내용 텍스트 가져오기
                                   let text = post.innerText;
                                   // 글자 수 제한_공백 포함
-                                  let maxLength = 17;
+                                  let maxLength = 23;
 
-                                  // 글자 수가 20자를 넘으면 자르고 ... 붙이기
+                                  // 최대 글자수 넘으면 자르고 ... 붙이기
                                   if (text.length > maxLength) {
                                       post.innerText = text.slice(0, maxLength) + "···";
                                   };
@@ -514,23 +530,6 @@
             kakao.maps.event.addListener(map, 'zoom_changed', removeMarkersOutOfBounds);
             //*********************기타함수*****************************************************
         </script>
-
-        <!-- 나눠요 영역 -->
-        <div class="shareArea">
-            <!-- 나눠요 타이틀 -->
-            <div class="shareTitle">
-                나눠요!
-            </div>
-            <!-- 나눠요 게시글 목록 -->
-            <div class="sharePostingList">
-
-                <!-- 나눠요 게시글 목록 -->
-                <div class="sharePostingList" id="result">
-
-                </div>
-
-            </div>
-        </div>
     
         <!-- 저작권 정보 -->
         <div class="rightContainer">

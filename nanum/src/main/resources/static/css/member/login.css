@@ -244,6 +244,7 @@ img {
 
         /* 아이디 input */
         .userId {
+            font-family: 'NEXON Lv1 Gothic OTF';
             margin-top: 1vh;
             padding-bottom: 0.5vh;
             border: none;
