@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     // 제목 글자수 제한
     const titleInput = document.getElementById('writeTitle');
-    const maxTitleLength = 25; // 제목 글자수 제한
+    const maxTitleLength = 20; // 제목 글자수 제한
 
     titleInput.addEventListener('input', function () {
     if (titleInput.value.length > maxTitleLength) {
@@ -37,7 +37,7 @@ $(document).ready(function () {
 
     // 본문 글자수 제한
     const contentInput = document.getElementById('postContent');
-    const maxContentLength = 200; // 본문 글자수 제한
+    const maxContentLength = 180; // 본문 글자수 제한
 
     contentInput.addEventListener('input', function () {
     if (contentInput.value.length > maxContentLength) {
