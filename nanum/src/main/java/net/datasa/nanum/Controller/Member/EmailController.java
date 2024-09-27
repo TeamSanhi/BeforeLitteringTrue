@@ -1,9 +1,16 @@
 package net.datasa.nanum.Controller.Member;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import net.datasa.nanum.domain.entity.MemberEntity;
+import net.datasa.nanum.security.AuthenticatedUser;
+import net.datasa.nanum.service.MemberService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +35,7 @@ public class EmailController {
     private final JavaMailSender emailSender;
     // 이메일 중복확인 하기 위한 리퍼지토리
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     /**
      * 이메일 ajax 요청을 받아 처리하는 부분
@@ -63,10 +71,51 @@ public class EmailController {
         return false;
     }
 
+    // 프로필 수정에서 이메일 전송 시 맵핑
+    @ResponseBody
+    @PostMapping("/reSendEmail")
+    public ResponseEntity<Map<String, Boolean>> sendEmail(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("email") String email,
+            HttpSession session) {
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("duplication", false);
+        response.put("loginUser", false);
+
+        // 이메일 중복확인하기 위해 repository에 검색
+        if (memberRepository.existsByMemberEmail(email)) {
+            log.debug("duplication : {}", "true");
+            response.put("duplication", true);
+            if (member.getMemberEmail().equals(email)) {
+                log.debug("loginUser : {}", "true");
+                response.put("loginUser", true);
+            }
+            return ResponseEntity.ok(response);
+        }
+
+        String code = generateVerificationCode(); // 랜덤 인증번호 생성
+
+        // 이메일 전송을 위한 객체 생성
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email); // 전송할 이메일
+        message.setSubject("이메일 인증 코드"); // 이메일 제목
+        message.setText("인증번호: " + code); // 내용추가 인증번호
+        emailSender.send(message); // 메시지 전송
+
+        // 인증번호를 세션에 저장
+        session.setAttribute("verificationCode", code);
+
+        return ResponseEntity.ok(response);
+    }
+
+
     /**
      * 전송한 이메일 확인하는 컨트롤러
-     * 
-     * @param inputCode
+     * @param emailCode
      * @param session
      * @return
      */

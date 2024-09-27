@@ -13,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -56,6 +57,7 @@ public class MyPageController {
         // 정렬
         alarmTotal.sort(Comparator.comparingInt(dayOrderMap::get));
 
+
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
         model.addAttribute("alarmTotal", alarmTotal);
@@ -75,13 +77,19 @@ public class MyPageController {
     }
 
     @PostMapping("profileEdit")
-    public String profileEdit(MemberDTO dto) {
+    public String profileEdit(@ModelAttribute MemberDTO dto, @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+        MemberEntity member = memberService.getMemberByNum(authenticatedUser.getNum());
 
         log.debug("회원 가입 정보 입력값: {}", dto);
 
-        // memberService.modify(dto);
 
-        return "myPageView/profileEdit";
+        if(dto.getMemberPw().equals("")){
+            dto.setMemberPw(member.getMemberPw());
+        }
+
+        memberService.modify(dto);
+
+        return "redirect:/myPage/profileEdit";
     }
 
 }
