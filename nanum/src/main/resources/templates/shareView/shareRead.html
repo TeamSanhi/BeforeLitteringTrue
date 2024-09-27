@@ -9,11 +9,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>글읽기</title>
     <!-- style -->
+    <!-- 슬라이드 css -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="/css/shareRead.css">
+    <link rel="stylesheet" href="/css/share/shareRead.css">
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script type="text/javascript" src="/js/shareRead.js"></script>
+    <script type="text/javascript" src="/js/share/shareRead.js"></script> 
+    <!-- 슬라이드 script 라이브러리 -->
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
   </head>
@@ -109,7 +111,10 @@
               >
                 <div class="modal-content">
                   <span id="detailsClose" class="close">&times;</span>
-                  <h2>쪽지 상세보기</h2>
+                  <h2>
+                    <img id="receiverProfileImage" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle;"/> 
+                    <span id="receiverNickname"></span>님에게
+                  </h2>
                   
                   <!-- 게시글로 이동하는 영역 추가 -->
                   <div id="goToShareBoard" style="cursor: pointer">
@@ -146,7 +151,7 @@
                     <div>
                       <label
                       ><input
-                      type="checkbox"
+                      type="radio"
                       name="reportReason"
                       value="욕설, 인신공격 등 언어적 폭력"
                       />
@@ -154,7 +159,7 @@
                       >
                       <label
                       ><input
-                      type="checkbox"
+                      type="radio"
                           name="reportReason"
                           value="부적절한 게시글"
                           />
@@ -162,14 +167,14 @@
                           >
                           <label
                           ><input
-                          type="checkbox"
+                          type="radio"
                           name="reportReason"
                           value="사기 또는 허위정보"
                           />
                           사기 또는 허위정보</label
                           >
                           <label
-                          ><input type="checkbox" name="reportReason" value="기타" />
+                          ><input type="radio" name="reportReason" value="기타" />
                           기타</label
                           >
                         </div>
@@ -296,10 +301,10 @@
                 </button>
               </th:block>
               <th:block th:if="${#authentication.name == shareBoard.memberId}">
-                <button class="wantShareButton" id="deleteButton" th:data-num="${shareBoard.shareNum}">
+                <button class="deleteResetButton" id="deleteButton" th:data-num="${shareBoard.shareNum}">
                   삭제
                 </button>        
-                <button class="wantShareButton" id="editButton" th:data-num="${shareBoard.shareNum}">
+                <button class="deleteResetButton" id="editButton" th:data-num="${shareBoard.shareNum}">
                   수정
                 </button>
               </th:block>
@@ -343,7 +348,10 @@
 <div id="messageModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h2>쪽지 보내기</h2>
+    <h2>
+      <img id="sReceiverProfileImage" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle;"/> 
+      <span id="sReceiverNickname"></span>님에게
+    </h2>
     <!-- 쪽지 내역이 출력되는 곳 -->
     <div id="existingMessages"></div>
     <textarea
@@ -357,11 +365,11 @@
       </div>
       
       <!-- 게시글 유저 신고 모달창 -->
-      <div id="reportModal" class="modal">
+      <div id="shareReportModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
           <h2>신고하기</h2>
-          <form id="reportForm">
+          <form id="shareReportForm">
             <div>
               <label
               ><input
@@ -393,7 +401,7 @@
                 >
               </div>
               <textarea
-              id="additionalReason"
+              id="shareAdditionalReason"
             placeholder="기타 사유를 입력하세요"
           ></textarea
           ><br />

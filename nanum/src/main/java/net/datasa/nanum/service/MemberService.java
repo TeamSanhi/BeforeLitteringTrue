@@ -32,7 +32,7 @@ public class MemberService {
                 .memberPw(passwordEncoder.encode(dto.getMemberPw()))
                 .memberEmail(dto.getMemberEmail())
                 .memberNickname(dto.getMemberNickname())
-                .memberFileName("images/profile-basic.png")
+                .memberFileName("/images/profile-basic.png")
                 .roleName("ROLE_USER")
                 .memberStatus(0)
                 .build();

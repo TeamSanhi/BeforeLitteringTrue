@@ -8,10 +8,10 @@
     <meta charset="UTF-8" />
     <title>Home Page</title>
     <!-- Style -->
-    <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/home/home.css">
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script type="text/javascript" src="/js/home.js"></script>
+    <script type="text/javascript" src="/js/home/home.js"></script>
   </head>
   <body>
     <!-- 사이트맵 qna a태그 없음  -->
@@ -70,7 +70,7 @@
           <!-- 로그인을 했을 시 -->
           <th:block sec:authorize="isAuthenticated()">
               
-              <!-- 쪽지 -->
+              <!--****************************************** 쪽지 *****************************-->
               <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
                   <!-- 쪽지 이미지  -->
                   <img src="/images/post.png" class="postImage">
@@ -107,7 +107,10 @@
               >
                 <div class="modal-content">
                   <span id="detailsClose" class="close">&times;</span>
-                  <h2>쪽지 상세보기</h2>
+                  <h2>
+                    <img id="receiverProfileImage" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle;"/> 
+                    <span id="receiverNickname"></span>님에게
+                  </h2>
 
                   <!-- 게시글로 이동하는 영역 추가 -->
                   <div id="goToShareBoard" style="cursor: pointer">
@@ -218,7 +221,7 @@
                 <!-- GIF 영역 -->
                 <div class="gifArea" >
                     <!-- gif 이미지 -->
-                    <img class="gif" src="/images/GIF.png">
+                    <img class="gif" src="/images/home_gif.gif">
                 </div>
             </div>
         </div>
