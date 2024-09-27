@@ -346,14 +346,22 @@ public class ShareService {
     // 게시글의 나눔 완료 여부를 "완료"로 변경
     public void completeShare(Integer shareNum, Integer receiverNum) {
 
+        // 나눔을 완료할 게시글 찾기
         ShareBoardEntity shareBoard = shareBoardRepository.findById(shareNum)
                 .orElseThrow(() -> new EntityNotFoundException("게시글 정보가 없습니다."));
-
+        // 나눔게시글을 작성한 작성자
+        MemberEntity member = memberRepository.findById(shareBoard.getMember().getMemberNum())
+                .orElseThrow(() -> new EntityNotFoundException("나눔글을 작성한 회원의 정보가 없습니다."));
+        // 나눔을 받을 회원 정보 찾기
         MemberEntity receiver = memberRepository.findById(receiverNum)
-                .orElseThrow(() -> new EntityNotFoundException("나눔받는 회원 정보가 없습니다."));
-
+                .orElseThrow(() -> new EntityNotFoundException("나눔받는 회원의 정보가 없습니다."));
+        // 나눔이 완료된 게시글을 나눔 완료처리한다.
         shareBoard.setShareCompleted(true);
+        // 나눔받은 사람의 정보를 게시글에 넣어준다.
         shareBoard.setReceiver(receiver);
+        // 게시글 작성자에게 포인트를 부여한다.
+        member.setMemberPoint(member.getMemberPoint() + 50);
+        // 트렌젝션이라 필요없는데
         shareBoardRepository.save(shareBoard);
     }
 

@@ -229,6 +229,7 @@ public class ShareController {
     public ResponseEntity<String> completeShare(@RequestParam("shareNum") Integer shareNum,
             @RequestParam("receiverNum") Integer receiverNum) {
         log.debug("게시글: {}, 받는사람: {}", shareNum, receiverNum);
+        // ShareService의 함수를 이용하여 나눔완료 처리
         shareService.completeShare(shareNum, receiverNum);
 
         return ResponseEntity.ok("나눔 완료");
