@@ -29,5 +29,5 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
     MemberEntity findByMemberNumEquals(Integer num);
 
     // memberPoint를 기준으로 상위 8명을 가져오는 메서드
-    List<MemberEntity> findTop8ByOrderByMemberPointDesc();
+    List<MemberEntity> findTop10ByOrderByMemberPointDesc();
 }

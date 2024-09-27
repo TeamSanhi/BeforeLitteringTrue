@@ -41,7 +41,7 @@ public class HomeService {
 
         // 북마크수 기준 상위 8개의 게시글을 불러온다.
         List<ShareBoardEntity> EntityList = shareBoardRepository
-                .findTop8ByShareCompletedFalseOrderByBookmarkCountDesc();
+                .findTop10ByShareCompletedFalseOrderByBookmarkCountDesc();
 
         // 반환할 DTO 생성
         List<ShareBoardDTO> DTOList = new ArrayList<ShareBoardDTO>();
@@ -64,8 +64,8 @@ public class HomeService {
      */
     public List<MemberDTO> pointList() {
 
-        // 포인트가 높은 상위 8명을 불러온다.
-        List<MemberEntity> memberEntityList = memberRepository.findTop8ByOrderByMemberPointDesc();
+        // 포인트가 높은 상위 10명을 불러온다.
+        List<MemberEntity> memberEntityList = memberRepository.findTop10ByOrderByMemberPointDesc();
 
         // 반환할 DTO 리스트
         List<MemberDTO> memberDTOList = new ArrayList<MemberDTO>();

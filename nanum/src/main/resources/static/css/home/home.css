@@ -777,29 +777,32 @@ input[type="radio"]:checked {
 }
 
 /* 나눠요 게시글 리스트 영역 */
-.sharePostingList {
+.shareArea {
   display: flex;
   flex-wrap: wrap;
   /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
-  justify-content: space-between;
+  justify-content: flex-start;
   /* 게시글이 왼쪽 정렬되게 설정 */
-  gap: 2vh;
   /* 게시글 사이에 일정 간격을 둠 */
+  width: 100%;
+  height: 90%;
+  gap: 1vh;
+  padding-bottom: 5vh;
+  
 }
 
 /* 나눠요 게시글 영역_div 박스 */
 .sharePosting {
-  width: 307px;
+  margin-bottom: 10px;
+  width: 261px;
   /* width: calc(25% - 2vh); */
   /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
   /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
-  text-align: left;
   height: 31vh;
-  margin-bottom: 1vh;
   border: 0.07vw solid black;
   background-color: white;
   box-sizing: border-box;
-  padding: 3vh;
+  padding: 1.9vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -808,7 +811,7 @@ input[type="radio"]:checked {
 
 /* 나눠요 게시글_제목 */
 .sharePostTitle {
-  font-size: 2.4vh;
+  font-size: 2.1vh;
   font-weight: 700;
   letter-spacing: 0.08vw;
   overflow: hidden; /* 넘치는 텍스트 숨김 */
@@ -869,12 +872,6 @@ input[type="radio"]:checked {
   background-position: 0 calc(100% - 0.3vh);
   background-size: 100% 1vh;
   background-repeat: no-repeat;
-}
-
-/* 게시글 사이 공백_좌, 우측 */
-.postBlank {
-  display: inline-block;
-  width: 3vw;
 }
 
 /* 형광펜 효과_빨간색 */

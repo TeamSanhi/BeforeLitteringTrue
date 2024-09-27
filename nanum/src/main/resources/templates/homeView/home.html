@@ -250,7 +250,7 @@
         <div class="slide_content">
             <div class="realContent">
                 <!-- 설정에 따라 변경되는 css -->
-                <div class="mainMessage" >
+                <div class="mainMessage">
                     <span id="mainMessage" class="typeMessage">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
                 </div>
                 <!-- GIF 영역 -->
@@ -265,35 +265,32 @@
         <div class="slide_content">
           <div class="realContent" >
             <!-- 설정에 따라 변경되는 css -->
-            <div class="mainMessage" >
+            <div class="mainMessage">
                 <span class="typeMessage">나눔 인기글! </span>
             </div>
-            <!-- GIF 영역 -->
-            <div class="gifArea">
-                <!-- 게시글 틀  -->
-                <div class="sharePostingList">
-                  <!-- 나눠요 인기글 게시글 목록 -->
-                  <div class="sharePosting" th:each="share : ${hotList}">
-                      <!-- 제목 -->
-                      <a th:href="@{/share/read(shareNum=${share.shareNum})}">
-                        <span class="sharePostTitle" th:text="${share.shareTitle}"></span>
-                      </a>
-                      <!-- 사진 -->
-                      <div class="shareImage">
-                          <img th:src="@{/share/download(imageNum=${share.imageList[0].imageNum})}">
-                      </div>
-                      <!-- 글내용 -->
-                      <div class="postContentArea">
-                          <span class="postContent" th:text="${share.shareContents}"></span>
-                      </div>
-                      <!-- 닉네임, 북마크수 -->
-                      <div class="postInfo">
-                          <span class="userName" th:text="${share.memberNickname}"></span>
-                          <span class="bookmarkCount" th:text="'북마크 ' + ${share.bookmarkCount}"></span>
-                      </div>
+              <!-- 게시글 틀  -->
+              <div class="shareArea">
+                <!-- 나눠요 인기글 게시글 목록 -->
+                <div class="sharePosting" th:each="share : ${hotList}">
+                    <!-- 제목 -->
+                    <a th:href="@{/share/read(shareNum=${share.shareNum})}">
+                      <span class="sharePostTitle" th:text="${share.shareTitle}"></span>
+                    </a>
+                    <!-- 사진 -->
+                    <div class="shareImage">
+                        <img th:src="@{/share/download(imageNum=${share.imageList[0].imageNum})}">
                     </div>
-                  </div>
-            </div>
+                    <!-- 글내용 -->
+                    <div class="postContentArea">
+                        <span class="postContent" th:text="${share.shareContents}"></span>
+                    </div>
+                    <!-- 닉네임, 북마크수 -->
+                    <div class="postInfo">
+                        <span class="userName" th:text="${share.memberNickname}"></span>
+                        <span class="bookmarkCount" th:text="'북마크 ' + ${share.bookmarkCount}"></span>
+                    </div>
+                </div>
+              </div>
           </div>
         </div>
 
