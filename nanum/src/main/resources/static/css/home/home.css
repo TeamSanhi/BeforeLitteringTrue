@@ -333,7 +333,7 @@
     }
 
     /* 기본 문구_타이핑 */
-    #mainMessage {
+    .typeMessage {
         border-right: 2px solid black; /* 커서 효과 */
         white-space: nowrap;
         overflow: hidden;
