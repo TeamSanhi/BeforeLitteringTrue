@@ -104,26 +104,5 @@ public class MemberService {
         // DB에 저장
         memberRepository.save(entity);
     }
-
-    public MemberDTO getMemberByEmail(String email) {
-        MemberEntity memberEntity = memberRepository.findByMemberEmail(email);
-
-        log.debug("email : {}", email);
-
-        MemberDTO memberDTO = new MemberDTO();
-
-        memberDTO.setMemberNum(memberEntity.getMemberNum());
-        memberDTO.setMemberId(memberEntity.getMemberId());
-        memberDTO.setMemberPw(memberEntity.getMemberPw());
-        memberDTO.setMemberEmail(memberEntity.getMemberEmail());
-        memberDTO.setMemberNickname(memberEntity.getMemberNickname());
-        memberDTO.setMemberFileName(memberEntity.getMemberFileName());
-        memberDTO.setCreateDate(memberEntity.getCreateDate());
-        memberDTO.setRoleName(memberEntity.getRoleName());
-        memberDTO.setMemberStatus(memberEntity.getMemberStatus());
-        memberDTO.setQuitDate(memberEntity.getQuitDate());
-
-        return memberDTO;
-    }
 }
 
