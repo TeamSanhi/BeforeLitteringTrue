@@ -181,18 +181,30 @@ function findRoute() {
 //************************************************ 받을래요 쪽지 기능 ***************************************** */
 // 삭제 버튼 클릭 시 실행될 함수
 $(document).ready(function () {
+  // 모든 모달을 숨긴 상태로 초기화
+  $(".modal").hide();
+
   // '받을래요' 버튼 클릭 시 모달 열기
   $("#receiveButton").click(showMessage);
 
-  // 모달 닫기
+  // 모달 닫기 버튼 클릭 시 모달 닫기
   $(".close").click(function () {
-    $("#messageModal").hide();
+    if ($(this).closest("#shareReportModal").length > 0) {
+      // 신고하기 모달을 닫고 쪽지 모달 열기
+      $("#shareReportModal").hide();
+      $("#messageModal").show();
+    } else {
+      $(".modal").hide();
+    }
   });
 
-  // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+  // 모달 바깥 영역 클릭 시 모달 닫기
   $(window).click(function (event) {
     if ($(event.target).is("#messageModal")) {
       $("#messageModal").hide();
+    }
+    if ($(event.target).is("#shareReportModal")) {
+      $("#shareReportModal").hide();
     }
   });
 
@@ -206,17 +218,17 @@ $(document).ready(function () {
     $("#shareReportModal").show();
   });
 
-  // 신고 모달 닫기
-  $(".close").click(function () {
-    $("#shareReportModal").hide();
-  });
+  // // 신고 모달 닫기
+  // $(".close").click(function () {
+  //   $("#shareReportModal").hide();
+  // });
 
-  // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
-  $(window).click(function (event) {
-    if ($(event.target).is("#shareReportModal")) {
-      $("#shareReportModal").hide();
-    }
-  });
+  // // 모달 창 바깥 부분을 클릭하면 모달 창 닫기
+  // $(window).click(function (event) {
+  //   if ($(event.target).is("#shareReportModal")) {
+  //     $("#shareReportModal").hide();
+  //   }
+  // });
 
   // 신고 제출 버튼 클릭 시 신고 내역 제출
   $("#submitUserReportButton").click(function () {
@@ -250,18 +262,30 @@ function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
 
       //쪽지내역 모달 창 출력
       $("#messageModal").show();
+      let userNum = $("#messages").data("num");
       let messages = response.existingMessages;
       let messageList = $("#existingMessages");
       messageList.empty(); // 기존 내용을 지우고
       if (response.roomExists) {
         // 기존 쪽지방이 있으면 쪽지 내용 로드
         messages.forEach(function (message) {
-          messageList.append(
-            `<div class="message">
-                        <strong>${message.senderNickname}</strong>: ${message.messageContents}
-                        <small>${message.deliverDate}</small>
-                    </div>`
-          );
+          if (userNum == message.senderNum) {
+            messageList.append(
+              `<div class="myMessageArea">
+                <div class="myMessage">보낸 이야기</div>
+                <div class="myMessageContent">${message.messageContents}</div>
+                <div class="myMessageDate">${message.deliverDate}</div>
+              </div>`
+            );
+          } else {
+            messageList.append(
+              `<div class="getMessageArea">
+                <div class="getMessage">받은 이야기</div>
+                <div class="getMessageContent">${message.messageContents}</div>
+                <div class="getMessageDate">${message.deliverDate}</div>
+              </div>`
+            );
+          }
         });
       } else {
         // 쪽지방이 없으면 빈 상태로 유지
@@ -318,12 +342,23 @@ function sendMessage() {
             messageList.empty(); // 기존 내용을 지우고
             // 주고받은 전체 쪽지를 영역에 집어넣음
             messages.forEach(function (message) {
-              messageList.append(
-                `<div class="message">
-                                    <strong>${message.senderNickname}</strong>: ${message.messageContents}
-                                    <small>${message.deliverDate}</small>
-                                </div>`
-              );
+              if (userNum == message.senderNum) {
+                messageList.append(
+                  `<div class="myMessageArea">
+                    <div class="myMessage">보낸 이야기</div>
+                    <div class="myMessageContent">${message.messageContents}</div>
+                    <div class="myMessageDate">${message.deliverDate}</div>
+                  </div>`
+                );
+              } else {
+                messageList.append(
+                  `<div class="getMessageArea">
+                    <div class="getMessage">받은 이야기</div>
+                    <div class="getMessageContent">${message.messageContents}</div>
+                    <div class="getMessageDate">${message.deliverDate}</div>
+                  </div>`
+                );
+              }
             });
             $("#messageContents").val(""); // 쪽지 입력하는 필드 비우기
           },
@@ -359,6 +394,7 @@ function shareSubmitReport() {
     },
     success: function (response) {
       alert("신고가 접수되었습니다.");
+      $("#shareAdditionalReason").val("");
       $("#shareReportModal").hide();
     },
     error: function (xhr) {
