@@ -260,6 +260,9 @@ function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
       $("#sReceiverNickname").text(response.receiverNickname); // 쪽지 상대의 닉네임
       $("#sReceiverProfileImage").attr("src", response.receiverProfileImage); // 프로필 사진 URL
 
+      // 신고 모달에 닉네임 설정
+      $("#shareReportUser").text(`${response.receiverNickname} 님`);
+
       //쪽지내역 모달 창 출력
       $("#messageModal").show();
       let userNum = $("#messages").data("num");
@@ -336,6 +339,9 @@ function sendMessage() {
               "src",
               response.receiverProfileImage
             ); // 프로필 사진 URL
+
+            // 신고 모달에 닉네임 설정
+            $("#shareReportUser").text(`${response.receiverNickname} 님`);
 
             let messages = response.existingMessages;
             let messageList = $("#existingMessages");
@@ -507,17 +513,32 @@ $(document).ready(function () {
         // 상대방의 닉네임과 프로필 사진을 모달에 업데이트
         $("#receiverNickname").text(data.receiverNickname);
         $("#receiverProfileImage").attr("src", data.receiverProfileImage); // 이미지 URL 업데이트
+
+        // 신고 모달에 닉네임 설정
+        $("#reportUser").text(`${data.receiverNickname} 님`);
+
         let detailsList = "";
         data.messages.forEach(function (message) {
-          detailsList += `
-              <div class="message-detail">
-                <strong>${message.senderNickname}:</strong> ${
-            message.messageContents
-          }
-                <br/>
-                <small>${new Date(message.deliverDate).toLocaleString()}</small>
+          if (userNum == message.senderNum) {
+            detailsList += `
+              <div class="myMessageArea">
+                <div class="myMessage">보낸 이야기</div>
+                <div class="myMessageContent">${message.messageContents}</div>
+                <div class="myMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
+              </div>`;
+          } else {
+            detailsList += `
+              <div class="getMessageArea">
+                <div class="getMessage">받은 이야기</div>
+                <div class="getMessageContent">${message.messageContents}</div>
+                <div class="getMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
               </div>
-              <hr />`;
+            `;
+          }
         });
         $("#messageDetailsContainer").html(detailsList);
 
@@ -583,6 +604,9 @@ $(document).ready(function () {
             // 상대방의 프로필과 닉네임 업데이트
             $("#receiverNickname").text(data.receiverNickname);
             $("#receiverProfileImage").attr("src", data.receiverProfileImage); // 프로필 사진 URL 업데이트
+
+            // 신고 모달에 닉네임 설정
+            $("#reportUser").text(`${data.receiverNickname} 님`);
 
             let detailsList = "";
             data.messages.forEach(function (message) {

@@ -141,7 +141,6 @@
                   </div>
 
                 <div id="messageDetailsContainer"></div>
-
                 <!-- 쪽지 보내기 -->
                 <div id="detailContentsContainer">
                   <textarea
@@ -152,7 +151,7 @@
                     ></textarea>
                     <!-- 보내기 버튼 -->
                     <button id="sendMessageBtn">보내기</button>
-                    <button id="shareComplete" style="display: none">
+                    <button id="shareComplete" style="display: none; margin-left: 10px;">
                       나눔 완료
                     </button>
                 </div>
@@ -162,11 +161,22 @@
               <!-- 게시글 유저 신고 모달창 -->
               <div id="reportModal" class="modal">
                 <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <h2>신고하기</h2>
-                  <form id="reportForm">
+                  <!-- 신고 모달 상단 영역 -->
+                  <div class="reportUpside">
+                    <!-- 신고 타이틀과 신고하고자 하는 유저 닉네임을 포함하는 영역 -->
+                    <div class="reportContainer">
+                    <!-- 타이틀 -->
+                    <span class="reportTitle">신고하기</span>
+                    <!-- 신고하기 버튼 (공백 유지) -->
+                    <span id="reportUser" class="reportUser">닉네임 님</span>
+                    </div>
+                    <!-- 닫기 버튼 -->
+                    <span class="close">╳</span>
+                  </div>
+ 
+                  <form id="reportForm" class="reportArea">
                     <div>
-                      <label
+                      <label class="reportReason"
                       ><input
                       type="radio"
                       name="reportReason"
@@ -174,7 +184,8 @@
                       />
                       욕설, 인신공격 등 언어적 폭력</label
                       >
-                      <label
+                      <br>
+                      <label class="reportReason"
                       ><input
                       type="radio"
                           name="reportReason"
@@ -182,7 +193,8 @@
                           />
                           부적절한 게시글</label
                           >
-                          <label
+                          <br>
+                          <label class="reportReason"
                           ><input
                           type="radio"
                           name="reportReason"
@@ -190,17 +202,20 @@
                           />
                           사기 또는 허위정보</label
                           >
-                          <label
+                          <br>
+                          <label class="reportReason"
                           ><input type="radio" name="reportReason" value="기타" />
                           기타</label
                           >
                         </div>
                         <textarea
                       id="additionalReason"
-                      placeholder="기타 사유를 입력하세요"
+                      class="additionalReason" 
+                      placeholder="기타 사유를 입력하세요."
+                      maxlength="400"
                     ></textarea
                     ><br />
-                    <button type="button" id="submitUserReportBtn">
+                    <button type="button" id="submitUserReportBtn" class="reportSubmit">
                       신고 제출
                     </button>
                   </form>
@@ -400,7 +415,7 @@
         <!-- 타이틀 -->
         <span class="reportTitle">신고하기</span>
         <!-- 신고하기 버튼 (공백 유지) -->
-        <span id="reportUser" class="reportUser">닉네임 님</span>
+        <span id="shareReportUser" class="reportUser">닉네임 님</span>
       </div>
       <!-- 닫기 버튼 -->
       <span class="close">╳</span>

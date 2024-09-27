@@ -208,6 +208,83 @@ img {
   align-items: center;
 }
 
+/* 존재하는 메시지 */
+#messageDetailsContainer {
+  margin-top: 2vh;
+  margin-bottom: 4vh;
+  padding-right: 2vh;
+  padding-left: 2vh;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  height: 49vh;
+  width: 100%;
+  overflow-y: scroll; /* 스크롤 기능 활성화 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE와 Edge에서 스크롤바 숨기기 */
+  /* border: 0.07vw solid black; */
+  box-shadow: rgba(149, 157, 165, 0.2) 0 1vh 2vh;
+}
+
+/* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
+#messageDetailsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+/* 보내기 버튼 */
+#sendMessageBtn {
+  position: relative;
+  padding-top: 0.2vh;
+  padding-left: 0.5vw;
+  right: 0.4vh;
+  width: 8vh;
+  height: 3.8vh;
+  border-radius: 2.5vh;
+  font-size: 1.7vh;
+  letter-spacing: 0.05vw;
+  background-color: #2dc986;
+  color: white;
+  border: 0.07vw solid black;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1;
+}
+
+/* 검색 버튼 호버 효과 */
+#sendMessageBtn:hover {
+  text-decoration: underline;
+}
+
+/* 나눔 완료 버튼 */
+#sendMessageBtn {
+  position: relative;
+  padding-top: 0.2vh;
+  padding-left: 0.5vw;
+  right: 0.4vh;
+  width: 8vh;
+  height: 3.8vh;
+  border-radius: 2.5vh;
+  font-size: 1.7vh;
+  letter-spacing: 0.05vw;
+  background-color: #2dc986;
+  color: white;
+  border: 0.07vw solid black;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  z-index: 1;
+}
+
+/* 나눔 완료 버튼 호버 효과 */
+#shareComplete:hover {
+  text-decoration: underline;
+}
+
+/* 유저 신고하기 모달만 배경 투명 처리 */
+#reportModal {
+  background-color: transparent; /* 배경 투명 처리 */
+}
+
 .message-room {
   border: 1px solid #ccc;
   padding: 10px;
