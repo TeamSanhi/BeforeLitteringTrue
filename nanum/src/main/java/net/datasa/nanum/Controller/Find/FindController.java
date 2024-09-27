@@ -1,14 +1,19 @@
 package net.datasa.nanum.Controller.Find;
 
+import net.datasa.nanum.domain.entity.MemberEntity;
+import net.datasa.nanum.security.AuthenticatedUser;
+import net.datasa.nanum.service.MemberService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.service.FindService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -17,6 +22,7 @@ import net.datasa.nanum.service.FindService;
 public class FindController {
 
     private final FindService findService;
+    private final MemberService memberService;
 
     @GetMapping("idCheck")
     @ResponseBody
@@ -43,6 +49,31 @@ public class FindController {
         log.debug("닉네임 중복인가? {}", available);
         // 아이디가 있으면 true, 없으면 false리턴
         return available;
+    }
+
+    @PostMapping("reNickCheck")
+    @ResponseBody
+    public ResponseEntity<Map<String, Boolean>> checkNickname(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("memberNickname") String memberNickname) {
+        Integer userNum = authenticatedUser.getNum();
+        MemberEntity member = memberService.getMemberByNum(userNum);
+
+        Map<String, Boolean> response = new HashMap<>();
+
+        response.put("duplication", false);
+        response.put("loginUser", false);
+
+        log.debug("입력한 닉네임: {}", memberNickname);
+        // 닉네임이 있으면 true, 없으면 false 리턴받음
+        if(findService.isNicknameAvailable(memberNickname)) {
+            log.debug("duplication : {}", "true");
+            response.put("duplication", true);
+            if (member.getMemberNickname().equals(memberNickname)) {
+                log.debug("loginUser : {}", "true");
+                response.put("loginUser", true);
+            }
+        }
+
+        return ResponseEntity.ok(response);
     }
 
     /**

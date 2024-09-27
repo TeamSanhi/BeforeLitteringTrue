@@ -89,20 +89,18 @@ public class MemberService {
 
     public void modify(MemberDTO dto) {
 
-        MemberEntity entity = memberRepository.findByMemberNumEquals(dto.getMemberNum());
+        MemberEntity entity = memberRepository.findByMemberIdEquals(dto.getMemberId());
 
         if (entity!=null) {
-            entity.setMemberId(dto.getMemberId());
             entity.setMemberPw(passwordEncoder.encode(dto.getMemberPw()));
-            //entity.setMemberEmail(dto.getMemberEmail());
+            entity.setMemberEmail(dto.getMemberEmail());
             entity.setMemberNickname(dto.getMemberNickname());
             entity.setMemberFileName(dto.getMemberFileName());
+            memberRepository.save(entity);
         }
 
         log.debug("DB에 저장되는 값 : {}", entity);
 
-        // DB에 저장
-        memberRepository.save(entity);
     }
 }
 
