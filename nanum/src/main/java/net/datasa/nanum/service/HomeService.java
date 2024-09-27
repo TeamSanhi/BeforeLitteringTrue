@@ -9,9 +9,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.ImageDTO;
+import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.ImageEntity;
+import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
 
 /**
@@ -25,6 +28,9 @@ public class HomeService {
 
     // shareBoardRepository를 주입
     private final ShareBoardRepository shareBoardRepository;
+
+    // MemberRepository를 주입
+    private final MemberRepository memberRepository;
 
     /**
      * 인기게시글을 불러오는 함수
@@ -43,7 +49,7 @@ public class HomeService {
         // DTO로 변환하여 List에 넣는다.
         for (ShareBoardEntity entity : EntityList) {
             // DTOList에 넣을 dto 생성하여 entity 변환하여 저장.
-            ShareBoardDTO dto = convertToDTO(entity);
+            ShareBoardDTO dto = boardConvertToDTO(entity);
             // DTOList에 dto 저장
             DTOList.add(dto);
         }
@@ -52,12 +58,40 @@ public class HomeService {
     }
 
     /**
+     * 포인트가 높은 상위 8명을 불러오는 함수
+     * 
+     * @return
+     */
+    public List<MemberDTO> pointList() {
+
+        // 포인트가 높은 상위 8명을 불러온다.
+        List<MemberEntity> memberEntityList = memberRepository.findTop8ByOrderByMemberPointDesc();
+
+        // 반환할 DTO 리스트
+        List<MemberDTO> memberDTOList = new ArrayList<MemberDTO>();
+
+        // 필요한 정보를 memberEntityList에서 반복하여 memberDTOList에 변환한다.
+        for (MemberEntity entity : memberEntityList) {
+            MemberDTO memberDTO = MemberDTO.builder()
+                    .memberNickname(entity.getMemberNickname()) // 닉네임
+                    .memberFileName(entity.getMemberFileName()) // 프로필 사진
+                    .memberPoint(entity.getMemberPoint()) // 나눔 포인트
+                    .build();
+
+            // dto 를 dtoList에 저장
+            memberDTOList.add(memberDTO);
+        }
+
+        return memberDTOList;
+    }
+
+    /**
      * 나눔글 entity에서 dto로 변환
      * 
      * @param shareBoardEntity 나눔글 엔티티
      * @return 나눔글 DTO
      */
-    private ShareBoardDTO convertToDTO(ShareBoardEntity shareBoardEntity) {
+    private ShareBoardDTO boardConvertToDTO(ShareBoardEntity shareBoardEntity) {
         ShareBoardDTO shareBoardDTO = new ShareBoardDTO();
         shareBoardDTO.setShareNum(shareBoardEntity.getShareNum());
         shareBoardDTO.setMemberNum(shareBoardEntity.getMember().getMemberNum());

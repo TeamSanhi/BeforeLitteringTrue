@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.service.HomeService;
 
@@ -34,13 +35,19 @@ public class HomeController {
         log.debug("homeController를 지나간다");
 
         // 북마크 순서로 상위 8개의 글을 불러온다.
-        List<ShareBoardDTO> DTOList = homeService.hotList();
+        List<ShareBoardDTO> shareBoardDTOList = homeService.hotList();
+        // 포인트가 높은 순서대로 상위 8명을 불러온다.
+        List<MemberDTO> memberDTOList = homeService.pointList();
 
         // 전달받은 DTOList를 확인
-        log.debug("HomeController DTOList : {} ", DTOList);
+        log.debug("HomeController shareBoardDTOList : {} ", shareBoardDTOList);
+        // 전달받은 memberDTOList 확인
+        log.debug("HomeController memberDTOList : {}", memberDTOList);
 
-        // 모ㄷ
-        model.addAttribute("hotList", DTOList);
+        // 모델에 저장
+        model.addAttribute("hotList", shareBoardDTOList);
+        // 모델에 저장
+        model.addAttribute("pointList", memberDTOList);
 
         return "homeView/home";
     }

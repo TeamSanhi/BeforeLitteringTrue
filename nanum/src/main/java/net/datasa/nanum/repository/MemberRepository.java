@@ -1,5 +1,7 @@
 package net.datasa.nanum.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -26,5 +28,6 @@ public interface MemberRepository extends JpaRepository<MemberEntity, Integer> {
     // 사용자의 일련번호로 DB 검색
     MemberEntity findByMemberNumEquals(Integer num);
 
-    
+    // memberPoint를 기준으로 상위 8명을 가져오는 메서드
+    List<MemberEntity> findTop8ByOrderByMemberPointDesc();
 }
