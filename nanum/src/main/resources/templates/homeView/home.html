@@ -88,11 +88,16 @@
                   max-height: calc(100vh - 50px);
                   overflow-x: hidden;
                   overflow-y: auto;
-                "
+                  "
               >
                 <div class="modal-content">
-                  <span id="messagesClose" class="close">&times;</span>
-                  <h2>나눔 이야기</h2>
+                  <!-- 나눔 이야기 상단 영역 -->
+                  <div class="messageUpside">
+                    <h2>나눔 이야기</h2>
+                    <!-- 닫기 버튼 -->
+                    <span class="close">╳</span> 
+                  </div>
+                  <!-- 쪽지방 목록이 출력되는 곳 -->
                   <div id="messageListContainer"></div>
                 </div>
               </div>
@@ -105,88 +110,116 @@
                   max-height: calc(100vh - 50px);
                   overflow-x: hidden;
                   overflow-y: auto;
-                "
+                  "
               >
                 <div class="modal-content">
-                  <span id="detailsClose" class="close">&times;</span>
-                  <h2>
-                    <img id="receiverProfileImage" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle;"/> 
-                    <span id="receiverNickname"></span>님에게
-                  </h2>
-
+                  <div class="messageUpside">
+                    <div class="usernameContainer">
+                      <img id="receiverProfileImage" src="" alt="Profile" style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle;"/> 
+                      <span class="usernameTitle"><b id="receiverNickname"></b>님에게</span>
+                      <!-- 신고하기 버튼 (공백 유지) -->
+                      <span id="userReportBtn" class="userReportButton highlighterRed">신고하기</span>                      
+                    </div>
+                    <!-- 닫기 버튼 -->
+                    <span class="close">╳</span> 
+                  </div>
+                  
                   <!-- 게시글로 이동하는 영역 추가 -->
                   <div id="goToShareBoard" style="cursor: pointer">
                     <div
-                      id="shareBoardLink"
-                      style="
+                    id="shareBoardLink"
+                    style="
                         padding: 10px;
                         border: 1px solid #ccc;
                         text-align: center;
-                      "
+                        "
                     >
-                      게시글로 이동
+                    게시글로 이동
                     </div>
                   </div>
-                  <div id="messageDetailsContainer"></div>
+
+                <div id="messageDetailsContainer"></div>
+                <!-- 쪽지 보내기 -->
+                <div id="detailContentsContainer">
                   <textarea
-                    id="messageInput"
-                    placeholder="메시지를 입력하세요"
-                  ></textarea>
-                  <button id="sendMessageBtn">보내기</button>
-                  <button id="userReportBtn">신고하기</button>
-                  <button id="shareComplete" style="display: none">
-                    나눔 완료
-                  </button>
+                  id="messageInput"
+                  class="messageContents" 
+                  placeholder="내용을 입력해주세요!"
+                  maxlength="100"
+                    ></textarea>
+                    <!-- 보내기 버튼 -->
+                    <button id="sendMessageBtn">보내기</button>
+                    <button id="shareComplete" style="display: none; margin-left: 10px;">
+                      나눔 완료
+                    </button>
+                </div>
                 </div>
               </div>
 
               <!-- 게시글 유저 신고 모달창 -->
               <div id="reportModal" class="modal">
                 <div class="modal-content">
-                  <span class="close">&times;</span>
-                  <h2>신고하기</h2>
-                  <form id="reportForm">
+                  <!-- 신고 모달 상단 영역 -->
+                  <div class="reportUpside">
+                    <!-- 신고 타이틀과 신고하고자 하는 유저 닉네임을 포함하는 영역 -->
+                    <div class="reportContainer">
+                    <!-- 타이틀 -->
+                    <span class="reportTitle">신고하기</span>
+                    <!-- 신고하기 버튼 (공백 유지) -->
+                    <span id="reportUser" class="reportUser">닉네임 님</span>
+                    </div>
+                    <!-- 닫기 버튼 -->
+                    <span class="close">╳</span>
+                  </div>
+ 
+                  <form id="reportForm" class="reportArea">
                     <div>
-                      <label
-                        ><input
-                          type="radio"
-                          name="reportReason"
-                          value="욕설, 인신공격 등 언어적 폭력"
-                        />
-                        욕설, 인신공격 등 언어적 폭력</label
+                      <label class="reportReason"
+                      ><input
+                      type="radio"
+                      name="reportReason"
+                      value="욕설, 인신공격 등 언어적 폭력"
+                      />
+                      욕설, 인신공격 등 언어적 폭력</label
                       >
-                      <label
-                        ><input
-                          type="radio"
+                      <br>
+                      <label class="reportReason"
+                      ><input
+                      type="radio"
                           name="reportReason"
                           value="부적절한 게시글"
-                        />
-                        부적절한 게시글</label
-                      >
-                      <label
-                        ><input
+                          />
+                          부적절한 게시글</label
+                          >
+                          <br>
+                          <label class="reportReason"
+                          ><input
                           type="radio"
                           name="reportReason"
                           value="사기 또는 허위정보"
-                        />
-                        사기 또는 허위정보</label
-                      >
-                      <label
-                        ><input type="radio" name="reportReason" value="기타" />
-                        기타</label
-                      >
-                    </div>
-                    <textarea
+                          />
+                          사기 또는 허위정보</label
+                          >
+                          <br>
+                          <label class="reportReason"
+                          ><input type="radio" name="reportReason" value="기타" />
+                          기타</label
+                          >
+                        </div>
+                        <textarea
                       id="additionalReason"
-                      placeholder="기타 사유를 입력하세요"
+                      class="additionalReason" 
+                      placeholder="기타 사유를 입력하세요."
+                      maxlength="400"
                     ></textarea
                     ><br />
-                    <button type="button" id="submitUserReportBtn">
+                    <button type="button" id="submitUserReportBtn" class="reportSubmit">
                       신고 제출
                     </button>
                   </form>
                 </div>
               </div>
+<!-- ************************************ 쪽지 목록 모달 *************************************-->
               
               <!-- 마이페이지  -->
               <div class="mypage">

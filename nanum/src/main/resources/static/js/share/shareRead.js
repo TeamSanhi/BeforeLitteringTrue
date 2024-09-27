@@ -265,28 +265,36 @@ function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
 
       //쪽지내역 모달 창 출력
       $("#messageModal").show();
-      let userNum = $("#messages").data("num");
+      let currentUserNum = $("#messages").data("num");
       let messages = response.existingMessages;
       let messageList = $("#existingMessages");
       messageList.empty(); // 기존 내용을 지우고
       if (response.roomExists) {
         // 기존 쪽지방이 있으면 쪽지 내용 로드
         messages.forEach(function (message) {
-          if (userNum == message.senderNum) {
+          if (currentUserNum == message.senderNum) {
             messageList.append(
               `<div class="myMessageArea">
                 <div class="myMessage">보낸 이야기</div>
                 <div class="myMessageContent">${message.messageContents}</div>
-                <div class="myMessageDate">${message.deliverDate}</div>
-              </div>`
+                <div class="myMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
+              </div>
+              <br>
+              `
             );
           } else {
             messageList.append(
               `<div class="getMessageArea">
                 <div class="getMessage">받은 이야기</div>
                 <div class="getMessageContent">${message.messageContents}</div>
-                <div class="getMessageDate">${message.deliverDate}</div>
-              </div>`
+                <div class="getMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
+              </div>
+              <br>
+              `
             );
           }
         });
@@ -345,24 +353,37 @@ function sendMessage() {
 
             let messages = response.existingMessages;
             let messageList = $("#existingMessages");
+            let currentUserNum = $("#messages").data("num");
             messageList.empty(); // 기존 내용을 지우고
             // 주고받은 전체 쪽지를 영역에 집어넣음
             messages.forEach(function (message) {
-              if (userNum == message.senderNum) {
+              if (currentUserNum == message.senderNum) {
                 messageList.append(
                   `<div class="myMessageArea">
                     <div class="myMessage">보낸 이야기</div>
-                    <div class="myMessageContent">${message.messageContents}</div>
-                    <div class="myMessageDate">${message.deliverDate}</div>
-                  </div>`
+                    <div class="myMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="myMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                  `
                 );
               } else {
                 messageList.append(
                   `<div class="getMessageArea">
                     <div class="getMessage">받은 이야기</div>
-                    <div class="getMessageContent">${message.messageContents}</div>
-                    <div class="getMessageDate">${message.deliverDate}</div>
-                  </div>`
+                    <div class="getMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="getMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                  `
                 );
               }
             });
@@ -517,9 +538,10 @@ $(document).ready(function () {
         // 신고 모달에 닉네임 설정
         $("#reportUser").text(`${data.receiverNickname} 님`);
 
+        let currentUserNum = $("#messages").data("num");
         let detailsList = "";
         data.messages.forEach(function (message) {
-          if (userNum == message.senderNum) {
+          if (currentUserNum == message.senderNum) {
             detailsList += `
               <div class="myMessageArea">
                 <div class="myMessage">보낸 이야기</div>
@@ -527,7 +549,9 @@ $(document).ready(function () {
                 <div class="myMessageDate">${new Date(
                   message.deliverDate
                 ).toLocaleString()}</div>
-              </div>`;
+              </div>
+              <br>
+              `;
           } else {
             detailsList += `
               <div class="getMessageArea">
@@ -537,6 +561,7 @@ $(document).ready(function () {
                   message.deliverDate
                 ).toLocaleString()}</div>
               </div>
+              <br>
             `;
           }
         });
@@ -608,17 +633,36 @@ $(document).ready(function () {
             // 신고 모달에 닉네임 설정
             $("#reportUser").text(`${data.receiverNickname} 님`);
 
+            let currentUserNum = $("#messages").data("num");
             let detailsList = "";
             data.messages.forEach(function (message) {
-              detailsList += `
-          <div class="message-detail">
-            <strong>${message.senderNickname}:</strong> ${
-                message.messageContents
+              if (currentUserNum == message.senderNum) {
+                detailsList += `
+                  <div class="myMessageArea">
+                    <div class="myMessage">보낸 이야기</div>
+                    <div class="myMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="myMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                  `;
+              } else {
+                detailsList += `
+                  <div class="getMessageArea">
+                    <div class="getMessage">받은 이야기</div>
+                    <div class="getMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="getMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                `;
               }
-            <br/>
-            <small>${new Date(message.deliverDate).toLocaleString()}</small>
-          </div>
-          <hr />`;
             });
             $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
           },

@@ -136,6 +136,9 @@ window.onload = function () {
 
 //*********************************************쪽지 ********************************************
 $(document).ready(function () {
+  // 모든 모달을 숨긴 상태로 초기화
+  $(".modal").hide();
+
   // 읽지 않은 쪽지 개수 가져오기
   updateUnreadCount();
 
@@ -233,17 +236,35 @@ $(document).ready(function () {
         $("#receiverNickname").text(data.receiverNickname);
         $("#receiverProfileImage").attr("src", data.receiverProfileImage); // 프로필 사진 URL 업데이트
 
+        // 신고 모달에 닉네임 설정
+        $("#reportUser").text(`${data.receiverNickname} 님`);
+
+        let currentUserNum = $("#messages").data("num");
         let detailsList = "";
         data.messages.forEach(function (message) {
-          detailsList += `
-              <div class="message-detail">
-                <strong>${message.senderNickname}:</strong> ${
-            message.messageContents
-          }
-                <br/>
-                <small>${new Date(message.deliverDate).toLocaleString()}</small>
+          if (currentUserNum == message.senderNum) {
+            detailsList += `
+              <div class="myMessageArea">
+                <div class="myMessage">보낸 이야기</div>
+                <div class="myMessageContent">${message.messageContents}</div>
+                <div class="myMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
               </div>
-              <hr />`;
+              <br>
+              `;
+          } else {
+            detailsList += `
+              <div class="getMessageArea">
+                <div class="getMessage">받은 이야기</div>
+                <div class="getMessageContent">${message.messageContents}</div>
+                <div class="getMessageDate">${new Date(
+                  message.deliverDate
+                ).toLocaleString()}</div>
+              </div>
+              <br>
+            `;
+          }
         });
         $("#messageDetailsContainer").html(detailsList);
 
@@ -310,17 +331,39 @@ $(document).ready(function () {
             $("#receiverNickname").text(data.receiverNickname);
             $("#receiverProfileImage").attr("src", data.receiverProfileImage); // 프로필 사진 URL 업데이트
 
+            // 신고 모달에 닉네임 설정
+            $("#reportUser").text(`${data.receiverNickname} 님`);
+
+            let currentUserNum = $("#messages").data("num");
             let detailsList = "";
             data.messages.forEach(function (message) {
-              detailsList += `
-          <div class="message-detail">
-            <strong>${message.senderNickname}:</strong> ${
-                message.messageContents
+              if (currentUserNum == message.senderNum) {
+                detailsList += `
+                  <div class="myMessageArea">
+                    <div class="myMessage">보낸 이야기</div>
+                    <div class="myMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="myMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                  `;
+              } else {
+                detailsList += `
+                  <div class="getMessageArea">
+                    <div class="getMessage">받은 이야기</div>
+                    <div class="getMessageContent">${
+                      message.messageContents
+                    }</div>
+                    <div class="getMessageDate">${new Date(
+                      message.deliverDate
+                    ).toLocaleString()}</div>
+                  </div>
+                  <br>
+                `;
               }
-            <br/>
-            <small>${new Date(message.deliverDate).toLocaleString()}</small>
-          </div>
-          <hr />`;
             });
             $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
           },
@@ -335,18 +378,33 @@ $(document).ready(function () {
     });
   });
 
-  // 나눔 이야기 닫기
-  $("#messagesClose").click(function () {
-    $("#messagesModal").fadeOut();
-    updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+  // 모달 닫기 버튼 클릭 시 모달 닫기
+  $(".close").click(function () {
+    if ($(this).closest("#reportModal").length > 0) {
+      // 신고하기 모달을 닫고 쪽지 모달 열기
+      $("#reportModal").hide();
+      $("#messageModal").show();
+      updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+      updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+    } else {
+      $(".modal").hide();
+      updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+      updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+    }
   });
 
-  // 쪽지 상세내역 닫기
-  $("#detailsClose").click(function () {
-    $("#detailsModal").fadeOut();
-    // 쪽지 목록 갱신을 위해 다시 목록 불러오기
-    updateMessageRooms();
-  });
+  // // 나눔 이야기 닫기
+  // $("#messagesClose").click(function () {
+  //   $("#messagesModal").fadeOut();
+  //   updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+  // });
+
+  // // 쪽지 상세내역 닫기
+  // $("#detailsClose").click(function () {
+  //   $("#detailsModal").fadeOut();
+  //   // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+  //   updateMessageRooms();
+  // });
 
   $(window).click(function (event) {
     if (
