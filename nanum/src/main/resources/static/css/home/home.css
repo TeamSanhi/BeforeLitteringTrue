@@ -195,6 +195,26 @@ img {
   letter-spacing: 0.1vw;
 }
 
+/* 쪽지방 목록 */
+#messageListContainer {
+  margin-top: 2vh;
+  margin-bottom: 4vh;
+  padding-right: 2vh;
+  padding-left: 2vh;
+  padding-top: 3vh;
+  padding-bottom: 3vh;
+  height: 49vh;
+  width: 100%;
+  overflow-y: scroll; /* 스크롤 기능 활성화 */
+  scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+  -ms-overflow-style: none; /* IE와 Edge에서 스크롤바 숨기기 */
+}
+
+/* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
+#messageListContainer::-webkit-scrollbar {
+  display: none;
+}
+
 /* 메시지 보내기 영역 */
 #detailContentsContainer {
   position: relative;
