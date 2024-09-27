@@ -412,6 +412,7 @@
             return emailRegex.test(email);
         }
 
+        // 로그인한 이메일과 동일한지 여부
         function isLoggedEmail() {
             var email = $("#memberEmail").val().trim();
             var loggedEmail = $("#loggedEmail").val();
@@ -449,10 +450,8 @@
                         // 전달받은 값이 true 면 중복임으로 경고 메시지
                         if (!response.loginUser) {
                             $("#emailError").text("이미 존재하는 이메일입니다.").show().css("color", "red"); // 경고 메시지
-                            $("#emailDuplicationCheck").val("y");
                         } else { // 이메일 체크 안 하도록 설정
                             $("#emailError").text("인증 완료된 이메일입니다.").show().css("color", "blue"); // 경고 메시지
-                            $("#emailDuplicationCheck").val("y");
                         }
                     } else {
                         // 전달받은 값이 false 면 중복되지 않고 이메일이 전송되었음으로 아래 메시지 출력
@@ -498,6 +497,7 @@
             });
         }
 
+        // 로그인한 닉네임과 동일한지 여부
         function isLoggedNickname() {
             var nickname = $("#memberNickname").val().trim();
             var loggedNickname = $("#loggedNickname").val();
@@ -588,18 +588,6 @@
             return true;
 
 
-        }
-
-        function previewImage(event) {
-            const file = event.target.files[0]; // 선택한 파일을 가져옴
-            if (file) {
-                const reader = new FileReader(); // 파일 읽기 객체
-                reader.onload = function(e) {
-                    // 이미지 요소의 src 속성을 업데이트하여 미리보기 표시
-                    document.getElementById('profileImage').src = e.target.result;
-                };
-                reader.readAsDataURL(file); // 파일을 읽어서 Data URL로 변환
-            }
         }
     </script>
 </head>
