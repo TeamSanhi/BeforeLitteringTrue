@@ -309,8 +309,7 @@
                   <div class="pointNickname" th:text="${point.memberNickname}"></div>
                   <!-- 회원 대표 이미지 -->
                   <div class="pointImages">
-                    <img th:src="@{/member/profileDownload(memberNum=${point.memberNum})}">
-                    <span th:text="${point.memberNum}"></span>
+                    <img th:src="@{/member/profileDownload(memberNum=${point.memberNum})}" style="width:100px; height:100px">
                   </div>
                   <!-- 회원의 나눔 포인트  -->
                   <div class="point" th:text="${point.memberPoint}"></div>
