@@ -307,7 +307,12 @@
                 <div class="memberPosting" th:each=" point : ${pointList}" >
                   <!-- 회원의 닉네임 -->
                   <div class="pointNickname" th:text="${point.memberNickname}"></div>
-                  <div class="pointImages" th:text="${point.memberFileName}"></div>
+                  <!-- 회원 대표 이미지 -->
+                  <div class="pointImages">
+                    <img th:src="@{/member/profileDownload(memberNum=${point.memberNum})}">
+                    <span th:text="${point.memberNum}"></span>
+                  </div>
+                  <!-- 회원의 나눔 포인트  -->
                   <div class="point" th:text="${point.memberPoint}"></div>
                 </div>
               </div>

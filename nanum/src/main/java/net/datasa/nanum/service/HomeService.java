@@ -73,6 +73,7 @@ public class HomeService {
         // 필요한 정보를 memberEntityList에서 반복하여 memberDTOList에 변환한다.
         for (MemberEntity entity : memberEntityList) {
             MemberDTO memberDTO = MemberDTO.builder()
+                    .memberNum(entity.getMemberNum()) // 프로필 이미지 전달을 위한 회원번혼 전송
                     .memberNickname(entity.getMemberNickname()) // 닉네임
                     .memberFileName(entity.getMemberFileName()) // 프로필 사진
                     .memberPoint(entity.getMemberPoint()) // 나눔 포인트

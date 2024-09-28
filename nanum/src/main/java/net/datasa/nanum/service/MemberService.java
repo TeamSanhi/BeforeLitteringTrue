@@ -1,13 +1,20 @@
 package net.datasa.nanum.service;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
+import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.repository.MemberRepository;
 
@@ -58,7 +65,8 @@ public class MemberService {
 
     /**
      * 패스워드 확인
-     * @param userNum 현재 사용자의 일련번호
+     * 
+     * @param userNum   현재 사용자의 일련번호
      * @param enteredPw 입력된 패스워드 값
      * @return 패스워드 일치 여부
      */
@@ -72,6 +80,7 @@ public class MemberService {
 
     /**
      * 멤버 탈퇴
+     * 
      * @param userNum 현재 사용자의 일련번호
      * @return 탈퇴 여부
      */
@@ -91,7 +100,7 @@ public class MemberService {
 
         MemberEntity entity = memberRepository.findByMemberIdEquals(dto.getMemberId());
 
-        if (entity!=null) {
+        if (entity != null) {
             entity.setMemberPw(passwordEncoder.encode(dto.getMemberPw()));
             entity.setMemberEmail(dto.getMemberEmail());
             entity.setMemberNickname(dto.getMemberNickname());
@@ -102,5 +111,38 @@ public class MemberService {
         log.debug("DB에 저장되는 값 : {}", entity);
 
     }
-}
 
+    /**
+     * imageRepository에서 이미지를 다운로드 하거나 보여주는 함수
+     */
+    public void profileDownload(Integer memberNum, HttpServletResponse response, String uploadPath) {
+
+        // 전달된 글 번호로 member테이블에서 회원정보 조회
+        MemberEntity memberEntity = memberRepository.findById(memberNum)
+                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        // response setHeader 설정
+        response.setHeader("Content-Disposition", "attachment;filename=" + memberEntity.getMemberFileName());
+
+        // 저장된 파일 경로와 파일 이름 합한다.
+        String fullPath = uploadPath + "/" + memberEntity.getMemberFileName();
+
+        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
+        FileInputStream filein = null;
+        ServletOutputStream fileout = null;
+
+        try {
+            filein = new FileInputStream(fullPath);
+            fileout = response.getOutputStream();
+
+            // Spring의 파일 관련 유틸 이용하여 출력
+            FileCopyUtils.copy(filein, fileout);
+
+            filein.close();
+            fileout.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+}

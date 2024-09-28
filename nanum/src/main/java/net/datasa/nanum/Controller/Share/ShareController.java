@@ -112,11 +112,12 @@ public class ShareController {
      */
     @GetMapping("download")
     public void readDownload(
-            @RequestParam("imageNum") Integer imageNum, HttpServletResponse response) {
+            @RequestParam("imageNum") Integer imageNum,
+            HttpServletResponse response) {
+        log.debug("download 컨트롤러 지나감: {}", imageNum);
+
         // 파일 다운로드 함수 실행
         shareService.download(imageNum, response, uploadPath);
-
-        log.debug("readdownload 컨트롤러 지나감: {}", imageNum);
     }
 
     /**

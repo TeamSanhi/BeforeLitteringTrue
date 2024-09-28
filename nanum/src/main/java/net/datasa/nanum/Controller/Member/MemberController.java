@@ -1,12 +1,15 @@
 package net.datasa.nanum.Controller.Member;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
@@ -17,8 +20,11 @@ import net.datasa.nanum.service.MemberService;
 @RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
-
+    // 멤버 서비스 사용
     private final MemberService memberService;
+    // 파일 저장경로
+    @Value("${board.uploadPath}")
+    String uploadPath;
 
     /**
      * 로그인 화면으로 이동
@@ -80,6 +86,22 @@ public class MemberController {
         memberService.join(dto);
 
         return "redirect:/";
+    }
+
+    /**
+     * image테이블 기준으로 게시글 번호를 검색하여 사진을 다운로드 시키는 컨트롤러
+     * 
+     * @param memberNum
+     * @param response
+     */
+    @GetMapping("profileDownload")
+    public void profileDownload(
+            @RequestParam("memberNum") Integer memberNum,
+            HttpServletResponse response) {
+        log.debug("download 컨트롤러 지나감: {}", memberNum);
+
+        // 파일 다운로드 함수 실행
+        memberService.profileDownload(memberNum, response, uploadPath);
     }
 
 }
