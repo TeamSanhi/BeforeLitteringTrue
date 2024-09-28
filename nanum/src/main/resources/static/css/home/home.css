@@ -890,6 +890,21 @@ input[type="radio"]:checked {
   cursor: pointer;
 }
 
+/* 나눠요 포인트 순위 리스트 영역 */
+.memberArea {
+  display: flex;
+  flex-wrap: wrap;
+  /* 줄바꿈을 허용하여 게시글 수가 맞지 않아도 흐트러지지 않도록 함 */
+  justify-content: flex-start;
+  /* 게시글이 왼쪽 정렬되게 설정 */
+  /* 게시글 사이에 일정 간격을 둠 */
+  width: 100%;
+  height: 90%;
+  gap: 1vh;
+  padding-bottom: 5vh;
+  
+}
+
 /* 저작권 영역 */
 .rightContainer {
   margin: auto;
