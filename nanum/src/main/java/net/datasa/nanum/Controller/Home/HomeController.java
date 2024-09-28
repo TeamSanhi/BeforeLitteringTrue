@@ -46,7 +46,12 @@ public class HomeController {
 
         // 모델에 저장
         model.addAttribute("hotList", shareBoardDTOList);
-        model.addAttribute("pointList", memberDTOList);
+        // 1등
+        model.addAttribute("pointFirst", memberDTOList.get(0));
+        // 2등
+        model.addAttribute("pointSecond", memberDTOList.get(1));
+        // 3등
+        model.addAttribute("pointThird", memberDTOList.get(2));
 
         return "homeView/home";
     }

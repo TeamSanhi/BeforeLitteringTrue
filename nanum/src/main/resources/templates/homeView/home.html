@@ -266,7 +266,7 @@
           <div class="realContent" >
             <!-- 설정에 따라 변경되는 css -->
             <div class="mainMessage">
-                <span class="typeMessage">나눔 인기글! </span>
+                <span class="typeMessage">나눔 인기글!</span>
             </div>
               <!-- 게시글 틀  -->
               <div class="shareArea">
@@ -299,20 +299,70 @@
             <div class="realContent">
               <div class="mainMessage" >
                 <span class="typeMessage">
-                  나눔 매니아 
+                  나눔 매니아!
                 </span>
               </div>
               <!-- 점수 순서로 회원을 들고온다.  -->
               <div class="memberArea" >
-                <div class="memberPosting" th:each=" point : ${pointList}" >
-                  <!-- 회원의 닉네임 -->
-                  <div class="pointNickname" th:text="${point.memberNickname}"></div>
-                  <!-- 회원 대표 이미지 -->
-                  <div class="pointImages">
-                    <img th:src="@{/member/profileDownload(memberNum=${point.memberNum})}" style="width:100px; height:100px">
+
+                <!-- 2등 -->
+                <div class="secondContainer">
+                    <div class="second">
+                      🥈 <span class="secondTitle">나눔 기사</span>
+                    </div>
+                    <!-- 게시글 졍역 -->
+                    <div class="secondBoard">
+                      <!-- 회원의 닉네임 -->
+                      <div class="secondNickname" th:text="${pointSecond.memberNickname}"></div>
+                      <!-- 회원 대표 이미지 -->
+                      <div class="secondImageArea">
+                        <img class="secondImage" th:src="@{/member/profileDownload(memberNum=${pointSecond.memberNum})}">
+                      </div>
+                      <!-- 회원의 나눔 포인트  -->
+                      <div>
+                        <span class="secondPointText">나눔 포인트 : </span><span  class="secondPoint" th:text="${pointSecond.memberPoint}"></span>
+                      </div>
+                    </div>
+                </div>
+
+                <!-- 1등  -->
+                <div class="firstContainer">
+                  <div class="first">
+                    🥇 <span class="firstTitle">나눔왕</span>
                   </div>
-                  <!-- 회원의 나눔 포인트  -->
-                  <div class="point" th:text="${point.memberPoint}"></div>
+                  <!-- 게시글 졍역 -->
+                  <div class="firstBoard">
+                    <!-- 회원의 닉네임 -->
+                    <div class="firstNickname" th:text="${pointFirst.memberNickname}"></div>
+                    <!-- 회원 대표 이미지 -->
+                    <div class="firstImageArea">
+                      <img class="firstImage" th:src="@{/member/profileDownload(memberNum=${pointFirst.memberNum})}">
+                    </div>
+                    <!-- 회원의 나눔 포인트  -->
+                    <div>
+                      <span class="firstPointText">나눔 포인트 : </span><span  class="firstPoint" th:text="${pointFirst.memberPoint}"></span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- 3등  -->
+                <div class="thirdContainer">
+                  <div class="third">
+                    🥉 <span class="thirdTitle">나눔 요정</span>
+                  </div>
+                  <!-- 게시글 졍역 -->
+                  <div class="thirdBoard">
+                    <!-- 회원의 닉네임 -->
+                    <div class="thirdNickname" th:text="${pointThird.memberNickname}"></div>
+                    <!-- 회원 대표 이미지 -->
+                    <div class="thirdImageArea">
+                      <img class="thirdImage" th:src="@{/member/profileDownload(memberNum=${pointThird.memberNum})}">
+                    </div>
+                    <!-- 회원의 나눔 포인트  -->
+                    <div>
+                      <span class="thirdPointText">나눔 포인트 : </span><span  class="thirdPoint" th:text="${pointThird.memberPoint}"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
