@@ -319,7 +319,7 @@
               <div class="memberArea" >
 
                 <!-- 2등 -->
-                <div class="secondContainer">
+                <div class="secondContainer" th:if="${pointSecond != null}">
                     <div class="second">
                       🥈 <span class="secondTitle">나눔 기사</span>
                     </div>
@@ -339,7 +339,7 @@
                 </div>
 
                 <!-- 1등  -->
-                <div class="firstContainer">
+                <div class="firstContainer" th:if="${pointFirst != null}">
                   <div class="first">
                     🥇 <span class="firstTitle">나눔왕</span>
                   </div>
@@ -359,7 +359,7 @@
                 </div>
                 
                 <!-- 3등  -->
-                <div class="thirdContainer">
+                <div class="thirdContainer" th:if="${pointThird != null}">
                   <div class="third">
                     🥉 <span class="thirdTitle">나눔 요정</span>
                   </div>

@@ -97,12 +97,16 @@ public class HomeController {
         // Model
         // 인기글 리스트 모델에 저장
         model.addAttribute("hotList", shareBoardDTOList);
-        // 1등
-        model.addAttribute("pointFirst", memberDTOList.get(0));
-        // 2등
-        model.addAttribute("pointSecond", memberDTOList.get(1));
-        // 3등
-        model.addAttribute("pointThird", memberDTOList.get(2));
+        // 1등, 2등, 3등 모델에 개별적으로 저장
+        if (memberDTOList.size() > 0) {
+            model.addAttribute("pointFirst", memberDTOList.get(0)); // 1등
+        }
+        if (memberDTOList.size() > 1) {
+            model.addAttribute("pointSecond", memberDTOList.get(1)); // 2등
+        }
+        if (memberDTOList.size() > 2) {
+            model.addAttribute("pointThird", memberDTOList.get(2)); // 3등
+        }
 
         return "homeView/home";
     }
