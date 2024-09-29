@@ -694,7 +694,7 @@ img {
 .highlighterRed {
   background: linear-gradient(red 0 100%);
   background-position: 0 calc(100% - 0.25vh);
-  background-size: 0 0.8vh;
+  background-size: 0 1.2vh;
   background-repeat: no-repeat;
   transition: background-size 0.3s;
 }
