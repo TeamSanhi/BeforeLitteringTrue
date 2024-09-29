@@ -52,7 +52,7 @@ public class MemberEntity {
 	private String memberNickname;
 	// 프로필 사진 이름
 	@Column(name = "member_file_name", length = 100)
-	private String memberFileName = "/images/profile-basic.png";
+	private String memberFileName = "profile-basic.png";
 	// 회원 가입일
 	@CreatedDate
 	@Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
