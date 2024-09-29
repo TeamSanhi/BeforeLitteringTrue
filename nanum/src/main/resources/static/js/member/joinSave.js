@@ -203,6 +203,8 @@ function sendEmailVerificationCode() {
           .text("이메일 전송에 성공하였습니다.")
           .show()
           .css("color", "blue");
+        // memberEmail input태그를 비활성화
+        $("#memberEmail").attr("readonly", true);
       }
     },
     error: function () {
@@ -232,8 +234,7 @@ function verifyEmailCode() {
         $("#emailCodeError").text(response).show().css("color", "blue");
         // 성공시 인증확인을 위한 emailDuplicationCheck를 y로 변경
         $("#emailDuplicationCheck").val("y");
-        // 인증성공시 이메일과 인증번호를 수정불가 하도록 변경
-        $("#memberEmail").attr("readonly", true);
+        // 인증번호를 수정불가 하도록 변경
         $("#emailCode").attr("readonly", true);
       } else {
         // 리턴받은 경고메시지를 출력
