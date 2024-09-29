@@ -275,7 +275,7 @@
           <!-- 작성자 정보 영역 --> 
           <div class="writerInfo">  
             <!-- ****************************작성자 프로필 사진 *******************-->
-            <img class="infoImage" src="./img/user.png" alt="User Photo">
+            <img class="infoImage" th:src="@{/member/profileDownload(memberNum=${shareBoard.memberNum})}" alt="User Photo">
             <!-- 작성자 이름 -->
             <div class="writerName">
               <span th:text="${shareBoard.memberNickname}"></span>

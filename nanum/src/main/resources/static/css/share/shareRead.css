@@ -506,17 +506,8 @@ img {
   align-items: center;
   width: 100%;
   height: 4vh;
-  margin-bottom: 3vh;
-}
-
-/* 작성자 프로필 사진 */
-.infoImage {
-  float: left;
-  width: 2.2vw;
-  height: 4vh;
-  margin-right: 1.5vh;
-  border-radius: 50%;
-  border: 0.07vw solid black;
+  margin-bottom: 2vh;
+  margin-top: 1vh;
 }
 
 /* 작성자 정보 영역 */
@@ -528,6 +519,16 @@ img {
   box-sizing: border-box;
   font-size: 2.1vh;
   font-weight: 500;
+}
+
+/* 작성자 프로필 사진 */
+.infoImage {
+  float: left;
+  width: 2.7vw;
+  height: 5vh;
+  margin-right: 1.5vh;
+  border-radius: 50%;
+  border: 0.07vw solid black;
 }
 
 /* 작성자 이름 */
