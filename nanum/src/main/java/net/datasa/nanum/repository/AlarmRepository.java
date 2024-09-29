@@ -16,5 +16,7 @@ public interface AlarmRepository extends JpaRepository<AlarmEntity, Integer> {
 
     // 멤버와 알람으로 alarmEntity 탐색
     @Query("SELECT a FROM AlarmEntity a WHERE a.memberNum = :memberNum and a.alarmDay = :alarmDay")
-    AlarmEntity findByMemberNumAndAlarmDay(@Param("memberNum") MemberEntity memberNum, @Param("alarmDay") Integer alarmDay);
+    AlarmEntity findByMemberNumAndAlarmDay(@Param("memberNum") MemberEntity memberNum,
+            @Param("alarmDay") Integer alarmDay);
+
 }

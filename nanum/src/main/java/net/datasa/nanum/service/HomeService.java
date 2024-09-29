@@ -5,15 +5,19 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datasa.nanum.domain.dto.AlarmDTO;
 import net.datasa.nanum.domain.dto.ImageDTO;
 import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
+import net.datasa.nanum.domain.entity.AlarmEntity;
 import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.domain.entity.ShareBoardEntity;
+import net.datasa.nanum.repository.AlarmRepository;
 import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.repository.ShareBoardRepository;
 
@@ -31,6 +35,9 @@ public class HomeService {
 
     // MemberRepository를 주입
     private final MemberRepository memberRepository;
+
+    // alaermrepository를 주입
+    private final AlarmRepository alarmRepository;
 
     /**
      * 인기게시글을 불러오는 함수
@@ -84,6 +91,35 @@ public class HomeService {
         }
 
         return memberDTOList;
+    }
+
+    /**
+     * 전달받은 파라미터 값으로 알람을 찾는 기능
+     */
+    public AlarmDTO alarmCheck(Integer memberNum, Integer alarm) {
+
+        // 전달받은 회원번호로 회원 조회
+        MemberEntity memberEntity = memberRepository.findById(memberNum)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        // 해당하는 알람이 있는지 찾는다.
+        AlarmEntity alarmEntity = alarmRepository.findByMemberNumAndAlarmDay(memberEntity, alarm);
+
+        if (alarmEntity != null) {
+            // AlarmDTO로 변환하여 반환
+            AlarmDTO alarmDTO = AlarmDTO.builder()
+                    .alarmNum(alarmEntity.getAlarmNum())
+                    .memberNum(alarmEntity.getMemberNum().getMemberNum())
+                    .alarmDay(alarmEntity.getAlarmDay())
+                    .alarmContents(alarmEntity.getAlarmContents())
+                    .build();
+            // 변환된 DTO를 반환
+            return alarmDTO;
+        } else {
+            // 알림이 없을 경우 null 처리
+            return null;
+        }
+
     }
 
     /**

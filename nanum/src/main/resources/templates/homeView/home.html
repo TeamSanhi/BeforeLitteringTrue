@@ -251,7 +251,20 @@
             <div class="realContent">
                 <!-- 설정에 따라 변경되는 css -->
                 <div class="mainMessage">
-                    <span id="mainMessage" class="typeMessage">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
+                    <!-- 로그인 하지 않았을시 -->
+                    <th:block sec:authorize="not isAuthenticated()">
+                      <!-- 기본 문구 출력 -->
+                      <span id="mainMessage" class="typeMessage">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
+                    </th:block>
+                    <!-- 로그인 하였을시 해당요일의 알람메시지를 보여준다. -->
+                    <th:blcok sec:authorize="isAuthenticated()">
+                      <span class="typeMessage">
+                        <!-- alarmDTO가 null이 아닐 때만 해당 요일의 알람내용을 보여준다. -->
+                        <span id="mainMessage" th:if="${alarm != null}" th:text="|오늘은 ${week}! ${alarm.alarmContents}|"></span>
+                        <!-- alarmDTO가 null일 때 기본 메시지를 출력 -->
+                        <span id="mainMessage" th:if="${alarm == null}">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
+                      </span>                   
+                    </th:blcok>
                 </div>
                 <!-- GIF 영역 -->
                 <div class="gifArea" >

@@ -40,23 +40,22 @@ public class MyPageController {
         Integer shareCount = shareService.getShareCount(member);
         List<AlarmDTO> alarmDTOTotal = alarmService.getAlarmList(member);
 
-        String[] daysOfWeek = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+        String[] daysOfWeek = { "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일" };
 
         List<String> alarmTotal = new ArrayList<>();
 
         for (AlarmDTO alarmDTO : alarmDTOTotal) {
-            String alarmDay = daysOfWeek[alarmDTO.getAlarmDay()];  // 배열에서 요일 찾기
+            String alarmDay = daysOfWeek[alarmDTO.getAlarmDay()]; // 배열에서 요일 찾기
             alarmTotal.add(alarmDay);
         }
 
         Map<String, Integer> dayOrderMap = new HashMap<>();
         for (int i = 0; i < daysOfWeek.length; i++) {
-            dayOrderMap.put(daysOfWeek[i], i);  // 요일과 그 인덱스를 Map에 저장
+            dayOrderMap.put(daysOfWeek[i], i); // 요일과 그 인덱스를 Map에 저장
         }
 
         // 정렬
         alarmTotal.sort(Comparator.comparingInt(dayOrderMap::get));
-
 
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
@@ -77,13 +76,13 @@ public class MyPageController {
     }
 
     @PostMapping("profileEdit")
-    public String profileEdit(@ModelAttribute MemberDTO dto, @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public String profileEdit(@ModelAttribute MemberDTO dto,
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         MemberEntity member = memberService.getMemberByNum(authenticatedUser.getNum());
 
         log.debug("회원 가입 정보 입력값: {}", dto);
 
-
-        if(dto.getMemberPw().equals("")){
+        if (dto.getMemberPw().equals("")) {
             dto.setMemberPw(member.getMemberPw());
         }
 
