@@ -5,19 +5,24 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
+import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
 import net.datasa.nanum.service.MemberService;
 import net.datasa.nanum.service.ShareService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,11 +30,15 @@ import java.util.Map;
 @RestController
 public class MyPageRestController {
 
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
+
     private final AlarmService alarmService;
     private final MemberService memberService;
     private final ShareService shareService;
+    private final MemberRepository memberRepository;
 
     // 기존 알람 존재 여부 확인 메소드
+
     @PostMapping("/checkAlarm")
     public ResponseEntity<Map<String, Boolean>> checkAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay) {
 
@@ -210,4 +219,47 @@ public class MyPageRestController {
 
         return responseList;
     }
+
+    @PostMapping("/uploadProfileImage")
+    public ResponseEntity<?> uploadProfileImage(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("file") MultipartFile file) {
+        try {
+            // 파일 타입 확인 (이미지 파일만 허용)
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지 파일만 업로드 가능합니다.");
+            }
+
+            // 파일명 클린업 및 중복 방지를 위한 UUID 적용
+            String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String fileName = UUID.randomUUID().toString() +    "_" + originalFileName;
+
+            // 파일 저장 경로 설정
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+
+            // 디렉토리가 존재하지 않으면 생성
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // 파일 저장
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            Integer userNum = authenticatedUser.getNum();
+            MemberEntity member = memberService.getMemberByNum(userNum);
+
+            // 멤버 엔티티에 파일 이름 설정
+            member.setMemberFileName(fileName);
+
+            // 데이터베이스에 저장
+            memberRepository.save(member);
+
+            // 성공 응답 반환 (저장된 파일 이름 포함)
+            return ResponseEntity.ok().body(Map.of("fileName", fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패");
+        }
+    }
+
 }

@@ -337,20 +337,21 @@
             $("#emailDuplicationCheck").val("");
             $('#passwordDuplicationCheck').val("");
 
-            $('#modifyButton').click(function() {
-                if(confirm('수정하시겠습니까?'))
+            $('#modifyButton').click(function () {
+                if (confirm('수정하시겠습니까?'))
                     return true;
                 else
                     return false;
             })
 
-            $('#modifyPost').submit(function(event) {
+            $('#modifyPost').submit(function (event) {
                 console.log("폼 제출 이벤트 호출됨");
                 if (!check()) {
                     console.log("폼 제출이 막힘");
                     event.preventDefault(); // 폼 제출을 막음
                 } else {
                     console.log("폼 제출 허용");
+                    profileImageEdit();
                 }
             });
 
@@ -364,7 +365,92 @@
                 checkPasswordMatch();
             });
 
+            // 이미지 변경 버튼 클릭 시 파일 입력 창을 열기
+            $('#imageChangeBtn').on('click', function () {
+                $('#fileInput').click();
+            });
+
+            var file; // 선택된 파일을 저장할 변수
+
+            // 파일 선택 시 이미지 미리보기 처리
+            $('#fileInput').on('change', function (event) {
+                console.log("fileCheck");
+                file = event.target.files[0]; // 선택한 파일 저장
+                if (file) {
+                    // 이미지 미리보기를 위해 FileReader 객체 생성
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // 선택한 이미지를 프로필 이미지로 설정
+                        $('#profileImage').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+                }
+            });
+
+            // 파일 선택 시 이벤트 처리
+            // $('#fileInput').on('change', function (event) {
+            //     console.log("fileCheck");
+            //     var file = event.target.files[0]; // 선택한 파일 가져오기
+            //     if (file) {
+            //         // 이미지 미리보기를 위해 FileReader 객체 생성
+            //         var reader = new FileReader();
+            //         reader.onload = function (e) {
+            //             // 선택한 이미지를 프로필 이미지로 설정
+            //             $('#profileImage').attr('src', e.target.result);
+            //         }
+            //         reader.readAsDataURL(file); // 파일을 데이터 URL로 읽기
+            //
+            //         // 서버로 파일 업로드를 위한 FormData 객체 생성
+            //         var formData = new FormData();
+            //         formData.append('file', file);
+            //
+            //         // AJAX 요청을 통해 서버에 이미지 업로드
+            //         $.ajax({
+            //             url: '/myPage/uploadProfileImage', // 서버 업로드 엔드포인트 URL
+            //             type: 'POST',
+            //             data: formData,
+            //             processData: false, // 파일 데이터를 문자열로 변환하지 않음
+            //             contentType: false, // 기본 Content-Type 헤더 설정 안 함
+            //             success: function (data) {
+            //                 // 업로드 성공 시 처리 로직
+            //                 console.log('이미지 업로드 성공:', data);
+            //             },
+            //             error: function (error) {
+            //                 // 업로드 실패 시 처리 로직
+            //                 console.error('이미지 업로드 실패:', error);
+            //             }
+            //         });
+            //     }
+            // });
         });
+
+        // 프로필 이미지 변경
+        function profileImageEdit() {
+            if (file) {
+                // 서버로 파일 업로드를 위한 FormData 객체 생성
+                var formData = new FormData();
+                formData.append('file', file);
+
+                // AJAX 요청을 통해 서버에 이미지 업로드
+                $.ajax({
+                    url: '/myPage/uploadProfileImage', // 서버 업로드 엔드포인트 URL
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // 파일 데이터를 문자열로 변환하지 않음
+                    contentType: false, // 기본 Content-Type 헤더 설정 안 함
+                    success: function (data) {
+                        // 업로드 성공 시 처리 로직
+                        console.log('이미지 업로드 성공:', data);
+                    },
+                    error: function (error) {
+                        // 업로드 실패 시 처리 로직
+                        console.error('이미지 업로드 실패:', error);
+                    }
+                });
+            } else {
+                console.log('파일이 선택되지 않았습니다.');
+            }
+        }
 
         // 비밀번호 유효성 검사 함수
         function validatePassword() {
@@ -466,7 +552,7 @@
         }
 
         // 이메일 인증번호 검증
-        function verifyEmailCode()  {
+        function verifyEmailCode() {
             // 인증번호
             const emailCode = $("#emailCode").val();
             // ajax로 인증번호 검증 요청
@@ -698,10 +784,12 @@
             <!-- 프로필 이미지 영역 -->
             <div id="imageArea">
                 <div id="imageEdit">
-                    <button class="imageChange">
-                        <img th:src="@{/images/{fileName}(fileName=${member != null && member.memberFileName != null ? member.memberFileName : 'defaultProfileImage.png'})}"
+                    <button type="button" id="imageChangeBtn" class="imageChange">
+                        <img id="profileImage"
+                             th:src="${member != null && member.memberFileName != null ? '/images/' + member.memberFileName : '/images/defaultProfileImage.png'}"
                              alt="프로필 이미지"/>
                     </button>
+                    <input type="file" id="fileInput" style="display:none;" accept="image/*"/>
                 </div>
             </div>
 
@@ -830,7 +918,7 @@
                 <div id="nickInputArea">
                     <!-- 닉네임_input -->
                     <input type="text" name="memberNickname" id="memberNickname" class="memberNickname" maxlength="12"
-                           oninput="onlyAlphaNumForNickname(this)" th:value="${member.memberNickname}">
+                           th:value="${member.memberNickname}">
                     <!-- 닉네임 입력 메시지 출력 -->
                     <div id="nickError">
                         닉네임를 입력해 주세요.
@@ -846,9 +934,9 @@
         </div>
     </div>
 
-<!--  로그인한 사용자의 이메일 정보  -->
+    <!--  로그인한 사용자의 이메일 정보  -->
     <input type="hidden" id="loggedEmail" th:value="${member.memberEmail}">
-<!--  로그인한 사용자의 닉네임 정보  -->
+    <!--  로그인한 사용자의 닉네임 정보  -->
     <input type="hidden" id="loggedNickname" th:value="${member.memberNickname}">
 
 
