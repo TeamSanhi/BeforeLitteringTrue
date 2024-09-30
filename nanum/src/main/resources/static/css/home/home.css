@@ -898,6 +898,7 @@ input[type="radio"]:checked {
   /* 게시글이 왼쪽 정렬되게 설정 */
   justify-content:center;
   align-items: flex-end;  /* 요소들을 아래쪽에 정렬 */
+  text-align: center;
   width: 100%;
   height: 90%;
   /* 게시글 사이에 일정 간격을 둠 */
@@ -933,8 +934,6 @@ input[type="radio"]:checked {
   margin-bottom: 10px;
   width: 23vw;
   height: 42vh;
-  border: 0.07vw solid black;
-  background-color: white;
   box-sizing: border-box;
   padding: 1.9vh;
   gap:1vh;
@@ -942,7 +941,6 @@ input[type="radio"]:checked {
   flex-direction: column;
   /* 양쪽끝으로 정렬  */
   justify-content:flex-start; 
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* 2등 닉네임 */
@@ -969,6 +967,8 @@ input[type="radio"]:checked {
   border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
   object-fit: cover;  /* 이미지가 영역에 꽉 차게 자르기 */
   margin: 1vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
 }
 
 /* 2등 포인트 Text */
@@ -1019,8 +1019,6 @@ input[type="radio"]:checked {
   margin-bottom: 10px;
   width: 27vw;
   height: 50vh;
-  border: 0.07vw solid black;
-  background-color: white;
   box-sizing: border-box;
   padding: 2.5vh;
   gap: 1vh;
@@ -1028,7 +1026,6 @@ input[type="radio"]:checked {
   flex-direction: column;
   /* 양쪽끝으로 정렬  */
   justify-content:flex-start; 
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* 1등 닉네임 */
@@ -1055,6 +1052,8 @@ input[type="radio"]:checked {
   border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
   object-fit: cover;  /* 이미지가 영역에 꽉 차게 자르기 */
   margin: 1vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
 }
 
 /* 1등 포인트 Text */
@@ -1105,15 +1104,12 @@ input[type="radio"]:checked {
   margin-bottom: 10px;
   width: 300px;
   height: 35vh;
-  border: 0.07vw solid black;
-  background-color: white;
   box-sizing: border-box;
   padding: 1.9vh;
   display: flex;
   flex-direction: column;
   /* 양쪽끝으로 정렬  */
   justify-content:flex-start; 
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* 3등 닉네임 */
@@ -1140,6 +1136,8 @@ input[type="radio"]:checked {
   border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
   object-fit: cover;  /* 이미지가 영역에 꽉 차게 자르기 */
   margin: 1vh;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  background-color: white;
 }
 
 /* 3등 포인트 Text */

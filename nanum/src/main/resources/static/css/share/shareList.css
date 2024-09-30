@@ -869,7 +869,6 @@ input[type="radio"]:checked {
   width: 32.5vw;
   height: 71vh;
   overflow-y: auto; /* 스크롤을 적용 */
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* 나눠요 게시글 영역_div 박스 */
@@ -878,7 +877,7 @@ input[type="radio"]:checked {
   /* width: calc(25% - 2vh); */
   /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
   /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
-  height: 36vh;
+  height: 35.5vh;
   margin-bottom: 2vh;
   border: 0.07vw solid black;
   background-color: white;
