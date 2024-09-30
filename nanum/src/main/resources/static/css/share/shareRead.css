@@ -161,7 +161,7 @@ img {
   height: 100%; /* 화면 전체 높이 */
   background-color: rgba(0, 0, 0, 0.4); /* 반투명한 검정색 배경 */
   /* 중앙 정렬을 위한 플렉스 설정 */
-  display: flex;
+  /* display: flex; */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
 }

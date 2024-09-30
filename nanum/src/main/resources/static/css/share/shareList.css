@@ -164,7 +164,7 @@ a {
 
 /* 쪽지 모달부분  */
 .modal {
-  display: none; /* 모달을 숨김 */
+  display: none; /*모달을 숨김*/
   position: fixed; /* 화면에 고정된 위치로 설정 */
   z-index: 10; /* 다른 요소보다 앞에 오도록 설정 */
   left: 0; /* 화면 왼쪽부터 시작 */
@@ -173,7 +173,7 @@ a {
   height: 100%; /* 화면 전체 높이 */
   background-color: rgba(0, 0, 0, 0.4); /* 반투명한 검정색 배경 */
   /* 중앙 정렬을 위한 플렉스 설정 */
-  display: flex;
+  /* display: flex; */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
 }
@@ -948,7 +948,6 @@ input[type="radio"]:checked {
   float: right;
   letter-spacing: 0.05vw;
 }
-
 
 /* 저작권 영역 */
 .rightContainer {
