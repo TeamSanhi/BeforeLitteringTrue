@@ -5,19 +5,24 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
 import net.datasa.nanum.domain.entity.MemberEntity;
+import net.datasa.nanum.repository.MemberRepository;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.AlarmService;
 import net.datasa.nanum.service.MemberService;
 import net.datasa.nanum.service.ShareService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,11 +30,15 @@ import java.util.Map;
 @RestController
 public class MyPageRestController {
 
+    private static final String UPLOAD_DIR = "C:\\upload\\profileImage";
+
     private final AlarmService alarmService;
     private final MemberService memberService;
     private final ShareService shareService;
+    private final MemberRepository memberRepository;
 
     // 기존 알람 존재 여부 확인 메소드
+
     @PostMapping("/checkAlarm")
     public ResponseEntity<Map<String, Boolean>> checkAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay) {
 
@@ -209,5 +218,64 @@ public class MyPageRestController {
         }
 
         return responseList;
+    }
+
+    @PostMapping("/uploadProfileImage")
+    public ResponseEntity<?> uploadProfileImage(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            // 파일 타입 확인 (이미지 파일만 허용)
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                log.debug("업로드된 파일의 Content-Type이 이미지가 아닙니다: " + contentType);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("이미지 파일만 업로드 가능합니다.");
+            }
+            log.debug("파일 타입 확인 완료: " + contentType);
+
+            // 파일명 클린업 및 중복 방지를 위한 UUID 적용
+            String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+            // 한글 및 허용된 특수문자만 남기고 나머지는 "_"로 대체
+            originalFileName = originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-ㄱ-힣]", "_");
+            String fileName = UUID.randomUUID().toString() + "_" + originalFileName;
+            log.debug("생성된 파일명: " + fileName);
+
+            // 파일 저장 경로 설정
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+
+            // 디렉토리가 존재하지 않으면 생성
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+                log.debug("업로드 디렉토리 생성 완료: " + UPLOAD_DIR);
+            }
+
+            // 파일 저장
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            log.debug("파일 저장 완료: " + filePath.toString());
+
+            // 사용자 정보 가져오기
+            Integer userNum = authenticatedUser.getNum();
+            MemberEntity member = memberService.getMemberByNum(userNum);
+            if (member == null) {
+                log.debug("회원 정보를 찾을 수 없습니다: 회원 번호 " + userNum);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원 정보를 찾을 수 없습니다.");
+            }
+            log.debug("회원 정보 조회 완료: " + member.toString());
+
+            // 멤버 엔티티에 파일 이름 설정
+            member.setMemberFileName(fileName);
+            log.debug("회원 엔티티에 파일명 설정 완료: " + fileName);
+
+            // 데이터베이스에 저장
+            memberRepository.save(member);
+            log.debug("회원 정보 업데이트 완료");
+
+            // 성공 응답 반환 (저장된 파일 이름 포함)
+            return ResponseEntity.ok().body(Map.of("fileName", fileName));
+        } catch (Exception e) {
+            log.error("파일 업로드 중 예외 발생", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드 실패");
+        }
     }
 }

@@ -82,10 +82,6 @@ public class MyPageController {
 
         log.debug("회원 가입 정보 입력값: {}", dto);
 
-        if (dto.getMemberPw().equals("")) {
-            dto.setMemberPw(member.getMemberPw());
-        }
-
         memberService.modify(dto);
 
         return "redirect:/myPage/profileEdit";

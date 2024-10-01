@@ -1,12 +1,19 @@
 package net.datasa.nanum.Controller.Message;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MessageDTO;
@@ -38,6 +47,9 @@ public class MessageController {
     private final MemberRepository memberRepository;
     private final ShareBoardRepository shareBoardRepository;
     private final RoomRepository roomRepository;
+
+    @Value("${board.uploadPath}")
+    String uploadPath;
 
     /**
      * 받을래요 버튼 클릭 시 쪽지방이 있는지 여부를 확인하고 메세지 내역을 출력
@@ -150,21 +162,32 @@ public class MessageController {
     @ResponseBody
     public ResponseEntity<Map<String, Object>> getMessageDetails(@RequestParam("roomNum") int roomNum, @RequestParam("userNum") int userNum) {
         
+
         RoomEntity room = roomRepository.findById(roomNum)
             .orElseThrow(() -> new EntityNotFoundException("쪽지방이 존재하지 않습니다."));
     
         // 메시지 내역 가져오기
         List<MessageDTO> messages = messageService.getMessage(room, userNum);
     
-        // 상대 정보 가져오기
-        String receiverNickname = (userNum == room.getCreator().getMemberNum()) 
-            ? room.getReceiver().getMemberNickname() 
-            : room.getCreator().getMemberNickname();
+        // // 상대 정보 가져오기
+        // String receiverNickname = (userNum == room.getCreator().getMemberNum()) 
+        //     ? room.getReceiver().getMemberNickname() 
+        //     : room.getCreator().getMemberNickname();
     
-        String receiverProfileImage = (userNum == room.getCreator().getMemberNum()) 
-            ? room.getReceiver().getMemberFileName() 
-            : room.getCreator().getMemberFileName();
+        // String receiverProfileImage = (userNum == room.getCreator().getMemberNum()) 
+        //     ? room.getReceiver().getMemberFileName() 
+        //     : room.getCreator().getMemberFileName();
 
+        // 상대방 정보 가져오기
+        MemberEntity receiver = (userNum == room.getCreator().getMemberNum()) 
+            ? room.getReceiver() 
+            : room.getCreator();
+
+        String receiverNickname = receiver.getMemberNickname();
+        int receiverMemberNum = receiver.getMemberNum();
+
+        // 상대방의 프로필 이미지 URL 생성
+        String receiverProfileImage = "/message/profileDownload?memberNum=" + receiverMemberNum;
 
         // 응답 데이터 구성
         Map<String, Object> response = new HashMap<>();
@@ -208,5 +231,37 @@ public class MessageController {
         long count = messageService.countRoomsWithUnreadMessagesByMemberNum(memberNum);
         log.debug("안읽은 개수: {}",count);
         return ResponseEntity.ok(count);
-    } 
+    }
+    
+    @GetMapping("profileDownload")
+    public void profileDownload(@RequestParam("memberNum") int memberNum, HttpServletResponse response) throws IOException {
+
+        // 회원 정보 조회
+        MemberEntity member = memberRepository.findById(memberNum)
+            .orElseThrow(() -> new EntityNotFoundException("회원이 존재하지 않습니다."));
+        String profileFileName = member.getMemberFileName();
+
+        // 프로필 이미지의 전체 경로 생성
+        String uploadPath = "c:/upload"; // 실제 설정값과 맞춰주세요.
+        String fullPath = uploadPath + "/" + profileFileName;
+
+        // 파일이 존재하는지 확인
+        File file = new File(fullPath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("프로필 이미지가 존재하지 않습니다.");
+        }
+
+        // 응답 헤더 설정
+        response.setContentType(Files.probeContentType(file.toPath()));
+        response.setHeader("Content-Disposition", "inline;filename=" + profileFileName);
+
+        // 파일을 응답 스트림으로 전송
+        try (
+            FileInputStream fis = new FileInputStream(file);
+            ServletOutputStream os = response.getOutputStream()
+            ) {
+            FileCopyUtils.copy(fis, os);
+        }
+    }
+
 }
