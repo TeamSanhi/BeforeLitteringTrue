@@ -23,7 +23,7 @@ public class MemberController {
     // 멤버 서비스 사용
     private final MemberService memberService;
     // 파일 저장경로
-    @Value("${board.uploadPath}")
+    @Value("${profile.uploadPath}")
     String uploadPath;
 
     /**
@@ -98,8 +98,7 @@ public class MemberController {
     public void profileDownload(
             @RequestParam("memberNum") Integer memberNum,
             HttpServletResponse response) {
-        log.debug("profileDownload 컨트롤러 지나감: {}", memberNum);
-
+        log.debug("profileDownload 컨트롤러 지나감: {}, {}", memberNum, uploadPath);
         // 파일 다운로드 함수 실행
         memberService.profileDownload(memberNum, response, uploadPath);
     }

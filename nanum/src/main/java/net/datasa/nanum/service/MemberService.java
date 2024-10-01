@@ -1,7 +1,12 @@
 package net.datasa.nanum.service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,7 +44,7 @@ public class MemberService {
                 .memberPw(passwordEncoder.encode(dto.getMemberPw()))
                 .memberEmail(dto.getMemberEmail())
                 .memberNickname(dto.getMemberNickname())
-                .memberFileName("/images/profile-basic.png")
+                .memberFileName("defaultImage.png")
                 .roleName("ROLE_USER")
                 .memberStatus(0)
                 .memberPoint(0)
@@ -102,10 +107,14 @@ public class MemberService {
         MemberEntity entity = memberRepository.findByMemberIdEquals(dto.getMemberId());
 
         if (entity != null) {
-            entity.setMemberPw(passwordEncoder.encode(dto.getMemberPw()));
-            entity.setMemberEmail(dto.getMemberEmail());
-            entity.setMemberNickname(dto.getMemberNickname());
-            entity.setMemberFileName(dto.getMemberFileName());
+            if (dto.getMemberPw().equals("")) {
+                entity.setMemberEmail(dto.getMemberEmail());
+                entity.setMemberNickname(dto.getMemberNickname());
+            } else {
+                entity.setMemberPw(passwordEncoder.encode(dto.getMemberPw()));
+                entity.setMemberEmail(dto.getMemberEmail());
+                entity.setMemberNickname(dto.getMemberNickname());
+            }
             memberRepository.save(entity);
         }
 
@@ -113,37 +122,60 @@ public class MemberService {
 
     }
 
+
     /**
      * imageRepository에서 이미지를 다운로드 하거나 보여주는 함수
      */
     public void profileDownload(Integer memberNum, HttpServletResponse response, String uploadPath) {
 
-        // 전달된 글 번호로 member테이블에서 회원정보 조회
+        // 회원 정보 조회
         MemberEntity memberEntity = memberRepository.findById(memberNum)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
 
-        // response setHeader 설정
-        response.setHeader("Content-Disposition", "attachment;filename=" + memberEntity.getMemberFileName());
+        String fileName = memberEntity.getMemberFileName();
+        String fullPath = Paths.get(uploadPath, fileName).toString();
 
-        // 저장된 파일 경로와 파일 이름 합한다.
-        String fullPath = uploadPath + "/" + memberEntity.getMemberFileName();
+        File file = new File(fullPath);
+        if (!file.exists()) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
 
-        // 서버의 파일을 읽을 입력 스트림과 클라이언트에게 전달할 출력스트림
-        FileInputStream filein = null;
-        ServletOutputStream fileout = null;
+        // 원본 파일명 추출 (UUID 제거)
+        String originalFileName = fileName.substring(fileName.indexOf("_") + 1);
 
+        // URL 인코딩 (RFC 5987)
+        String encodedFileName = URLEncoder.encode(originalFileName, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20"); // 공백은 %20으로 인코딩
+
+        // ASCII-only 파일명 생성 (비ASCII 문자는 '_'로 대체)
+        String asciiFileName = originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+
+        // Content-Disposition 헤더 설정
+        String contentDisposition = "attachment; filename=\"" + asciiFileName + "\"; filename*=UTF-8''" + encodedFileName;
+        response.setHeader("Content-Disposition", contentDisposition);
+
+        // Content-Type 설정
         try {
-            filein = new FileInputStream(fullPath);
-            fileout = response.getOutputStream();
+            String contentType = Files.probeContentType(Paths.get(fullPath));
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+            response.setContentType(contentType);
+        } catch (IOException e) {
+            response.setContentType("application/octet-stream");
+        }
 
-            // Spring의 파일 관련 유틸 이용하여 출력
+        // 파일 크기 설정
+        response.setContentLengthLong(file.length());
+
+        // 파일 스트림 처리 (try-with-resources 사용)
+        try (FileInputStream filein = new FileInputStream(file);
+             ServletOutputStream fileout = response.getOutputStream()) {
             FileCopyUtils.copy(filein, fileout);
-
-            filein.close();
-            fileout.close();
         } catch (IOException e) {
             e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

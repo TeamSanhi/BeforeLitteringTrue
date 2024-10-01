@@ -332,6 +332,7 @@
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
+        var file; // 선택된 파일을 저장할 변수
         $(document).ready(function () {
             $("#nickDuplicationCheck").val("");
             $("#emailDuplicationCheck").val("");
@@ -346,12 +347,20 @@
 
             $('#modifyPost').submit(function (event) {
                 console.log("폼 제출 이벤트 호출됨");
+
+                // 폼 제출 막기
+                event.preventDefault();
+
+                // 폼 검증 로직
                 if (!check()) {
                     console.log("폼 제출이 막힘");
-                    event.preventDefault(); // 폼 제출을 막음
                 } else {
-                    console.log("폼 제출 허용");
-                    profileImageEdit();
+                    // 프로필 이미지 업로드
+                    profileImageEdit(function() {
+                        console.log("폼 제출 허용");
+                        // 이미지 업로드 후 폼을 수동으로 제출
+                        $('#modifyPost')[0].submit();
+                    });
                 }
             });
 
@@ -370,11 +379,10 @@
                 $('#fileInput').click();
             });
 
-            var file; // 선택된 파일을 저장할 변수
 
             // 파일 선택 시 이미지 미리보기 처리
             $('#fileInput').on('change', function (event) {
-                console.log("fileCheck");
+                console.log("이미지 미리보기");
                 file = event.target.files[0]; // 선택한 파일 저장
                 if (file) {
                     // 이미지 미리보기를 위해 FileReader 객체 생성
@@ -424,8 +432,8 @@
             // });
         });
 
-        // 프로필 이미지 변경
-        function profileImageEdit() {
+        // 프로필 이미지 편집 함수
+        function profileImageEdit(callback) {
             if (file) {
                 // 서버로 파일 업로드를 위한 FormData 객체 생성
                 var formData = new FormData();
@@ -441,6 +449,11 @@
                     success: function (data) {
                         // 업로드 성공 시 처리 로직
                         console.log('이미지 업로드 성공:', data);
+
+                        // 이미지 업로드 성공 시 콜백 실행 (폼 제출 허용)
+                        if (typeof callback === 'function') {
+                            callback();
+                        }
                     },
                     error: function (error) {
                         // 업로드 실패 시 처리 로직
@@ -449,6 +462,11 @@
                 });
             } else {
                 console.log('파일이 선택되지 않았습니다.');
+
+                // 파일이 선택되지 않은 경우에도 콜백을 실행
+                if (typeof callback === 'function') {
+                    callback();
+                }
             }
         }
 
@@ -676,6 +694,7 @@
 
         }
     </script>
+
 </head>
 <body>
 <!-- 네비게이션 구역 -->
@@ -786,8 +805,9 @@
                 <div id="imageEdit">
                     <button type="button" id="imageChangeBtn" class="imageChange">
                         <img id="profileImage"
-                             th:src="${member != null && member.memberFileName != null ? '/images/' + member.memberFileName : '/images/defaultProfileImage.png'}"
-                             alt="프로필 이미지"/>
+                             alt="프로필 이미지"
+                             th:src="@{/member/profileDownload(memberNum=${member.memberNum})}"
+                        />
                     </button>
                     <input type="file" id="fileInput" style="display:none;" accept="image/*"/>
                 </div>
