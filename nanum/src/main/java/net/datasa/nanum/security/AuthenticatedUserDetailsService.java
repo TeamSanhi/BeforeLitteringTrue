@@ -46,6 +46,7 @@ public class AuthenticatedUserDetailsService implements UserDetailsService {
                 .build();
 
         log.debug("로그인 가능 여부: {}", user.isEnabled());
+        log.debug("유저 정보: {}",user);
         return user;
     }
 }
