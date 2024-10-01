@@ -116,7 +116,7 @@ window.onload = function () {
     }
   });
 
-  // 글 내용의 길이가 15자가 넘으면 생략하여 보여준다.
+  // 글 내용의 길이가 14자가 넘으면 생략하여 보여준다.
   // 모든 postContent 요소들을 가져옴
   let postContents = document.querySelectorAll(".postContent");
 
@@ -125,9 +125,9 @@ window.onload = function () {
     // 게시글 내용 텍스트 가져오기
     let text = post.innerText;
     // 글자 수 제한_공백 포함
-    let maxLength = 15;
+    let maxLength = 14;
 
-    // 글자 수가 40자를 넘으면 자르고 ... 붙이기
+    // 글자 수가 14자를 넘으면 자르고 ... 붙이기
     if (text.length > maxLength) {
       post.innerText = text.slice(0, maxLength) + "···";
     }
