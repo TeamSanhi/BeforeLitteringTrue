@@ -164,7 +164,7 @@ a {
 
 /* 쪽지 모달부분  */
 .modal {
-  display: none; /* 모달을 숨김 */
+  display: none; /*모달을 숨김*/
   position: fixed; /* 화면에 고정된 위치로 설정 */
   z-index: 10; /* 다른 요소보다 앞에 오도록 설정 */
   left: 0; /* 화면 왼쪽부터 시작 */
@@ -173,7 +173,7 @@ a {
   height: 100%; /* 화면 전체 높이 */
   background-color: rgba(0, 0, 0, 0.4); /* 반투명한 검정색 배경 */
   /* 중앙 정렬을 위한 플렉스 설정 */
-  display: flex;
+  /* display: flex; */
   justify-content: center; /* 수평 중앙 정렬 */
   align-items: center; /* 수직 중앙 정렬 */
 }
@@ -869,7 +869,6 @@ input[type="radio"]:checked {
   width: 32.5vw;
   height: 71vh;
   overflow-y: auto; /* 스크롤을 적용 */
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 /* 나눠요 게시글 영역_div 박스 */
@@ -878,7 +877,7 @@ input[type="radio"]:checked {
   /* width: calc(25% - 2vh); */
   /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
   /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
-  height: 36vh;
+  height: 35.5vh;
   margin-bottom: 2vh;
   border: 0.07vw solid black;
   background-color: white;
@@ -949,7 +948,6 @@ input[type="radio"]:checked {
   float: right;
   letter-spacing: 0.05vw;
 }
-
 
 /* 저작권 영역 */
 .rightContainer {

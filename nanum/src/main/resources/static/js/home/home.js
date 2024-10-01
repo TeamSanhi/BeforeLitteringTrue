@@ -116,7 +116,7 @@ window.onload = function () {
     }
   });
 
-  // 글 내용의 길이가 15자가 넘으면 생략하여 보여준다.
+  // 글 내용의 길이가 14자가 넘으면 생략하여 보여준다.
   // 모든 postContent 요소들을 가져옴
   let postContents = document.querySelectorAll(".postContent");
 
@@ -125,9 +125,9 @@ window.onload = function () {
     // 게시글 내용 텍스트 가져오기
     let text = post.innerText;
     // 글자 수 제한_공백 포함
-    let maxLength = 15;
+    let maxLength = 14;
 
-    // 글자 수가 40자를 넘으면 자르고 ... 붙이기
+    // 글자 수가 14자를 넘으면 자르고 ... 붙이기
     if (text.length > maxLength) {
       post.innerText = text.slice(0, maxLength) + "···";
     }
@@ -144,7 +144,7 @@ $(document).ready(function () {
 
   // 쪽지 목록 열기 모달
   $("#messages").click(function () {
-    $("#messagesModal").fadeIn();
+    $("#messagesModal").fadeIn().css("display", "flex");
     updateUnreadCount(); // 쪽지 모달 열릴 때마다 개수 업데이트
 
     let memberNum = $("#messages").data("num");
@@ -218,7 +218,7 @@ $(document).ready(function () {
       "게시글 번호:",
       shareNum
     );
-    $("#detailsModal").fadeIn();
+    $("#detailsModal").fadeIn().css("display", "flex");
 
     // 쪽지 상세 목록에서 게시글로 이동하는 클릭 이벤트
     $("#goToShareBoard").click(function () {
@@ -411,8 +411,8 @@ $(document).ready(function () {
       $(event.target).is("#messagesModal") ||
       $(event.target).is("#detailsModal")
     ) {
-      $("#messagesModal").fadeOut();
-      $("#detailsModal").fadeOut();
+      $("#messagesModal").fadeOut().css("display", "none");
+      $("#detailsModal").fadeOut().css("display", "none");
       updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
       // 쪽지 목록 갱신을 위해 다시 목록 불러오기
       updateMessageRooms();
@@ -421,7 +421,7 @@ $(document).ready(function () {
 
   // 쪽지에서 '신고하기' 버튼 클릭 시 신고 모달 열기
   $("#userReportBtn").click(function () {
-    $("#reportModal").show();
+    $("#reportModal").show().css("display", "flex");
   });
 
   // 신고 모달 닫기
