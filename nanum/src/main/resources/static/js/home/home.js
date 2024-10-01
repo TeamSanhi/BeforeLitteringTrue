@@ -23,7 +23,7 @@ window.onload = function () {
   // badge.textContent = `(${notifications})`;
 
   // 메시지 타이핑 효과
-  const messageElement = document.getElementById("mainMessage");
+  const messageElement = document.querySelector(".typing"); // 첫 번째 매칭되는 .mainMessage 요소 선택
   const messageText = messageElement.textContent; // 원래 텍스트
   let index = 0; // 타이핑 될 텍스트의 인덱스
 

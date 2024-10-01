@@ -98,7 +98,7 @@ public class MemberController {
     public void profileDownload(
             @RequestParam("memberNum") Integer memberNum,
             HttpServletResponse response) {
-        log.debug("download 컨트롤러 지나감: {}", memberNum);
+        log.debug("profileDownload 컨트롤러 지나감: {}", memberNum);
 
         // 파일 다운로드 함수 실행
         memberService.profileDownload(memberNum, response, uploadPath);

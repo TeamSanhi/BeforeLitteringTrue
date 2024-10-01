@@ -52,7 +52,7 @@ public class MemberEntity {
 	private String memberNickname;
 	// 프로필 사진 이름
 	@Column(name = "member_file_name", length = 100)
-	private String memberFileName = "profile-basic.png";
+	private String memberFileName = "/images/profile-basic.png";
 	// 회원 가입일
 	@CreatedDate
 	@Column(name = "create_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -68,7 +68,7 @@ public class MemberEntity {
 	private LocalDateTime quitDate;
 	// 나눔 포인트
 	@Column(name = "member_point", columnDefinition = "INTEGER DEFAULT 0")
-	private Integer memberPoint;
+	private Integer memberPoint = 0;
 
 	// ******북마크 리스트******
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
