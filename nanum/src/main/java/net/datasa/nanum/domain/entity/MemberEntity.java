@@ -68,7 +68,7 @@ public class MemberEntity {
 	private LocalDateTime quitDate;
 	// 나눔 포인트
 	@Column(name = "member_point", columnDefinition = "INTEGER DEFAULT 0")
-	private Integer memberPoint;
+	private Integer memberPoint = 0;
 
 	// ******북마크 리스트******
 	@OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)

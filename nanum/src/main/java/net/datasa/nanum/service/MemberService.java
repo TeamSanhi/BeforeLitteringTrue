@@ -42,6 +42,7 @@ public class MemberService {
                 .memberFileName("/images/profile-basic.png")
                 .roleName("ROLE_USER")
                 .memberStatus(0)
+                .memberPoint(0)
                 .build();
 
         log.debug("DB에 저장되는 값 : {}", memberEntity);
