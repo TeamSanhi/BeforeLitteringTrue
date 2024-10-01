@@ -874,12 +874,11 @@ input[type="radio"]:checked {
 
 /* 나눠요 게시글 영역_div 박스 */
 .sharePosting {
-  margin-bottom: 2vh;
   width: 245.7px;
   /* width: calc(25% - 2vh); */
   /* 각 게시글을 4개씩 한 줄에 표시, gap을 고려한 너비 계산 */
   /* 글자 수가 4개 미만이 되면 영역 폭이 계속 변해서 345px 로 고정시켰음  */
-  height: 35.5vh;
+  height: 36vh;
   border: 0.07vw solid black;
   background-color: white;
   box-sizing: border-box;
