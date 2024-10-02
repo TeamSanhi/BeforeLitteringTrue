@@ -7,17 +7,110 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>아이디 찾기</title>
+    <title>에코나비</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/member/joinSave.css" />
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script></script>
+    <script>
+      $(document).ready(function () {});
+    </script>
   </head>
   <body>
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+      <!-- 로고 -->
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" class="logoImg" />
+        </a>
+      </div>
+
+      <!-- 우리는 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/info/service">우리는</a>
+        </span>
+      </div>
+
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/share/list">나눠요</a>
+        </span>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/recycle/list">버려요</a>
+        </span>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+        <!-- 회원가입 -->
+        <div class="join">
+          <span class="highlighterGreen">
+            <a href="/member/join">회원가입</a>
+          </span>
+        </div>
+        <!-- 로그인 -->
+        <div class="login">
+          <span class="highlighterGreen">
+            <a href="/member/loginForm">로그인</a>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
+
     <h1>아이디 찾기</h1>
-    <form action="/member/idFind" method="post"></form>
-      <label for="email">이메일</label>
-      <input type="email" id="memberEmail" name="memberEmail" />
-      <button type="submit">인증하기</button>
+    <form action="/find/idFind" method="post">
+      <div id="mainContainer">
+        <div class="joinArea">
+          <!-- 이메일 영역 -->
+          <div class="emailArea">
+            <!-- 이메일 상단 영역 -->
+            <div class="emailUpsideArea">
+              <!-- 이메일 타이틀 -->
+              <div class="emailTitle">이메일</div>
+              <!-- 이메일 인증 -->
+              <div
+                class="emailButton highlighterGreen"
+                onclick="sendEmailVerificationCode()"
+              >
+                인증번호 전송
+              </div>
+            </div>
+
+            <!-- 이메일_input 영역 -->
+            <div class="emailInputArea">
+              <!-- 이메일_input -->
+              <input
+                type="text"
+                name="memberEmail"
+                id="memberEmail"
+                class="memberEmail"
+              />
+              <br />
+              <!-- 이메일 입력 메시지 출력 -->
+              <div class="emailError" id="emailError"></div>
+            </div>
+          </div>
+        </div>
+        <!-- 버튼 영역 -->
+        <div class="buttonArea">
+          <!-- 아이디 찾기 버튼 -->
+          <button type="submit" class="joinButton" id="postButton">
+            아이디 찾기
+          </button>
+        </div>
+      </div>
     </form>
-    <a href="/member/loginForm">로그인 페이지로 이동</a>
+
+    <!-- 저작권 정보 -->
+    <div class="rightContainer">© 2024 Team San, Hai. All rights reserved.</div>
   </body>
 </html>
