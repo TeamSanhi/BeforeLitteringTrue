@@ -9,11 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>에코나비</title>
     <!-- Style -->
-    <link rel="stylesheet" href="/css/member/joinSave.css" />
+    <link rel="stylesheet" href="/css/find/idFind.css" />
+    <!-- 스크립트 -->
+    <script type="text/javascript" src="/js/find/idFind.js"></script>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-      $(document).ready(function () {});
-    </script>
   </head>
   <body>
     <!-- 네비게이션 구역 -->
@@ -65,50 +64,75 @@
 
     <!-- 공백 -->
     <div class="blankContainer"></div>
-
-    <h1>아이디 찾기</h1>
-    <form action="/find/idFind" method="post">
-      <div id="mainContainer">
-        <div class="joinArea">
-          <!-- 이메일 영역 -->
-          <div class="emailArea">
-            <!-- 이메일 상단 영역 -->
-            <div class="emailUpsideArea">
-              <!-- 이메일 타이틀 -->
-              <div class="emailTitle">이메일</div>
-              <!-- 이메일 인증 -->
-              <div
-                class="emailButton highlighterGreen"
-                onclick="sendEmailVerificationCode()"
-              >
-                인증번호 전송
+    <!-- 메인 영역 -->
+    <div id="mainContainer">
+      <!-- 아이디찾기 영역 -->
+      <div class="idFindArea">
+            <!-- 회원가입 타이틀 영역 -->
+            <div class="idFindTitleArea">
+              <!-- 회원가입 타이틀 -->
+              <div class="idFindTitle">
+                아이디 찾기
               </div>
             </div>
+            
+            <!-- 이메일 영역 -->
+            <div class="emailArea">
+              <!-- 이메일 상단 영역 -->
+              <div class="emailUpsideArea">
+                  <!-- 이메일 타이틀 -->
+                  <div class="emailTitle">
+                      이메일   
+                  </div>
+                  <!-- 이메일 인증 -->
+                    <div class="emailButton highlighterGreen" onclick="sendEmailVerificationCode()">인증번호 전송</div>
+              </div>
+              
+              <!-- 이메일_input 영역 -->
+              <div class="emailInputArea">
+                  <!-- 이메일_input -->
+                  <input type="text" name="memberEmail" id="memberEmail" class="memberEmail">
+                  <br>
+                  <!-- 이메일 입력 메시지 출력 -->
+                  <div class="emailError" id="emailError"></div>
+              </div>
+          </div>
 
-            <!-- 이메일_input 영역 -->
-            <div class="emailInputArea">
-              <!-- 이메일_input -->
-              <input
-                type="text"
-                name="memberEmail"
-                id="memberEmail"
-                class="memberEmail"
-              />
-              <br />
-              <!-- 이메일 입력 메시지 출력 -->
-              <div class="emailError" id="emailError"></div>
+
+          <!-- 인증번호 인증 영역 -->
+          <div class="emailCodeArea">
+            <!-- 인증번호 인증 상단 영역 -->
+            <div class="emailCodeUpsideArea">
+                <!-- 인증번호 인증 타이틀 -->
+                <div class="emailCodeTitle">
+                    인증번호   
+                </div>
+                <!-- 인증번호 인증 -->
+                <div class="codeButton highlighterGreen" onclick="verifyEmailCode()">
+                  인증번호 확인
+                </div>
+            </div>
+            
+            <!-- 인증번호_input 영역 -->
+            <div class="emailCodeInput">
+                <!-- 인증번호_input -->
+                <input type="text" id="emailCode" class="emailCode">
+                <!-- 인증번호 입력 메시지 출력 -->
+                <div class="emailCodeError" id="emailCodeError">
+                    인증번호를 입력해 주세요.
+                </div>
             </div>
           </div>
-        </div>
-        <!-- 버튼 영역 -->
-        <div class="buttonArea">
-          <!-- 아이디 찾기 버튼 -->
-          <button type="submit" class="joinButton" id="postButton">
-            아이디 찾기
-          </button>
-        </div>
+
+          <!-- 버튼 영역 -->
+          <div class="buttonArea">
+            <!-- 아이디 찾기 버튼 -->
+            <button type="submit" class="joinButton" id="postButton">
+              아이디 확인
+            </button>
+          </div>
       </div>
-    </form>
+    </div>
 
     <!-- 저작권 정보 -->
     <div class="rightContainer">© 2024 Team San, Hai. All rights reserved.</div>
