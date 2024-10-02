@@ -35,6 +35,7 @@ public class EmailController {
     private final JavaMailSender emailSender;
     // 이메일 중복확인 하기 위한 리퍼지토리
     private final MemberRepository memberRepository;
+    // 멤버 서비스 사용
     private final MemberService memberService;
 
     /**
@@ -112,9 +113,9 @@ public class EmailController {
         return ResponseEntity.ok(response);
     }
 
-
     /**
      * 전송한 이메일 확인하는 컨트롤러
+     * 
      * @param emailCode
      * @param session
      * @return
