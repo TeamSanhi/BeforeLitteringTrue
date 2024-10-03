@@ -209,6 +209,51 @@ public class EmailController {
     }
 
     /**
+     * 아이디 찾기 이메일 ajax 요청을 받아 처리하는 부분
+     * 
+     * @param email
+     * @param session
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("pwFindSendEmail")
+    public boolean pwFindEmail(
+            @RequestParam("email") String email,
+            @RequestParam("id") String id,
+            HttpSession session) {
+
+        log.debug("전달받은 값 : {}, {}", email, id);
+
+        // 이메일 이 존재하지 않으면 return true 값을 전달 .
+        if (!memberRepository.existsByMemberEmail(email)) {
+            return true;
+        }
+
+        // email로 entity 찾는다.
+        MemberEntity entity = memberRepository.findByMemberEmail(email);
+        // email로 찾은 entity의 id 와 전달받은 id 가 일치하면 실행
+        if (entity.getMemberId().equals(id)) {
+            String code = generateVerificationCode(); // 랜덤 인증번호 생성
+            // 이메일 전송을 위한 객체 생성
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email); // 전송할 이메일
+            message.setSubject("회원정보 찾기 인증 코드"); // 이메일 제목
+            message.setText("인증번호: " + code); // 내용추가 인증번호
+            emailSender.send(message); // 메시지 전송
+
+            // 인증번호를 세션에 저장
+            session.setAttribute("verificationCode", code);
+
+            // 이메일이 중복이면 fasle 리턴
+            return false;
+        } else {
+            // 아니면 true 리턴
+            return true;
+        }
+
+    }
+
+    /**
      * 6자리의 무작위 숫자를 생성하기 위한 함수
      * 
      * @return

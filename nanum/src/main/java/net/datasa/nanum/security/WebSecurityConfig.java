@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                         , "/member/sendEmail" // 이메일 전송 ajax 요청
                         , "/member/verifyEmail" // 이메일 인증번호 확인 ajax 요청
                         , "/member/FindSendEmail" // 아이디 찾기 ajax 요청
+                        , "/member/pwFindSendEmail" // 비밀번호 찾기 ajax 요청
                         , "/member/idFindverifyEmail" // 아이디찾기 인증번호 ajax 인증요청
                         , "/member/profileDownload" // 회원 프로필 이미지 보여주는 경로
                         , "/message/profileDownload**" // 쪽지에서 프로필 이미지 보여주는 경로
@@ -36,6 +37,7 @@ public class WebSecurityConfig {
                         , "/find/pwFind" // 비밀번호 찾기
                         , "/find/idCheck" // ID 중복 확인
                         , "/find/nickCheck" // 닉네임 중복 확인
+                        , "/find/pwFind" // 비밀번호 변경
                         , "/share/list" // 나눔 리스트
                         , "/share/read" // 나눔글 읽기
                         , "/share/download" // shareBoard 테이블 파일이름 기준 다운로드

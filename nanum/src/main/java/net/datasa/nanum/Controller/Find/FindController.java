@@ -14,6 +14,7 @@ import net.datasa.nanum.service.FindService;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
 @Controller
@@ -53,7 +54,9 @@ public class FindController {
 
     @PostMapping("reNickCheck")
     @ResponseBody
-    public ResponseEntity<Map<String, Boolean>> checkNickname(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("memberNickname") String memberNickname) {
+    public ResponseEntity<Map<String, Boolean>> checkNickname(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("memberNickname") String memberNickname) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
@@ -64,7 +67,7 @@ public class FindController {
 
         log.debug("입력한 닉네임: {}", memberNickname);
         // 닉네임이 있으면 true, 없으면 false 리턴받음
-        if(findService.isNicknameAvailable(memberNickname)) {
+        if (findService.isNicknameAvailable(memberNickname)) {
             log.debug("duplication : {}", "true");
             response.put("duplication", true);
             if (member.getMemberNickname().equals(memberNickname)) {
@@ -96,6 +99,27 @@ public class FindController {
     public String pwFind() {
         log.debug("pwFind.html로 이동");
         return "findView/pwFind";
+    }
+
+    /**
+     * 비밀번호 변경 컨트롤러
+     * 
+     * @param memberEmail
+     * @return
+     */
+    @PostMapping("pwFind")
+    @ResponseBody
+    public boolean pwFind(
+            @RequestParam("memberEmail") String memberEmail,
+            @RequestParam("memberPw") String memberPw) {
+
+        log.debug("전달받은 email, pw : {}, {}", memberEmail, memberPw);
+
+        // 전달받은 값들로 비밀번호를 변경한다.
+        boolean result = findService.pwFind(memberEmail, memberPw);
+
+        // 변경시 true, 변경실패시 false
+        return result;
     }
 
 }

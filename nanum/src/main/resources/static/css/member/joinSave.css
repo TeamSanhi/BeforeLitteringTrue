@@ -610,8 +610,9 @@
 
     /* 저작권 영역 */
     .rightContainer {
-        margin: auto;
-        margin-top: 4vh;
+        margin: 0 auto;
+        padding: 4vh;
+        padding-bottom: 5vh;
         width: 93vw;
         height: 3vh;
         white-space: nowrap;

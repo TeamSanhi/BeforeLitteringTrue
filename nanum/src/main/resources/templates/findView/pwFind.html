@@ -7,45 +7,198 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>비밀번호 찾기</title>
+    <title>에코나비</title>
+    <!-- Style -->
+    <link rel="stylesheet" href="/css/find/pwFind.css" />
+    <!-- 스크립트 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <script>
-      $(document).ready(function () {
-        $("#passwordSearchForm").submit(function (event) {
-          event.preventDefault(); // 폼 기본 제출 방지
-
-          const email = $("#memberEmail").val();
-
-          $.ajax({
-            url: "/find/pwFind",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify({ memberEmail: email }),
-            success: function (response) {
-              console.log(response);
-              $("#responseMessage").text(response.message);
-            },
-            error: function (xhr, status, error) {
-              $("#responseMessage").text("이메일 전송 중 오류가 발생했습니다.");
-            },
-          });
-        });
-      });
-    </script>
+    <script type="text/javascript" src="/js/find/pwFind.js"></script>
   </head>
   <body>
-    <h1>비밀번호 찾기</h1>
-    <form id="passwordSearchForm">
-      <label for="memberEmail">이메일:</label>
-      <input type="email" id="memberEmail" name="memberEmail" required />
-      <button type="submit">비밀번호 재설정 링크 전송</button>
-    </form>
+    <!-- 네비게이션 구역 -->
+    <div class="navigationContainer">
+      <!-- 로고 -->
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" class="logoImg" />
+        </a>
+      </div>
 
-    <div id="responseMessage"></div>
-    <!-- 서버 응답 메시지를 표시할 영역 -->
+      <!-- 우리는 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/info/service">우리는</a>
+        </span>
+      </div>
 
-    <div>
-      <a href="/member/loginForm">로그인 페이지로 이동</a>
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/share/list">나눠요</a>
+        </span>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a href="/recycle/list">버려요</a>
+        </span>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+        <!-- 회원가입 -->
+        <div class="join">
+          <span class="highlighterGreen">
+            <a href="/member/join">회원가입</a>
+          </span>
+        </div>
+        <!-- 로그인 -->
+        <div class="login">
+          <span class="highlighterGreen">
+            <a href="/member/loginForm">로그인</a>
+          </span>
+        </div>
+      </div>
     </div>
+
+    <!-- 공백 -->
+    <div class="blankContainer"></div>
+    <!-- 메인 영역 -->
+    <div id="mainContainer">
+
+        <!-- 아이디찾기 영역 -->
+        <div class="pwFindArea">
+              <!-- 비밀번호찾기 타이틀 영역 -->
+              <div class="pwFindTitleArea">
+                <!-- 비밀번호찾기 타이틀 -->
+                <div class="pwFindTitle">
+                  비밀번호 찾기
+                </div>
+              </div>
+                            
+              <!-- 아이디 영역 -->
+              <div class="idArea">
+                <!-- 아이디 상단 영역 -->
+                <div class="idUpsideArea">
+                    <!-- 아이디 타이틀 -->
+                    <div class="idTitle">
+                        아이디   
+                    </div>
+                </div>
+                
+                <!-- 아이디_input 영역 -->
+                <div class="idInputArea">
+                    <!-- 아이디_input -->
+                    <input
+                        type="text" id="memberId" class="memberId" maxlength="12" oninput="onlyAlphaNumForId(this)">
+                    <!-- 아이디 입력 메시지 출력 -->
+                    <div class="idError" id="idError"></div>
+                </div>
+              </div>
+              
+              <!-- 이메일 영역 -->
+              <div class="emailArea">
+                <!-- 이메일 상단 영역 -->
+                <div class="emailUpsideArea">
+                    <!-- 이메일 타이틀 -->
+                    <div class="emailTitle">
+                        이메일   
+                    </div>
+                    <!-- 이메일 인증 -->
+                      <div class="emailButton highlighterGreen" onclick="sendEmailVerificationCode()">인증번호 전송</div>
+                </div>
+                
+                <!-- 이메일_input 영역 -->
+                <div class="emailInputArea">
+                    <!-- 이메일_input -->
+                    <input type="text" id="memberEmail" class="memberEmail">
+                    <br>
+                    <!-- 이메일 입력 메시지 출력 -->
+                    <div class="emailError" id="emailError"></div>
+                </div>
+            </div>
+  
+            <!-- 인증번호 인증 영역 -->
+            <div class="emailCodeArea">
+              <!-- 인증번호 인증 상단 영역 -->
+              <div class="emailCodeUpsideArea">
+                  <!-- 인증번호 인증 타이틀 -->
+                  <div class="emailCodeTitle">
+                      인증번호   
+                  </div>
+                  <!-- 인증번호 인증 -->
+                  <div class="codeButton highlighterGreen" onclick="verifyEmailCode()">
+                    인증번호 확인
+                  </div>
+              </div>
+              
+              <!-- 인증번호_input 영역 -->
+              <div class="emailCodeInput">
+                  <!-- 인증번호_input -->
+                  <input type="text" id="emailCode" class="emailCode">
+                  <!-- 인증번호 입력 메시지 출력 -->
+                  <div class="emailCodeError" id="emailCodeError">
+                      인증번호를 입력해 주세요.
+                  </div>
+              </div>
+            </div>
+  
+                      <!-- 비밀번호 영역 -->
+            <div class="passwordArea">
+              <!-- 비밀번호 상단 영역 -->
+              <div class="passwordUpsideArea">
+                  <!-- 비밀번호 타이틀 -->
+                  <div class="passwordTitle">
+                      비밀번호   
+                  </div>
+              </div>
+              
+              <!-- 비밀번호_input 영역 -->
+              <div class="passwordInputArea">
+                  <!-- 비밀번호_input -->
+                  <input type="password" id="memberPw" class="memberPw">
+                  <!-- 비밀번호 입력 메시지 출력 -->
+                  <div class="passwordError"></div>
+              </div>
+            </div>
+                
+            <!-- 비밀번호 확인 영역 -->
+            <div class="pwCheckArea">
+                <!-- 비밀번호 확인 상단 영역 -->
+                <div class="pwCheckUpsideArea">
+                    <!-- 비밀번호 확인 타이틀 -->
+                    <div class="pwCheckTitle">
+                        비밀번호 확인  
+                    </div>
+                 </div>
+                
+                <!-- 비밀번호 확인_input 영역 -->
+                <div class="pwCheckInputArea">
+                    <!-- 비밀번호 확인_input -->
+                    <input type="password" id="pwCheck" class="pwCheck">
+                    <!-- 비밀번호 확인 메시지 출력 -->
+                    <div class="pwCheckError"></div>
+                </div>
+            </div>
+            
+            <!-- 비밀번호 규약을 제대로 통과하였는지 여부 체크 -->
+            <input type="hidden" id="passwordDuplicationCheck" value="">
+            <!-- 인증번호 확인을 위한 input 인증 성공시 value 값이 y로 변경된다.  -->
+            <input id="emailDuplicationCheck" type="hidden" value="">
+  
+            <!-- 버튼 영역 -->
+            <div class="buttonArea">
+              <!-- 아이디 찾기 버튼 -->
+              <button type="submit" class="findButton" id="findButton">
+                비밀번호 변경
+              </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 저작권 정보 -->
+    <div class="rightContainer">© 2024 Team San, Hai. All rights reserved.</div>
   </body>
 </html>
