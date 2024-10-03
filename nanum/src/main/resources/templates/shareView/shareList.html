@@ -405,9 +405,8 @@
                         //영역 변경전에 만들어져있는 게시글을 초기화
                         $('#result').empty();
 
-
-                        // 최대 30개의 게시글만 보여줌
-                        let limitedList = mapList.slice(0, 30);
+                        // 최대 20개의 게시글만 보여줌
+                        let limitedList = mapList.slice(0, 20);
                         limitedList.forEach(function(share) {
                             // 게시글 내용 추가
                             $('#result').append(`
