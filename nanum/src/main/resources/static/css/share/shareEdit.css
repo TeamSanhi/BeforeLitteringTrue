@@ -1,6 +1,6 @@
 /* shareEdit_style_css */
-   /* Font | NEXON Lv1 Gothic OTF */
-   @font-face {
+    /* Font | NEXON Lv1 Gothic OTF */
+    @font-face {
         font-family: 'NEXON Lv1 Gothic OTF';
         src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
         font-weight: normal;
