@@ -1,6 +1,5 @@
-/* join_style_css */
-
-    /* Font | Pretendard */
+/* idFind_style_css */
+    /* Font | NEXON Lv1 Gothic OTF */
     @font-face {
         font-family: 'NEXON Lv1 Gothic OTF';
         src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
@@ -8,12 +7,10 @@
         font-style: normal;
     }
 
-
     /* General Reset */
     * {
         box-sizing: border-box;
     }
-
 
     /* Body에 font 적용 */
     body {
@@ -31,13 +28,11 @@
         display: none;
     }
 
-
     /* a태그 속성 없애기 */
     a {
         color: inherit;
         text-decoration: inherit;
     }
-
 
     /* 이미지 */
     img {
@@ -57,7 +52,6 @@
         white-space: nowrap;
     }
 
-
     /* 로고 감싸는 div */
     .logo {
         display: inline-block;
@@ -70,7 +64,6 @@
         height: 5vh;
         margin-bottom: 0.5vh;
     }
-
 
     /* 메뉴 감싸는 div_우리는 / 나눠요 / 버려요 */
     .projectInfo {
@@ -91,7 +84,6 @@
         cursor: pointer;
     }
 
-
     /* 형광펜 효과_파란색 */
     .highlighterBlue {
         background: linear-gradient(#8ABAFF 0 100%);
@@ -106,11 +98,11 @@
         background-size: 100% 1.5vh;
     }
 
-
     /* 회원가입, 로그인 div 영역 */
     .rightGroup {
         float: right;
     }
+
 
 /* 로그인 안했을 시 */
     /* 회원가입 */
@@ -127,7 +119,6 @@
         margin-right: 2vw;
         color: gray;
     }
-
 
     /* 로그인 */
     .login {
@@ -158,7 +149,6 @@
         background-size: 100% 0.9vh;
     }    
 
-
     /* Blank_네비게이션 & 슬라이드 사이 공백 */
     .blankContainer {
         height: 2vh;
@@ -183,9 +173,8 @@
         padding: 4vh 5vh;
         border: 0.07vw solid black;
         background-color: white;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0vw 0.7vh 2.9vh 0vw;
     }
-
 
     /* 회원가입 타이틀 영역 */
     .idFindTitleArea {
@@ -268,7 +257,6 @@
         text-align: center;
         color: red;
     }
-
 
     /* 이메일 인증 영역 */
     .emailCodeArea {
@@ -368,7 +356,8 @@
         cursor: pointer;
     }
 
-    /* 아이디 확인 모달창 기본 스타일 */
+
+/* 아이디 확인 모달창 기본 스타일 */
     /* 모달창 */
     .modal {
         display: none; /* 기본적으로 안 보이게 설정 */
@@ -385,8 +374,8 @@
     .modal-content {
         background-color: white;
         margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
+        padding: 2vh 2vw;
+        border: 0.07vw solid #888;
         width: 27%;
         height: 33%;
         text-align: center;
@@ -435,21 +424,17 @@
         cursor: pointer;
     }
 
-
-
-        /* 저작권 영역 */
-        .rightContainer {
-            margin: auto;
-            margin-top: 4vh;
-            width: 93vw;
-            height: 3vh;
-            white-space: nowrap;
-            text-align: center;
-            line-height: 3vh;
-            font-size: 1.4vh;
-            font-weight: 500;
-            text-decoration: underline;
-            color: gray;
-        }
-
-    
+    /* 저작권 영역 */
+    .rightContainer {
+        margin: auto;
+        margin-top: 4vh;
+        width: 93vw;
+        height: 3vh;
+        white-space: nowrap;
+        text-align: center;
+        line-height: 3vh;
+        font-size: 1.4vh;
+        font-weight: 500;
+        text-decoration: underline;
+        color: gray;
+    }
