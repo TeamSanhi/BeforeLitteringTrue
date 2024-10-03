@@ -122,7 +122,6 @@ public class MemberService {
 
     }
 
-
     /**
      * imageRepository에서 이미지를 다운로드 하거나 보여주는 함수
      */
@@ -131,6 +130,8 @@ public class MemberService {
         // 회원 정보 조회
         MemberEntity memberEntity = memberRepository.findById(memberNum)
                 .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+
+        log.debug("profileDownload memberEntity : {}", memberEntity);
 
         String fileName = memberEntity.getMemberFileName();
         String fullPath = Paths.get(uploadPath, fileName).toString();
@@ -152,7 +153,9 @@ public class MemberService {
         String asciiFileName = originalFileName.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
 
         // Content-Disposition 헤더 설정
-        String contentDisposition = "attachment; filename=\"" + asciiFileName + "\"; filename*=UTF-8''" + encodedFileName;
+        String contentDisposition = "attachment; filename=\"" + asciiFileName + "\"; filename*=UTF-8''"
+                + encodedFileName;
+
         response.setHeader("Content-Disposition", contentDisposition);
 
         // Content-Type 설정
@@ -171,7 +174,7 @@ public class MemberService {
 
         // 파일 스트림 처리 (try-with-resources 사용)
         try (FileInputStream filein = new FileInputStream(file);
-             ServletOutputStream fileout = response.getOutputStream()) {
+                ServletOutputStream fileout = response.getOutputStream()) {
             FileCopyUtils.copy(filein, fileout);
         } catch (IOException e) {
             e.printStackTrace();
