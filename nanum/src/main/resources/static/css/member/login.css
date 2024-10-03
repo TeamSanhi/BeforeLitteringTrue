@@ -1,18 +1,17 @@
 /* login_style_css */
-   /* Font | Pretendard */
-   @font-face {
+
+    /* Font | NEXON Lv1 Gothic OTF */
+    @font-face {
         font-family: 'NEXON Lv1 Gothic OTF';
         src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
         font-weight: normal;
         font-style: normal;
     }
 
-
     /* General Reset */
     * {
         box-sizing: border-box;
     }
-
 
     /* Body에 font 적용 */
     body {
@@ -25,19 +24,16 @@
         background-position: center;
     }
 
-
     /* a태그 속성 없애기 */
     a {
         color: inherit;
         text-decoration: inherit;
     }
 
-
     /* 슬라이드에서 사용 될 리스트 속성 */
     li {
         list-style: none;
     }
-
 
     /* 이미지 */
     img {
@@ -160,6 +156,7 @@
         width: 93vw;
     }
 
+
 /* 로그인 전체 영역 */
     /* 메인 컨테이너 */
     #mainContainer {
@@ -171,14 +168,13 @@
         margin: 0 auto;
     }
 
-
     /* 로그인 전체 영역 */
     .loginArea {
         width: 35vw;
         padding: 4vh 5vh;
         border: 0.07vw solid black;
         background-color: white;
-        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     }
 
     /* 로그인 타이틀 영역 */
@@ -262,7 +258,6 @@
         text-align: center;
         color: red;
     }
-
 
     /* 비밀번호 영역 */
     .passwordArea {
@@ -350,7 +345,7 @@
         font-size: 2.2vh;
         font-weight: 700;
         color: black;
-        background-color: #8ABAFF;
+        background-color: white;
         font-family: 'NEXON Lv1 Gothic OTF';
     }
 
