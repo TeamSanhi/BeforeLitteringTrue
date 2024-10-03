@@ -28,8 +28,10 @@ public class WebSecurityConfig {
                         , "/member/join" // 회원가입
                         , "/member/sendEmail" // 이메일 전송 ajax 요청
                         , "/member/verifyEmail" // 이메일 인증번호 확인 ajax 요청
+                        , "/member/FindSendEmail" // 아이디 찾기 ajax 요청
+                        , "/member/idFindverifyEmail" // 아이디찾기 인증번호 ajax 인증요청
                         , "/member/profileDownload" // 회원 프로필 이미지 보여주는 경로
-                        , "/message/profileDownload**"  // 쪽지에서 프로필 이미지 보여주는 경로
+                        , "/message/profileDownload**" // 쪽지에서 프로필 이미지 보여주는 경로
                         , "/find/idFind" // ID 찾기
                         , "/find/pwFind" // 비밀번호 찾기
                         , "/find/idCheck" // ID 중복 확인

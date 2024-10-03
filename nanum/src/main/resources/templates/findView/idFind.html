@@ -11,8 +11,8 @@
     <!-- Style -->
     <link rel="stylesheet" href="/css/find/idFind.css" />
     <!-- 스크립트 -->
-    <script type="text/javascript" src="/js/find/idFind.js"></script>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script type="text/javascript" src="/js/find/idFind.js"></script>
   </head>
   <body>
     <!-- 네비게이션 구역 -->
@@ -124,15 +124,39 @@
             </div>
           </div>
 
+          <!-- 인증번호 확인을 위한 input 인증 성공시 value 값이 y로 변경된다.  -->
+          <input id="emailDuplicationCheck" type="hidden" value="">
+
           <!-- 버튼 영역 -->
           <div class="buttonArea">
             <!-- 아이디 찾기 버튼 -->
-            <button type="submit" class="joinButton" id="postButton">
+            <button type="submit" class="findButton" id="findButton">
               아이디 확인
             </button>
           </div>
+
+          <!-- 모달창 구조 -->
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+              <!-- 닫기버튼 -->
+               <div class="closeDiv">
+                 <span class="close">&times;</span>
+              </div>
+              <!-- 아이디 확인 title -->
+              <div class="idCheck">
+                <span>아이디 확인</span>
+              </div>
+              <!-- 찾은 아이디 나오는 div -->
+              <div class="idCheck" id="idCheck">
+              </div>
+              <div class="buttonArea">
+                <button id="confirmButton" class="idFindButton">로그인</button>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
+
 
     <!-- 저작권 정보 -->
     <div class="rightContainer">© 2024 Team San, Hai. All rights reserved.</div>
