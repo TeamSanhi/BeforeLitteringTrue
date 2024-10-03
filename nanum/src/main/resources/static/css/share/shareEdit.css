@@ -289,7 +289,7 @@
     /* 구분선 */
     hr {
         width: 100%;
-        border: 0.8px solid black;
+        border: 0.08vw solid black;
         margin-top: 1.8vh;
         margin-bottom: 3.5vh;      
     }
