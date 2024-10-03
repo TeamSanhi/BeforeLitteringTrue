@@ -335,7 +335,7 @@
         height: 5vh;
     }
 
-    /* 회원가입 버튼 */
+    /* 아이디 확인 버튼 */
     .findButton {
         width: 9vw;
         height: 100%;
@@ -344,16 +344,16 @@
         font-size: 2.2vh;
         font-weight: 700;
         border: 0.07vw solid black;
-        background: linear-gradient(#8ABAFF 0 100%);
+        background: white;
         box-sizing: border-box;
         color: black;
         font-family: 'NEXON Lv1 Gothic OTF';
     }
 
-    /* 가입 버튼_hover */
+    /* 아이디 확인_hover */
     .findButton:hover {
-        text-decoration: underline;
         cursor: pointer;
+        background: linear-gradient(#8ABAFF 0 100%);
     }
 
 
@@ -412,16 +412,16 @@
         font-size: 2.2vh;
         font-weight: 700;
         border: 0.07vw solid black;
-        background: linear-gradient(#8ABAFF 0 100%);
+        background: white;
         box-sizing: border-box;
         color: black;
         font-family: 'NEXON Lv1 Gothic OTF';
     }
 
-    /* 가입 버튼_hover */
+    /* 아이디 확인 버튼_hover */
     .idFindButton:hover {
-        text-decoration: underline;
         cursor: pointer;
+        background: linear-gradient(#8ABAFF 0 100%);
     }
 
     /* 저작권 영역 */
