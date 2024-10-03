@@ -405,6 +405,59 @@
                         //영역 변경전에 만들어져있는 게시글을 초기화
                         $('#result').empty();
 
+
+                        // 최대 30개의 게시글만 보여줌
+                        let limitedList = mapList.slice(0, 30);
+                        limitedList.forEach(function(share) {
+                            // 게시글 내용 추가
+                            $('#result').append(`
+                                <div class="sharePosting">
+                                    <a href="/share/read?shareNum=${share.shareNum}">
+                                        <span class="sharePostTitle">${share.shareTitle}</span>
+                                    </a>
+                                    <div class="shareImage">
+                                        <img src="/share/download?imageNum=${share.imageList[0].imageNum}" loading="lazy">
+                                    </div>
+                                    <div class="postContentArea">
+                                        <span class="postContent">${share.shareContents}</span>
+                                    </div>
+                                    <div class="postInfo">
+                                        <span class="userName">${share.memberNickname}</span>
+                                        <span class="postDate">${share.formatDate}</span>
+                                    </div>
+                                </div>
+                            `)
+                          // 글 제목 의 길이가 10자가 넘으면 생략하여 보여준다. 
+                          // 모든 postContent 요소들을 가져옴
+                          let sharePostTitle = document.querySelectorAll(".sharePostTitle")
+                          // 각 postContent 요소들에 글자 수 제한 적용
+                          sharePostTitle.forEach(function(post) {
+                              // 게시글 내용 텍스트 가져오기
+                              let text = post.innerText;
+                              // 글자 수 제한_공백 포함
+                              let maxLength = 10
+                              // 최대 글자수 넘으면 자르고 ... 붙이기
+                              if (text.length > maxLength) {
+                                  post.innerText = text.slice(0, maxLength) + "···";
+                              };
+                          });
+                          
+                          // 글내용의 길이가 23자가 넘으면 생략하여 보여준다. 
+                          // 모든 postContent 요소들을 가져옴
+                          let postContents = document.querySelectorAll(".postContent")
+                          // 각 postContent 요소들에 글자 수 제한 적용
+                          postContents.forEach(function(post) {
+                              // 게시글 내용 텍스트 가져오기
+                              let text = post.innerText;
+                              // 글자 수 제한_공백 포함
+                              let maxLength = 13
+                              // 최대 글자수 넘으면 자르고 ... 붙이기
+                              if (text.length > maxLength) {
+                                  post.innerText = text.slice(0, maxLength) + "···";
+                              };
+                          });
+                        });
+
                         // 지도에 마커를 찍어 게시글 위치를 표시
                         mapList.forEach(function(share) {
                             let markerPosition = new kakao.maps.LatLng(share.shareLat, share.shareLng);
@@ -420,59 +473,60 @@
                                 // 각 마커에 대한 인포윈도우와 이벤트 등록
                                 createMarkerWithDynamicInfo(marker, share);
                             }
-                            //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
-                            $('#result').append(`
-                                    <div class="sharePosting">
-                                        <a href="/share/read?shareNum=${share.shareNum}">
-                                            <span class="sharePostTitle">${share.shareTitle}</span>
-                                        </a>
-                                        <div class="shareImage">
-                                            <img src="/share/download?imageNum=${share.imageList[0].imageNum}" loading="lazy>
-                                        </div>
-                                        <div class="postContentArea">
-                                            <span class="postContent">${share.shareContents}</span>
-                                        </div>
-                                        <div class="postInfo">
-                                            <span class="userName">${share.memberNickname}</span>
-                                            <span class="postDate">${share.formatDate}</span>
-                                        </div>
-                                    </div>
-                            `);
 
-                              // 글 제목 의 길이가 10자가 넘으면 생략하여 보여준다. 
-                              // 모든 postContent 요소들을 가져옴
-                              let sharePostTitle = document.querySelectorAll(".sharePostTitle");
+                            // 영역내의 모든 게시글을 보여주는 영역 이걸 무한스크롤로 처리해보자 
+                            // //게시글의 내용을 하나씩 담아서 result div에 에 넣어준다. 
+                            // $('#result').append(`
+                            //         <div class="sharePosting">
+                            //             <a href="/share/read?shareNum=${share.shareNum}">
+                            //                 <span class="sharePostTitle">${share.shareTitle}</span>
+                            //             </a>
+                            //             <div class="shareImage">
+                            //                 <img src="/share/download?imageNum=${share.imageList[0].imageNum}" loading="lazy>
+                            //             </div>
+                            //             <div class="postContentArea">
+                            //                 <span class="postContent">${share.shareContents}</span>
+                            //             </div>
+                            //             <div class="postInfo">
+                            //                 <span class="userName">${share.memberNickname}</span>
+                            //                 <span class="postDate">${share.formatDate}</span>
+                            //             </div>
+                            //         </div>
+                            // `);
 
-                              // 각 postContent 요소들에 글자 수 제한 적용
-                              sharePostTitle.forEach(function(post) {
-                                  // 게시글 내용 텍스트 가져오기
-                                  let text = post.innerText;
-                                  // 글자 수 제한_공백 포함
-                                  let maxLength = 10;
+                            //   // 글 제목 의 길이가 10자가 넘으면 생략하여 보여준다. 
+                            //   // 모든 postContent 요소들을 가져옴
+                            //   let sharePostTitle = document.querySelectorAll(".sharePostTitle");
 
-                                  // 최대 글자수 넘으면 자르고 ... 붙이기
-                                  if (text.length > maxLength) {
-                                      post.innerText = text.slice(0, maxLength) + "···";
-                                  };
-                              });
+                            //   // 각 postContent 요소들에 글자 수 제한 적용
+                            //   sharePostTitle.forEach(function(post) {
+                            //       // 게시글 내용 텍스트 가져오기
+                            //       let text = post.innerText;
+                            //       // 글자 수 제한_공백 포함
+                            //       let maxLength = 10;
+
+                            //       // 최대 글자수 넘으면 자르고 ... 붙이기
+                            //       if (text.length > maxLength) {
+                            //           post.innerText = text.slice(0, maxLength) + "···";
+                            //       };
+                            //   });
                               
-                              // 글내용의 길이가 23자가 넘으면 생략하여 보여준다. 
-                              // 모든 postContent 요소들을 가져옴
-                              let postContents = document.querySelectorAll(".postContent");
+                            //   // 글내용의 길이가 23자가 넘으면 생략하여 보여준다. 
+                            //   // 모든 postContent 요소들을 가져옴
+                            //   let postContents = document.querySelectorAll(".postContent");
 
-                              // 각 postContent 요소들에 글자 수 제한 적용
-                              postContents.forEach(function(post) {
-                                  // 게시글 내용 텍스트 가져오기
-                                  let text = post.innerText;
-                                  // 글자 수 제한_공백 포함
-                                  let maxLength = 13;
+                            //   // 각 postContent 요소들에 글자 수 제한 적용
+                            //   postContents.forEach(function(post) {
+                            //       // 게시글 내용 텍스트 가져오기
+                            //       let text = post.innerText;
+                            //       // 글자 수 제한_공백 포함
+                            //       let maxLength = 13;
 
-                                  // 최대 글자수 넘으면 자르고 ... 붙이기
-                                  if (text.length > maxLength) {
-                                      post.innerText = text.slice(0, maxLength) + "···";
-                                  };
-                              });
-                            
+                            //       // 최대 글자수 넘으면 자르고 ... 붙이기
+                            //       if (text.length > maxLength) {
+                            //           post.innerText = text.slice(0, maxLength) + "···";
+                            //       };
+                            //   });
                         });
                         
                         // 클러스터러에 새로 추가된 마커들 등록
