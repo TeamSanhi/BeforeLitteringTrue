@@ -297,7 +297,7 @@
 
   /* 유저 신고하기 모달만 배경 투명 처리 */
   #reportModal {
-    background-color: transparent; /* 배경 투명 처리 */
+    background-color: transparent;    /* 배경 투명 처리 */
   }
 
   .message-room {
@@ -322,9 +322,9 @@
   /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
   .close:hover,
   .close:focus {
-    color: black; /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-    text-decoration: none; /* 닫기 버튼의 밑줄 제거 */
-    cursor: pointer; /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+    color: black;           /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
+    text-decoration: none;    /* 닫기 버튼의 밑줄 제거 */
+    cursor: pointer;          /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
   }
 
 
@@ -409,9 +409,9 @@
   .messageContents {
     width: 100%;
     height: 4.5vh;
-    padding: 0.8vh 8vh 0 2vh; /* 버튼을 위한 패딩 공간 */
+    padding: 0.8vh 8vh 0 2vh;       /* 버튼을 위한 패딩 공간 */
     border: 0.07vw solid black;
-    border-radius: 2.5vh; /* 둥근 모서리 */
+    border-radius: 2.5vh;           /* 둥근 모서리 */
     font-size: 2vh;
     line-height: 3vh;
     outline: none;
@@ -478,14 +478,14 @@
 
   /* 라디오버튼 체크 상태 스타일 */
   input[type="radio"]:checked {
-    background-color: black; /* 체크 상태의 배경색을 검정색으로 변경 */
+    background-color: black;  /* 체크 상태의 배경색을 검정색으로 변경 */
   }
 
   /* Webkit 브라우저 (Chrome, Safari, Edge)에서 체크박스 모양을 변경 */
   input[type="radio"] {
-    appearance: none; /* 기본 체크박스 스타일 제거 */
+    appearance: none;       /* 기본 체크박스 스타일 제거 */
     margin-right: 0.7vw;
-    width: 1.5vh; /* 원하는 크기로 조정 */
+    width: 1.5vh;           /* 원하는 크기로 조정 */
     height: 1.5vh;
     cursor: pointer;
     border: 0.07vw solid black;
@@ -507,7 +507,7 @@
     padding-left: 1.5vw;
     padding-right: 1.5vw;
     border: 0.07vw solid black;
-    border-radius: 2.5vh; /* 둥근 모서리 */
+    border-radius: 2.5vh;     /* 둥근 모서리 */
     font-size: 2vh;
     line-height: 3.2vh;
     outline: none;
@@ -710,10 +710,10 @@
 
   /* 기본 문구_타이핑 */
   .typeMessage {
-    border-right: 0.2vw solid black; /* 커서 효과 */
+    border-right: 0.2vw solid black;          /* 커서 효과 */
     white-space: nowrap;
     overflow: hidden;
-    animation: blink 0.75s step-end infinite; /* 커서 깜박임 애니메이션 */
+    animation: blink 0.75s step-end infinite;   /* 커서 깜박임 애니메이션 */
   }
 
   /* gif 영역 */
@@ -820,7 +820,7 @@
 
   /* 나눠요 게시글_제목_hover */
   .sharePostTitle:hover {
-    background-size: 100% 1vh; /* hover 시 배경 확장 */
+    background-size: 100% 1vh;     /* hover 시 배경 확장 */
   }
 
   /* 나눠요 게시글_이미지 영역 */
@@ -891,7 +891,7 @@
     flex-wrap: wrap;
     /* 게시글이 왼쪽 정렬되게 설정 */
     justify-content:center;
-    align-items: flex-end;  /* 요소들을 아래쪽에 정렬 */
+    align-items: flex-end;    /* 요소들을 아래쪽에 정렬 */
     text-align: center;
     width: 100%;
     height: 90%;
@@ -941,7 +941,7 @@
     font-size: 3vh;
     font-weight: 700;
     letter-spacing: 0.08vw;
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    overflow: hidden;             /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -955,10 +955,10 @@
 
   /* 2등 이미지 */
   .secondImage {
-    width: 26vh; /* 가로 크기 */
-    height: 26vh; /* 세로 크기 (가로와 동일하게 설정) */
-    border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
-    object-fit: cover; /* 이미지가 영역에 꽉 차게 자르기 */
+    width: 26vh;            /* 가로 크기 */
+    height: 26vh;           /* 세로 크기 (가로와 동일하게 설정) */
+    border-radius: 50%;     /* 원형으로 만들기 위한 반지름 설정 */
+    object-fit: cover;      /* 이미지가 영역에 꽉 차게 자르기 */
     margin: 1vh;
     box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     background-color: white;
@@ -1026,7 +1026,7 @@
     font-size: 4vh;
     font-weight: 700;
     letter-spacing: 0.08vw;
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    overflow: hidden;         /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -1040,10 +1040,10 @@
 
   /* 1등 이미지 */
   .firstImage {
-    width: 31vh; /* 가로 크기 */
-    height: 31vh; /* 세로 크기 (가로와 동일하게 설정) */
-    border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
-    object-fit: cover; /* 이미지가 영역에 꽉 차게 자르기 */
+    width: 31vh;            /* 가로 크기 */
+    height: 31vh;           /* 세로 크기 (가로와 동일하게 설정) */
+    border-radius: 50%;     /* 원형으로 만들기 위한 반지름 설정 */
+    object-fit: cover;      /* 이미지가 영역에 꽉 차게 자르기 */
     margin: 1vh;
     box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     background-color: white;
@@ -1110,7 +1110,7 @@
     font-size: 3vh;
     font-weight: 700;
     letter-spacing: 0.08vw;
-    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    overflow: hidden;       /* 넘치는 텍스트 숨김 */
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -1124,10 +1124,10 @@
 
   /* 3등 이미지 */
   .thirdImage {
-    width: 21.8vh; /* 가로 크기 */
-    height: 21.8vh; /* 세로 크기 (가로와 동일하게 설정) */
-    border-radius: 50%; /* 원형으로 만들기 위한 반지름 설정 */
-    object-fit: cover; /* 이미지가 영역에 꽉 차게 자르기 */
+    width: 21.8vh;        /* 가로 크기 */
+    height: 21.8vh;       /* 세로 크기 (가로와 동일하게 설정) */
+    border-radius: 50%;   /* 원형으로 만들기 위한 반지름 설정 */
+    object-fit: cover;    /* 이미지가 영역에 꽉 차게 자르기 */
     margin: 1vh;
     box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     background-color: white;
