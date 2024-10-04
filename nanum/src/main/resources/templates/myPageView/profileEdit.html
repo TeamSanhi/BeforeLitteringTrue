@@ -9,36 +9,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>에코나비 - 환경 보호 플랫폼</title>
     <style>
-        /* 기본 리셋 */
+        /* Font | NEXON Lv1 Gothic OTF */
+        @font-face {
+            font-family: "NEXON Lv1 Gothic OTF";
+            src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff")
+            format("woff");
+            font-weight: normal;
+            font-style: normal;
+        }
+        /* General Reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* 전역 스타일 */
+        /* Body에 font 적용 */
         body {
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f4f6f8;
-            color: #333;
-            line-height: 1.6;
+            font-family: "NEXON Lv1 Gothic OTF";
+            box-sizing: border-box;
+            background-image: url("/images/background.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        /* a태그 속성 없애기 */
+        a {
+            color: inherit;
+            text-decoration: inherit;
         }
 
         /* 네비게이션 바 */
         .navigationContainer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            padding: 15px 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            margin: auto;
+            margin-top: 5vh;
+            width: 93vw;
+            height: 6vh;
+            white-space: nowrap;
         }
 
-        .logo img.logoImg {
-            height: 40px;
+        /* 로고 감싸는 div */
+        .logo {
+            display: inline-block;
+            height: 6vh;
+            margin-right: 1vw;
+        }
+
+        /* 로고 이미지 */
+        .logoImg {
+            height: 5vh;
+            margin-bottom: 0.5vh;
+        }
+
+        /* 메뉴 감싸는 div_우리는 / 나눠요 / 버려요 */
+        .projectInfo {
+            margin-left: 1vw;
+            font-size: 2.5vh;
+            font-weight: 700;
+            letter-spacing: 0.2vw;
+            display: inline-block;
+            width: 7vw;
+            height: 6vh;
+            text-align: center;
+            vertical-align: top;
+            line-height: 6vh;
+        }
+
+        /* 네비게이션 메뉴_hover 효과 제거 */
+        .projectInfo:hover {
+            cursor: pointer;
         }
 
         .projectInfo a {
@@ -46,62 +87,499 @@
             text-decoration: none;
             color: #2c3e50;
             font-weight: 500;
-            transition: color 0.3s;
         }
 
-        .projectInfo a:hover {
-            color: #3498db;
+        /* 형광펜 효과_파란색 */
+        .highlighterBlue {
+            background: linear-gradient(180deg, #8ABAFF 0%, #8ABAFF 100%);
+            background-position: 0 calc(100% - 0.3vh);
+            background-size: 0 1.5vh;
+            background-repeat: no-repeat;
+            transition: background-size 0.3s;
         }
 
+        /* 형광펜 효과_파란색_hover */
+        .highlighterBlue:hover {
+            background-size: 100% 1.5vh;
+        }
+
+        /* 회원가입, 로그인 div 영역 */
         .rightGroup {
+            float: right;
+        }
+
+        /* 로그인 했을 시 */
+        /* 나눔 이야기 (쪽지) */
+        .message {
+            padding: 2vh;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.5vw;
+            vertical-align: center;
+            cursor: pointer;
+        }
+
+        /* 쪽지 모달부분  */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 모달 콘텐츠 스타일 */
+        .modal-content {
+            background-color: white;
+            padding: 4vh 3vw;
+            width: 40vw;
+            height: 75vh;
+            overflow-y: hidden;
+        }
+
+        /* 나눔 이야기 영역 */
+        /* 모달 상단 영역_타이틀, 닫기 */
+        .messageUpside {
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 사용자 이름과 신고하기 버튼 컨테이너 */
+        .usernameContainer {
             display: flex;
             align-items: center;
         }
 
-        .rightGroup div {
-            margin-left: 20px;
+        /* 사용자 이름 */
+        .usernameTitle {
+            font-size: 2.5vh;
+            letter-spacing: 0.1vw;
         }
 
-        .rightGroup a {
-            text-decoration: none;
-            color: #2c3e50;
-            font-weight: 500;
-            transition: color 0.3s;
+        /* 쪽지방 목록 */
+        #messageListContainer {
+            margin-top: 2vh;
+            margin-bottom: 4vh;
+            padding-right: 2vh;
+            padding-left: 2vh;
+            padding-top: 3vh;
+            padding-bottom: 3vh;
+            height: 49vh;
+            width: 100%;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
 
-        .rightGroup a:hover {
-            color: #3498db;
+        /* Webkit 브라우저에서 스크롤바 숨기기 */
+        #messageListContainer::-webkit-scrollbar {
+            display: none;
         }
 
-        /* 호버 효과 */
-        .joinHover, .loginHover, .messageHover, .mypageHover, .logoutHover {
+        /* 메시지 보내기 영역 */
+        #detailContentsContainer {
             position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 존재하는 메시지 */
+        #messageDetailsContainer {
+            margin-top: 2vh;
+            margin-bottom: 4vh;
+            padding-right: 2vh;
+            padding-left: 2vh;
+            padding-top: 3vh;
+            padding-bottom: 3vh;
+            height: 49vh;
+            width: 100%;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /* Webkit 브라우저에서 스크롤바 숨기기 */
+        #messageDetailsContainer::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 보내기 버튼 */
+        #sendMessageBtn {
+            position: relative;
+            padding-top: 0.2vh;
+            padding-left: 0.5vw;
+            right: 0.4vh;
+            width: 8vh;
+            height: 3.8vh;
+            border-radius: 0;
+            font-size: 1.7vh;
+            letter-spacing: 0.05vw;
+            background-color: #2dc986;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* 검색 버튼 호버 효과 */
+        #sendMessageBtn:hover {
+            text-decoration: underline;
+        }
+
+        /* 나눔 완료 버튼 */
+        #shareComplete {
+            position: relative;
+            padding-top: 0.2vh;
+            padding-left: 0.5vw;
+            right: 0.4vh;
+            width: 8vh;
+            height: 3.8vh;
+            border-radius: 0;
+            font-size: 1.7vh;
+            letter-spacing: 0.05vw;
+            background-color: #2dc986;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            z-index: 1;
+        }
+
+        /* 나눔 완료 버튼 호버 효과 */
+        #shareComplete:hover {
+            text-decoration: underline;
+        }
+
+        /* 유저 신고하기 모달만 배경 투명 처리 */
+        #reportModal {
+            background-color: transparent;
+        }
+
+        .message-room {
+            border: none;
+            padding: 1vh;
+            margin-bottom: 1vh;
+            cursor: pointer;
+        }
+
+        /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
+        .close {
+            font-size: 2.5vh;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* 닫기 버튼 호버 스타일 */
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* 보낸 이야기 영역 */
+        .myMessageArea {
+            margin-top: 1vh;
+            margin-bottom: 1vh;
+            padding-left: 3vh;
+            padding-right: 3vh;
+            text-align: right;
+            width: 100%;
+            height: auto;
+        }
+
+        /* 보낸 이야기_타이틀 */
+        .myMessage {
+            font-size: 1.5vh;
+            font-weight: 700;
+            letter-spacing: 0.05vw;
+            margin-bottom: 1.2vh;
+            color: #2dc986;
+        }
+
+        /* 보낸 이야기_내용 */
+        .myMessageContent {
+            font-size: 1.8vh;
+            letter-spacing: 0.06vw;
+            line-height: 3vh;
+            margin-bottom: 1.2vh;
+        }
+
+        /* 보낸 메시지_날짜 */
+        .myMessageDate {
+            font-size: 1.5vh;
+            font-weight: 700;
+            letter-spacing: 0.05vw;
+            margin-bottom: 1.2vh;
+            color: gray;
+        }
+
+        /* 받은 이야기 영역 */
+        .getMessageArea {
+            margin-top: 1vh;
+            margin-bottom: 1vh;
+            padding-left: 3vh;
+            padding-right: 3vh;
+            text-align: left;
+            width: 100%;
+            height: auto;
+        }
+
+        /* 받은 이야기_타이틀 */
+        .getMessage {
+            font-size: 1.5vh;
+            font-weight: 700;
+            letter-spacing: 0.05vw;
+            margin-bottom: 1.2vh;
+            color: #8abaff;
+        }
+
+        /* 받은 이야기_내용 */
+        .getMessageContent {
+            font-size: 1.8vh;
+            letter-spacing: 0.06vw;
+            line-height: 3.5vh;
+            margin-bottom: 1.2vh;
+        }
+
+        /* 받은 메시지_날짜 */
+        .getMessageDate {
+            font-size: 1.5vh;
+            font-weight: 700;
+            letter-spacing: 0.05vw;
+            margin-bottom: 1.2vh;
+            color: gray;
+        }
+
+        /* 메시지 보내기 창 */
+        .messageContents {
+            width: 100%;
+            height: 4.5vh;
+            padding: 0.8vh 8vh 0 2vh;
+            border: 0.07vw solid black;
+            border-radius: 0;
+            font-size: 2vh;
+            line-height: 3vh;
+            outline: none;
+            resize: none;
+            overflow: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        /* Webkit 브라우저에서 스크롤바 숨기기 */
+        .messageContents::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* 신고 영역 */
+        .reportUpside {
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin: 0;
+            padding: 0;
+        }
+
+        .reportContainer {
+            display: flex;
+            align-items: center;
+        }
+
+        .reportTitle {
+            font-size: 2.5vh;
+            letter-spacing: 0.1vw;
+        }
+
+        .reportUser {
+            padding-top: 1vh;
+            font-size: 1.7vh;
+            letter-spacing: 0.07vw;
+            color: gray;
+            margin-left: 2vw;
+        }
+
+        .reportArea {
+            margin-top: 4vh;
+            margin-bottom: 4vh;
+        }
+
+        .reportReason {
+            display: flex;
+            align-items: center;
+            font-size: 2vh;
+            letter-spacing: 0.05vw;
+            line-height: 2vh;
+            margin-bottom: 1vh;
+        }
+
+        input[type="radio"]:checked {
+            background-color: black;
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            margin-right: 0.7vw;
+            width: 1.5vh;
+            height: 1.5vh;
+            cursor: pointer;
+            border: 0.07vw solid black;
+        }
+
+        input[type="radio"]:checked {
+            background-color: red;
+        }
+
+        .additionalReason {
+            width: 90%;
+            height: 30vh;
+            margin-top: 0.5vh;
+            margin-left: 1.5vw;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+            padding-left: 1.5vw;
+            padding-right: 1.5vw;
+            border: 1px solid black;
+            border-radius: 0;
+            font-size: 2vh;
+            line-height: 3.2vh;
+            outline: none;
+            resize: none;
+            overflow: scroll;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .reportSubmit {
+            margin: 5vh auto;
+            width: 8vw;
+            height: 5vh;
+            color: white;
+            background-color: gray;
+            border-radius: 0;
+            border: none;
+            font-size: 2.1vh;
+            font-weight: 700;
+            letter-spacing: 0.1vw;
+            cursor: pointer;
+            padding-top: 0.5vh;
+            display: block;
+        }
+
+        .reportSubmit:hover {
+            color: white;
+            background-color: red;
+        }
+
+        .modal-button {
+            padding: 1vh 2vw;
+            margin: 2vh 1vw;
+            font-size: 2vh;
+            cursor: pointer;
+            border: none;
+            border-radius: 0;
+        }
+
+        .cancel-button {
+            background-color: lightgray;
+        }
+
+        .report-confirm-button {
+            background-color: red;
+            color: white;
+        }
+
+        .confirm-report-modal-content {
+            background-color: white;
+            padding: 2vh 2vw;
+            width: 30vw;
+            height: 30vh;
+            text-align: center;
+            border-radius: 0;
+        }
+
+        .userReportButton {
+            padding-top: 1vh;
+            font-size: 1.7vh;
+            letter-spacing: 0.07vw;
+            color: gray;
+            margin-left: 2vw;
+        }
+
+        /* 쪽지 이미지 */
+        .postImage {
+            margin-top: 0;
+            width: 1.5vw;
+        }
+
+        /* 마이페이지 */
+        .mypage {
+            font-size: 1.8vh;
+            font-weight: 500;
+            letter-spacing: 0.05vw;
             display: inline-block;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s;
+            height: 6vh;
+            text-align: center;
+            text-decoration: underline;
+            vertical-align: top;
+            line-height: 6vh;
+            margin-right: 2vw;
+            color: gray;
         }
 
-        .joinHover:hover, .loginHover:hover, .messageHover:hover, .mypageHover:hover, .logoutHover:hover {
-            background-color: #3498db;
-            color: #ffffff;
+        /* 로그아웃 */
+        .logout {
+            font-size: 1.8vh;
+            font-weight: 500;
+            letter-spacing: 0.05vw;
+            display: inline-block;
+            height: 6vh;
+            text-align: center;
+            text-decoration: underline;
+            vertical-align: top;
+            line-height: 6vh;
+            color: gray;
         }
 
-        /* 배지 스타일 */
-        .badge {
-            background-color: #e74c3c;
-            color: #ffffff;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8em;
-            position: absolute;
-            top: -5px;
-            right: -10px;
+        /* 형광펜 효과_초록 */
+        .highlighterGreen {
+            background: linear-gradient(180deg, #2DC986 0%, #2DC986 100%);
+            background-position: 0 calc(100% - 0.2vh);
+            background-size: 0 0.9vh;
+            background-repeat: no-repeat;
+            transition: background-size 0.3s;
+        }
+
+        .highlighterGreen:hover {
+            color: black;
+            background-size: 100% 0.9vh;
+        }
+
+        /* Blank_네비게이션 & 슬라이드 사이 공백 */
+        .blankContainer {
+            height: 2vh;
+            width: 93vw;
         }
 
         /* 모달 스타일 */
         .modal {
-            display: none; /* 기본적으로 숨김 */
+            display: none;
             position: fixed;
             z-index: 2000;
             left: 0;
@@ -116,7 +594,7 @@
             background-color: #ffffff;
             margin: 10% auto;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 0;
             width: 80%;
             max-width: 500px;
             position: relative;
@@ -141,7 +619,7 @@
 
         /* 메인 컨테이너 */
         .blankContainer {
-            height: 20px; /* 원하는 높이로 조정 */
+            height: 20px;
         }
 
         /* 프로필 수정 폼 */
@@ -154,8 +632,8 @@
         #modifyArea {
             background-color: #ffffff;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 0;
+            border: 1px solid black;
             width: 100%;
             max-width: 600px;
         }
@@ -187,7 +665,7 @@
             height: 120px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #3498db;
+            border: 2px solid black;
             transition: transform 0.3s;
         }
 
@@ -213,13 +691,15 @@
             font-weight: 500;
         }
 
+        /* 버튼 배경색 및 글자색 변경 */
         #modifyArea div[id$="DoubleCheck"],
         #modifyArea div[id$="Button"],
         #modifyArea div[id$="codeButton"] {
-            background-color: #3498db;
-            color: #ffffff;
+            background-color: #8ABAFF;
+            color: #2C3E50; /* 글자색을 짙은 남색으로 변경 */
             padding: 6px 12px;
-            border-radius: 4px;
+            border-radius: 0;
+            border: none; /* 테두리 제거 */
             cursor: pointer;
             font-size: 0.9em;
             transition: background-color 0.3s;
@@ -228,15 +708,15 @@
         #modifyArea div[id$="DoubleCheck"]:hover,
         #modifyArea div[id$="Button"]:hover,
         #modifyArea div[id$="codeButton"]:hover {
-            background-color: #2980b9;
+            background-color: #6A9FDB;
         }
 
         #modifyArea input[type="text"],
         #modifyArea input[type="password"] {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #bdc3c7;
-            border-radius: 4px;
+            border: 1px solid black;
+            border-radius: 0;
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
@@ -251,7 +731,7 @@
         #modifyArea div[id$="Error"] {
             margin-top: 5px;
             font-size: 0.85em;
-            display: none; /* 초기에는 숨김 */
+            display: none;
         }
 
         /* 설명 텍스트 */
@@ -268,38 +748,26 @@
             margin-top: 30px;
         }
 
+        /* 수정 버튼 배경색 및 글자색 변경 */
         #modifyButton {
-            background-color: #2ecc71;
-            color: #ffffff;
+            background-color: #2DC986;
+            color: #1B5E20; /* 글자색을 짙은 녹색으로 변경 */
             padding: 12px 30px;
-            border: none;
-            border-radius: 25px;
+            border: none; /* 테두리 제거 */
+            border-radius: 0;
             cursor: pointer;
             font-size: 1em;
             transition: background-color 0.3s;
         }
 
         #modifyButton:hover {
-            background-color: #27ae60;
+            background-color: #28b47e;
         }
 
         /* 숨겨진 입력 필드 */
         input[type="hidden"] {
             display: none;
         }
-
-        /* 푸터 */
-        /*.rightContainer {*/
-        /*    text-align: center;*/
-        /*    padding: 20px;*/
-        /*    background-color: #ffffff;*/
-        /*    position: fixed;*/
-        /*    width: 100%;*/
-        /*    bottom: 0;*/
-        /*    box-shadow: 0 -2px 4px rgba(0,0,0,0.1);*/
-        /*    font-size: 0.9em;*/
-        /*    color: #7f8c8d;*/
-        /*}*/
 
         /* 반응형 디자인 */
         @media (max-width: 768px) {
@@ -329,6 +797,8 @@
             }
         }
     </style>
+
+
     <!-- script -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
@@ -709,75 +1179,217 @@
 
     <!-- 우리는 -->
     <div class="projectInfo">
-        <a href="/info/service">우리는</a>
+          <span class="highlighterBlue">
+              <a href="/info/service">우리는</a>
+          </span>
     </div>
 
     <!-- 나눠요 -->
     <div class="projectInfo">
-        <a href="/share/list">나눠요</a>
+          <span class="highlighterBlue">
+              <a href="/share/list">나눠요</a>
+          </span>
+
     </div>
 
     <!-- 버려요 -->
     <div class="projectInfo">
-        <a href="/recycle/list">버려요</a>
+          <span class="highlighterBlue">
+            <a href="/recycle/list">버려요</a>
+          </span>
     </div>
 
     <!-- 오른쪽 정렬 -->
     <div class="rightGroup">
-        <!-- 로그인 하지 않았을시 보여주는 페이지 -->
+
+        <!-- 로그인을 안했을 시 -->
         <th:block sec:authorize="not isAuthenticated()">
-            <!-- 회원가입 -->
             <div class="join">
-                  <span class="joinHover">
-                      <a href="/member/join">회원가입</a>
-                  </span>
+                <span class="highlighterGreen">
+                  <a href="/member/join">회원가입</a>
+                </span>
             </div>
 
-            <!-- 로그인 -->
             <div class="login">
-                <a href="/member/loginForm">
-                      <span class="loginHover">
-                          로그인
-                      </span>
-                </a>
+                <span class="highlighterGreen">
+                  <a href="/member/loginForm">로그인</a>
+                </span>
             </div>
         </th:block>
 
-        <!-- 로그인 하였을시 보여줄 페이지 -->
+
+        <!-- 로그인을 했을 시 -->
         <th:block sec:authorize="isAuthenticated()">
-            <!-- 나눔 쪽지 -->
-            <div class="message" id="messages">
-                  <span class="messageHover">
-                      나눔 이야기&nbsp;<span class="badge" id="badge">(0)</span> <!-- 알림 기본값 0 -->
-                  </span>
+
+            <!--****************************************** 쪽지 *****************************-->
+            <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
+                <!-- 쪽지 이미지  -->
+                <img src="/images/post.png" class="postImage">
+                <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+                <div class="badge" id="badge">0</div>
             </div>
 
-            <div id="messagesModal" class="modal">
+            <!-- 쪽지 목록 모달 -->
+            <div
+                    id="messagesModal"
+                    class="modal"
+                    style="
+                  max-height: calc(100vh - 5vh);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                  "
+            >
                 <div class="modal-content">
-                    <span id="messagesClose" class="close">&times;</span>
-                    <h2>쪽지 목록</h2>
+                    <!-- 나눔 이야기 상단 영역 -->
+                    <div class="messageUpside">
+                        <h2>나눔 이야기</h2>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
+                    </div>
+                    <!-- 쪽지방 목록이 출력되는 곳 -->
+                    <div id="messageListContainer"></div>
                 </div>
             </div>
 
+            <!-- 쪽지 상세보기 모달 -->
+            <div
+                    id="detailsModal"
+                    class="modal"
+                    style="
+                  max-height: calc(100vh - 5vh);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                  "
+            >
+                <div class="modal-content">
+                    <div class="messageUpside">
+                        <div class="usernameContainer">
+                            <img
+                                    id="receiverProfileImage"
+                                    src=""
+                                    alt="Profile"
+                                    style="width: 3vh; height: 3vh; border-radius: 50%; vertical-align: middle;"
+                            />
+                            <span class="usernameTitle"><b id="receiverNickname"></b>님에게</span>
+                            <!-- 신고하기 버튼 (공백 유지) -->
+                            <span id="userReportBtn" class="userReportButton highlighterRed">신고하기</span>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
+                    </div>
+
+                    <!-- 게시글로 이동하는 영역 추가 -->
+                    <div id="goToShareBoard" style="cursor: pointer">
+                        <div
+                                id="shareBoardLink"
+                                style="
+                        padding: 1vh 1vw;
+                        border: 0.07vw solid #ccc;
+                        text-align: center;
+                        "
+                        >
+                            게시글로 이동
+                        </div>
+                    </div>
+
+                    <!-- 쪽지 목록 출력 영역 -->
+                    <div id="messageDetailsContainer"></div>
+                    <!-- 쪽지 보내기 -->
+                    <div id="detailContentsContainer">
+                  <textarea
+                          id="messageInput"
+                          class="messageContents"
+                          placeholder="내용을 입력해주세요!"
+                          maxlength="100"
+                  ></textarea>
+                        <!-- 보내기 버튼 -->
+                        <button id="sendMessageBtn">보내기</button>
+                        <button id="shareComplete" style="display: none; margin-left: 1vw;">
+                            나눔 완료
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 게시글 유저 신고 모달창 -->
+            <div id="reportModal" class="modal">
+                <div class="modal-content">
+                    <!-- 신고 모달 상단 영역 -->
+                    <div class="reportUpside">
+                        <!-- 신고 타이틀과 신고하고자 하는 유저 닉네임을 포함하는 영역 -->
+                        <div class="reportContainer">
+                            <!-- 타이틀 -->
+                            <span class="reportTitle">신고하기</span>
+                            <!-- 신고하기 버튼 (공백 유지) -->
+                            <span id="reportUser" class="reportUser">닉네임 님</span>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
+                    </div>
+
+                    <form id="reportForm" class="reportArea">
+                        <div>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="욕설, 인신공격 등 언어적 폭력"
+                            />
+                                욕설, 인신공격 등 언어적 폭력</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="부적절한 게시글"
+                            />
+                                부적절한 게시글</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="사기 또는 허위정보"
+                            />
+                                사기 또는 허위정보</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input type="radio" name="reportReason" value="기타" />
+                                기타</label
+                            >
+                        </div>
+                        <textarea
+                                id="additionalReason"
+                                class="additionalReason"
+                                placeholder="기타 사유를 입력하세요."
+                                maxlength="400"
+                        ></textarea
+                        ><br />
+                        <button type="button" id="submitUserReportBtn" class="reportSubmit">
+                            신고 제출
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- ************************************ 쪽지 목록 모달 *************************************-->
+
+            <!-- 마이페이지  -->
             <div class="mypage">
-                <a th:href="@{/myPage/view}">
-                      <span class="mypageHover">
-                          마이페이지
-                      </span>
-                </a>
+                <span class="highlighterGreen">
+                  <a th:href="@{/myPage/view}">마이페이지</a>
+                </span>
             </div>
 
             <!-- 로그아웃 -->
             <div class="logout">
-                <a th:href="@{/member/logout}">
-                      <span class="logoutHover">
-                          로그아웃
-                      </span>
-                </a>
+                <span class="highlighterGreen">
+                  <a th:href="@{/member/logout}">로그아웃</a>
+                </span>
             </div>
-
         </th:block>
-
     </div>
 </div>
 
