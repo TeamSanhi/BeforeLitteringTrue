@@ -9,72 +9,794 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Page</title>
     <style>
-        /* 기존 스타일 */
-        nav {
-            display: flex; /* Flexbox 사용 */
-            align-items: center; /* 수직 정렬 */
-            gap: 20px; /* 항목 간 간격 */
-            position: fixed; /* 네비게이션을 고정 위치로 설정 */
-            top: 10px;
-            left: 10px;
-            right: 10px; /* 좌우 여백 설정 */
-            padding: 10px 20px; /* 내부 여백 추가 */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
-            z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
-            background: #ffffff;
+        /* myPage_style_css */
+
+        /* Font | NEXON Lv1 Gothic */
+        @font-face {
+            font-family: 'NEXON Lv1 Gothic OTF';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
         }
 
-        nav .member {
-            margin-left: auto; /* .member를 오른쪽으로 밀어냄 */
-            display: flex; /* Flexbox 사용 */
-            gap: 20px; /* 항목 간 간격 */
-            padding: 5px 10px; /* 내부 여백 추가 */
-            border-radius: 5px; /* 모서리 둥글게 */
+        /* General Reset */
+        * {
+            box-sizing: border-box;
         }
 
-        /*footer {*/
-        /*    display: flex;*/
-        /*    justify-content: space-between;*/
-        /*    gap: 20px;*/
-        /*    position: absolute;*/
-        /*    bottom: 10px;*/
-        /*    left: 10px;*/
-        /*}*/
+        /* Body에 font 적용 & 스크롤 적용 */
+        body {
+            font-family: 'NEXON Lv1 Gothic OTF';
+            background-image: url('/images/background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            -ms-overflow-style: none;
+        }
 
-        .profileInfo {
+        /* 스크롤바 없애기 */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* a태그 속성 없애기 */
+        a {
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        /* 슬라이드에서 사용 될 리스트 속성 */
+        li {
+            list-style: none;
+        }
+
+        /* 이미지 */
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 네비게이션 */
+        .navigationContainer {
+            margin: 5vh auto 0 auto;
+            width: 93vw;
+            height: 6vh;
+            white-space: nowrap;
+        }
+
+        /* 로고 */
+        .logo {
+            display: inline-block;
+            height: 6vh;
+            margin-right: 1vw;
+        }
+
+        .logoImg {
+            height: 5vh;
+            margin-bottom: 0.5vh;
+        }
+
+        /* 메뉴_우리는 / 나눠요 / 버려요 */
+        .projectInfo {
+            margin-left: 1vw;
+            font-size: 2.5vh;
+            font-weight: 700;
+            letter-spacing: 0.2vw;
+            display: inline-block;
+            width: 7vw;
+            height: 6vh;
+            text-align: center;
+            line-height: 6vh;
+        }
+
+        .projectInfo:hover {
+            cursor: pointer;
+        }
+
+        /* 형광펜 효과_파란색 */
+        .highlighterBlue {
+            background: linear-gradient(180deg, #8ABAFF 0%, #8ABAFF 100%);
+            background-position: 0 calc(100% - 0.3vh);
+            background-size: 0 1.5vh;
+            background-repeat: no-repeat;
+            transition: background-size 0.3s;
+        }
+
+        .highlighterBlue:hover {
+            background-size: 100% 1.5vh;
+        }
+
+        /* 회원가입, 로그인 div 영역 */
+        .rightGroup {
+            float: right;
+        }
+
+        /* 로그인 했을 시 */
+        /* 나눔 이야기 (쪽지) */
+        .message {
+            padding: 2vh;
+            display: inline-flex;
+            align-items: center;
+            margin-right: 0.5vw;
+            cursor: pointer;
+        }
+
+        /* 쪽지 이미지 */
+        .postImage {
+            width: 1.5vw;
+            margin-top: 0;
+        }
+
+        /* 나눔 이야기 알림 뱃지 */
+        .badge {
+            color: black;
+            margin-left: 0.5vw;
+            margin-right: 0.2vw;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        /* 마이페이지 */
+        .mypage, .logout {
+            font-size: 1.8vh;
+            font-weight: 500;
+            letter-spacing: 0.05vw;
+            display: inline-block;
+            height: 6vh;
+            text-align: center;
+            text-decoration: underline;
+            line-height: 6vh;
+            color: gray;
+        }
+
+        .mypage {
+            margin-right: 2vw;
+        }
+
+        /* 형광펜 효과_초록 */
+        .highlighterGreen {
+            background: linear-gradient(180deg, #2DC986 0%, #2DC986 100%);
+            background-position: 0 calc(100% - 0.2vh);
+            background-size: 0 0.9vh;
+            background-repeat: no-repeat;
+            transition: background-size 0.3s;
+        }
+
+        .highlighterGreen:hover {
+            color: black;
+            background-size: 100% 0.9vh;
+        }
+
+        /* 공백 */
+        .blankContainer {
+            height: 5vh;
+            width: 93vw;
+        }
+
+        /* 메인 컨텐츠 영역 */
+        #mainContainer {
+            position: relative;
+            margin: auto;
+        }
+
+        /* 메인 컨텐츠_상단 프로필 */
+        .profileArea {
+            width: 93vw;
+            height: 20vh;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* 프로필 이미지 영역 */
+        .profileImage {
+            display: inline-block;
+            width: 20vh;
+            height: 20vh;
+        }
+
+        /* 프로필 사진 */
+        .image {
+            border-radius: 50%;
+            border: 0.07vw solid black;
+        }
+
+        /* 상단 오른쪽 영역 */
+        .userContentArea {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: auto;
+            height: 12vh;
+            margin-left: 3vw;
+            text-align: left;
+        }
+
+        /* 상단 오른쪽 상단 영역_닉네임, 개인정보 수정 */
+        .userInfo {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* 닉네임, 개인정보 수정 영역 */
+        .userNameContainer {
+            display: flex;
+            align-items: center;
+            gap: 1vw;
+        }
+
+        /* 닉네임 */
+        .userName {
+            font-size: 3.5vh;
+            letter-spacing: 0.15vw;
+            font-weight: 700;
+        }
+
+        /* 개인정보 수정 버튼 */
+        .infoSetting {
+            width: 3.5vh;
+            height: 3.5vh;
+            margin-top: -0.3vh;
+            cursor: pointer;
+        }
+
+        /* 회원 탈퇴 버튼 */
+        #deleteId, #alarmAdd {
+            margin-top: 1.3vh;
+            color: gray;
+            cursor: pointer;
+        }
+
+        #deleteId:hover, #alarmAdd:hover {
+            color: red;
+            text-decoration: underline;
+        }
+
+        /* 회원 정보 수정 모달 */
+        #infoSettingModal {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* 어두운 배경 */
+            overflow-y: auto;
+        }
+
+        #infoSettingModal.show {
+            display: flex;
+        }
+
+        /* 회원 정보 수정 모달 스타일 */
+        #infoSettingModal .modal-header {
+            display: flex;
+            justify-content: space-between; /* 타이틀과 닫기 버튼 양 끝 정렬 */
+            align-items: center;
+            margin-bottom: 2vh;
+        }
+
+        #infoSettingModal .modal-content {
+            background-color: white;
+            padding: 3vw;
+            width: 70vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+            position: relative;
+        }
+
+        #infoSettingModal .joinArea {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: auto;
+            overflow-y: auto;
+        }
+
+        /* 회원 정보 수정 모달_타이틀 영역 */
+        #infoSettingModal .joinTitleArea {
+            display: block;
+            width: 25vw;
+            font-size: 2.5vh;
+            text-align: center;
+            margin-bottom: 3vh;
+        }
+
+        #infoSettingModal .modal-title {
+            font-size: 2.5vh;
+            letter-spacing: 0.1vw;
+            margin-bottom: 2.5vh;
+            text-align: left;
+        }
+
+        #infoSettingModal .close {
+            font-size: 2.5vh;
+            font-weight: 300;
+            cursor: pointer;
+            text-align: right;
+        }
+
+        /* 프로필 이미지 영역 */
+        .editProfileArea {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 3vh;
+        }
+
+        /* 프로필 사진 */
+        .editProfile {
+            margin: 0 auto 2vh auto;
+            width: 12vh;
+            height: 12vh;
+        }
+
+        .editProfile img {
+            border-radius: 50%;
+            border: 0.07vw solid black;
+        }
+
+        /* 프로필 사진 영역 안에 버튼 */
+        .editProfileButton {
+            font-size: 1.8vh;
+            color: gray;
+            cursor: pointer;
+        }
+
+        .editProfileButton:hover {
+            text-decoration: underline;
+            color: black;
+        }
+
+        /* 아이디 영역 */
+        .idArea,
+        .checkModal,
+        .emailArea,
+        .emailCodeArea,
+        .nickArea {
+            width: 100%;
+            height: 9vh;
+            margin-bottom: 5vh;
+        }
+
+        /* 상단 영역 */
+        .idUpsideArea,
+        .passwordUpsideArea,
+        .emailUpsideArea,
+        .emailCodeUpsideArea,
+        .nickUpsideArea {
+            width: 100%;
+            height: 2.15vh;
+            padding: 0;
+        }
+
+        /* 타이틀 */
+        .idTitle,
+        .passwordTitle,
+        .emailTitle,
+        .emailCodeTitle,
+        .nickTitle {
+            float: left;
+            font-size: 1.8vh;
+            font-weight: 600;
+            margin-left: 0.2vh;
+            color: gray;
+        }
+
+        /* 버튼 */
+        .emailButton,
+        .codeButton,
+        .nickDoubleCheck {
+            float: right;
+            font-size: 1.8vh;
+            font-weight: 500;
+            margin-right: 0.2vh;
+            color: lightgray;
+            text-decoration: underline;
+        }
+
+        .emailButton:hover,
+        .codeButton:hover,
+        .nickDoubleCheck:hover {
+            text-decoration: underline;
+            color: #2DC986;
+            cursor: pointer;
+        }
+
+        /* input 영역 */
+        .idInputArea,
+        .passwordInputArea,
+        .emailInputArea,
+        .emailCodeInput,
+        .nickInputArea {
+            width: 100%;
+        }
+
+        /* input */
+        .memberId,
+        .memberPw,
+        .memberEmail,
+        .emailCode,
+        .memberNickname {
+            margin-top: 1vh;
+            padding-bottom: 0.5vh;
+            border: none;
+            border-bottom: 0.07vw solid black;
+            outline: none;
+            font-size: 2vh;
+            background-color: transparent;
+            width: 100%;
+            box-sizing: border-box;
+            color: black;
+        }
+
+        /* 에러 메시지 */
+        .idError,
+        .emailError,
+        .emailCodeError,
+        .nickError {
+            display: none;
+            width: 100%;
+            font-size: 1.6vh;
+            margin-top: 1.2vh;
+            text-align: center;
+            color: red;
+        }
+
+        /* 버튼 영역 */
+        .buttonArea {
+            text-align: center;
+            margin-top: 5vh;
+        }
+
+        .closeButton,
+        .joinButton {
+            margin-right: 2vw;
+            width: 5vw;
+            height: 4.5vh;
+            border-radius: 2.5vh;
+            font-size: 2vh;
+            letter-spacing: 0.1vw;
+            background-color: gray;
+            color: white;
+            border: 0.07vw solid black;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .closeButton:hover,
+        .joinButton:hover {
+            background-color: #8ABAFF;
+        }
+
+        /* 사용자 알림 영역_쓰레기 배출일 */
+        .userAlert {
+            display: flex;
+            gap: 3vw;
+            font-size: 2vh;
+            letter-spacing: 0.08vw;
+            text-align: left;
+        }
+
+        /* 프로필 영역과 메뉴 사이의 영역 */
+        .menuBlank {
+            width: 100%;
+            height: 7vh;
+        }
+
+        /* 메뉴 영역 */
+        .menuArea {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 150px;
+            margin: auto;
+            width: 40vw;
+            height: 5vh;
         }
 
-        .profileEdit {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 350px;
+        /* 메뉴 버튼 */
+        .myAlert, .myShare, .myBookmark {
+            width: 18vh;
+            height: 5vh;
+            font-size: 2.2vh;
+            border-radius: 5vh;
+            border: 0.07vw solid black;
+            font-weight: 700;
+            letter-spacing: 0.1vw;
+            cursor: pointer;
+            background-color: white;
         }
 
-        .profileBoard {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 500px;
+        .myAlert:hover, .myShare:hover, .myBookmark:hover {
+            background-color: #8ABAFF;
         }
 
-        .boardPage {
+        /* 알림, 컨텐츠 사이 공백 */
+        .contentBlank {
+            width: 100%;
+            height: 5vh;
+        }
+
+        /* 나의 알림 영역 */
+        .myAlertArea {
+            margin: 0 auto 10vh auto;
+            width: 65vw;
+        }
+
+        /* 알림 (테스트용) */
+        .alertEx1 {
+            display: flex;
+            margin: 0 auto 7vh auto;
+            align-items: center;
+            width: 50vw;
+            height: 30vh;
+            background-color: white;
+            border: 0.07vw solid black;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            padding: 4.5vh;
+        }
+
+        /* 알림_사진 */
+        .rightIcon {
+            width: 12vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rightIcon img {
+            width: 100%;
+            object-fit: contain;
+        }
+
+        /* 알림 내용 영역 */
+        .alertContentArea {
+            display: flex;
+            flex-direction: column;
+            flex: 3;
+            margin-left: 4vw;
+            height: 100%;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 알림_알림 편집 */
+        .settingAlert {
+            font-size: 2vh;
+            letter-spacing: 0.05vw;
+            color: gray;
+            text-align: right;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .settingAlert:hover {
+            text-decoration: underline;
+        }
+
+        /* 알림_알림 내용 영역 */
+        .contentArea {
+            margin-top: auto;
+            margin-bottom: auto;
+            text-align: left;
+        }
+
+        /* 알림_요일 */
+        .date {
+            font-size: 2.2vh;
+            letter-spacing: 0.1vw;
+        }
+
+        /* 알림_내용 */
+        .alertContent {
+            margin-left: 1vw;
+            font-size: 3vh;
+            font-weight: 700;
+            letter-spacing: 0.15vw;
+        }
+
+        /* 알림 추가 모달 */
+        .modal {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* 어두운 배경 */
+        }
+
+        .modal.show {
+            display: flex;
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center;     /* 수직 중앙 정렬 */
+        }
+
+        /* 모달 내부 콘텐츠 */
+        .modal-content {
+            background-color: white;
+            padding: 3vw;
+            width: 30vw;
+            max-width: 30vw;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+            position: relative;
+        }
+
+        /* 모달 헤더 */
+        .modal-header {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
-            position: absolute;
-            top: 600px;
+            align-items: center;
+            margin-bottom: 2vh;
+        }
+
+        /* 모달 타이틀 */
+        .modal-title {
+            font-size: 2.5vh;
+            letter-spacing: 0.1vw;
+            margin-bottom: 2.5vh;
+        }
+
+        /* 닫기 버튼 */
+        .close {
+            margin-top: -2.5vh;
+            font-size: 2.5vh;
+            font-weight: 300;
+            cursor: pointer;
+        }
+
+        /* 모달 컨텐츠 */
+        .modal-body {
+            font-size: 2vh;
+            line-height: 5vh;
+            text-align: left;
+        }
+
+        /* 모달 내 인풋 그룹 */
+        .input-group {
+            margin: 2vh 0;
+        }
+
+        /* 모달 내 인풋 라벨 */
+        .input-group label {
+            display: block;
+            margin-bottom: 1vh;
+            font-weight: bold;
+        }
+
+        /* 모달 내 인풋 */
+        .input-group input {
+            padding: 1vh;
+            width: calc(100% - 2vh);
+            font-size: 2vh;
+            border: 0.07vw solid black;
+            border-radius: 0.5vh;
+            outline: none;
+            margin-bottom: 1vh;
+        }
+
+        /* 에러 메시지 */
+        .error-message {
+            color: red;
+            font-size: 1.8vh;
+            margin-top: 1vh;
+        }
+
+        /* 모달 푸터 */
+        .modal-footer {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 2vh;
+        }
+
+        /* 모달 버튼 */
+        .modal-button {
+            width: 8vw;
+            height: 4.5vh;
+            border-radius: 2.5vh;
+            font-size: 2vh;
+            background-color: gray;
+            color: white;
+            border: 0.07vw solid black;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .modal-button:hover {
+            background-color: #8ABAFF;
+        }
+
+        /* 알림 추가 버튼 */
+        .Day, .alarmContents {
+            font-size: 2vh;
+            line-height: 5vh;
+            letter-spacing: 0.08vw;
+            text-align: left;
+        }
+
+        /* 알림 요일 */
+        .alarmDay {
+            width: 100%;
+            margin-bottom: 3vh;
+        }
+
+        /* 알림 라디오 버튼 */
+        .alarmDay input[type="radio"] {
+            appearance: none;
+            width: 1.5vh;
+            height: 1.5vh;
+            border: 0.07vw solid black;
+            border-radius: 50%;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .alarmDay input[type="radio"]:checked {
+            background-color: #8ABAFF;
+        }
+
+        /* 추가한 알림 내용 */
+        .alarmContents {
+            margin-bottom: 2vh;
+        }
+
+        /* 알림 내용 입력 필드 */
+        .alarmContents input {
+            padding: 0 1.2vw;
+            width: 100%;
+            height: 5vh;
+            font-size: 1.8vh;
+            border: 0.07vw solid black;
+            border-radius: 5vh;
+            outline: none;
+        }
+
+        /* 저장 버튼 */
+        #added, #edited {
+            display: block;
+            margin: 0 auto;
+            width: 5vw;
+            height: 4.5vh;
+            border-radius: 2.5vh;
+            font-size: 2vh;
+            letter-spacing: 0.1vw;
+            background-color: gray;
+            color: white;
+            border: 0.07vw solid black;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+            z-index: 1;
+        }
+
+        #added:hover, #edited:hover {
+            background-color: #8ABAFF;
+        }
+
+        /* 회원 탈퇴 모달 */
+        .verifyModal {
+            text-align: center;
+            font-size: 2vh;
+            margin-bottom: 5vh;
+            letter-spacing: 0.1vw;
+            background-color: aliceblue;
         }
 
         /* 모달 스타일 */
-        .modal {
+        .verifyModal .modal {
             display: none;
             position: fixed;
             z-index: 1;
@@ -85,7 +807,11 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .modal-content {
+        .verifyModal .modal.show {
+            display: block;
+        }
+
+        .verifyModal .modal-content {
             background-color: #fff;
             margin: 10% auto;
             padding: 30px;
@@ -96,7 +822,7 @@
             position: relative;
         }
 
-        .close {
+        .verifyModal .close {
             color: #aaa;
             position: absolute;
             top: 10px;
@@ -106,18 +832,18 @@
             cursor: pointer;
         }
 
-        .close:hover,
-        .close:focus {
+        .verifyModal .close:hover,
+        .verifyModal .close:focus {
             color: black;
         }
 
         /* 페이징 스타일 추가 */
-        .pagination {
+        .verifyModal .pagination {
             margin-top: 20px;
             text-align: center;
         }
 
-        .pagination .page-btn {
+        .verifyModal .pagination .page-btn {
             margin: 0 5px;
             padding: 5px 10px;
             background-color: #f1f1f1;
@@ -126,17 +852,50 @@
             border-radius: 3px;
         }
 
-        .pagination .page-btn:hover {
+        .verifyModal .pagination .page-btn:hover {
             background-color: #ddd;
         }
 
-        .pagination .current-page {
+        .verifyModal .pagination .current-page {
             margin: 0 5px;
             padding: 5px 10px;
             font-weight: bold;
             color: #fff;
             background-color: #007bff;
             border-radius: 3px;
+        }
+
+        /* 버튼 영역 */
+        .button {
+            text-align: center;
+            margin-top: 5vh;
+        }
+
+        #next, #delete, #reset {
+            margin-right: 2vw;
+            width: 5vw;
+            height: 4.5vh;
+            border-radius: 2.5vh;
+            font-size: 2vh;
+            letter-spacing: 0.1vw;
+            background-color: gray;
+            color: white;
+            border: 0.07vw solid black;
+            cursor: pointer;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        #next:hover {
+            background-color: red;
+        }
+
+        #delete:hover {
+            background-color: red;
+        }
+
+        #reset:hover {
+            background-color: #8ABAFF;
         }
     </style>
     <!-- jQuery 라이브러리 로드 -->
@@ -312,15 +1071,14 @@
                     },
                     success: function (response) {
                         if (response.alarmExists) {
-                            if (confirm("기존 알람이 있습니다. 수정하시겠습니까?")){
+                            if (confirm("기존 알람이 있습니다. 수정하시겠습니까?")) {
                                 editAlarm(alarmDay, alarmContents);
                                 $('#alarmAddModal').fadeOut();
                             }
-                        }
-                        else {
+                        } else {
                             addAlarm(alarmDay, alarmContents);
                             $('#alarmAddModal').fadeOut();
-                            setTimeout(function() {
+                            setTimeout(function () {
                                 location.reload();
                             }, 1000);
                         }
@@ -332,7 +1090,6 @@
                     }
                 });
             })
-
 
 
             // 알림 편집
@@ -556,243 +1313,416 @@
     </script>
 </head>
 <body>
-<header>
-    <!-- 네비게이션 바 -->
-    <nav>
-        <p><a href="/">로고</a></p>
-        <p><a th:href="@{/info/service}">우리는..</a></p>
-        <p><a th:href="@{/share/list}">나눠요</a></p>
-        <p><a th:href="@{/recycle/list}">버려요</a></p>
+<!-- 네비게이션 구역 -->
+<div class="navigationContainer">
 
-        <!-- 회원 기능 -->
-        <div class="member">
-            <th:block sec:authorize="not isAuthenticated()">
-                <p>
-                    <a th:href="@{/member/join}">회원가입</a>
-                </p>
-                <p>
-                    <a th:href="@{/member/loginForm}">로그인</a>
-                </p>
-            </th:block>
-            <th:block sec:authorize="isAuthenticated()">
-                <p>
-                    <button
-                            id="messages"
-                            th:data-num="${#authentication.principal.num}"
-                    >
-                        쪽지
-                    </button>
-                </p>
+    <!-- 로고 -->
+    <div class="logo">
+        <a href="/">
+            <img src="/images/logo.png" class="logoImg">
+        </a>
+    </div>
 
-                <!-- 쪽지 목록 모달 -->
-                <div id="messagesModal" class="modal">
-                    <div class="modal-content">
-                        <span id="messagesClose" class="close">&times;</span>
+    <!-- 우리는 -->
+    <div class="projectInfo">
+          <span class="highlighterBlue">
+              <a href="/info/service">우리는</a>
+          </span>
+    </div>
+
+    <!-- 나눠요 -->
+    <div class="projectInfo">
+          <span class="highlighterBlue">
+              <a href="/share/list">나눠요</a>
+          </span>
+
+    </div>
+
+    <!-- 버려요 -->
+    <div class="projectInfo">
+          <span class="highlighterBlue">
+            <a href="/recycle/list">버려요</a>
+          </span>
+    </div>
+
+    <!-- 오른쪽 정렬 -->
+    <div class="rightGroup">
+
+        <!-- 로그인을 안했을 시 -->
+        <th:block sec:authorize="not isAuthenticated()">
+            <div class="join">
+                <span class="highlighterGreen">
+                  <a href="/member/join">회원가입</a>
+                </span>
+            </div>
+
+            <div class="login">
+                <span class="highlighterGreen">
+                  <a href="/member/loginForm">로그인</a>
+                </span>
+            </div>
+        </th:block>
+
+
+        <!-- 로그인을 했을 시 -->
+        <th:block sec:authorize="isAuthenticated()">
+
+            <!--****************************************** 쪽지 *****************************-->
+            <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
+                <!-- 쪽지 이미지  -->
+                <img src="/images/post.png" class="postImage">
+                <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+                <div class="badge" id="badge">0</div>
+            </div>
+
+            <!-- 쪽지 목록 모달 -->
+            <div
+                    id="messagesModal"
+                    class="modal"
+                    style="
+                  max-height: calc(100vh - 5vh);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                  "
+            >
+                <div class="modal-content">
+                    <!-- 나눔 이야기 상단 영역 -->
+                    <div class="messageUpside">
                         <h2>나눔 이야기</h2>
-                        <div id="messageListContainer"></div>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
                     </div>
+                    <!-- 쪽지방 목록이 출력되는 곳 -->
+                    <div id="messageListContainer"></div>
                 </div>
+            </div>
 
-                <!-- 쪽지 상세보기 모달 -->
-                <div id="detailsModal" class="modal">
-                    <div class="modal-content">
-                        <span id="detailsClose" class="close">&times;</span>
-                        <h2>쪽지 상세보기</h2>
-                        <div id="messageDetailsContainer"></div>
-                        <textarea
-                                id="messageInput"
-                                placeholder="메시지를 입력하세요"
-                        ></textarea>
+            <!-- 쪽지 상세보기 모달 -->
+            <div
+                    id="detailsModal"
+                    class="modal"
+                    style="
+                  max-height: calc(100vh - 5vh);
+                  overflow-x: hidden;
+                  overflow-y: auto;
+                  "
+            >
+                <div class="modal-content">
+                    <div class="messageUpside">
+                        <div class="usernameContainer">
+                            <img
+                                    id="receiverProfileImage"
+                                    src=""
+                                    alt="Profile"
+                                    style="width: 3vh; height: 3vh; border-radius: 50%; vertical-align: middle;"
+                            />
+                            <span class="usernameTitle"><b id="receiverNickname"></b>님에게</span>
+                            <!-- 신고하기 버튼 (공백 유지) -->
+                            <span id="userReportBtn" class="userReportButton highlighterRed">신고하기</span>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
+                    </div>
+
+                    <!-- 게시글로 이동하는 영역 추가 -->
+                    <div id="goToShareBoard" style="cursor: pointer">
+                        <div
+                                id="shareBoardLink"
+                                style="
+                        padding: 1vh 1vw;
+                        border: 0.07vw solid #ccc;
+                        text-align: center;
+                        "
+                        >
+                            게시글로 이동
+                        </div>
+                    </div>
+
+                    <!-- 쪽지 목록 출력 영역 -->
+                    <div id="messageDetailsContainer"></div>
+                    <!-- 쪽지 보내기 -->
+                    <div id="detailContentsContainer">
+                  <textarea
+                          id="messageInput"
+                          class="messageContents"
+                          placeholder="내용을 입력해주세요!"
+                          maxlength="100"
+                  ></textarea>
+                        <!-- 보내기 버튼 -->
                         <button id="sendMessageBtn">보내기</button>
-                        <button id="userReportBtn">신고하기</button>
-                        <button id="shareComplete" style="display: none">
+                        <button id="shareComplete" style="display: none; margin-left: 1vw;">
                             나눔 완료
                         </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- 게시글 유저 신고 모달창 -->
-                <div id="reportModal" class="modal">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <h2>신고하기</h2>
-                        <form id="reportForm">
-                            <div>
-                                <label
-                                ><input
-                                        type="checkbox"
-                                        name="reportReason"
-                                        value="욕설, 인신공격 등 언어적 폭력"
-                                />
-                                    욕설, 인신공격 등 언어적 폭력</label
-                                >
-                                <label
-                                ><input
-                                        type="checkbox"
-                                        name="reportReason"
-                                        value="부적절한 게시글"
-                                />
-                                    부적절한 게시글</label
-                                >
-                                <label
-                                ><input
-                                        type="checkbox"
-                                        name="reportReason"
-                                        value="사기 또는 허위정보"
-                                />
-                                    사기 또는 허위정보</label
-                                >
-                                <label
-                                ><input type="checkbox" name="reportReason" value="기타"/>
-                                    기타</label
-                                >
-                            </div>
-                            <textarea
-                                    id="additionalReason"
-                                    placeholder="기타 사유를 입력하세요"
-                            ></textarea
-                            ><br/>
-                            <button type="button" id="submitUserReportBtn">
-                                신고 제출
-                            </button>
-                        </form>
+            <!-- 게시글 유저 신고 모달창 -->
+            <div id="reportModal" class="modal">
+                <div class="modal-content">
+                    <!-- 신고 모달 상단 영역 -->
+                    <div class="reportUpside">
+                        <!-- 신고 타이틀과 신고하고자 하는 유저 닉네임을 포함하는 영역 -->
+                        <div class="reportContainer">
+                            <!-- 타이틀 -->
+                            <span class="reportTitle">신고하기</span>
+                            <!-- 신고하기 버튼 (공백 유지) -->
+                            <span id="reportUser" class="reportUser">닉네임 님</span>
+                        </div>
+                        <!-- 닫기 버튼 -->
+                        <span class="close">╳</span>
                     </div>
+
+                    <form id="reportForm" class="reportArea">
+                        <div>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="욕설, 인신공격 등 언어적 폭력"
+                            />
+                                욕설, 인신공격 등 언어적 폭력</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="부적절한 게시글"
+                            />
+                                부적절한 게시글</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="사기 또는 허위정보"
+                            />
+                                사기 또는 허위정보</label
+                            >
+                            <br>
+                            <label class="reportReason"
+                            ><input type="radio" name="reportReason" value="기타"/>
+                                기타</label
+                            >
+                        </div>
+                        <textarea
+                                id="additionalReason"
+                                class="additionalReason"
+                                placeholder="기타 사유를 입력하세요."
+                                maxlength="400"
+                        ></textarea
+                        ><br/>
+                        <button type="button" id="submitUserReportBtn" class="reportSubmit">
+                            신고 제출
+                        </button>
+                    </form>
                 </div>
+            </div>
+            <!-- ************************************ 쪽지 목록 모달 *************************************-->
 
-                <p>
-                    <a th:href="@{/member/logout}">로그아웃</a>
-                </p>
-                <p>
-                    <a th:href="@{/myPage/view}">마이페이지</a>
-                </p>
-            </th:block>
+            <!-- 마이페이지  -->
+            <div class="mypage">
+                <span class="highlighterGreen">
+                  <a th:href="@{/myPage/view}">마이페이지</a>
+                </span>
+            </div>
+
+            <!-- 로그아웃 -->
+            <div class="logout">
+                <span class="highlighterGreen">
+                  <a th:href="@{/member/logout}">로그아웃</a>
+                </span>
+            </div>
+        </th:block>
+    </div>
+</div>
+
+<!-- 공백 -->
+<div class="blankContainer"></div>
+
+<!-- mainContainer -->
+<div id="mainContainer">
+
+    <!-- 상단 프로필 부분 -->
+    <div class="profileArea">
+        <!-- 왼쪽 영역_프로필 이미지 -->
+        <div class="profileImage">
+            <img class="image"
+                 alt="프로필 이미지"
+                 th:src="@{/member/profileDownload(memberNum=${memberNum})}"
+            />
         </div>
-    </nav>
-</header>
 
-<main>
-    <!-- 프로필 정보 제공 -->
-    <section class="profileInfo">
-        <!-- 닉네임 -->
-        <p th:text="${userNickname}">닉네임</p>
-        <!-- 나눔 수 -->
-        <p th:text="${shareCount}">나눔 수</p>
+        <!-- 오른쪽 영역 -->
+        <div class="userContentArea">
+            <!-- 상단 -->
+            <div class="userInfo">
+                <!-- 닉네임, 개인정보 수정 영역 -->
+                <div class="userNameContainer">
+                    <!-- 닉네임 -->
+                    <span class="userName" th:text="${userNickname}">이름</span>
+                    <!-- 개인정보 수정 -->
+                    <div class="infoSetting">
+                        <a th:href="@{/myPage/profileEdit}"><img src="/images/setting.png"></a>
+                    </div>
+                    <!-- 알림 추가-->
+                    <button id="alarmAdd">알림 추가</button>
+                    <!-- 회원 탈퇴 -->
+                    <button id="deleteId">회원 탈퇴</button>
+                </div>
+            </div>
+
+            <div class="userAlert">
+                <!-- 나의 나눔 -->
+                <span class="shareCount">나의 나눔 <span th:text="${shareCount}">숫자</span></span>
+                <!-- 북마크 -->
+                <span class="pointCount">포인트 <span th:text="${pointCount}">숫자</span></span>
+                <!-- 등록된 알림 -->
+                <span class="alertCount">나의 알림 <span th:text="${alarmTotal}">요일</span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 메뉴와 컨텐츠 사이 공백 -->
+    <div class="menuBlank"></div>
+
+
+    <!-- 메뉴 영역 -->
+    <div class="menuArea">
         <!-- 나의 알림 -->
-        <p th:text="${alarmTotal}">나의 알림</p>
-    </section>
+        <button class="myAlert" data-list="alarm" data-url="/myPage/showAlarm"><span class="menuHighlight">나의 알림</span>
+        </button>
+        <!-- 나의 나눔 -->
+        <button class="myShare" data-list="give" data-url="/myPage/showGive"><span class="menuHighlight">나의 나눔</span>
+        </button>
+        <!-- 북마크 -->
+        <button class="myBookmark" data-list="bookmark" data-url="/myPage/showBookmark"><span
+                class="menuHighlight">북마크</span>
+        </button>
+    </div>
 
-    <!-- 프로필 편집 -->
-    <section class="profileEdit">
-        <!-- 프로필 수정 -->
-        <p><a th:href="@{/myPage/profileEdit}">프로필 수정</a></p>
+    <!-- 메뉴와 컨텐츠 사이의 공백 -->
+    <div class="contentBlank"></div>
 
-        <!-- 알림 추가 -->
-        <button id="alarmAdd">알림 추가</button>
+    <!-- 서브 페이지 영역 -->
+    <div id="showData"></div>
 
-        <!-- 알림 추가 모달 -->
-        <div id="alarmAddModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="alarmAddClose">&times;</span>
-                <h2>일정 등록</h2>
-                <div class="alarmDay">
-                    <span style="font-weight: bold">요일</span>
-                    <input type="radio" class="addDay" name="alarmDay" value="일요일">일
-                    <input type="radio" class="addDay" name="alarmDay" value="월요일">월
-                    <input type="radio" class="addDay" name="alarmDay" value="화요일">화
-                    <input type="radio" class="addDay" name="alarmDay" value="수요일">수
-                    <input type="radio" class="addDay" name="alarmDay" value="목요일">목
-                    <input type="radio" class="addDay" name="alarmDay" value="금요일">금
-                    <input type="radio" class="addDay" name="alarmDay" value="토요일">토
+    <!-- 나의 알림_알림 추가 모달 창 -->
+    <div id="alarmAddModal" class="modal">
+        <div class="modal-content">
+            <!-- 모달 헤더: 타이틀과 닫기 버튼 -->
+            <div class="modal-header">
+                <div class="modal-title">나의 알림 등록하기</div>
+                <span class="close" id="alarmAddClose">╳</span>
+            </div>
+            <!-- 모달 내용 -->
+            <div class="alarmDay">
+                <label id="alarmDay">요일</label>
+                <br>
+                <input type="radio" class="addDay" name="alarmDay" value="일요일"> 일
+                <input type="radio" class="addDay" name="alarmDay" value="월요일"> 월
+                <input type="radio" class="addDay" name="alarmDay" value="화요일"> 화
+                <input type="radio" class="addDay" name="alarmDay" value="수요일"> 수
+                <input type="radio" class="addDay" name="alarmDay" value="목요일"> 목
+                <input type="radio" class="addDay" name="alarmDay" value="금요일"> 금
+                <input type="radio" class="addDay" name="alarmDay" value="토요일"> 토
+            </div>
+            <div class="alarmContents">
+                <label for="addContents">알림 내용</label>
+                <br>
+                <input type="text" id="addContents" class="alarmContents" name="alarmContents"
+                       placeholder="내용을 입력해주세요!">
+            </div>
+            <button type="submit" id="added">저장</button>
+        </div>
+    </div>
+
+    <!-- 알림 수정 모달 창 -->
+    <div id="alarmEditModal" class="modal">
+        <div class="modal-content">
+            <!-- 모달 헤더: 타이틀과 닫기 버튼 -->
+            <div class="modal-header">
+                <div class="modal-title">나의 알림 수정하기</div>
+                <span class="close" id="alarmEditClose">╳</span>
+            </div>
+            <div class="alarmDay">
+                <label id="editDay">요일</label>
+                <br>
+                <input type="radio" class="editDay" name="alarmDay" value="일요일">일
+                <input type="radio" class="editDay" name="alarmDay" value="월요일">월
+                <input type="radio" class="editDay" name="alarmDay" value="화요일">화
+                <input type="radio" class="editDay" name="alarmDay" value="목요일">목
+                <input type="radio" class="editDay" name="alarmDay" value="수요일">수
+                <input type="radio" class="editDay" name="alarmDay" value="금요일">금
+                <input type="radio" class="editDay" name="alarmDay" value="토요일">토
+            </div>
+            <div class="alarmContents">
+                <label for="addContents">알림 내용</label>
+                <br>
+                <input type="text" id="editContents" class="alarmContents" name="alarmContents"
+                       placeholder="내용을 입력해주세요!">
+            </div>
+            <button type="submit" id="edited">수정</button>
+        </div>
+    </div>
+
+    <!-- 탈퇴 경고 모달 -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">회원 탈퇴 하기</div>
+                <span class="close" id="alertClose">╳</span>
+            </div>
+            <div id="board">
+                <div class="deleteAlert">
+                    정말로 탈퇴하시겠습니까?
                 </div>
-                <div class="alarmContents">
-                    <span style="font-weight: bold">알림 내용</span>
-                    <input type="text" id="addContents" class="alarmContents" name="alarmContents">
+                <div id="button">
+                    <button id="reset">취소</button>
+                    <button id="next">탈퇴하기</button>
                 </div>
-                <button type="submit" id="added">저장</button>
             </div>
         </div>
+    </div>
 
-        <!-- 알림 편집 모달 -->
-        <div id="alarmEditModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="alarmEditClose">&times;</span>
-                <h2>일정 등록</h2>
-                <div class="alarmDay">
-                    <span style="font-weight: bold">요일</span>
-                    <input type="radio" class="editDay" name="alarmDay" value="일요일">일
-                    <input type="radio" class="editDay" name="alarmDay" value="월요일">월
-                    <input type="radio" class="editDay" name="alarmDay" value="화요일">화
-                    <input type="radio" class="editDay" name="alarmDay" value="목요일">목
-                    <input type="radio" class="editDay" name="alarmDay" value="수요일">수
-                    <input type="radio" class="editDay" name="alarmDay" value="금요일">금
-                    <input type="radio" class="editDay" name="alarmDay" value="토요일">토
-                </div>
-                <div class="alarmContents">
-                    <span style="font-weight: bold">알림 내용</span>
-                    <input type="text" id="editContents" class="alarmContents" name="alarmContents">
-                </div>
-                <button type="submit" id="edited">수정</button>
+    <!-- 비밀번호 확인 모달 -->
+    <div id="checkModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">비밀번호 확인</div>
+                <span class="close" id="checkClose">╳</span>
             </div>
-        </div>
-
-        <!-- 멤버 탈퇴 -->
-        <button id="deleteId">멤버 탈퇴</button>
-
-        <!-- 탈퇴 경고 모달 -->
-        <div id="alertModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="alertClose">&times;</span>
-                <div id="board">
-                    <span style="font-weight: bold">탈퇴하시겠습니까?</span>
-                    <div id="button">
-                        <button id="reset">취소</button>
-                        <button id="next">탈퇴하기</button>
-                    </div>
+            <div id="check">
+                <!-- 비밀번호 입력 -->
+                <div class="passwordUpsideArea">
+                    <div class="passwordTitle">비밀번호를 입력해주세요</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 비밀번호 확인 모달 -->
-        <div id="checkModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="checkClose">&times;</span>
-                <div id="check">
-                    <!-- 비밀번호 입력 -->
-                    <span style="font-weight: bold">비밀번호 확인</span>
+                <div class="passwordInputArea">
                     <input type="password" name="pwCheck" id="pwCheck"/>
+                </div>
+                <div class="button">
                     <button id="delete">탈퇴하기</button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- 탈퇴 확인 모달 -->
-        <div id="verifyModal" class="modal">
-            <div class="modal-content">
-                <span class="close" id="verifyClose">&times;</span>
-                <div id="verify">탈퇴되었습니다.</div>
+    <!-- 탈퇴 확인 모달 -->
+    <div id="verifyModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title"></div>
+                <span class="close" id="verifyClose">╳</span>
             </div>
+            <div id="verify">탈퇴되었습니다.</div>
         </div>
-    </section>
+    </div>
 
-    <!-- 맞춤형 보드 제공 -->
-    <section class="profileBoard">
-        <!-- 알림 띄우기 -->
-        <button data-list="alarm" data-url="/myPage/showAlarm">나의 알림</button>
-        <!-- 나눔 현황 띄우기 -->
-        <button data-list="give" data-url="/myPage/showGive">나의 나눔</button>
-        <button data-list="donate" data-url="/myPage/showGive">나눴어요</button>
-        <button data-list="pendingGive" data-url="/myPage/showGive">나눠요</button>
-        <button data-list="receive" data-url="/myPage/showReceive">받았어요</button>
-        <!-- 북마크 띄우기 -->
-        <button data-list="bookmark" data-url="/myPage/showBookmark">북마크</button>
-    </section>
-    <section class="boardPage">
-        <div id="showData"></div>
-    </section>
-</main>
-<!--<footer>-->
-<!--    <p><a th:href="@{/info/siteMap}" target="_blank">사이트맵</a></p>-->
-<!--    <p><a th:href="@{/info/faq}" target="_blank">FAQ</a></p>-->
-<!--</footer>-->
+    <!--    <button data-list="donate" data-url="/myPage/showGive">나눴어요</button>-->
+    <!--    <button data-list="pendingGive" data-url="/myPage/showGive">나눠요</button>-->
+    <!--    <button data-list="receive" data-url="/myPage/showReceive">받았어요</button>-->
+</div>
 </body>
 </html>

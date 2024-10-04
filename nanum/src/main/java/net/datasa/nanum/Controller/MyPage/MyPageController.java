@@ -60,6 +60,10 @@ public class MyPageController {
         model.addAttribute("userNickname", userNickname);
         model.addAttribute("shareCount", shareCount);
         model.addAttribute("alarmTotal", alarmTotal);
+        model.addAttribute("memberNum", member.getMemberNum());
+        model.addAttribute("pointCount", member.getMemberPoint());
+
+        log.debug("model : {}", model.toString());
 
         return "myPageView/myPage";
     }
