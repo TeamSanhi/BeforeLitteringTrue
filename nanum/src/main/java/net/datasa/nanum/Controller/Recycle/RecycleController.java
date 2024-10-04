@@ -41,46 +41,32 @@ public class RecycleController {
      * @param searchWord - 검색어
      * @return recycleView/recycleList 페이지
      */
-    @GetMapping("list")
-    public String recycleList(Model model,
-                              @RequestParam(name = "page", defaultValue = "1") int page,
-                              @RequestParam(name = "searchType", defaultValue = "") String searchType,
-                              @RequestParam(name = "searchWord", defaultValue = "") String searchWord) {
+  @GetMapping("list")
+public String recycleList(Model model,
+                          @RequestParam(name = "searchType", defaultValue = "") String searchType,
+                          @RequestParam(name = "searchWord", defaultValue = "") String searchWord) {
 
-        // 로그로 설정 값 및 요청 파라미터 출력
-        log.debug("설정 값 : pageSize={}, linkSize={}", defaultPageSize, linkSize);
-        log.debug("요청파라미터 : page={}, searchType={}, searchWord={}", page, searchType, searchWord);     
+    // 매우 큰 페이지 크기 설정
+    int pageSize = Integer.MAX_VALUE;
 
-        // 페이지 크기를 설정 (여기서는 20으로 설정)
-        int pageSize = 20;
+    // 첫 번째 페이지 가져오기
+    int page = 1;
 
-        // 서비스 계층에서 글 목록 가져오기
-        Page<RecycleDTO> boardPage = recycleService.getList(page, pageSize, searchType, searchWord);
+    // 서비스 계층에서 글 목록 가져오기
+    Page<RecycleDTO> boardPage = recycleService.getList(page, pageSize, searchType, searchWord);
 
-        // 가져온 게시물 목록을 모델에 추가
-        List<RecycleDTO> recycleList = boardPage.getContent();
-        model.addAttribute("recycleList", recycleList);
+    // 가져온 게시물 목록을 모델에 추가
+    List<RecycleDTO> recycleList = boardPage.getContent();
+    model.addAttribute("recycleList", recycleList);
 
-        // 검색 관련 정보를 모델에 추가
-        model.addAttribute("searchType", searchType);
-        model.addAttribute("searchWord", searchWord);
+    // 검색 관련 정보를 모델에 추가
+    model.addAttribute("searchType", searchType);
+    model.addAttribute("searchWord", searchWord);
 
-        // 페이징 처리에 필요한 데이터 모델에 추가
-        model.addAttribute("boardPage", boardPage);
-        model.addAttribute("page", page);
-        model.addAttribute("linkSize", linkSize);
+    // Thymeleaf 템플릿을 반환
+    return "recycleView/recycleList";
+}
 
-        // 페이지 관련 로그 출력
-        log.debug("전체 개수 :{}", boardPage.getTotalElements());
-        log.debug("전체 페이지수 :{}", boardPage.getTotalPages());
-        log.debug("현재 페이지 :{}", boardPage.getNumber());
-        log.debug("페이지당 글수 :{}", boardPage.getSize());
-        log.debug("이전페이지 존재 :{}", boardPage.hasPrevious());
-        log.debug("다음페이지 존재 :{}", boardPage.hasNext());
-
-        // Thymeleaf 템플릿을 반환
-        return "recycleView/recycleList";
-    }
 
     /**
      * 버려요 게시글 상세보기 (팝업에서 사용)
