@@ -23,7 +23,7 @@ import net.datasa.nanum.repository.AlarmRepository;
 public class AlarmService {
     private final AlarmRepository alarmRepository;
 
-    private static final String[] daysOfWeek = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+    private static final String[] daysOfWeek = { "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일" };
 
     private Integer getDayIndex(String alarmDay) {
         for (int i = 0; i < daysOfWeek.length; i++) {
@@ -36,6 +36,7 @@ public class AlarmService {
 
     /**
      * 알림 리스트 entity에서 dto로 변환
+     * 
      * @param member 멤버 엔티티
      * @return 알림 리스트 반환
      */
@@ -57,12 +58,12 @@ public class AlarmService {
     public Boolean isAlarmExists(MemberEntity member, String alarmDay) {
         Integer alarmDayInt = getDayIndex(alarmDay);
 
-        if(alarmRepository.findByMemberNumAndAlarmDay(member, alarmDayInt)!=null)
+        if (alarmRepository.findByMemberNumAndAlarmDay(member, alarmDayInt) != null)
             return true;
         return false;
     }
 
-    public Boolean alarmAdd (MemberEntity member, String alarmDay, String alarmContents) {
+    public Boolean alarmAdd(MemberEntity member, String alarmDay, String alarmContents) {
         Integer alarmDayInt = getDayIndex(alarmDay);
 
         AlarmEntity alarmEntity = new AlarmEntity();
@@ -76,7 +77,7 @@ public class AlarmService {
         return true;
     }
 
-    public Boolean alarmEdit (MemberEntity memberNum, String alarmDay, String alarmContents) {
+    public Boolean alarmEdit(MemberEntity memberNum, String alarmDay, String alarmContents) {
         Integer alarmDayInt = getDayIndex(alarmDay);
 
         // 기존 알람 조회
@@ -96,26 +97,26 @@ public class AlarmService {
         try {
             // 알람 정보를 가져옵니다.
             AlarmEntity alarmEntity = alarmRepository.findById(alarmDTO.getAlarmNum())
-                .orElseThrow(() -> new EntityNotFoundException("알람 정보가 존재하지 않습니다."));
-    
+                    .orElseThrow(() -> new EntityNotFoundException("알람 정보가 존재하지 않습니다."));
+
             log.debug("지금 가져온 알람: {}", alarmEntity);
             // 알람 정보를 수정합니다.
             alarmEntity.setAlarmDay(alarmDTO.getAlarmDay());
             alarmEntity.setAlarmContents(alarmDTO.getAlarmContents());
-            alarmRepository.save(alarmEntity);  // 수정된 알람 저장
-    
+            alarmRepository.save(alarmEntity); // 수정된 알람 저장
+
             // 성공 응답 설정
             response.put("alarmChange", true);
         } catch (EntityNotFoundException e) {
             // 알람이 존재하지 않는 경우
             response.put("alarmChange", false);
-            response.put("message", e.getMessage());  // 에러 메시지 추가
+            response.put("message", e.getMessage()); // 에러 메시지 추가
         } catch (Exception e) {
             // 기타 예외 처리
             response.put("alarmChange", false);
-            response.put("message", "알람 수정에 실패했습니다.");  // 기본 에러 메시지
+            response.put("message", "알람 수정에 실패했습니다."); // 기본 에러 메시지
         }
-        
+
         return response;
     }
 

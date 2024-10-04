@@ -10,71 +10,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>recycleList</title>
 
-    <!-- jQuery 라이브러리 추가 -->
-    <!-- 로컬에 jQuery 파일이 있는 경우 -->
+    <link rel="stylesheet" href="/css/recycle/recycleList.css" />
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <!-- 또는 CDN을 사용하는 경우 -->
-    <!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
-
+    <script th:src="@{/js/recycle/recycleList.js}"></script>
     <!-- 스타일 정의 -->
     <style type="text/css">
-      /* 기본 스타일 */
-      .fixed_img_col {
-        margin: 0 auto;
-        text-align: center;
-        max-width: 1600px; /* 필요에 따라 조정 가능 */
-      }
-
-      .fixed_img_col ul {
-        list-style: none;
-        padding: 0;
-        display: inline-block; /* 중앙 정렬을 위해 추가 */
-      }
-
-      .fixed_img_col ul li {
-        display: inline-block;
-        margin: 5px;
-      }
-
-      .fixed_img_col ul li img {
-        width: 300px;
-        height: 300px;
-        object-fit: cover;
-      }
-
       /* 팝업 오버레이 스타일 */
       .popup-overlay {
         display: none;
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 100%;  
         height: 100%;
         background: rgba(0, 0, 0, 0.7);
         z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
       }
-
-      /* 팝업 콘텐츠 스타일 */
-      .popup-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        display: flex;
-        width: 900px; /* 팝업 너비를 900px로 증가 */
-        max-width: 90vw; /* 뷰포트 너비의 90%로 제한 */
-        box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
-      }
-
-      /* 팝업 왼쪽 이미지 영역 */
-      .popup-left {
-        flex: 1;
-        max-width: 50%; /* 이미지 영역의 최대 너비를 50%로 설정 */
-      }
-
       .popup-left img {
         width: 100%;
         height: auto; /* 이미지 비율 유지 */
@@ -83,12 +34,6 @@
         border-radius: 5px;
       }
 
-      /* 팝업 오른쪽 텍스트 영역 */
-      .popup-right {
-        flex: 1;
-        padding-left: 20px; /* 이미지와 텍스트 사이 여백 */
-        max-width: 50%; /* 텍스트 영역의 최대 너비를 50%로 설정 */
-      }
 
       /* 닫기 버튼 스타일 */
       .close-btn {
@@ -100,13 +45,6 @@
 
       .close-btn:hover {
         color: red;
-      }
-
-      /* 제목과 카테고리의 Flexbox 컨테이너 */
-      .popup-right .title-category {
-        display: flex;
-        align-items: baseline;
-        margin-bottom: 10px;
       }
 
       /* 제목 스타일 */
@@ -129,12 +67,6 @@
         color: #000; /* 텍스트 색상 검정 */
       }
 
-      /* 구분선 스타일 */
-      .popup-right .divider {
-        border: none;
-        border-top: 1px solid #ccc;
-        margin: 15px 0;
-      }
 
       /* 기타 기존 스타일 유지 */
       .popup-right p {
@@ -146,60 +78,6 @@
         font-size: 12px;
         color: gray;
         margin-top: 10px;
-      }
-
-      /* 검색 바 스타일 */
-      .search-bar {
-        margin: 20px auto;
-        text-align: center;
-        position: relative;
-      }
-
-      .search-bar form {
-        display: inline-block;
-      }
-
-      .search-bar select,
-      .search-bar input {
-        padding: 5px;
-        font-size: 16px;
-      }
-
-      .search-bar button {
-        padding: 5px 10px;
-        font-size: 16px;
-      }
-
-      /* 회원 기능 스타일 */
-      .member {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        position: absolute;
-        top: 10px;
-        right: 10px;
-      }
-
-      /* 모달 스타일 */
-      .modal {
-        display: none; /* 모달을 숨김 */
-        position: fixed; /* 화면에 고정된 위치로 설정 */
-        z-index: 1; /* 다른 요소보다 앞에 오도록 설정 */
-        left: 0; /* 화면 왼쪽부터 시작 */
-        top: 0; /* 화면 상단부터 시작 */
-        width: 100%; /* 화면 전체 너비 */
-        height: 100%; /* 화면 전체 높이 */
-        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-      }
-
-      .modal-content {
-        background-color: #fff;
-        margin: 10% auto; /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-        padding: 30px; /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-        border: 1px solid #888;
-        width: 90%; /* 너비를 화면의 90%로 변경 */
-        max-width: 600px; /* 최대 너비를 600px로 확장 */
-        text-align: center;
       }
 
       /* 닫기 버튼 스타일 */
@@ -216,415 +94,315 @@
         color: black;
         text-decoration: none;
       }
-
-      /* 네비게이션 바 스타일 (추가 가능) */
-      .nav {
-        background-color: #f8f9fa;
-        padding: 10px;
-        text-align: center;
-      }
-
-      .nav a {
-        margin: 0 15px;
-        text-decoration: none;
-        color: #333;
-        font-weight: bold;
-      }
-
-      .nav a:hover {
-        color: #007bff;
-      }
-      #searchWordList {
-        list-style: none;
-        padding: 0;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        background-color: white;
-        position: absolute; /* 부모 요소인 검색창 아래에 위치 */
-        left: 0;
-        right: 0; /* 양쪽을 0으로 맞춰 중앙 정렬 */
-        max-width: 200px; /* 검색창과 일치하게 설정 */
-        margin: 0 auto; /* 가로 중앙 정렬 */
-        z-index: 1000;
-        border-radius: 10px;
-        left: 5%;
-      }
-
-      #searchWordList li {
-        padding: 3px;
-        cursor: pointer;
-      }
-
-      #searchWordList li:hover {
-        background-color: #f0f0f0;
-      }
     </style>
-
-    <!-- 스크립트 정의 -->
-    <script>
-      function openPopup(recycleNum) {
-        // AJAX 요청으로 게시글 데이터를 불러온다
-        fetch(`/recycle/read?recycleNum=${recycleNum}`)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data); // 데이터 확인
-            // 팝업창의 내용을 동적으로 설정
-            document.getElementById("popupTitle").textContent =
-              data.recycleName;
-            document.getElementById("popupContents").textContent =
-              data.recycleContents;
-            document.getElementById("popupCategory").textContent =
-              data.recycleCategory;
-            document.getElementById("popupPossible").textContent =
-              data.recyclePossible;
-            // 날짜 변환 및 표시
-            const date = new Date(data.updateDate);
-
-            const formattedDate =
-              date.getFullYear() +
-              "년 " +
-              (date.getMonth() + 1).toString().padStart(2, "0") +
-              "월 " +
-              date.getDate().toString().padStart(2, "0") +
-              "일 " +
-              date.getHours().toString().padStart(2, "0") +
-              "시 " +
-              date.getMinutes().toString().padStart(2, "0") +
-              "분 ";
-            // date.getSeconds().toString().padStart(2, "0") +
-            // "초";
-
-            document.getElementById("popupDate").textContent = formattedDate;
-
-            // 이미지가 제대로 표시되도록 설정
-            document.getElementById("popupImage").src =
-              `/images/` + data.recycleFileName;
-
-            // 팝업 표시
-            document.querySelector(".popup-overlay").style.display = "block";
-          })
-          .catch((error) => {
-            console.error("데이터를 불러오는 중 오류 발생:", error);
-            alert("데이터를 불러오는 데 실패했습니다.");
-          });
-      }
-
-      function closePopup() {
-        document.querySelector(".popup-overlay").style.display = "none";
-      }
-
-      // 외부 영역 클릭 시 팝업 닫기
-      window.addEventListener("click", function (event) {
-        var popupContent = document.querySelector(".popup-content");
-        var popupOverlay = document.querySelector(".popup-overlay");
-
-        if (
-          event.target === popupOverlay &&
-          !popupContent.contains(event.target)
-        ) {
-          closePopup();
-        }
-      });
-
-      // jQuery를 사용하는 모달 제어 코드
-      $(document).ready(function () {
-        $("#messages").click(function () {
-          $("#messagesModal").fadeIn();
-        });
-        $("#messagesClose").click(function () {
-          $("#messagesModal").fadeOut();
-        });
-        $(window).click(function (event) {
-          if ($(event.target).is("#messagesModal")) {
-            $("#messagesModal").fadeOut();
-          }
-        });
-      });
-
-      // Esc 키로 팝업창 닫기
-      document.addEventListener("keydown", function (event) {
-        if (event.key === "Escape") {
-          closePopup();
-        }
-      });
-
-      function pagingFormSubmit(page) {
-        let form = document.createElement("form");
-        form.method = "GET";
-        form.action = "/recycle/list"; // 페이징을 처리할 URL
-
-        let input = document.createElement("input");
-        input.type = "hidden";
-        input.name = "page";
-        input.value = page;
-
-        form.appendChild(input);
-        document.body.appendChild(form);
-        form.submit();
-      }
-      document.addEventListener("DOMContentLoaded", function () {
-        // 검색어 저장 함수
-        function saveSearchWord() {
-          const searchWord = document.querySelector(
-            'input[name="searchWord"]'
-          ).value;
-
-          if (searchWord) {
-            let searchWords =
-              JSON.parse(localStorage.getItem("searchWords")) || [];
-
-            // 중복 검색어 제거
-            searchWords = searchWords.filter((word) => word !== searchWord);
-
-            // 검색어 배열에 추가
-            searchWords.unshift(searchWord); // 새로운 검색어를 앞에 추가
-
-            // 최대 5개의 검색어만 저장
-            if (searchWords.length > 5) {
-              searchWords = searchWords.slice(0, 5);
-            }
-
-            localStorage.setItem("searchWords", JSON.stringify(searchWords));
-          }
-        }
-
-        // 검색창 클릭 시 검색어 목록을 불러오는 함수
-        function loadSearchWordList() {
-          const searchWords =
-            JSON.parse(localStorage.getItem("searchWords")) || [];
-
-          if (searchWords.length > 0) {
-            let dropdown = document.getElementById("searchWordList");
-
-            // 이전 검색어 목록 삭제
-            dropdown.innerHTML = "";
-
-            // 검색어 목록을 동적으로 추가
-            searchWords.forEach((word) => {
-              const listItem = document.createElement("li");
-              listItem.textContent = word;
-
-              // 클릭한 검색어를 입력 필드에 넣기
-              listItem.addEventListener("click", function () {
-                document.querySelector('input[name="searchWord"]').value = word;
-                dropdown.style.display = "none"; // 목록을 숨기기
-              });
-
-              dropdown.appendChild(listItem);
-            });
-
-            // 검색어 목록 표시
-            dropdown.style.display = "block";
-          }
-        }
-
-        // 검색창 클릭 시 검색어 목록 불러오기
-        document
-          .querySelector('input[name="searchWord"]')
-          .addEventListener("focus", loadSearchWordList);
-
-        // 검색 폼 제출 시 검색어 저장
-        document
-          .querySelector(".search-bar form")
-          .addEventListener("submit", saveSearchWord);
-
-        // 검색창 외부 클릭 시 목록 닫기
-        document.addEventListener("click", function (event) {
-          if (!event.target.matches('input[name="searchWord"]')) {
-            document.getElementById("searchWordList").style.display = "none";
-          }
-        });
-      });
-    </script>
   </head>
   <body>
-    <div class="wrap">
-      <!-- 네비게이션 바 -->
-      <div class="nav">
-        <a th:href="@{/}">로고</a>
-        <a th:href="@{/info/service}">우리는..</a>
-        <a th:href="@{/share/list}">나눠요</a>
-        <a th:href="@{/recycle/list}">버려요</a>
+    <!-- 네비게이션 바 -->
+    <div class="navigationContainer">
+      <div class="logo">
+        <a th:href="@{/}">
+          <img th:src="@{/images/logo.png}" class="logoImg" />
+        </a>
       </div>
-
-      <!-- 회원 기능 -->
-      <div class="member">
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a th:href="@{/info/service}">우리는</a>
+        </span>
+      </div>
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a th:href="@{/share/list}">나눠요</a>
+        </span>
+      </div>
+      <div class="projectInfo">
+        <span class="highlighterBlue">
+          <a th:href="@{/recycle/list}">버려요</a>
+        </span>
+      </div>
+      <div class="rightGroup">
+        <!-- 로그인을 안했을 시 -->
         <th:block sec:authorize="not isAuthenticated()">
-          <p>
-            <a th:href="@{/member/join}">회원가입</a>
-          </p>
-          <p>
-            <a th:href="@{/member/loginForm}">로그인</a>
-          </p>
-        </th:block>
-        <th:block sec:authorize="isAuthenticated()">
-          <p>
-            <button id="messages">쪽지</button>
-          </p>
-          <div id="messagesModal" class="modal">
-            <div class="modal-content">
-              <span id="messagesClose" class="close">&times;</span>
-              <h2>쪽지 목록</h2>
-              <!-- 쪽지 목록 콘텐츠를 여기에 추가 -->
-            </div>
+          <div class="join">
+            <span class="highlighterGreen">
+              <a th:href="@{/member/join}">회원가입</a>
+            </span>
           </div>
-          <p>
-            <a th:href="@{/myPage/view}">마이페이지</a>
-          </p>
-          <p>
-            <a th:href="@{/member/logout}">로그아웃</a>
-          </p>
+
+          <div class="login">
+            <span class="highlighterGreen">
+              <a th:href="@{/member/loginForm}">로그인</a>
+            </span>
+          </div>
+        </th:block>
+        <!-- 로그인을 했을 시 -->
+        <th:block sec:authorize="isAuthenticated()">
+          <!--****************************************** 쪽지 *****************************-->
+          <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
+            <!-- 쪽지 이미지  -->
+            <img src="/images/post.png" class="postImage">
+            <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+            <div class="badge" id="badge">0</div>
+        </div>
+
+        <!-- 쪽지 목록 모달 -->
+        <div
+          id="messagesModal"
+          class="modal"
+          style="
+            max-height: calc(100vh - 5vh);
+            overflow-x: hidden;
+            overflow-y: auto;
+            "
+        >
+          <div class="modal-content">
+            <!-- 나눔 이야기 상단 영역 -->
+            <div class="messageUpside">
+              <h2>나눔 이야기</h2>
+              <!-- 닫기 버튼 -->
+              <span class="close">╳</span> 
+            </div>
+            <!-- 쪽지방 목록이 출력되는 곳 -->
+            <div id="messageListContainer"></div>
+          </div>
+        </div>
+
+        <!-- 쪽지 상세보기 모달 -->
+        <div
+          id="detailsModal"
+          class="modal"
+          style="
+            max-height: calc(100vh - 5vh);
+            overflow-x: hidden;
+            overflow-y: auto;
+            "
+        >
+          <div class="modal-content">
+            <div class="messageUpside">
+              <div class="usernameContainer">
+                <img
+                  id="receiverProfileImage"
+                  src=""
+                  alt="Profile"
+                  style="width: 3vh; height: 3vh; border-radius: 50%; vertical-align: middle;"
+                /> 
+                <span class="usernameTitle"><b id="receiverNickname"></b>님에게</span>
+                <!-- 신고하기 버튼 (공백 유지) -->
+                <span id="userReportBtn" class="userReportButton highlighterRed">신고하기</span>                      
+              </div>
+              <!-- 닫기 버튼 -->
+              <span class="close">╳</span> 
+            </div>
+            
+            <!-- 게시글로 이동하는 영역 추가 -->
+            <div id="goToShareBoard" style="cursor: pointer">
+              <div
+              id="shareBoardLink"
+              style="
+                  padding: 1vh 1vw;
+                  border: 0.07vw solid #ccc;
+                  text-align: center;
+                  "
+              >
+              게시글로 이동
+              </div>
+            </div>
+
+          <!-- 쪽지 목록 출력 영역 -->
+          <div id="messageDetailsContainer"></div>
+          <!-- 쪽지 보내기 -->
+          <div id="detailContentsContainer">
+            <textarea
+            id="messageInput"
+            class="messageContents" 
+            placeholder="내용을 입력해주세요!"
+            maxlength="100"
+              ></textarea>
+              <!-- 보내기 버튼 -->
+              <button id="sendMessageBtn">보내기</button>
+              <button id="shareComplete" style="display: none; margin-left: 1vw;">
+                나눔 완료
+              </button>
+          </div>
+          </div>
+        </div>
+
+        <!-- 게시글 유저 신고 모달창 -->
+        <div id="reportModal" class="modal">
+          <div class="modal-content">
+            <!-- 신고 모달 상단 영역 -->
+            <div class="reportUpside">
+              <!-- 신고 타이틀과 신고하고자 하는 유저 닉네임을 포함하는 영역 -->
+              <div class="reportContainer">
+              <!-- 타이틀 -->
+              <span class="reportTitle">신고하기</span>
+              <!-- 신고하기 버튼 (공백 유지) -->
+              <span id="reportUser" class="reportUser">닉네임 님</span>
+              </div>
+              <!-- 닫기 버튼 -->
+              <span class="close">╳</span>
+            </div>
+
+            <form id="reportForm" class="reportArea">
+              <div>
+                <label class="reportReason"
+                ><input
+                type="radio"
+                name="reportReason"
+                value="욕설, 인신공격 등 언어적 폭력"
+                />
+                욕설, 인신공격 등 언어적 폭력</label
+                >
+                <br>
+                <label class="reportReason"
+                ><input
+                type="radio"
+                    name="reportReason"
+                    value="부적절한 게시글"
+                    />
+                    부적절한 게시글</label
+                    >
+                    <br>
+                    <label class="reportReason"
+                    ><input
+                    type="radio"
+                    name="reportReason"
+                    value="사기 또는 허위정보"
+                    />
+                    사기 또는 허위정보</label
+                    >
+                    <br>
+                    <label class="reportReason"
+                    ><input type="radio" name="reportReason" value="기타" />
+                    기타</label
+                    >
+                  </div>
+                  <textarea
+                id="additionalReason"
+                class="additionalReason" 
+                placeholder="기타 사유를 입력하세요."
+                maxlength="400"
+              ></textarea
+              ><br />
+              <button type="button" id="submitUserReportBtn" class="reportSubmit">
+                신고 제출
+              </button>
+            </form>
+          </div>
+        </div>
+          <!-- ************************************ 쪽지 목록 모달 *************************************-->
+          <!-- 마이페이지  -->
+          <div class="mypage">
+            <span class="highlighterGreen">
+              <a th:href="@{/myPage/view}">마이페이지</a>
+            </span>
+          </div>
+
+          <!-- 로그아웃 -->
+          <div class="logout">
+            <span class="highlighterGreen">
+              <a th:href="@{/member/logout}">로그아웃</a>
+            </span>
+          </div>
         </th:block>
       </div>
-
-      <!-- 이미지 목록 -->
-      <div class="fixed_img_col">
-        <ul>
-          <th:block th:each="item : ${recycleList}">
-            <li>
-              <a
-                href="javascript:void(0)"
-                th:onclick="'openPopup(' + ${item.recycleNum} + ')'"
-              >
-                <img
-                  th:src="@{'/images/' + ${item.recycleFileName}}"
-                  alt="이미지"
-                  width="300px"
-                  height="300px"
-                />
-              </a>
-            </li>
-          </th:block>
-        </ul>
-      </div>
+      <div class="blankContainer"></div>
       <!-- 검색 결과가 없을 때 -->
       <th:block th:if="${#lists.size(recycleList) == 0}">
         <p style="text-align: center; font-size: 18px; color: red">
           해당 품목이 없습니다.
         </p>
       </th:block>
-      <!-- 페이지 이동 링크 -->
-      <div class="pagination" style="text-align: center; margin-bottom: 20px">
-        <span th:if="${boardPage.totalPages > 0 and page != 1}">
-          <a href="javascript:pagingFormSubmit(1)">첫페이지</a>
-        </span>
-
-        <a
-          th:if="${page != 1}"
-          th:href="|javascript:pagingFormSubmit(${page - 1})|"
-          >◀</a
-        >
-
-        <span
-          th:if="${boardPage.totalPages > 0}"
-          th:each="counter : ${#numbers.sequence((page - linkSize < 1 ? 1 : page - linkSize), 
-(page + linkSize > boardPage.totalPages ? boardPage.totalPages : page + linkSize))}"
-        >
-          <th:block th:if="${counter == page}">
-            <b th:text="${counter}"></b>
-          </th:block>
-          <th:block th:if="${counter != page}">
-            <a
-              th:text="${counter}"
-              th:href="|javascript:pagingFormSubmit(${counter})|"
-            ></a>
-          </th:block>
-        </span>
-
-        <a
-          th:if="${page != boardPage.totalPages}"
-          th:href="|javascript:pagingFormSubmit(${page + 1})|"
-          >▶</a
-        >
-
-        <span
-          th:if="${boardPage.totalPages > 0 and page != boardPage.totalPages}"
-        >
-          <a th:href="|javascript:pagingFormSubmit(${boardPage.totalPages})|"
-            >마지막페이지</a
+      <!-- 검색 영역 -->
+      <div class="searchArea">
+        <!-- 검색창 영역 -->
+        <div id="searchContainer">
+          <!-- 검색 타입 옵션 텍스트 -->
+          <div class="searchType">
+            <span
+              class="option-text"
+              data-value="titleAndContents"
+              th:classappend="${searchType == 'titleAndContents'} ? ' selected' : ''"
+            >
+              <span class="hb">제목 및 내용</span>
+            </span>
+            |
+            <span
+              class="option-text"
+              data-value="category"
+              th:classappend="${searchType == 'category'} ? ' selected' : ''"
+            >
+              <span class="hb">카테고리</span>
+            </span>
+          </div>
+          <!-- 검색창 -->
+          <form
+            th:action="@{/recycle/list}"
+            method="get"
+            style="position: relative"
           >
-        </span>
+            <input type="hidden" name="searchType" value="" />
+            <input
+              type="text"
+              class="search"
+              name="searchWord"
+              id="search"
+              placeholder="검색어를 입력해주세요!"
+              th:value="${searchWord}"
+              autocomplete="off"
+              onfocus="loadSearchWordList()"
+            />
+            <button type="submit">검색</button>
+            <!-- 검색어 목록을 표시할 리스트 -->
+            <ul id="searchWordList" style="display: none">
+              <!-- 동적으로 검색어가 추가될 예정 -->
+            </ul>
+          </form>
+        </div>
       </div>
 
-      <!-- 검색 바 -->
-      <div class="search-bar">
-        <form th:action="@{/recycle/list}" method="get">
-          <select name="searchType">
-            <!--
-              <option value="title" th:selected="${searchType == 'title'}">
-                제목
-              </option>
-              <option value="contents" th:selected="${searchType == 'contents'}">
-                내용
-              </option>
-              -->
-            <option
-              value="titleAndContents"
-              th:selected="${searchType == 'titleAndContents'}"
+      <!-- 버려요 컨텐츠 영역 -->
+      <div class="recycleArea">
+        <th:block th:each="item : ${recycleList}">
+          <div class="recycleContent">
+            <a
+              href="javascript:void(0)"
+              th:onclick="'openPopup(' + ${item.recycleNum} + ')'"
             >
-              제목 및 내용
-            </option>
-            <option value="category" th:selected="${searchType == 'category'}">
-              카테고리
-            </option>
-          </select>
-          <input
-            type="text"
-            name="searchWord"
-            placeholder="검색어를 입력하세요"
-            th:value="${searchWord}"
-            onfocus="loadSearchWord()"
-            autocomplete="off"
-          />
-          <button type="submit">검색</button>
-        </form>
-        <!-- 검색어 목록을 표시할 리스트 -->
-        <ul
-          id="searchWordList"
-          style="
-            display: none;
-            border: 1px solid #ccc;
-            max-width: 200px;
-            margin: 0 auto;
-            padding: 5px;
-            position: absolute;
-            background-color: white;
-            z-index: 1000;
-          "
-        >
-          <!-- 동적으로 검색어가 추가될 예정 -->
-        </ul>
+              <img
+                th:src="@{'/images/' + ${item.recycleFileName}}"
+                alt="이미지"
+              />
+            </a>
+          </div>
+        </th:block>
       </div>
     </div>
-
     <!-- 팝업창 -->
     <div class="popup-overlay">
       <div class="popup-content">
         <!-- 왼쪽: 이미지 -->
         <div class="popup-left">
-          <img
-            id="popupImage"
-            src=""
-            alt="게시물 이미지"
-            style="width: 100%; height: auto; object-fit: cover"
-          />
+          <img id="popupImage" src="" alt="게시물 이미지" />
         </div>
 
         <!-- 오른쪽: 텍스트 내용 -->
         <div class="popup-right">
-          <span class="close-btn" onclick="closePopup()">X</span>
-          <!-- 제목과 카테고리를 같은 줄에 배치 -->
-          <div class="title-category">
+          <!-- 팝업 상단 타이틀 영역 -->
+          <div class="popupUpside">
+            <!-- 제목 -->
             <h2 id="popupTitle">제목</h2>
             <span id="popupCategory" class="category">카테고리</span>
+            <!-- 닫기 버튼 -->
+            <span class="close-btn" onclick="closePopup()">X</span>
           </div>
-          <!-- 재활용 여부를 제목과 카테고리 아래에 배치 -->
-          <p id="popupPossible" class="possible">재활용 여부</p>
+          <!-- 재활용 여부 -->
+          <div id="popupPossible">재활용 여부</div>
           <!-- 구분선 추가 -->
           <hr class="divider" />
-          <!-- 내용과 최종 업데이트 날짜는 그대로 유지 -->
-          <p id="popupContents">내용</p>
-          <p id="popupDate" class="updated-date">최종 업데이트 날짜</p>
+          <!-- 내용 -->
+          <div id="popupContents">내용</div>
+          <!-- 최종 업데이트 날짜 -->
+          <div class="updated-date" id="popupDate">최종 업데이트 날짜</div>
         </div>
       </div>
     </div>
