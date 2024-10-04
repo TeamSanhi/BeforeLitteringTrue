@@ -38,7 +38,7 @@ public interface ShareBoardRepository extends JpaRepository<ShareBoardEntity, In
                         "AND e.shareLng > :swLng AND e.shareLng < :neLng " +
                         "AND (:search = '' OR e.shareTitle LIKE %:search% OR e.shareContents LIKE %:search%) " +
                         "AND e.shareCompleted = false " + // 거래 완료전 게시글을 테이블에서 검색
-                        "ORDER BY e.shareNum DESC")
+                        "ORDER BY e.shareDate DESC")
         List<ShareBoardEntity> findMapList(
                         @Param("swLat") double swLat,
                         @Param("swLng") double swLng,
