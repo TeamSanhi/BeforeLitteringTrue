@@ -1,312 +1,343 @@
 <!DOCTYPE html>
-<html lang="ko"
-    xmlns:th="http://thymeleaf.org"
-    xmlns:sec="http://thymeleaf.org/extras/spring-security"
+<html
+  lang="ko"
+  xmlns:th="http://thymeleaf.org"
+  xmlns:sec="http://thymeleaf.org/extras/spring-security"
 >
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>에코나비</title>
     <!-- Style -->
-    <link rel="stylesheet" href="/css/share/shareEdit.css">
+    <link rel="stylesheet" href="/css/share/shareEdit.css" />
 
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script type="text/javascript" src="/js/share/shareEdit.js"></script>
-</head>
-<body>
+  </head>
+  <body>
     <!-- 네비게이션 구역 -->
     <div class="navigationContainer">
+      <!-- 로고 -->
+      <div class="logo">
+        <a href="/">
+          <img src="/images/logo.png" class="logoImg" />
+        </a>
+      </div>
 
-        <!-- 로고 -->
-        <div class="logo">
-            <a href="/">
-                <img src="/images/logo.png" class="logoImg">
-            </a>
+      <!-- 우리는 -->
+      <div class="projectInfo">
+        <a href="/info/service">우리는</a>
+      </div>
+
+      <!-- 나눠요 -->
+      <div class="projectInfo">
+        <a href="/share/list">나눠요</a>
+      </div>
+
+      <!-- 버려요 -->
+      <div class="projectInfo">
+        <a href="/recycle/list">버려요</a>
+      </div>
+
+      <!-- 오른쪽 정렬 -->
+      <div class="rightGroup">
+        <!-- ************************************ 쪽지 목록 모달 ************************************* -->
+        <!-- 쪽지 -->
+        <div
+          class="message"
+          id="messages"
+          th:data-num="${#authentication.principal.num}"
+        >
+          <!-- 쪽지 이미지  -->
+          <img src="/images/post.png" class="postImage" />
+          <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
+          <div class="badge" id="badge">0</div>
         </div>
-  
-        <!-- 우리는 -->
-        <div class="projectInfo">
-            <a href="/info/service">우리는</a>
+
+        <div
+          id="messagesModal"
+          class="modal"
+          style="
+            max-height: calc(100vh - 5vh);
+            overflow-x: hidden;
+            overflow-y: auto;
+          "
+        >
+          <div class="modal-content">
+            <span id="messagesClose" class="close">&times;</span>
+            <h2>나눔 이야기</h2>
+            <div id="messageListContainer"></div>
+          </div>
         </div>
-  
-        <!-- 나눠요 -->
-        <div class="projectInfo">
-            <a href="/share/list">나눠요</a>
+
+        <!-- 쪽지 상세보기 모달 -->
+        <div
+          id="detailsModal"
+          class="modal"
+          style="
+            max-height: calc(100vh - 5vh);
+            overflow-x: hidden;
+            overflow-y: auto;
+          "
+        >
+          <div class="modal-content">
+            <span id="detailsClose" class="close">&times;</span>
+            <h2>
+              <img
+                id="receiverProfileImage"
+                src=""
+                alt="Profile"
+                style="
+                  width: 3vh;
+                  height: 3vh;
+                  border-radius: 50%;
+                  vertical-align: middle;
+                "
+              />
+              <span id="receiverNickname"></span>님에게
+            </h2>
+
+            <!-- 게시글로 이동하는 영역 추가 -->
+            <div id="goToShareBoard" style="cursor: pointer">
+              <div
+                id="shareBoardLink"
+                style="
+                  padding: 1vh 1vw;
+                  border: 0.07vw solid #ccc;
+                  text-align: center;
+                "
+              >
+                게시글로 이동
+              </div>
+            </div>
+            <div id="messageDetailsContainer"></div>
+            <textarea
+              id="messageInput"
+              placeholder="메시지를 입력하세요"
+            ></textarea>
+            <button id="sendMessageBtn">보내기</button>
+            <button id="userReportBtn">신고하기</button>
+            <button id="shareComplete" style="display: none">나눔 완료</button>
+          </div>
         </div>
-  
-        <!-- 버려요 -->
-        <div class="projectInfo">
-            <a href="/recycle/list">버려요</a>
-        </div>
-  
-        <!-- 오른쪽 정렬 -->
-        <div class="rightGroup">
-  
-              <!-- ************************************ 쪽지 목록 모달 ************************************* -->
-                <!-- 쪽지 -->
-                <div class="message" id="messages" th:data-num="${#authentication.principal.num}">
-                    <!-- 쪽지 이미지  -->
-                    <img src="/images/post.png" class="postImage">
-                    <!-- 아래 뱃지 숫자는 알아서 변경하도록,,, -->
-                    <div class="badge" id="badge">0</div>
-                </div>
-  
-                <div
-                  id="messagesModal"
-                  class="modal"
-                  style="
-                    max-height: calc(100vh - 5vh);
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                    "
+
+        <!-- 게시글 유저 신고 모달창 -->
+        <div id="reportModal" class="modal">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>신고하기</h2>
+            <form id="reportForm">
+              <div>
+                <label
+                  ><input
+                    type="radio"
+                    name="reportReason"
+                    value="욕설, 인신공격 등 언어적 폭력"
+                  />
+                  욕설, 인신공격 등 언어적 폭력</label
                 >
-                  <div class="modal-content">
-                    <span id="messagesClose" class="close">&times;</span>
-                    <h2>나눔 이야기</h2>
-                    <div id="messageListContainer"></div>
-                  </div>
-                </div>
-                
-                <!-- 쪽지 상세보기 모달 -->
-                <div
-                  id="detailsModal"
-                  class="modal"
-                  style="
-                    max-height: calc(100vh - 5vh);
-                    overflow-x: hidden;
-                    overflow-y: auto;
-                    "
+                <label
+                  ><input
+                    type="radio"
+                    name="reportReason"
+                    value="부적절한 게시글"
+                  />
+                  부적절한 게시글</label
                 >
-                  <div class="modal-content">
-                    <span id="detailsClose" class="close">&times;</span>
-                    <h2>
-                      <img id="receiverProfileImage" src="" alt="Profile" style="width: 3vh; height: 3vh; border-radius: 50%; vertical-align: middle;"/> 
-                      <span id="receiverNickname"></span>님에게
-                    </h2>
-                    
-                    <!-- 게시글로 이동하는 영역 추가 -->
-                    <div id="goToShareBoard" style="cursor: pointer">
-                      <div
-                      id="shareBoardLink"
-                      style="
-                          padding: 1vh 1vw;
-                          border: 0.07vw solid #ccc;
-                          text-align: center;
-                          "
-                      >
-                      게시글로 이동
-                    </div>
-                  </div>
-                  <div id="messageDetailsContainer"></div>
-                  <textarea
-                  id="messageInput"
-                  placeholder="메시지를 입력하세요"
-                    ></textarea>
-                    <button id="sendMessageBtn">보내기</button>
-                    <button id="userReportBtn">신고하기</button>
-                    <button id="shareComplete" style="display: none">
-                      나눔 완료
-                    </button>
-                  </div>
-                </div>
-  
-                <!-- 게시글 유저 신고 모달창 -->
-                <div id="reportModal" class="modal">
-                  <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2>신고하기</h2>
-                    <form id="reportForm">
-                      <div>
-                        <label
-                        ><input
-                        type="radio"
-                        name="reportReason"
-                        value="욕설, 인신공격 등 언어적 폭력"
-                        />
-                        욕설, 인신공격 등 언어적 폭력</label
-                        >
-                        <label
-                        ><input
-                        type="radio"
-                            name="reportReason"
-                            value="부적절한 게시글"
-                            />
-                            부적절한 게시글</label
-                            >
-                            <label
-                            ><input
-                            type="radio"
-                            name="reportReason"
-                            value="사기 또는 허위정보"
-                            />
-                            사기 또는 허위정보</label
-                            >
-                            <label
-                            ><input type="radio" name="reportReason" value="기타" />
-                            기타</label
-                            >
-                          </div>
-                          <textarea
-                        id="additionalReason"
-                        placeholder="기타 사유를 입력하세요"
-                      ></textarea
-                      ><br />
-                      <button type="button" id="submitUserReportBtn">
-                        신고 제출
-                      </button>
-                    </form>
-                  </div>
-                </div>
-  <!-- ************************************ 쪽지 목록 모달 *************************************-->
-  
-                <div class="mypage">
-                    <a th:href="@{/myPage/view}">
-                        <span class="mypageHover">
-                            마이페이지
-                        </span>
-                    </a>
-                </div>
-                
-                <!-- 로그아웃 -->
-                <div class="logout">
-                    <a th:href="@{/member/logout}">
-                        <span class="logoutHover">
-                            로그아웃
-                        </span>
-                    </a>
-                </div>
+                <label
+                  ><input
+                    type="radio"
+                    name="reportReason"
+                    value="사기 또는 허위정보"
+                  />
+                  사기 또는 허위정보</label
+                >
+                <label
+                  ><input type="radio" name="reportReason" value="기타" />
+                  기타</label
+                >
+              </div>
+              <textarea
+                id="additionalReason"
+                placeholder="기타 사유를 입력하세요"
+              ></textarea
+              ><br />
+              <button
+                type="button"
+                id="submitUserReportBtn"
+                class="reportSubmit"
+              >
+                신고 제출
+              </button>
+            </form>
+          </div>
         </div>
+        <!-- ************************************ 쪽지 목록 모달 *************************************-->
+
+        <div class="mypage">
+          <a th:href="@{/myPage/view}">
+            <span class="mypageHover"> 마이페이지 </span>
+          </a>
+        </div>
+
+        <!-- 로그아웃 -->
+        <div class="logout">
+          <a th:href="@{/member/logout}">
+            <span class="logoutHover"> 로그아웃 </span>
+          </a>
+        </div>
+      </div>
     </div>
-  
+
     <!-- 공백 -->
     <div class="blankContainer"></div>
 
     <!-- 게시글 작성 폼  -->
     <form id="edit" method="post" action="edit" enctype="multipart/form-data">
-
-        <!-- 게시글 작성 전체 영역 -->
-        <div class="mainContainer">
-            <!-- 상단 영역 -->
-            <div class="upsideContainer">
-                <!-- 왼쪽 영역_게시글 작성 (제목 / 본문 / 사진) -->
-                <div class="leftContainer">            
-                    <!-- 수정 게시글을 찾기위해 게시글번호를 hidden 값을 넣어줌 -->
-                    <input type="hidden" name="shareNum" th:value="${shareBoard.shareNum}">
-                    <!-- 제목 작성 영역 -->
-                    <div class="writeTitleArea">
-                        <!-- 제목 -->
-                        <input type="text" name="shareTitle" id="writeTitle" placeholder="제목을 입력해주세요!" required>
-                    </div>
-    
-                    <!-- 제목, 본문 구분선 -->
-                    <hr>
-    
-                    <!-- 본문 작성 영역 -->
-                    <div class="postContentArea">               
-                        <!-- 본문 작성 -->
-                        <textarea class="postContent" name="shareContents" id="postContent" placeholder="내용을 입력해주세요!" required></textarea>
-                    </div> 
-                </div>   
-                
-                <!-- 오른쪽 영역_지도 -->
-                <div class="rightContainer">
-                    <!-- 지도 영역 -->
-                    <div class="mapArea" id="map">
-                        <!-- 위도경도 태그 숨김처리-->
-                        <input type="hidden" name="shareLat" id="lat">
-                        <input type="hidden" name="shareLng" id="lng">
-                    </div>
-                </div>
+      <!-- 게시글 작성 전체 영역 -->
+      <div class="mainContainer">
+        <!-- 상단 영역 -->
+        <div class="upsideContainer">
+          <!-- 왼쪽 영역_게시글 작성 (제목 / 본문 / 사진) -->
+          <div class="leftContainer">
+            <!-- 수정 게시글을 찾기위해 게시글번호를 hidden 값을 넣어줌 -->
+            <input
+              type="hidden"
+              name="shareNum"
+              th:value="${shareBoard.shareNum}"
+            />
+            <!-- 제목 작성 영역 -->
+            <div class="writeTitleArea">
+              <!-- 제목 -->
+              <input
+                type="text"
+                name="shareTitle"
+                id="writeTitle"
+                placeholder="제목을 입력해주세요!"
+                required
+              />
             </div>
 
-            <!-- 하단 영역 -->
-            <div class="downContainer">
-                <!-- 사진 영역 -->
-                <div class="addPhotoArea">
-                    <!-- 사진 추가 -->
-                    <div class="addPhoto" id="addPhoto">
-                        +
-                    </div>
-                    <!-- 숨겨진 파일 입력 태그 -->
-                    <input type="file" name="uploads" id="file" style="display: none;" multiple onchange="checkFileLimit(event)">
-                    <!-- 사진 미리보기 출력 -->
-                    <span class="preview"></span>
-                    <span class="preview"></span>
-                    <span class="preview"></span>
-                    <span class="preview"></span>
-                    <span class="preview"></span>
-                </div>
-                <!-- 버튼 영역 -->
-                <div class="postingButtonArea">
-                    <!-- 버튼 클릭시 form submit하는 js 실행 실행 -->
-                    <button class="postingButton" id="submitButton">
-                        수정하기
-                    </button>
-                </div>
-            </div>
+            <!-- 제목, 본문 구분선 -->
+            <hr />
 
+            <!-- 본문 작성 영역 -->
+            <div class="postContentArea">
+              <!-- 본문 작성 -->
+              <textarea
+                class="postContent"
+                name="shareContents"
+                id="postContent"
+                placeholder="내용을 입력해주세요!"
+                required
+              ></textarea>
+            </div>
+          </div>
+
+          <!-- 오른쪽 영역_지도 -->
+          <div class="rightContainer">
+            <!-- 지도 영역 -->
+            <div class="mapArea" id="map">
+              <!-- 위도경도 태그 숨김처리-->
+              <input type="hidden" name="shareLat" id="lat" />
+              <input type="hidden" name="shareLng" id="lng" />
+            </div>
+          </div>
         </div>
 
+        <!-- 하단 영역 -->
+        <div class="downContainer">
+          <!-- 사진 영역 -->
+          <div class="addPhotoArea">
+            <!-- 사진 추가 -->
+            <div class="addPhoto" id="addPhoto">+</div>
+            <!-- 숨겨진 파일 입력 태그 -->
+            <input
+              type="file"
+              name="uploads"
+              id="file"
+              style="display: none"
+              multiple
+              onchange="checkFileLimit(event)"
+            />
+            <!-- 사진 미리보기 출력 -->
+            <span class="preview"></span>
+            <span class="preview"></span>
+            <span class="preview"></span>
+            <span class="preview"></span>
+            <span class="preview"></span>
+          </div>
+          <!-- 버튼 영역 -->
+          <div class="postingButtonArea">
+            <!-- 버튼 클릭시 form submit하는 js 실행 실행 -->
+            <button class="postingButton" id="submitButton">수정하기</button>
+          </div>
+        </div>
+      </div>
     </form>
 
     <!-- 모달 팝업 -->
     <div id="confirmationModal" class="modal">
-        <div class="modal-content">
-            <span>나누실래요?</span>
-            <div class="modal-buttons">
-                <button id="cancelButton">잠시만요</button>
-                <button id="confirmButton">나눌래요</button>
-            </div>
+      <div class="modal-content">
+        <span>나누실래요?</span>
+        <div class="modal-buttons">
+          <button id="cancelButton">잠시만요</button>
+          <button id="confirmButton">나눌래요</button>
         </div>
+      </div>
     </div>
 
     <!-- 저작권 정보 -->
-    <div class="rightArea">
-        © 2024 Team San, Hai. All rights reserved.
-    </div>
+    <div class="rightArea">© 2024 Team San, Hai. All rights reserved.</div>
 
     <!-- 지도 자바스크립트 -->
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=488efa68a7500b0e2b513a8253d1f0c9"
+    ></script>
     <script>
-        //gelocation으로 현재 위치 가져오기
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-            let mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-                mapOption = {                   //geolocation으로 가져온 현재 위치를 기준으로 지도 옵션 설정
-                    center: new kakao.maps.LatLng(position.coords.latitude, position.coords.longitude   ), // 지도의 중심좌표
-                    level: 4 // 지도의 확대 레벨
-                };
-            
-            let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-            
-            // 지도를 클릭한 위치에 표출할 마커입니다
-            let marker = new kakao.maps.Marker({ 
-                // 지도 중심좌표에 마커를 생성합니다 
-                position: map.getCenter() 
-            }); 
-            // 지도에 마커를 표시합니다
-            marker.setMap(map);
+      //gelocation으로 현재 위치 가져오기
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          let mapContainer = document.getElementById("map"), // 지도를 표시할 div
+            mapOption = {
+              //geolocation으로 가져온 현재 위치를 기준으로 지도 옵션 설정
+              center: new kakao.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude
+              ), // 지도의 중심좌표
+              level: 4, // 지도의 확대 레벨
+            };
 
-            //form에 현재 위치의 위도 경도값 값 넣어주기 
-            $('#lat').val(position.coords.latitude);
-            $('#lng').val(position.coords.longitude);
-            
-            // 지도에 클릭 이벤트를 등록합니다
-            // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
-            kakao.maps.event.addListener(map, 'click', function(mouseEvent) {        
-                
-                // 클릭한 위도, 경도 정보를 가져옵니다 
-                let latlng = mouseEvent.latLng; 
-                
-                // 마커 위치를 클릭한 위치로 옮깁니다
-                marker.setPosition(latlng);
-                
-                //form에 위도 경도값 값 넣어주기 
-                $('#lat').val(latlng.getLat());
-                $('#lng').val(latlng.getLng());
-            });
-        })
-    };
+          let map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+          // 지도를 클릭한 위치에 표출할 마커입니다
+          let marker = new kakao.maps.Marker({
+            // 지도 중심좌표에 마커를 생성합니다
+            position: map.getCenter(),
+          });
+          // 지도에 마커를 표시합니다
+          marker.setMap(map);
+
+          //form에 현재 위치의 위도 경도값 값 넣어주기
+          $("#lat").val(position.coords.latitude);
+          $("#lng").val(position.coords.longitude);
+
+          // 지도에 클릭 이벤트를 등록합니다
+          // 지도를 클릭하면 마지막 파라미터로 넘어온 함수를 호출합니다
+          kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+            // 클릭한 위도, 경도 정보를 가져옵니다
+            let latlng = mouseEvent.latLng;
+
+            // 마커 위치를 클릭한 위치로 옮깁니다
+            marker.setPosition(latlng);
+
+            //form에 위도 경도값 값 넣어주기
+            $("#lat").val(latlng.getLat());
+            $("#lng").val(latlng.getLng());
+          });
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
