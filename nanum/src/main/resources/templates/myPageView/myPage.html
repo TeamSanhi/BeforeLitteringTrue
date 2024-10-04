@@ -228,6 +228,7 @@
             display: flex;
             align-items: center;
             gap: 1vw;
+            flex-wrap: wrap; /* 버튼들이 화면에 맞게 자동으로 줄바꿈되도록 설정 */
         }
 
         /* 닉네임 */
@@ -246,15 +247,20 @@
         }
 
         /* 회원 탈퇴 버튼 */
-        #deleteId, #alarmAdd {
-            margin-top: 1.3vh;
-            color: gray;
+        #alarmAdd, #deleteId {
+            padding: 0.8vh 2vh;
+            font-size: 2vh;
+            border-radius: 2vh;
+            border: 0.07vw solid black;
+            background-color: #8ABAFF; /* 버튼 배경색 변경 */
+            color: white;
             cursor: pointer;
+            margin-left: 1vw;
+            margin-top: 1vh;
         }
 
         #deleteId:hover, #alarmAdd:hover {
-            color: red;
-            text-decoration: underline;
+            background-color: #6a9fde;
         }
 
         /* 회원 정보 수정 모달 */
@@ -620,7 +626,7 @@
         .modal.show {
             display: flex;
             justify-content: center; /* 수평 중앙 정렬 */
-            align-items: center;     /* 수직 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
         }
 
         /* 모달 내부 콘텐츠 */
@@ -837,32 +843,43 @@
             color: black;
         }
 
-        /* 페이징 스타일 추가 */
-        .verifyModal .pagination {
-            margin-top: 20px;
-            text-align: center;
+        /* 페이징 스타일 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 5vh;
+            gap: 1vw;
         }
 
-        .verifyModal .pagination .page-btn {
-            margin: 0 5px;
-            padding: 5px 10px;
-            background-color: #f1f1f1;
-            border: none;
+        .pagination .page-btn,
+        .pagination .current-page {
+            padding: 1vh 2vh;
+            font-size: 2vh;
+            border: 0.07vw solid black;
+            border-radius: 5vh;
             cursor: pointer;
-            border-radius: 3px;
+            background-color: white;
+            transition: background-color 0.3s;
         }
 
-        .verifyModal .pagination .page-btn:hover {
-            background-color: #ddd;
+        .pagination .page-btn:hover {
+            background-color: #8ABAFF;
         }
 
-        .verifyModal .pagination .current-page {
-            margin: 0 5px;
-            padding: 5px 10px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff;
-            border-radius: 3px;
+        .pagination .current-page {
+            background-color: #2DC986;
+            color: white;
+            cursor: default;
+            border-color: #2DC986;
+        }
+
+        .pagination .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination .disabled:hover {
+            background-color: white;
         }
 
         /* 버튼 영역 */
@@ -897,7 +914,40 @@
         #reset:hover {
             background-color: #8ABAFF;
         }
+
+        .alarmTable {
+            width: 80%; /* 기존 100%에서 80%로 너비 감소 */
+            margin: 0 auto 5vh auto; /* 테이블을 중앙에 배치 */
+            border-collapse: collapse;
+        }
+
+        .alarmTable th, .alarmTable td {
+            border: 0.07vw solid black;
+            padding: 1vh;
+            text-align: center;
+            font-size: 2vh;
+        }
+
+        .alarmTable th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .alarmModify {
+            padding: 0.5vh 1vh;
+            font-size: 1.8vh;
+            border: none;
+            border-radius: 1vh;
+            background-color: #2DC986;
+            color: white;
+            cursor: pointer;
+        }
+
+        .alarmModify:hover {
+            background-color: #1a8f64;
+        }
     </style>
+
     <!-- jQuery 라이브러리 로드 -->
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script>
@@ -1185,6 +1235,31 @@
             }
 
             // 페이지 렌더링 함수
+            // function renderPage(listType, page) {
+            //     $("#showData").html("");
+            //
+            //     const dataList = dataManager.data[listType];
+            //
+            //     if (!dataList || !Array.isArray(dataList)) {
+            //         $("#showData").html("<p>데이터를 불러오지 못했습니다.</p>");
+            //         return;
+            //     }
+            //
+            //     const perPage = dataManager.perPage[listType];
+            //     const start = (page - 1) * perPage;
+            //     const end = start + perPage;
+            //     const pagedData = dataList.slice(start, end);
+            //
+            //     if (pagedData.length > 0) {
+            //         pagedData.forEach(item => {
+            //             const itemHtml = generateItemHtml(listType, item);
+            //             $("#showData").append(itemHtml);
+            //         });
+            //     } else {
+            //         $("#showData").html("<p>데이터가 없습니다.</p>");
+            //     }
+            // }
+
             function renderPage(listType, page) {
                 $("#showData").html("");
 
@@ -1201,10 +1276,34 @@
                 const pagedData = dataList.slice(start, end);
 
                 if (pagedData.length > 0) {
-                    pagedData.forEach(item => {
-                        const itemHtml = generateItemHtml(listType, item);
-                        $("#showData").append(itemHtml);
-                    });
+                    if (listType === 'alarm') {
+                        // 테이블 구조 시작
+                        let tableHtml = `
+                            <table class="alarmTable">
+                                <thead>
+                                    <tr>
+                                        <th>요일</th>
+                                        <th>알림 내용</th>
+                                        <th>편집</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                        pagedData.forEach(item => {
+                            tableHtml += generateItemHtml(listType, item);
+                        });
+                        tableHtml += `
+                                </tbody>
+                            </table>
+                        `;
+                        $("#showData").append(tableHtml);
+                    } else {
+                        // 다른 목록 타입에 대한 처리
+                        pagedData.forEach(item => {
+                            const itemHtml = generateItemHtml(listType, item);
+                            $("#showData").append(itemHtml);
+                        });
+                    }
                 } else {
                     $("#showData").html("<p>데이터가 없습니다.</p>");
                 }
@@ -1215,12 +1314,14 @@
                 switch (listType) {
                     case 'alarm':
                         return `
-                        <p>
-                            ${item.alarmDay},
-                            ${item.alarmContents},
-                            <button class="alarmModify" data-day="${item.alarmDay}" data-contents="${item.alarmContents}">알림 편집</button>
-                        </p>
-                    `;
+                            <tr>
+                                <td>${item.alarmDay}</td>
+                                <td>${item.alarmContents}</td>
+                                <td>
+                                    <button class="alarmModify" data-day="${item.alarmDay}" data-contents="${item.alarmContents}">알림 편집</button>
+                                </td>
+                            </tr>
+                        `;
                     case 'give':
                         return `
                         <p><a href="/share/read?shareNum=${item.shareNum}">
