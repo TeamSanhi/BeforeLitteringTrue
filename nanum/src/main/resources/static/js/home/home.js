@@ -146,7 +146,6 @@ $(document).ready(function () {
   $("#messages").click(function () {
     $("#messagesModal").fadeIn().css("display", "flex");
     updateUnreadCount(); // 쪽지 모달 열릴 때마다 개수 업데이트
-
     let memberNum = $("#messages").data("num");
 
     // 회원 번호를 통해 속한 쪽지방을 모두 가져옴
@@ -219,7 +218,6 @@ $(document).ready(function () {
       shareNum
     );
     $("#detailsModal").fadeIn().css("display", "flex");
-
     // 쪽지 상세 목록에서 게시글로 이동하는 클릭 이벤트
     $("#goToShareBoard").click(function () {
       let shareBoardUrl = `/share/read?shareNum=${shareNum}`; // 게시글 상세 페이지로 이동하는 URL
@@ -301,6 +299,10 @@ $(document).ready(function () {
         } else {
           $("#shareComplete").hide();
         }
+
+        $("#messageDetailsContainer").scrollTop(
+          $("#messageDetailsContainer")[0].scrollHeight
+        ); // 상세 목록 이동 시 자동 스크롤
       },
       error: function (xhr, status, error) {
         console.error("AJAX 요청 오류:", status, error);
@@ -366,6 +368,9 @@ $(document).ready(function () {
               }
             });
             $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
+            $("#messageDetailsContainer").scrollTop(
+              $("#messageDetailsContainer")[0].scrollHeight
+            ); // 상세목록 이동 시 맨 아래로 자동 스크롤
           },
           error: function (xhr, status, error) {
             console.error("상세 메시지 가져오기 오류:", status, error);
@@ -612,4 +617,5 @@ function updateMessageRooms() {
     },
   });
 }
+
 //************************************쪽지 *******************************************************/

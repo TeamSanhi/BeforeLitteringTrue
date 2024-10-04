@@ -302,6 +302,8 @@ function checkAndLoadRoom(creatorNum, receiverNum, shareNum) {
         // 쪽지방이 없으면 빈 상태로 유지
         $("#existingMessages").html("");
       }
+
+      $("#existingMessages").scrollTop($("#existingMessages")[0].scrollHeight); // 목록 제일 아래로 스크롤
     },
     error: function () {
       //로그인하지 않았을시 ajax실패! 로그인 화면으로 이동
@@ -388,6 +390,9 @@ function sendMessage() {
               }
             });
             $("#messageContents").val(""); // 쪽지 입력하는 필드 비우기
+            $("#existingMessages").scrollTop(
+              $("#existingMessages")[0].scrollHeight
+            ); // 목록 제일 아래로 스크롤
           },
         });
       } else {
@@ -600,6 +605,10 @@ $(document).ready(function () {
         } else {
           $("#shareComplete").hide();
         }
+
+        $("#messageDetailsContainer").scrollTop(
+          $("#messageDetailsContainer")[0].scrollHeight
+        ); // 상세목록 이동 시 맨 아래로 자동 스크롤
       },
       error: function (xhr, status, error) {
         console.error("AJAX 요청 오류:", status, error);
@@ -665,6 +674,10 @@ $(document).ready(function () {
               }
             });
             $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
+
+            $("#messageDetailsContainer").scrollTop(
+              $("#messageDetailsContainer")[0].scrollHeight
+            ); // 상세목록 이동 시 맨 아래로 자동 스크롤
           },
           error: function (xhr, status, error) {
             console.error("상세 메시지 가져오기 오류:", status, error);

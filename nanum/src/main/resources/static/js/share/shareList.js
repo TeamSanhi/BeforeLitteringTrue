@@ -164,6 +164,10 @@ $(document).ready(function () {
         } else {
           $("#shareComplete").hide();
         }
+
+        $("#messageDetailsContainer").scrollTop(
+          $("#messageDetailsContainer")[0].scrollHeight
+        ); // 상세목록 이동 시 맨 아래로 자동 스크롤
       },
       error: function (xhr, status, error) {
         console.error("AJAX 요청 오류:", status, error);
@@ -229,6 +233,9 @@ $(document).ready(function () {
               }
             });
             $("#messageDetailsContainer").html(detailsList); // 상세 메시지 갱신
+            $("#messageDetailsContainer").scrollTop(
+              $("#messageDetailsContainer")[0].scrollHeight
+            ); // 상세목록 이동 시 맨 아래로 자동 스크롤
           },
           error: function (xhr, status, error) {
             console.error("상세 메시지 가져오기 오류:", status, error);
