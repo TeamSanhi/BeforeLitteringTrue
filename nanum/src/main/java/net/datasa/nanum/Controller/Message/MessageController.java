@@ -73,15 +73,34 @@ public class MessageController {
                 response.put("existingMessages", messages);
 
                 MemberEntity receiver = room.getReceiver();
-                response.put("receiverNickname", receiver.getMemberNickname());
-                response.put("receiverProfileImage", receiver.getMemberFileName()); // 프로필 이미지 URL 필드
 
-                log.debug("프로필사진: {}", receiver.getMemberFileName());
+                int receiverMemberNum = receiver.getMemberNum();
+
+                // 상대방의 프로필 이미지 URL 생성
+                String receiverProfileImage = "/member/profileDownload?memberNum=" + receiverMemberNum;
+
+                response.put("receiverNickname", receiver.getMemberNickname());
+                response.put("receiverProfileImage", receiverProfileImage); // 프로필 이미지 URL 필드
+
+                log.debug("프로필사진: {}", receiverProfileImage);
 
             } 
             // 쪽지방이 없을 때
             else {
+                MemberEntity nReceiver = memberRepository.findById(receiverNum)
+                    .orElseThrow(() -> new EntityNotFoundException("회원 정보가 존재하지 않습니다."));
+
+                String nReceiverNickname = nReceiver.getMemberNickname();
+                int nReceiverMemberNum = nReceiver.getMemberNum();
+
+            // 상대방의 프로필 이미지 URL 생성
+            String nReceiverProfileImage = "/member/profileDownload?memberNum=" + nReceiverMemberNum;
+
                 response.put("roomExists", false);
+                response.put("receiverNickname", nReceiverNickname);            // 상대 닉네임
+                response.put("receiverProfileImage", nReceiverProfileImage); // 프로필 이미지 URL 필드
+
+                log.debug("닉네임: {}, 이미지: {}",nReceiverNickname, nReceiverProfileImage);
             }
 
             return ResponseEntity.ok(response);
