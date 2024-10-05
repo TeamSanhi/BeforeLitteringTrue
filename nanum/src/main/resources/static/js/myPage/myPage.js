@@ -1,6 +1,4 @@
 $(document).ready(function () {
-
-
     const dataManager = {
         data: {},
         currentPage: {},
@@ -379,7 +377,7 @@ $(document).ready(function () {
                 });
             }
         } else {
-            $("#showData").html("<p>데이터가 없습니다.</p>");
+            $("#showData").html("<p style='display: flex; justify-content: center; align-items: center; padding: 5vh; width: 93vw; height: auto; font-size: 2vh; letter-spacing: 0.1vw;'>아직 등록 된 알림이 없습니다!</p>");
         }
     }
 

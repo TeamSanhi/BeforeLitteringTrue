@@ -820,6 +820,7 @@
     /* 알림 추가 버튼 */
     .addAlertButton {
         font-family: 'NEXON Lv1 Gothic OTF';
+        padding: 0.4vh;
         width: 6vh;
         height: 6vh;
         border-radius: 50%;
