@@ -811,7 +811,7 @@
 
     /* 알림 추가 영역 */
     .addAlert {
-        margin: 3vh auto;
+        margin: 0 auto 3vh auto;
         width: 6vh;
         height: 6vh;
     }

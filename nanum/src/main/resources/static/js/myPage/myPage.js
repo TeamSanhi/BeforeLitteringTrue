@@ -214,7 +214,35 @@ $(document).ready(function () {
         $('#editDay').prop('checked', false);
         $('#editContents').val('');
     });
-    
+
+    // 알림 삭제 함수
+    function deleteAlarm(alarmNum) {
+        //알람 삭제 안내문문
+        if(!confirm("알림을 삭제 하시겠습니까?"))
+            return;
+
+        // 알람 삭제 ajax 요청 
+        $.ajax({
+            url: '/myPage/alarmDelete',
+            type: "POST",
+            data: {
+                alarmNum: alarmNum,
+            },
+            success: function (response) {
+                if (response) {
+                    alert("성공적으로 삭제되었습니다.");
+                    if (dataManager.listType === 'alarm') {
+                        fetchData('alarm', '/myPage/showAlarm');
+                    }
+                } else {
+                    alert("삭제제되지 않았습니다.");
+                }
+            },
+            error: function () {
+                alert("알람을 삭제하는 중 오류가 발생했습니다.");
+            }
+        });
+    }
 
     // // 알림 편집 버튼
     // $(document).on('click', '.alarmModify', function () {
@@ -371,7 +399,7 @@ $(document).ready(function () {
                 <div class="alertContentArea">
                     <div>
                         <span class="settingAlert alarmModify">편집</span>
-                        <span class="settingDelete alarmDelete">삭제</span>
+                        <span class="settingDelete alarmDelete" data-num="${item.alarmNum}">삭제</span>
                     </div>
                     <div class="contentArea">
                         <span class="date">${item.alarmDay}</span>
@@ -439,6 +467,16 @@ $(document).ready(function () {
 
             });
 
+            // 동적으로 삭제버튼 기능 추가 
+            $('.alarmDelete').click(function() {
+                //삭제할 알람 번호 가져옴
+                let alarmNum = $(this).data('num');
+
+                // 알람 삭제함수 실행
+                deleteAlarm(alarmNum);
+                
+            })
+
             return;
         }
 
@@ -454,7 +492,6 @@ $(document).ready(function () {
         const paginationHtml = renderPagination(totalItems, perPage, currentPage, listType);
         $("#showData").append(paginationHtml);
     }
-
 
     // 페이징 HTML 생성 함수
     function renderPagination(totalItems, itemsPerPage, currentPage, listType) {

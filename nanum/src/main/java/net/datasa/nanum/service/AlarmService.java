@@ -120,4 +120,20 @@ public class AlarmService {
         return response;
     }
 
+    /**
+     * 알람 삭제 함수
+     * 
+     * @param alarmNum
+     * @return
+     */
+    public boolean delete(Integer alarmNum) {
+
+        // 알림이 존재하면 삭제 진행후 return true 알람이 존재하지 않으면 false리턴
+        if (alarmRepository.existsById(alarmNum)) {
+            alarmRepository.deleteById(alarmNum);
+            return true;
+        } else
+            return false;
+    }
+
 }

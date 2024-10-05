@@ -23,6 +23,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +42,8 @@ public class MyPageRestController {
     // 기존 알람 존재 여부 확인 메소드
 
     @PostMapping("/checkAlarm")
-    public ResponseEntity<Map<String, Boolean>> checkAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay) {
+    public ResponseEntity<Map<String, Boolean>> checkAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("alarmDay") String alarmDay) {
 
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
@@ -59,7 +62,8 @@ public class MyPageRestController {
 
     // 알람 추가 메소드
     @PostMapping("/alarmAdd")
-    public ResponseEntity<Map<String, Boolean>> alarmAdd(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
+    public ResponseEntity<Map<String, Boolean>> alarmAdd(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
         Boolean isAlarmAdded = false;
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
@@ -78,7 +82,8 @@ public class MyPageRestController {
 
     // 알람 편집 메소드
     @PostMapping("/alarmEdit")
-    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
+    public ResponseEntity<Map<String, Boolean>> alarmEdit(@AuthenticationPrincipal AuthenticatedUser authenticatedUser,
+            @RequestParam("alarmDay") String alarmDay, @RequestParam("alarmContents") String alarmContents) {
         Boolean isAlarmEdited = false;
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
@@ -87,7 +92,7 @@ public class MyPageRestController {
 
         if (alarmService.alarmEdit(member, alarmDay, alarmContents))
 
-        isAlarmEdited = true;
+            isAlarmEdited = true;
 
         Map<String, Boolean> response = new HashMap<>();
         response.put("alarmEdit", isAlarmEdited);
@@ -97,9 +102,29 @@ public class MyPageRestController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 알람삭제 ajax를 처리하는 컨트롤러
+     * 
+     * @param alarmNum
+     * @return
+     */
+    @PostMapping("alarmDelete")
+    public boolean postMethodName(
+            @RequestParam("alarmNum") Integer alarmNum) {
+
+        log.debug("삭제를 위해 전달받은 alarmNum : {}", alarmNum);
+
+        // 알람 삭제
+        boolean result = alarmService.delete(alarmNum);
+
+        // 알람이 삭제되면 ture 삭제되지 않으면 false 리턴
+        return result;
+    }
+
     // 비밀번호 확인 메소드
     @PostMapping("checkPassword")
-    public ResponseEntity<Map<String, Boolean>> checkPassword(@AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("enteredPw") String enteredPw) {
+    public ResponseEntity<Map<String, Boolean>> checkPassword(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser, @RequestParam("enteredPw") String enteredPw) {
         Integer userNum = authenticatedUser.getNum();
 
         log.debug("입력받은 패스워드 : {}", enteredPw);
@@ -116,7 +141,8 @@ public class MyPageRestController {
 
     // 탈퇴 처리 메소드
     @PostMapping("deleteMember")
-    public ResponseEntity<Map<String, Boolean>> deleteMember(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<Map<String, Boolean>> deleteMember(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
 
         boolean isDeleted = memberService.deleteMember(userNum);
@@ -131,7 +157,8 @@ public class MyPageRestController {
 
     // 알람 현황 제공 메소드
     @PostMapping("showAlarm")
-    public ResponseEntity<List<Map<String, String>>> showAlarm(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<List<Map<String, String>>> showAlarm(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
@@ -141,7 +168,7 @@ public class MyPageRestController {
 
         List<Map<String, String>> responseList = new ArrayList<>();
 
-        String[] daysOfWeek = {"일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"};
+        String[] daysOfWeek = { "일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일" };
 
         for (AlarmDTO alarmDTO : alarmDTOTotal) {
             Map<String, String> response = new HashMap<>();
@@ -149,9 +176,11 @@ public class MyPageRestController {
 
             log.debug("alarmDay: {}", alarmDay);
             log.debug("alarmContents: {}", alarmDTO.getAlarmContents());
+            log.debug("alarmNum : {}", alarmDTO.getAlarmNum());
 
             response.put("alarmDay", alarmDay);
             response.put("alarmContents", alarmDTO.getAlarmContents());
+            response.put("alarmNum", alarmDTO.getAlarmNum().toString());
             responseList.add(response);
         }
 
@@ -162,7 +191,8 @@ public class MyPageRestController {
 
     // 작성한 나눔글 현황 제공 메소드
     @PostMapping("showGive")
-    public ResponseEntity<List<Map<String, String>>> showGive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<List<Map<String, String>>> showGive(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
@@ -172,7 +202,8 @@ public class MyPageRestController {
 
     // 받은 나눔글 현황 제공 메소드
     @PostMapping("showReceive")
-    public ResponseEntity<List<Map<String, String>>> showReceive(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<List<Map<String, String>>> showReceive(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
@@ -182,7 +213,8 @@ public class MyPageRestController {
 
     // 북마크한 나눔글 현황 제공 메소드
     @PostMapping("showBookmark")
-    public ResponseEntity<List<Map<String, String>>> showBookmark(@AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+    public ResponseEntity<List<Map<String, String>>> showBookmark(
+            @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
         Integer userNum = authenticatedUser.getNum();
         MemberEntity member = memberService.getMemberByNum(userNum);
 
@@ -191,7 +223,8 @@ public class MyPageRestController {
     }
 
     // 데이터 리스트로 받아오는 공통 메소드
-    private List<Map<String, String>> processShareBoardList(List<ShareBoardDTO> shareList, boolean includeShareCompleted) {
+    private List<Map<String, String>> processShareBoardList(List<ShareBoardDTO> shareList,
+            boolean includeShareCompleted) {
         List<Map<String, String>> responseList = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
