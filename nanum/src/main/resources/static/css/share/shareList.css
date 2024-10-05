@@ -873,7 +873,7 @@
   /* 나눠요 게시글 영역_div 박스 */
   .sharePosting {
     width: 16vw;
-    height: 36vh;
+    height: 36.2vh;
     border: 0.07vw solid black;
     background-color: white;
     box-sizing: border-box;
