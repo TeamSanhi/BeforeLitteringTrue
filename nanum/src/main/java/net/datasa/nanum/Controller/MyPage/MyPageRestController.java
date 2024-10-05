@@ -23,8 +23,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -197,6 +195,10 @@ public class MyPageRestController {
         MemberEntity member = memberService.getMemberByNum(userNum);
 
         List<ShareBoardDTO> giveListDTOTotal = shareService.getGiveList(member);
+
+        // 전달받은 내용 확인
+        log.debug("전달받은 giveListDTOTotal : {}", giveListDTOTotal);
+
         return ResponseEntity.ok(processShareBoardList(giveListDTOTotal, true));
     }
 
@@ -226,7 +228,7 @@ public class MyPageRestController {
     private List<Map<String, String>> processShareBoardList(List<ShareBoardDTO> shareList,
             boolean includeShareCompleted) {
         List<Map<String, String>> responseList = new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
         for (ShareBoardDTO dto : shareList) {
             Map<String, String> response = new HashMap<>();
@@ -236,6 +238,8 @@ public class MyPageRestController {
             response.put("shareTitle", dto.getShareTitle());
             response.put("shareContents", dto.getShareContents());
             response.put("shareDate", shareDate);
+            response.put("memberNickname", dto.getMemberNickname());
+            response.put("imageNum", dto.getImageList().get(0).getImageNum().toString()); // 이미지 번호 준다.
 
             if (includeShareCompleted) {
                 response.put("shareCompleted", dto.getShareCompleted() ? "나눴어요" : "나눠요");

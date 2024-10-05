@@ -860,11 +860,12 @@
   .bookmarkCount {
     color: black;
     font-size: 1.6vh;
+    font-weight: 600;
     float: right;
     letter-spacing: 0.05vw;
     background: linear-gradient(#2dc986 0 100%);
     background-position: 0 calc(100% - 0.3vh);
-    background-size: 100% 1vh;
+    background-size: 100% 0.8vh;
     background-repeat: no-repeat;
   }
 

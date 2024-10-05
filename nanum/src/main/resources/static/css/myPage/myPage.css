@@ -515,7 +515,7 @@
         /* 프로필 영역과 메뉴 사이의 영역 */
         .menuBlank {
             width: 100%;
-            height: 4.5vh;
+            height: 5.5vh;
         }
 
         /* 메뉴 영역 */
@@ -549,7 +549,7 @@
         /* 알림, 컨텐츠 사이 공백 */
         .contentBlank {
             width: 100%;
-            height: 5vh;
+            height: 2vh;
         }
 
         /* 나의 알림 영역 */
@@ -809,25 +809,30 @@
             outline: none;
         }
 
+    .addAlert-container{
+        text-align: center;
+        width: 100%;
+    }
+
     /* 알림 추가 영역 */
     .addAlert {
-        margin: 0 auto 3vh auto;
-        width: 6vh;
-        height: 6vh;
+        display: flex;
+        justify-content: center;  /* 페이지 버튼들을 가운데로 정렬 */
     }
+            
 
     /* 알림 추가 버튼 */
     .addAlertButton {
         font-family: 'NEXON Lv1 Gothic OTF';
-        padding-top: 0.3vh;
-        width: 100%;
-        height: 100%;
+        width: 6vh;
+        height: 6vh;
         border-radius: 50%;
         font-size: 5vh;
         font-weight: 300;
         background-color: white;
         border: 0.07vw solid black;
         cursor: pointer;
+            box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     }
 
     /* 알림 추가 버튼_hover */
@@ -912,23 +917,32 @@
             color: black;
         }
 
-        /* 페이징 스타일 */
+         /* 페이징 컨테이너 div */
+        .pagination-container {
+            text-align: center;
+            width: 100%;
+          }
+
+        /* 페이징 div  */
         .pagination {
             display: flex;
-            justify-content: center;
-            margin-top: 5vh;
+            justify-content: center;  /* 페이지 버튼들을 가운데로 정렬 */
             gap: 1vw;
         }
+        
 
         .pagination .page-btn,
         .pagination .current-page {
+            font-family: 'NEXON Lv1 Gothic OTF';
             padding: 1vh 2vh;
             font-size: 2vh;
+            font-weight: 700;
             border: 0.07vw solid black;
             border-radius: 5vh;
             cursor: pointer;
             background-color: white;
             transition: background-color 0.3s;
+            box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
         }
 
         .pagination .page-btn:hover {
@@ -983,6 +997,101 @@
         #reset:hover {
             background-color: #8ABAFF;
         }
+        
+  /* 나눠요 게시글 리스트 영역 */
+  .shareArea {
+    margin: 4vh auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:flex-start;  /* 가로로 가운데 정렬 */
+    align-items: center;      /* 세로로 가운데 정렬 */
+    width: 87vw;
+    height: 90%;
+    gap: 1vh;
+    padding-bottom: 5vh;
+}
+
+  /* 나눠요 게시글 영역_div 박스 */
+  .sharePosting {
+    margin-bottom: 1vh;
+    width: 16.99vw;
+    height: 31vh;
+    border: 0.07vw solid black;
+    background-color: white;
+    box-sizing: border-box;
+    padding: 1.9vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
+  }
+
+  /* 나눠요 게시글_제목 */
+  .sharePostTitle {
+    font-size: 2.1vh;
+    font-weight: 700;
+    letter-spacing: 0.08vw;
+    overflow: hidden; /* 넘치는 텍스트 숨김 */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: linear-gradient(#8abaff 0 100%);
+    background-position: 0 calc(100% - 0.3vh);
+    background-size: 0 1vh;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s;
+  }
+
+  /* 나눠요 게시글_제목_hover */
+  .sharePostTitle:hover {
+    background-size: 100% 1vh;     /* hover 시 배경 확장 */
+  }
+
+  /* 나눠요 게시글_이미지 영역 */
+  .shareImage {
+    width: 100%;
+    height: 18vh;
+    overflow: hidden;
+  }
+
+  /* 나눠요_본문 영역 */
+  .postContentArea {
+    width: 100%;
+    line-height: 2.7vh;
+  }
+
+  /* 나눠요 게시글_본문 글 */
+  .postContent {
+    font-size: 1.8vh;
+    line-height: 2.5vh;
+    letter-spacing: 0.05vw;
+  }
+
+  /* 게시글 하단 정보 영역 */
+  .postInfo {
+    width: 100%;
+    color: gray;
+  }
+
+  /* 게시글 정보_작성자 닉네임 */
+  .userNickname {
+    font-size: 1.6vh;
+    float: left;
+    letter-spacing: 0.05vw;
+  }
+
+  /* 게시글 정보_작성 일시 */
+  .postInfo .bookmarkCount {
+    color: black;
+    font-size: 1.6vh;
+    font-weight: 600;
+    float: right;
+    letter-spacing: 0.05vw;
+    background: linear-gradient(#2dc986 0 100%);
+    background-position: 0 calc(100% - 0.3vh);
+    background-size: 100% 0.8vh;
+    background-repeat: no-repeat;
+  }
+
         /* 공통 테이블 스타일 */
         /* 공통 테이블 스타일 */
         .dataTable {

@@ -357,11 +357,9 @@ $(document).ready(function () {
                 let tableHtml = '<table class="dataTable"><thead><tr>';
 
                 // 테이블 헤더 정의
-                if (listType === 'give') {
-                    tableHtml += '<th>날짜</th><th>제목</th><th>내용</th><th>상태</th>';
-                } else if (listType === 'bookmark') {
-                    tableHtml += '<th>날짜</th><th>제목</th><th>내용</th>';
-                }
+                // if (listType === 'bookmark') {
+                //     tableHtml += '<th>날짜</th><th>제목</th><th>내용</th>';
+                // }
 
                 tableHtml += '</tr></thead><tbody>';
 
@@ -410,20 +408,50 @@ $(document).ready(function () {
     `;
             case 'give':
                 return `
-        <tr class="data-row" data-url="/share/read?shareNum=${item.shareNum}">
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareDate}</a></td>
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareTitle}</a></td>
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareContents}</a></td>
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareCompleted}</a></td>
-        </tr>
+                <!-- 나눠요 인기글 게시글 목록 -->
+                <div class="sharePosting">
+                    <!-- 제목 -->
+                    <a href="/share/read?shareNum=${item.shareNum}">
+                      <span class="sharePostTitle">${item.shareTitle}</span>
+                    </a>
+                    <!-- 사진 -->
+                    <div class="shareImage">
+                        <img src="/share/download?imageNum=${item.imageNum}" loading="lazy">
+                    </div>
+                    <!-- 글내용 -->
+                    <div class="postContentArea">
+                        <span class="postContent">${item.shareContents}</span>
+                    </div>
+                    <!-- 작성일자, 나눔여부 -->
+                    <div class="postInfo">
+                        <span class="userNickname">${item.shareDate}</span>
+                        <span class="bookmarkCount" >${item.shareCompleted}</span>
+                    </div>
+                </div>
     `;
+    
             case 'bookmark':
                 return `
-        <tr class="data-row" data-url="/share/read?shareNum=${item.shareNum}">
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareDate}</a></td>
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareTitle}</a></td>
-            <td><a href="/share/read?shareNum=${item.shareNum}">${item.shareContents}</a></td>
-        </tr>
+                <!-- 나눠요 인기글 게시글 목록 -->
+                <div class="sharePosting">
+                    <!-- 제목 -->
+                    <a href="/share/read?shareNum=${item.shareNum}">
+                      <span class="sharePostTitle">${item.shareTitle}</span>
+                    </a>
+                    <!-- 사진 -->
+                    <div class="shareImage">
+                        <img src="/share/download?imageNum=${item.imageNum}" loading="lazy">
+                    </div>
+                    <!-- 글내용 -->
+                    <div class="postContentArea">
+                        <span class="postContent">${item.shareContents}</span>
+                    </div>
+                    <!-- 닉네임, 나눔여부 -->
+                    <div class="postInfo">
+                        <span class="userNickname">${item.memberNickname}</span>
+                        <span class="bookmarkCount">북마크</span>
+                    </div>
+                </div>
     `;
             // 다른 케이스들은 기존과 동일하게 유지
         }  
@@ -437,9 +465,11 @@ $(document).ready(function () {
         if(listType === "alarm"){
             let alarmButton = `
                 <!-- 알림 추가 영역 -->
-                <div class="addAlert" >
-                    <!-- 버튼 -->
-                    <button class="addAlertButton" id="alarmAdd">+</button>
+                <div class="addAlert-container">
+                    <div class="addAlert" >
+                        <!-- 버튼 -->
+                        <button class="addAlertButton" id="alarmAdd">+</button>
+                    </div>
                 </div>
             `;
             $("#showData").append(alarmButton);
@@ -471,14 +501,46 @@ $(document).ready(function () {
             $('.alarmDelete').click(function() {
                 //삭제할 알람 번호 가져옴
                 let alarmNum = $(this).data('num');
-
                 // 알람 삭제함수 실행
-                deleteAlarm(alarmNum);
-                
+                deleteAlarm(alarmNum);                
             })
-
             return;
         }
+
+        // 만들어진 게시글에 글자수 제한하는 함수를 실행시킨다.
+        // 글 제목 의 길이가 11자가 넘으면 생략하여 보여준다.
+        // 모든 postContent 요소들을 가져옴
+        let sharePostTitle = document.querySelectorAll(".sharePostTitle");
+
+        // 각 postContent 요소들에 글자 수 제한 적용
+        sharePostTitle.forEach(function (post) {
+            // 게시글 내용 텍스트 가져오기
+            let text = post.innerText;
+            // 글자 수 제한_공백 포함
+            let maxLength = 11;
+
+            // 글자 수가 40자를 넘으면 자르고 ... 붙이기
+            if (text.length > maxLength) {
+            post.innerText = text.slice(0, maxLength) + "···";
+            }
+        });
+
+        // 글 내용의 길이가 14자가 넘으면 생략하여 보여준다.
+        // 모든 postContent 요소들을 가져옴
+        let postContents = document.querySelectorAll(".postContent");
+
+        // 각 postContent 요소들에 글자 수 제한 적용
+        postContents.forEach(function (post) {
+            // 게시글 내용 텍스트 가져오기
+            let text = post.innerText;
+            // 글자 수 제한_공백 포함
+            let maxLength = 14;
+
+            // 글자 수가 14자를 넘으면 자르고 ... 붙이기
+            if (text.length > maxLength) {
+            post.innerText = text.slice(0, maxLength) + "···";
+            }
+        });
 
         const dataList = dataManager.data[listType];
 
@@ -496,7 +558,7 @@ $(document).ready(function () {
     // 페이징 HTML 생성 함수
     function renderPagination(totalItems, itemsPerPage, currentPage, listType) {
         const totalPages = Math.ceil(totalItems / itemsPerPage);
-        let paginationHtml = '<div class="pagination">';
+        let paginationHtml = '<div class="pagination-container"><div class="pagination">';
 
         // 이전 버튼
         if (currentPage > 1) {
@@ -517,7 +579,12 @@ $(document).ready(function () {
             paginationHtml += `<button class="page-btn" data-page="${currentPage + 1}" data-list="${listType}">다음</button>`;
         }
 
-        paginationHtml += '</div>';
+        paginationHtml += '</div></div>';
         return paginationHtml;
     }
+
+    
 });
+
+
+

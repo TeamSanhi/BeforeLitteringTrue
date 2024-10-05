@@ -288,6 +288,7 @@ public class ShareService {
         shareBoardDTO.setShareDate(shareBoardEntity.getShareDate());
         shareBoardDTO.setReportCount(shareBoardEntity.getReportCount());
         shareBoardDTO.setBookmarkCount(shareBoardEntity.getBookmarkCount());
+        shareBoardDTO.setMemberNickname(shareBoardEntity.getMember().getMemberNickname()); // 닉네임 가져옴
 
         List<ImageDTO> imageDTOList = new ArrayList<>();
         for (ImageEntity imageEntity : shareBoardEntity.getImageList()) {
