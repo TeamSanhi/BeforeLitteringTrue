@@ -13,8 +13,8 @@ $(document).ready(function () {
         listType: '',
 
         // 이미지 토글 상태를 저장하는 변수
-        currentImageIndex: 0,
-        images: ["/image/trash.png", "/image/box.png"], // 두 개의 이미지 경로
+        currentImageIndex: 0,   //이 숫자를 변경해가며 images배열의 인덱스로 넣어 순차적으로 이미지를 변경시킨다.
+        images: ["/images/trash.png", "/images/box.png"], // 두 개의 이미지 경로
     };
 
     // 모달 초기화 함수
@@ -158,8 +158,6 @@ $(document).ready(function () {
                 if (response.alarmEdit) {
                     alert("성공적으로 반영되었습니다.");
 
-                    toggleImage();
-
                     if (dataManager.listType === 'alarm') {
                         fetchData('alarm', '/myPage/showAlarm');
                     }
@@ -176,7 +174,16 @@ $(document).ready(function () {
     // 이미지 토글 함수
     function toggleImage() {
         // 이미지 인덱스 토글
-        dataManager.currentImageIndex = 1 - dataManager.currentImageIndex;  // 0 -> 1, 1 -> 0
+        // 0이면 1로
+        if(dataManager.currentImageIndex == 0){
+            dataManager.currentImageIndex = 1
+            return;
+        }
+        // 1이면 0으로 반복문에서 번갈아 가도록 설정한다. 
+        if(dataManager.currentImageIndex == 1){
+            dataManager.currentImageIndex = 0
+            return;
+        }
     }
 
 
@@ -379,6 +386,8 @@ $(document).ready(function () {
 
                 pagedData.forEach(item => {
                     tableHtml += generateItemHtml(listType, item);
+                    // 알람의 이미지 순차적으로 나오도록 숫자를 조정 
+                    toggleImage();
                 });
 
                 tableHtml += '</tbody></table>';
@@ -405,7 +414,7 @@ $(document).ready(function () {
             <div class="alert">
                 <!-- 오른쪽 아이콘_이미지 -->
                 <div class="rightIcon">
-                    <img src="${imageSrc}">
+                    <img src="${dataManager.images[dataManager.currentImageIndex]}">
                 </div>
                 <!-- 왼쪽 하단_알림 내용 영역 -->
                 <div class="alertContentArea">
