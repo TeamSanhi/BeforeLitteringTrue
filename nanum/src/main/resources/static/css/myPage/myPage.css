@@ -223,6 +223,7 @@
         .image {
             border-radius: 50%;
             border: 0.07vw solid black;
+            box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
         }
 
         /* 상단 오른쪽 영역 */
