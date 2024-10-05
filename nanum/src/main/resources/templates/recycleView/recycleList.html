@@ -306,12 +306,6 @@
         </th:block>
       </div>
       <div class="blankContainer"></div>
-      <!-- 검색 결과가 없을 때 -->
-      <th:block th:if="${#lists.size(recycleList) == 0}">
-        <p style="text-align: center; font-size: 18px; color: red">
-          해당 품목이 없습니다.
-        </p>
-      </th:block>
       <!-- 검색 영역 -->
       <div class="searchArea">
         <!-- 검색창 영역 -->
@@ -359,6 +353,12 @@
           </form>
         </div>
       </div>
+      <!-- 검색 결과가 없을 때 -->
+      <th:block th:if="${#lists.size(recycleList) == 0}">
+        <p style="text-align: center; font-size: 18px; color: red">
+          해당 품목이 없습니다.
+        </p>
+      </th:block>
 
       <!-- 버려요 컨텐츠 영역 -->
       <div class="recycleArea">
@@ -393,7 +393,7 @@
             <h2 id="popupTitle">제목</h2>
             <span id="popupCategory" class="category">카테고리</span>
             <!-- 닫기 버튼 -->
-            <span class="close-btn" onclick="closePopup()">X</span>
+            <span class="close-btn" onclick="closePopup()" style="color: red;">X</span>
           </div>
           <!-- 재활용 여부 -->
           <div id="popupPossible">재활용 여부</div>
