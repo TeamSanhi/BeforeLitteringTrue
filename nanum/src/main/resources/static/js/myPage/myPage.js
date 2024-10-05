@@ -305,16 +305,16 @@ $(document).ready(function () {
     });
 
     // 테이블 행 클릭 이벤트
-    $(document).on('click', '.dataTable tr.data-row', function(e) {
-        // 클릭한 요소가 링크나 버튼인 경우 이벤트 중단
-        if ($(e.target).is('a') || $(e.target).is('button') || $(e.target).parents('a').length > 0) {
-            return;
-        }
-        const url = $(this).data('url');
-        if (url) {
-            window.location.href = url;
-        }
-    });
+    // $(document).on('click', '.dataTable tr.data-row', function(e) {
+    //     // 클릭한 요소가 링크나 버튼인 경우 이벤트 중단
+    //     if ($(e.target).is('a') || $(e.target).is('button') || $(e.target).parents('a').length > 0) {
+    //         return;
+    //     }
+    //     const url = $(this).data('url');
+    //     if (url) {
+    //         window.location.href = url;
+    //     }
+    // });
 
     // 데이터 가져오기 함수
     function fetchData(listType, url) {
@@ -378,25 +378,17 @@ $(document).ready(function () {
 
         if (pagedData.length > 0) {
             if (listType === 'alarm' || listType === 'give' || listType === 'bookmark') {
-                // 테이블 구조 시작
-                let tableHtml = '<table class="dataTable"><thead><tr>';
+                // 게시글 구조 시작
+                let Html = "";
 
-                // 테이블 헤더 정의
-                // if (listType === 'bookmark') {
-                //     tableHtml += '<th>날짜</th><th>제목</th><th>내용</th>';
-                // }
-
-                tableHtml += '</tr></thead><tbody>';
-
+                // 반복문을 통해 html로 넣어줄 게시글들을 생성한다.
                 pagedData.forEach(item => {
-                    tableHtml += generateItemHtml(listType, item);
-                    // 알람의 이미지 순차적으로 나오도록 숫자를 조정 
+                    Html += generateItemHtml(listType, item);
+                    // 반복문이 실행 될때마다 숫자가 변경되어 알람 이미지를 다르게 하는 함수 
                     toggleImage();
                 });
 
-                tableHtml += '</tbody></table>';
-
-                $("#showData").append(tableHtml);
+                $("#showData").append(Html);
             } else {
                 // 다른 목록 타입에 대한 처리
                 pagedData.forEach(item => {
@@ -405,7 +397,8 @@ $(document).ready(function () {
                 });
             }
         } else {
-            $("#showData").html("<p style='display: flex; justify-content: center; align-items: center; padding: 5vh; width: 93vw; height: auto; font-size: 2vh; letter-spacing: 0.1vw;'>아직 등록 된 알림이 없습니다!</p>");
+            // 등록된 알람 또는 게시글이 없는 경우 글 출력되는 메시지 
+            $("#showData").html("<p style='display: flex; justify-content: center; align-items: center; padding: 3vh; padding-bottom: 5vh; width: 93vw; height: auto; font-size: 3vh; font-weight:700; letter-spacing: 0.1vw;'>아직 등록 된 알림 또는 게시글이 없습니다!</p>");
         }
     }
 
