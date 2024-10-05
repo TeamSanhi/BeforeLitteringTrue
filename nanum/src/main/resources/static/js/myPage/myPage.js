@@ -10,7 +10,11 @@ $(document).ready(function () {
             'receive': 10,
             'bookmark': 10
         },
-        listType: ''
+        listType: '',
+
+        // 이미지 토글 상태를 저장하는 변수
+        currentImageIndex: 0,
+        images: ["/image/trash.png", "/image/box.png"], // 두 개의 이미지 경로
     };
 
     // 모달 초기화 함수
@@ -153,6 +157,9 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.alarmEdit) {
                     alert("성공적으로 반영되었습니다.");
+
+                    toggleImage();
+
                     if (dataManager.listType === 'alarm') {
                         fetchData('alarm', '/myPage/showAlarm');
                     }
@@ -165,6 +172,14 @@ $(document).ready(function () {
             }
         });
     }
+
+    // 이미지 토글 함수
+    function toggleImage() {
+        // 이미지 인덱스 토글
+        dataManager.currentImageIndex = 1 - dataManager.currentImageIndex;  // 0 -> 1, 1 -> 0
+    }
+
+
 
     // 알림 추가 함수 중복 확인 
     $('#added').click(function () {
@@ -390,7 +405,7 @@ $(document).ready(function () {
             <div class="alert">
                 <!-- 오른쪽 아이콘_이미지 -->
                 <div class="rightIcon">
-                    <img src="/images/trash.png">
+                    <img src="${imageSrc}">
                 </div>
                 <!-- 왼쪽 하단_알림 내용 영역 -->
                 <div class="alertContentArea">

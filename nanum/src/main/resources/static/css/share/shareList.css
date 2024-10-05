@@ -744,6 +744,7 @@
     text-align: center;
     font-size: 2.1vh;
     letter-spacing: 0.1vw;
+    outline: none;
   }
 
   /* 초기화 버튼 */
