@@ -188,16 +188,12 @@
         background-size: 100% 0.9vh;
     }
 
-
-
-
 /* 공백 */
     /* Blank_네비게이션 & 컨텐츠 사이 공백 */
     .blankContainer {
         height: 5vh;
         width: 93vw;
     }
-
 
         /* 메인 컨텐츠 영역 */
         #mainContainer {
@@ -210,10 +206,10 @@
             width: 93vw;
             height: 20vh;
             margin: auto;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
         }
 
         /* 프로필 이미지 영역 */
@@ -245,6 +241,7 @@
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            height: auto;
         }
 
         /* 닉네임, 개인정보 수정 영역 */
@@ -252,7 +249,6 @@
             display: flex;
             align-items: center;
             gap: 1vw;
-            flex-wrap: wrap; /* 버튼들이 화면에 맞게 자동으로 줄바꿈되도록 설정 */
         }
 
         /* 닉네임 */
@@ -262,30 +258,28 @@
             font-weight: 700;
         }
 
-        /* 개인정보 수정 버튼 */
-        .infoSetting {
-            width: 3.5vh;
-            height: 3.5vh;
-            margin-top: -0.3vh;
-            cursor: pointer;
-        }
+    /* 개인정보 수정 버튼 */
+    .infoSetting {
+        display: inline-block;
+        width: 3.5vh;
+        margin-top: -0.3vh;
+        height: 3.5vh;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
 
-        /* 회원 탈퇴 버튼 */
-        #alarmAdd, #deleteId {
-            padding: 0.8vh 2vh;
-            font-size: 2vh;
-            border-radius: 2vh;
-            border: 0.07vw solid black;
-            background-color: #8ABAFF; /* 버튼 배경색 변경 */
-            color: white;
-            cursor: pointer;
-            margin-left: 1vw;
-            margin-top: 1vh;
-        }
+    /* 회원 탈퇴 버튼 */
+    #deleteId, #alarmAdd{
+        margin-top: 1.3vh;
+        color: gray;
+        cursor: pointer;
+    }
 
-        #deleteId:hover, #alarmAdd:hover {
-            background-color: #6a9fde;
-        }
+    /* 회원 탈퇴 버튼 */
+    #deleteId:hover, #alarmAdd:hover {
+        color: red;
+        text-decoration: underline;
+    }
 
         /* 회원 정보 수정 모달 */
         #infoSettingModal {
@@ -512,9 +506,10 @@
         .userAlert {
             display: flex;
             gap: 3vw;
+            height: auto;
+            text-align: left;
             font-size: 2vh;
             letter-spacing: 0.08vw;
-            text-align: left;
         }
 
         /* 프로필 영역과 메뉴 사이의 영역 */

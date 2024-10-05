@@ -50,22 +50,6 @@
     <!-- 오른쪽 정렬 -->
     <div class="rightGroup">
 
-        <!-- 로그인을 안했을 시 -->
-        <th:block sec:authorize="not isAuthenticated()">
-            <div class="join">
-                <span class="highlighterGreen">
-                  <a href="/member/join">회원가입</a>
-                </span>
-            </div>
-
-            <div class="login">
-                <span class="highlighterGreen">
-                  <a href="/member/loginForm">로그인</a>
-                </span>
-            </div>
-        </th:block>
-
-
         <!-- 로그인을 했을 시 -->
         <th:block sec:authorize="isAuthenticated()">
 
@@ -270,19 +254,19 @@
                         <a th:href="@{/myPage/profileEdit}"><img src="/images/setting.png"></a>
                     </div>
                     <!-- 알림 추가-->
-                    <button id="alarmAdd">알림 추가</button>
+                    <!-- <span id="alarmAdd">알림 추가</span> -->
                     <!-- 회원 탈퇴 -->
-                    <button id="deleteId">회원 탈퇴</button>
+                    <span id="deleteId">회원 탈퇴</span>
                 </div>
             </div>
 
             <div class="userAlert">
+                <!-- 등록된 알림 -->
+                <span class="alertCount">나의 알림 <span th:text="${alarmLength}">요일</span></span>
                 <!-- 나의 나눔 -->
                 <span class="shareCount">나의 나눔 <span th:text="${shareCount}">숫자</span></span>
                 <!-- 북마크 -->
-                <span class="pointCount">포인트 <span th:text="${pointCount}">숫자</span></span>
-                <!-- 등록된 알림 -->
-                <span class="alertCount">나의 알림 <span th:text="${alarmTotal}">요일</span></span>
+                <span class="bookmarkCount">북마크 <span th:text="${bookmarkCount}">숫자</span></span>
             </div>
         </div>
     </div>
