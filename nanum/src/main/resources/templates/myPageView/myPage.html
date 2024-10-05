@@ -262,13 +262,13 @@
 
             <div class="userAlert">
                 <!-- 등록된 알림 -->
-                <span class="alertCount">나의 알림 <span th:text="${alarmLength}">요일</span></span>
+                <span class="alertCount highlightable">나의 알림 <span class="highlighterGreen" th:text="${alarmLength}">요일</span></span>
                 <!-- 나의 나눔 -->
-                <span class="shareCount">나의 나눔 <span th:text="${shareCount}">숫자</span></span>
+                <span class="shareCount highlightable">나의 나눔 <span class="highlighterGreen" th:text="${shareCount}">숫자</span></span>
                 <!-- 북마크 -->
-                <span class="bookmarkCount">북마크 <span th:text="${bookmarkCount}">숫자</span></span>
+                <span class="bookmarkCount highlightable">북마크 <span class="highlighterGreen" th:text="${bookmarkCount}">숫자</span></span>
                 <!-- 나눔 포인트 -->
-                <span class="pointCount">포인트 <span th:text="${pointCount}">포인트</span></span>
+                <span class="pointCount highlightable">포인트 <span class="highlighterGreen" th:text="${pointCount}">포인트</span></span>
             </div>
         </div>
     </div>
@@ -308,7 +308,7 @@
             </div>
             <!-- 모달 내용 -->
             <div class="alarmDay">
-                <label id="alarmDay">요일</label>
+                <label id="alarmDay"></label>
                 <br>
                 <input type="radio" class="addDay" name="alarmDay" value="일요일"> 일
                 <input type="radio" class="addDay" name="alarmDay" value="월요일"> 월
@@ -368,9 +368,9 @@
                 <div class="deleteAlert">
                     정말로 탈퇴하시겠습니까?
                 </div>
-                <div id="button">
+                <div class="button">
                     <button id="reset">취소</button>
-                    <button id="next">탈퇴하기</button>
+                    <button id="next">탈퇴</button>
                 </div>
             </div>
         </div>
@@ -392,7 +392,7 @@
                     <input type="password" name="pwCheck" id="pwCheck"/>
                 </div>
                 <div class="button">
-                    <button id="delete">탈퇴하기</button>
+                    <button id="delete">탈퇴</button>
                 </div>
             </div>
         </div>

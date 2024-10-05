@@ -177,15 +177,15 @@
     .highlighterGreen {
         background: linear-gradient(#2DC986 0 100%);
         background-position: 0 calc(100% - 0.2vh);
-        background-size: 0 0.9vh;
+        background-size: 0 50%;
         background-repeat: no-repeat;
         transition: background-size 0.3s;
     }
-
-    /* 형광펜 효과_초록_hover */
-    .highlighterGreen:hover {
+    
+    /* 전체 span hover 시 효과 */
+    .highlightable:hover .highlighterGreen {
         color: black;
-        background-size: 100% 0.9vh;
+        background-size: 100% 50%;
     }
 
 /* 공백 */
@@ -337,6 +337,7 @@
 
         #infoSettingModal .modal-title {
             font-size: 2.5vh;
+            font-weight: 700;
             letter-spacing: 0.1vw;
             margin-bottom: 2.5vh;
             text-align: left;
@@ -652,30 +653,24 @@
 
         /* 알림 추가 모달 */
         .modal {
-            display: none; /* 기본적으로 숨김 */
-            position: fixed;
-            z-index: 1000;
+            display: none; /* 기본적으로 안 보이게 설정 */
+            position: fixed; 
+            z-index: 1;
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.4); /* 어두운 배경 */
-        }
-
-        .modal.show {
-            display: flex;
-            justify-content: center; /* 수평 중앙 정렬 */
-            align-items: center; /* 수직 중앙 정렬 */
+            background-color: rgba(0, 0, 0, 0.5); /* 배경 어둡게 */
         }
 
         /* 모달 내부 콘텐츠 */
         .modal-content {
+            margin: 15% auto;
             background-color: white;
             padding: 3vw;
             width: 30vw;
             max-width: 30vw;
             box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-            position: relative;
         }
 
         /* 모달 헤더 */
@@ -800,6 +795,7 @@
 
         /* 알림 내용 입력 필드 */
         .alarmContents input {
+            font-family: 'NEXON Lv1 Gothic OTF';
             padding: 0 1.2vw;
             width: 100%;
             height: 5vh;
@@ -832,7 +828,7 @@
         background-color: white;
         border: 0.07vw solid black;
         cursor: pointer;
-            box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
+        box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     }
 
     /* 알림 추가 버튼_hover */
@@ -846,18 +842,20 @@
 
         /* 저장 버튼 */
         #added, #edited {
+            font-family: 'NEXON Lv1 Gothic OTF';
             display: block;
             margin: 0 auto;
             width: 5vw;
             height: 4.5vh;
             border-radius: 2.5vh;
-            font-size: 2vh;
+            font-size: 2.3vh;
+            font-weight:700;
             letter-spacing: 0.1vw;
-            background-color: gray;
-            color: white;
+            background-color: white;
+            color: black;
             border: 0.07vw solid black;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 700;
             text-align: center;
             z-index: 1;
         }
@@ -972,18 +970,22 @@
         }
 
         #next, #delete, #reset {
-            margin-right: 2vw;
+            font-family: 'NEXON Lv1 Gothic OTF';
+            display: inline-block;
+            margin: 0 auto;
             width: 5vw;
             height: 4.5vh;
             border-radius: 2.5vh;
-            font-size: 2vh;
+            font-size: 2.3vh;
+            font-weight:700;
             letter-spacing: 0.1vw;
-            background-color: gray;
-            color: white;
+            background-color: white;
+            color: black;
             border: 0.07vw solid black;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 700;
             text-align: center;
+            z-index: 1;
         }
 
         #next:hover {
