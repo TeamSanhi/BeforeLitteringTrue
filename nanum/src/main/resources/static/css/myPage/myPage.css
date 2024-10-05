@@ -181,8 +181,14 @@
         background-repeat: no-repeat;
         transition: background-size 0.3s;
     }
+
+    /* 형광팬 효과 */
+    .highlighterGreen:hover {
+        color: black;
+        background-size: 100% 50%;
+    }
     
-    /* 전체 span hover 시 효과 */
+    /* 전체 span hover시 일부만 형광팬 효과 효과 */
     .highlightable:hover .highlighterGreen {
         color: black;
         background-size: 100% 50%;
@@ -223,6 +229,7 @@
         .image {
             border-radius: 50%;
             border: 0.07vw solid black;
+            box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
         }
 
         /* 상단 오른쪽 영역 */
