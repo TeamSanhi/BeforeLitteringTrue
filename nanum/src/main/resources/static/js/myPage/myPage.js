@@ -585,7 +585,7 @@ $(document).ready(function () {
     }
 
     // 페이지가 로드되면 버튼 클릭 이벤트 발생
-    const myShareButton = document.querySelector(".myShare");
+    const myShareButton = document.querySelector(".myAlert");
     if (myShareButton) {
         myShareButton.click();
     }
