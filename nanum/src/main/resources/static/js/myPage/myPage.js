@@ -318,6 +318,10 @@ $(document).ready(function () {
 
     // 데이터 가져오기 함수
     function fetchData(listType, url) {
+
+        // 데이터를 가져올때 인덱스를 초기화 하여 시작하는 이미지를 같도록한다.
+        dataManager.currentImageIndex = 0;
+
         $.ajax({
             url: url,
             type: 'POST',
