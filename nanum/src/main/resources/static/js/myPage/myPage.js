@@ -1,5 +1,6 @@
 $(document).ready(function () {
 
+
     const dataManager = {
         data: {},
         currentPage: {},
@@ -583,6 +584,11 @@ $(document).ready(function () {
         return paginationHtml;
     }
 
+    // 페이지가 로드되면 버튼 클릭 이벤트 발생
+    const myShareButton = document.querySelector(".myShare");
+    if (myShareButton) {
+        myShareButton.click();
+    }
     
 });
 

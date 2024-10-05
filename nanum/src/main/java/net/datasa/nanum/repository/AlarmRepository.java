@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AlarmRepository extends JpaRepository<AlarmEntity, Integer> {
     // 알림 리스트 생성
-    @Query("SELECT a FROM AlarmEntity a WHERE a.memberNum = :memberNum")
+    @Query("SELECT a FROM AlarmEntity a WHERE a.memberNum = :memberNum ORDER BY a.alarmDay ASC")
     List<AlarmEntity> listAlarmByMemberNum(@Param("memberNum") MemberEntity memberNum);
 
     // 멤버와 알람으로 alarmEntity 탐색

@@ -18,7 +18,7 @@ public interface ShareBoardRepository extends JpaRepository<ShareBoardEntity, In
         Integer shareCount(@Param("memberNum") MemberEntity memberNum);
 
         // 사용자가 작성한 나눔글
-        @Query("select s from ShareBoardEntity s where s.member = :memberNum")
+        @Query("SELECT s FROM ShareBoardEntity s WHERE s.member = :memberNum ORDER BY s.shareDate DESC")
         List<ShareBoardEntity> findGiveListByMemberNum(@Param("memberNum") MemberEntity memberNum);
 
         // 사용자가 수령한 나눔글
@@ -26,7 +26,7 @@ public interface ShareBoardRepository extends JpaRepository<ShareBoardEntity, In
         List<ShareBoardEntity> findReceiveListByMemberNum(@Param("memberNum") MemberEntity memberNum);
 
         // 사용자가 북마크한 나눔글
-        @Query("SELECT s FROM ShareBoardEntity s JOIN BookMarkEntity b ON s = b.shareBoard WHERE b.member = :memberNum")
+        @Query("SELECT s FROM ShareBoardEntity s JOIN BookMarkEntity b ON s = b.shareBoard WHERE b.member = :memberNum ORDER BY s.shareDate DESC")
         List<ShareBoardEntity> findBookmarkListByMemberNum(@Param("memberNum") MemberEntity memberNum);
 
         // 거래가 완료되지 않은 게시글을 북마크 개수 기준으로 상위 8개만 가져오는 메서드
