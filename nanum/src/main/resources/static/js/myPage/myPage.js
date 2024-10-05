@@ -167,7 +167,7 @@ $(document).ready(function () {
         });
     }
 
-    // 알림 추가 함수 
+    // 알림 추가 함수 중복 확인 
     $('#added').click(function () {
         const alarmDay = $(".addDay:checked").val();
         const alarmContents = $("#addContents").val();
@@ -206,29 +206,31 @@ $(document).ready(function () {
         const alarmDay = $(".editDay:checked").val();
         const alarmContents = $("#editContents").val();
 
-        if (confirm("수정하시겠습니까?"))
+        if (confirm("수정하시겠습니까?")){
             editAlarm(alarmDay, alarmContents);
+        }
 
         $('#alarmEditModal').fadeOut();
         $('#editDay').prop('checked', false);
         $('#editContents').val('');
     });
+    
 
-    // 알림 편집 버튼
-    $(document).on('click', '.alarmModify', function () {
-        const day = $(this).data('day');
-        const content = $(this).data('contents');
+    // // 알림 편집 버튼
+    // $(document).on('click', '.alarmModify', function () {
+    //     const day = $(this).data('day');
+    //     const content = $(this).data('contents');
 
-        $('.editDay').prop('disabled', true);
-        $('.editDay[value="' + day + '"]').prop('disabled', false);
+    //     $('.editDay').prop('disabled', true);
+    //     $('.editDay[value="' + day + '"]').prop('disabled', false);
 
-        $('.editDay').each(function () {
-            $(this).prop('checked', $(this).val() === day);
-        });
+    //     $('.editDay').each(function () {
+    //         $(this).prop('checked', $(this).val() === day);
+    //     });
 
-        $('#editContents').val(content);
-        $('#alarmEditModal').fadeIn();
-    });
+    //     $('#editContents').val(content);
+    //     $('#alarmEditModal').fadeIn();
+    // });
 
     // 데이터 목록 버튼 클릭 이벤트
     $('button[data-list]').click(function () {
@@ -305,6 +307,7 @@ $(document).ready(function () {
         });
     }
 
+    // 페이지 렌더
     function renderPage(listType, page) {
         $("#showData").html("");
 
@@ -326,9 +329,7 @@ $(document).ready(function () {
                 let tableHtml = '<table class="dataTable"><thead><tr>';
 
                 // 테이블 헤더 정의
-                if (listType === 'alarm') {
-                    tableHtml += '<th>요일</th><th>알림 내용</th><th>편집</th>';
-                } else if (listType === 'give') {
+                if (listType === 'give') {
                     tableHtml += '<th>날짜</th><th>제목</th><th>내용</th><th>상태</th>';
                 } else if (listType === 'bookmark') {
                     tableHtml += '<th>날짜</th><th>제목</th><th>내용</th>';
@@ -360,13 +361,24 @@ $(document).ready(function () {
         switch (listType) {
             case 'alarm':
                 return `
-        <tr>
-            <td>${item.alarmDay}</td>
-            <td>${item.alarmContents}</td>
-            <td>
-                <button class="alarmModify" data-day="${item.alarmDay}" data-contents="${item.alarmContents}">알림 편집</button>
-            </td>
-        </tr>
+            <!-- 알림 -->
+            <div class="alert">
+                <!-- 오른쪽 아이콘_이미지 -->
+                <div class="rightIcon">
+                    <img src="/images/trash.png">
+                </div>
+                <!-- 왼쪽 하단_알림 내용 영역 -->
+                <div class="alertContentArea">
+                    <div>
+                        <span class="settingAlert alarmModify">편집</span>
+                        <span class="settingDelete alarmDelete">삭제</span>
+                    </div>
+                    <div class="contentArea">
+                        <span class="date">${item.alarmDay}</span>
+                        <span class="alertContent">${item.alarmContents}</span>
+                    </div>
+                </div>
+            </div>
     `;
             case 'give':
                 return `
@@ -386,11 +398,50 @@ $(document).ready(function () {
         </tr>
     `;
             // 다른 케이스들은 기존과 동일하게 유지
-        }
+        }  
+        
     }
 
     // 페이징 섹션 렌더링 함수
     function renderPaginationSection(listType) {
+
+        // 알람 버튼 클릭하면 페이징 함수 실행 하지 않고 알람추가 버튼추가 
+        if(listType === "alarm"){
+            let alarmButton = `
+                <!-- 알림 추가 영역 -->
+                <div class="addAlert" >
+                    <!-- 버튼 -->
+                    <button class="addAlertButton" id="alarmAdd">+</button>
+                </div>
+            `;
+            $("#showData").append(alarmButton);
+
+            // 동적으로 추가된 알람 추가 버튼에 이벤트 바인딩
+            $(document).on('click', '#alarmAdd', function () {
+                $('#alarmAddModal').fadeIn();  // 알람 추가 모달을 띄움
+            });
+
+            // 동적으로 추가된 알림 편집 버튼 클릭 이벤트
+            $(document).on('click', '.alarmModify', function () {
+                // 클릭된 알림에서 관련 데이터(예: 날짜와 내용)를 가져옴
+                const alarmDay = $(this).closest('.alertContentArea').find('.date').text();
+                const alarmContents = $(this).closest('.alertContentArea').find('.alertContent').text();
+
+                // 모달에 데이터를 채워서 보여줌
+                $('.editDay').each(function () {
+                    $(this).prop('checked', $(this).val() === alarmDay);
+                });
+                $('#editDay').html(alarmDay);
+                $('#editContents').val(alarmContents);
+
+                // 알림 편집 모달 열기
+                $('#alarmEditModal').fadeIn();
+
+            });
+
+            return;
+        }
+
         const dataList = dataManager.data[listType];
 
         if (!dataList || !Array.isArray(dataList)) {
@@ -403,6 +454,7 @@ $(document).ready(function () {
         const paginationHtml = renderPagination(totalItems, perPage, currentPage, listType);
         $("#showData").append(paginationHtml);
     }
+
 
     // 페이징 HTML 생성 함수
     function renderPagination(totalItems, itemsPerPage, currentPage, listType) {

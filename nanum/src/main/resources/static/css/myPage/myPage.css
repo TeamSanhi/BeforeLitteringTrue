@@ -191,7 +191,7 @@
 /* 공백 */
     /* Blank_네비게이션 & 컨텐츠 사이 공백 */
     .blankContainer {
-        height: 5vh;
+        height: 6vh;
         width: 93vw;
     }
 
@@ -559,9 +559,9 @@
         }
 
         /* 알림 (테스트용) */
-        .alertEx1 {
+        .alert {
             display: flex;
-            margin: 0 auto 7vh auto;
+            margin: 0 auto 5.5vh auto;
             align-items: center;
             width: 50vw;
             height: 30vh;
@@ -597,6 +597,7 @@
 
         /* 알림_알림 편집 */
         .settingAlert {
+            margin-right: 3.5vw;
             font-size: 2vh;
             letter-spacing: 0.05vw;
             color: gray;
@@ -610,6 +611,23 @@
         .settingAlert:hover {
             text-decoration: underline;
         }
+
+        /* 알림_알림 편집 */
+        .settingDelete {
+            font-size: 2vh;
+            letter-spacing: 0.05vw;
+            color: gray;
+            text-align: right;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .settingDelete:hover {
+            text-decoration: underline;
+        }
+
 
         /* 알림_알림 내용 영역 */
         .contentArea {
@@ -790,6 +808,36 @@
             border-radius: 5vh;
             outline: none;
         }
+
+    /* 알림 추가 영역 */
+    .addAlert {
+        margin: 3vh auto;
+        width: 6vh;
+        height: 6vh;
+    }
+
+    /* 알림 추가 버튼 */
+    .addAlertButton {
+        font-family: 'NEXON Lv1 Gothic OTF';
+        padding-top: 0.3vh;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        font-size: 5vh;
+        font-weight: 300;
+        background-color: white;
+        border: 0.07vw solid black;
+        cursor: pointer;
+    }
+
+    /* 알림 추가 버튼_hover */
+    .addAlertButton:hover {
+        background-color: #8ABAFF;
+    }
+
+    .editDay{
+        display: none;
+    }
 
         /* 저장 버튼 */
         #added, #edited {
@@ -973,18 +1021,4 @@
         /* 링크 호버 시 글자색 변경 없음 */
         .dataTable td a:hover {
             color: inherit;
-        }
-
-        .alarmModify {
-            padding: 0.5vh 1vh;
-            font-size: 1.8vh;
-            border: none;
-            border-radius: 1vh;
-            background-color: #2DC986;
-            color: white;
-            cursor: pointer;
-        }
-
-        .alarmModify:hover {
-            background-color: #1a8f64;
         }
