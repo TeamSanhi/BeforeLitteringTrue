@@ -269,14 +269,14 @@
     }
 
     /* 회원 탈퇴 버튼 */
-    #deleteId, #alarmAdd{
+    #deleteId {
         margin-top: 1.3vh;
         color: gray;
         cursor: pointer;
     }
 
     /* 회원 탈퇴 버튼 */
-    #deleteId:hover, #alarmAdd:hover {
+    #deleteId:hover {
         color: red;
         text-decoration: underline;
     }
@@ -527,22 +527,24 @@
             height: 5vh;
         }
 
-        /* 메뉴 버튼 */
-        .myAlert, .myShare, .myBookmark {
-            width: 18vh;
-            height: 5vh;
-            font-size: 2.2vh;
-            border-radius: 5vh;
-            border: 0.07vw solid black;
-            font-weight: 700;
-            letter-spacing: 0.1vw;
-            cursor: pointer;
-            background-color: white;
-        }
+    /* 나의 알림, 나의 나눔, 나의 북마크 버튼 */
+    .myAlert, .myShare, .myBookmark {
+        width: 18vh;
+        height: 5vh;
+        font-size: 2.2vh;
+        border-radius: 5vh;
+        border: 0.07vw solid black;
+        font-family: "NEXON Lv1 Gothic OTF";
+        font-weight: 700;
+        letter-spacing: 0.1vw;
+        cursor: pointer;
+        background-color: white;
+    }
 
-        .myAlert:hover, .myShare:hover, .myBookmark:hover {
-            background-color: #8ABAFF;
-        }
+    /* 하단 컨텐츠 영역 버튼_hover */
+    .myAlert:hover, .myShare:hover, .myBookmark:hover {
+        background-color: #8ABAFF;
+    }
 
         /* 알림, 컨텐츠 사이 공백 */
         .contentBlank {

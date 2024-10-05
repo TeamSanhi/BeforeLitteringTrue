@@ -267,6 +267,8 @@
                 <span class="shareCount">나의 나눔 <span th:text="${shareCount}">숫자</span></span>
                 <!-- 북마크 -->
                 <span class="bookmarkCount">북마크 <span th:text="${bookmarkCount}">숫자</span></span>
+                <!-- 나눔 포인트 -->
+                <span class="pointCount">포인트 <span th:text="${pointCount}">포인트</span></span>
             </div>
         </div>
     </div>
@@ -274,18 +276,19 @@
     <!-- 메뉴와 컨텐츠 사이 공백 -->
     <div class="menuBlank"></div>
 
-
     <!-- 메뉴 영역 -->
     <div class="menuArea">
         <!-- 나의 알림 -->
-        <button class="myAlert" data-list="alarm" data-url="/myPage/showAlarm"><span class="menuHighlight">나의 알림</span>
+        <button class="myAlert" data-list="alarm" data-url="/myPage/showAlarm">
+            <span class="menuHighlight">나의 알림</span>
         </button>
         <!-- 나의 나눔 -->
-        <button class="myShare" data-list="give" data-url="/myPage/showGive"><span class="menuHighlight">나의 나눔</span>
+        <button class="myShare" data-list="give" data-url="/myPage/showGive">
+            <span class="menuHighlight">나의 나눔</span>
         </button>
         <!-- 북마크 -->
-        <button class="myBookmark" data-list="bookmark" data-url="/myPage/showBookmark"><span
-                class="menuHighlight">북마크</span>
+        <button class="myBookmark" data-list="bookmark" data-url="/myPage/showBookmark">
+            <span class="menuHighlight">북마크</span>
         </button>
     </div>
 
