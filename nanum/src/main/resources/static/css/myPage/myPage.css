@@ -515,7 +515,7 @@
         /* 프로필 영역과 메뉴 사이의 영역 */
         .menuBlank {
             width: 100%;
-            height: 7vh;
+            height: 4.5vh;
         }
 
         /* 메뉴 영역 */

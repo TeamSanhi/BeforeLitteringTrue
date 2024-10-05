@@ -4,12 +4,12 @@ $(document).ready(function () {
         data: {},
         currentPage: {},
         perPage: {
-            'alarm': 9,
-            'give': 9,
-            'donate': 9,
-            'pendingGive': 9,
-            'receive': 9,
-            'bookmark': 9
+            'alarm': 7,
+            'give': 10,
+            'donate': 10,
+            'pendingGive': 10,
+            'receive': 10,
+            'bookmark': 10
         },
         listType: ''
     };
