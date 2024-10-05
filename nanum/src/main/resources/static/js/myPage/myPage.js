@@ -1,4 +1,5 @@
 $(document).ready(function () {
+
     const dataManager = {
         data: {},
         currentPage: {},
@@ -106,6 +107,17 @@ $(document).ready(function () {
         }
     });
 
+    // 3. 나의 알림, 나의 나눔, 북마크 버튼 hover 효과 유지 및 섹션 변경
+    $(".menuArea button").on("click", function () {
+        // 모든 버튼의 배경색을 원래대로
+        $(".menuArea button").css("background-color", "white");
+
+        // 클릭된 버튼의 배경색 변경
+        $(this).css("background-color", "#8ABAFF");
+
+    });
+
+    // 알림 추가 함수
     function addAlarm(alarmDay, alarmContents) {
         $.ajax({
             url: '/myPage/alarmAdd',
@@ -130,6 +142,7 @@ $(document).ready(function () {
         });
     }
 
+    // 알림 편집 함수 
     function editAlarm(alarmDay, alarmContents) {
         $.ajax({
             url: '/myPage/alarmEdit',
@@ -154,7 +167,7 @@ $(document).ready(function () {
         });
     }
 
-    // 알림 추가
+    // 알림 추가 함수 
     $('#added').click(function () {
         const alarmDay = $(".addDay:checked").val();
         const alarmContents = $("#addContents").val();
