@@ -15,39 +15,46 @@ window.onload = function () {
   // 현재 슬라이드 인덱스
   let curIndex = 0;
 
-  // 알림 갯수 (서버에서 받아올 값, 현재는 테스트용)
-  // let notifications = 3   // 알림이 있을 때 갯수 설정
-  // const badge = document.getElementById("badge");
+  // 메시지 요소와 원래 텍스트 저장
+  const messages = [
+    { element: document.querySelector(".typing1") },
+    { element: document.querySelector(".typing2") },
+    { element: document.querySelector(".typing3") }
+  ];
+  
+  // 각 메시지 요소의 텍스트를 변수에 저장하고 초기화
+  messages.forEach((messageObj) => {
+    messageObj.text = messageObj.element.textContent; // 원래 텍스트 저장
+    messageObj.element.textContent = ""; // 초기 텍스트 비우기
+  });
+  
+  // 타이핑 효과를 적용하는 함수
+  function typeText(messageObj) {
+    const { element, text } = messageObj;
+    let index = 0;
 
-  // 알림 수에 따라 괄호 안의 숫자를 변경
-  // badge.textContent = `(${notifications})`;
-
-  // 메시지 타이핑 효과
-  const messageElement = document.querySelector(".typing"); // 첫 번째 매칭되는 .mainMessage 요소 선택
-  const messageText = messageElement.textContent; // 원래 텍스트
-  let index = 0; // 타이핑 될 텍스트의 인덱스
-
-  messageElement.textContent = ""; // 초기 텍스트 비우기
-
-  // 타이핑 하는 함수
-  function typeText() {
-    if (index < messageText.length) {
-      messageElement.textContent += messageText[index]; // 한 글자씩 추가
-      index++;
-      setTimeout(typeText, 100); // 다음 글자 타이핑까지 100ms 후에 추가
-    } else {
-      setTimeout(restartTyping, 10000); // 타이핑 완료 후 10초 대기
+    function typing() {
+      if (index < text.length) {
+        element.textContent += text[index]; // 한 글자씩 추가
+        index++;
+        setTimeout(typing, 100); // 다음 글자 타이핑까지 100ms 후에 추가
+      } else {
+        setTimeout(() => restartTyping(messageObj), 5000); // 타이핑 완료 후 10초 대기
+      }
     }
+    typing();
+  }
+  
+  // 타이핑을 다시 시작하는 함수
+  function restartTyping(messageObj) {
+    messageObj.element.textContent = ""; // 텍스트 비움
+    typeText(messageObj); // 다시 타이핑 시작
   }
 
-  // 타이핑 다시 시작하는 함수
-  function restartTyping() {
-    messageElement.textContent = ""; // 텍스트를 다시 비움
-    index = 0; // 인덱스를 초기화
-    typeText(); // 타이핑을 다시 시작
-  }
-
-  typeText(); // 타이핑 효과 시작
+  // 모든 메시지 요소에 타이핑 효과 적용
+  messages.forEach((messageObj) => {
+    typeText(messageObj);
+  });
 
   function updateSliderWidth() {
     sliderWidth = document.getElementById("mainContainer").offsetWidth;
@@ -250,6 +257,7 @@ $(document).ready(function () {
                 ).toLocaleString()}</div>
               </div>
               <br>
+              <hr style="border: 0.01vh solid black;">
               `;
           } else {
             detailsList += `
@@ -261,6 +269,7 @@ $(document).ready(function () {
                 ).toLocaleString()}</div>
               </div>
               <br>
+              <hr style="border: 0.01vh solid black;">
             `;
           }
         });
@@ -351,6 +360,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+                  <hr style="border: 0.01vh solid black;">
                   `;
               } else {
                 detailsList += `
@@ -364,6 +374,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+                  <hr style="border: 0.01vh solid black;">
                 `;
               }
             });
