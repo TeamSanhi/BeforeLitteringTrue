@@ -585,7 +585,7 @@
     font-size: 1.7vh;
     letter-spacing: 0.07vw;
     color: gray;
-    margin-left: 1vw;
+    margin-left: 0.5vw;
   }
 
   /* 나눔 완료된 게시글일시 나눔완료버튼 */
@@ -594,7 +594,7 @@
     font-size: 1.7vh;
     letter-spacing: 0.07vw;
     color: black;
-    margin-left: 1vw;
+    margin-left: 0.5vw;
     background: linear-gradient(#2DC986 0 100%);
     background-position: 0 calc(100% - 0.25vh);
     background-size: 100% 0.8vh;
@@ -607,7 +607,7 @@
     font-size: 1.7vh;
     letter-spacing: 0.07vw;
     color: gray;
-    margin-left: 1vw;
+    margin-left: 0.5vw;
   }
 
 /* 쪽지 모달 css 끝  */
