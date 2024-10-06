@@ -252,7 +252,7 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     border: 0.07vw solid black;
-    /* box-shadow: rgba(149, 157, 165, 0.2) 0 1vh 2vh; */
+    box-shadow: rgba(149, 157, 165, 0.2) 0 1vh 2vh;
   }
 
   /* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
