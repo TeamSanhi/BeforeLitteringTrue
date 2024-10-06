@@ -357,148 +357,149 @@ a {
     display: flex;
     max-width: 90vw;
     max-height: 80vh;
-    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh;
     width: 60vw; /* 너비 조정 */
     height: auto; /* 높이는 내용에 따라 조정 */
   }
 
-/* 팝업 왼쪽 이미지 영역 */
-.popup-left {
-  flex: 1;
-  max-width: 50%; /* 이미지 영역의 최대 너비를 50%로 설정 */
-  padding-right: 1vw;
-}
+  /* 팝업 왼쪽 이미지 영역 */
+  .popup-left {
+    flex: 1;
+    max-width: 50%; /* 이미지 영역의 최대 너비를 50%로 설정 */
+    padding-right: 1vw;
+  }
 
-.popup-left img {
-  width: 100%;
-  height: auto;
-  max-height: 60vh;
-  object-fit: cover; /* 이미지가 박스에 잘리도록 */
-}
+  .popup-left img {
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    object-fit: cover; /* 이미지가 박스에 잘리도록 */
+  }
 
-/* 팝업 상단 타이틀 영역 */
-.popupUpside {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 4vh;
-}
+  /* 팝업 상단 타이틀 영역 */
+  .popupUpside {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4vh;
+  }
 
-/* 해당 물품 이름 */
-#popupTitle {
-  display: inline-block;
-  font-size: 3vh;
-  letter-spacing: 0.1vw;
-  background: linear-gradient(#8abaff 0 100%);
-  background-position: 0 calc(100% - 0.7vh);
-  background-size: 100% 1.5vh;
-  background-repeat: no-repeat;
-  cursor: pointer;
-}
+  /* 해당 물품 이름 */
+  #popupTitle {
+    display: inline-block;
+    font-size: 3vh;
+    letter-spacing: 0.1vw;
+    background: linear-gradient(#8abaff 0 100%);
+    background-position: 0 calc(100% - 0.7vh);
+    background-size: 100% 1.5vh;
+    background-repeat: no-repeat;
+    cursor: pointer;
+  }
 
-/* 팝업 오른쪽 텍스트 스타일 */
-#popupCategory {
-  margin-left: 1vw;
-  margin-top: 1vh;
-  display: inline-block;
-  font-size: 2vh;
-  letter-spacing: 0.1vw;
-}
+  /* 팝업 오른쪽 텍스트 스타일 */
+  #popupCategory {
+    margin-left: 1vw;
+    margin-top: 1vh;
+    display: inline-block;
+    font-size: 2vh;
+    letter-spacing: 0.1vw;
+  }
 
-/* 닫기 버튼 스타일 */
-.close-btn {
-  margin-top: -0.6vh;
-  cursor: pointer;
-  font-size: 3vh;
-  margin-left: auto; /* 오른쪽 정렬 */
-}
+  /* 닫기 버튼 스타일 */
+  .close-btn {
+    margin-top: -0.6vh;
+    cursor: pointer;
+    font-size: 3vh;
+    margin-left: auto; /* 오른쪽 정렬 */
+  }
 
-/* 팝업 오른쪽 텍스트 영역 */
-.popup-right {
-  flex: 1;
-  padding-left: 1vw;
-  max-width: 50%; /* 텍스트 영역의 최대 너비를 50%로 설정 */
-  display: flex;
-  flex-direction: column;
-}
+  /* 팝업 오른쪽 텍스트 영역 */
+  .popup-right {
+    flex: 1;
+    padding-left: 1vw;
+    max-width: 50%; /* 텍스트 영역의 최대 너비를 50%로 설정 */
+    display: flex;
+    flex-direction: column;
+  }
 
-/* 재활용 여부 */
-#popupPossible {
-  font-size: 1.8vh;
-  letter-spacing: 0.1vw;
-}
+  /* 재활용 여부 */
+  #popupPossible {
+    font-size: 1.8vh;
+    letter-spacing: 0.1vw;
+  }
 
-/* 구분선 */
-.divider {
-  border: none;
-  border-top: 0.07vw solid gray;
-  margin: 2.5vh 0;
-}
+  /* 구분선 */
+  .divider {
+    border: none;
+    border-top: 0.07vw solid gray;
+    margin: 2.5vh 0;
+  }
 
-/* 재활용 내용 */
-#popupContents {
-  font-size: 1.8vh;
-  letter-spacing: 0.1vw;
-  line-height: 3vh;
-  margin-bottom: 4vh;
-}
+  /* 재활용 내용 */
+  #popupContents {
+    font-size: 1.8vh;
+    letter-spacing: 0.1vw;
+    line-height: 3vh;
+    margin-bottom: 4vh;
+  }
 
-/* 최종 업데이트 날짜 */
-.updated-date {
-  font-size: 1.5vh;
-  letter-spacing: 0.05vw;
-  color: gray;
-  margin-top: auto; /* 하단 정렬 */
-}
-/* 검색어 목록 스타일 */
-#searchWordList {
-  list-style: none;
-  padding: 0;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  background-color: white;
-  position: absolute; /* 부모 요소인 폼 내에서 위치 */
-  top: 100%; /* 검색창 바로 아래에 위치 */
-  left: 0;
-  width: 100%; /* 검색창의 너비와 동일하게 */
-  z-index: 1000;
-  border-radius: 5px;
-}
+  /* 최종 업데이트 날짜 */
+  .updated-date {
+    font-size: 1.5vh;
+    letter-spacing: 0.05vw;
+    color: gray;
+    margin-top: auto; /* 하단 정렬 */
+  }
 
-#searchWordList li {
-  padding: 5px;
-  cursor: pointer;
-}
+  /* 검색어 목록 스타일 */
+  #searchWordList {
+    list-style: none;
+    padding: 0;
+    margin-top: 0.5vh;
+    border: 0.07vw solid #ddd;
+    background-color: white;
+    position: absolute; /* 부모 요소인 폼 내에서 위치 */
+    top: 100%; /* 검색창 바로 아래에 위치 */
+    left: 0;
+    width: 100%; /* 검색창의 너비와 동일하게 */
+    z-index: 1000;
+    border-radius: 0.5vh;
+  }
 
-#searchWordList li:hover {
-  background-color: #f0f0f0;
-}
+  #searchWordList li {
+    padding: 0.5vh 0.5vw;
+    cursor: pointer;
+  }
 
-/* 검색 타입 옵션 텍스트 스타일 */
-.option-text {
-  position: relative;
-  padding: 0 1vw;
-  color: gray;
-  cursor: pointer;
-}
+  #searchWordList li:hover {
+    background-color: #f0f0f0;
+  }
 
-.option-text .hb {
-  color: gray; /* 기본 텍스트 색상 */
-  background: linear-gradient(#8abaff 0 100%);
-  background-position: 0 calc(100% - 0.2vh);
-  background-size: 0 1vh;
-  background-repeat: no-repeat;
-  transition: background-size 0.3s, color 0.3s;
-}
+  /* 검색 타입 옵션 텍스트 스타일 */
+  .option-text {
+    position: relative;
+    padding: 0 1vw;
+    color: gray;
+    cursor: pointer;
+  }
 
-.option-text:hover .hb {
-  color: black;
-  background-size: 100% 1vh;
-}
+  .option-text .hb {
+    color: gray; /* 기본 텍스트 색상 */
+    background: linear-gradient(#8abaff 0 100%);
+    background-position: 0 calc(100% - 0.2vh);
+    background-size: 0 1vh;
+    background-repeat: no-repeat;
+    transition: background-size 0.3s, color 0.3s;
+  }
 
-.option-text.selected .hb {
-  color: black;
-  background-size: 100% 1vh;
-}
+  .option-text:hover .hb {
+    color: black;
+    background-size: 100% 1vh;
+  }
+
+  .option-text.selected .hb {
+    color: black;
+    background-size: 100% 1vh;
+  }
 /* 기존 CSS 코드 아래에 추가 */
 
 /* 쪽지 모달 부분 */

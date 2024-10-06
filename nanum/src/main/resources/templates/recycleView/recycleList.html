@@ -14,44 +14,7 @@
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <script th:src="@{/js/recycle/recycleList.js}"></script>
     <!-- 스타일 정의 -->
-    <style type="text/css">
-      /* 팝업 오버레이 스타일 */
-      .popup-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;  
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 1000; /* 다른 요소보다 앞에 오도록 설정 */
-      }
-      .popup-left img {
-        width: 100%;
-        height: auto; /* 이미지 비율 유지 */
-        max-height: 500px; /* 최대 높이 설정 */
-        object-fit: cover;
-        border-radius: 5px;
-      }
-
-
-      /* 닫기 버튼 스타일 */
-      .close-btn {
-        float: right;
-        cursor: pointer;
-        font-size: 24px; /* 폰트 크기 증가 */
-        font-weight: bold;
-      }
-
-      .close-btn:hover {
-        color: red;
-      }
-
-      /* 제목 스타일 */
-      .popup-right h2 {
-        margin: 0;
-        font-size: 24px; /* 폰트 크기 증가 */
-      }
+    <!-- <style type="text/css">
 
       /* 카테고리 스타일 */
       .popup-right .category {
@@ -94,7 +57,7 @@
         color: black;
         text-decoration: none;
       }
-    </style>
+    </style> -->
   </head>
   <body>
     <!-- 네비게이션 바 -->
@@ -366,17 +329,16 @@
           <div class="recycleContent">
             <a
               href="javascript:void(0)"
-              th:onclick="'openPopup(' + ${item.recycleNum} + ')'"
-            >
+              th:onclick="'openPopup(' + ${item.recycleNum} + ')'">
               <img
                 th:src="@{'/images/' + ${item.recycleFileName}}"
-                alt="이미지"
-              />
+                alt="이미지"/>
             </a>
           </div>
         </th:block>
       </div>
     </div>
+
     <!-- 팝업창 -->
     <div class="popup-overlay">
       <div class="popup-content">
@@ -390,19 +352,19 @@
           <!-- 팝업 상단 타이틀 영역 -->
           <div class="popupUpside">
             <!-- 제목 -->
-            <h2 id="popupTitle">제목</h2>
+            <div id="popupTitle">제목</div>
             <span id="popupCategory" class="category">카테고리</span>
             <!-- 닫기 버튼 -->
-            <span class="close-btn" onclick="closePopup()" style="color: black;">╳</span>
+            <span class="close-btn" onclick="closePopup()">╳</span>
           </div>
           <!-- 재활용 여부 -->
-          <div id="popupPossible">재활용 여부</div>
+          <div id="popupPossible" class="possible">재활용 여부</div>
           <!-- 구분선 추가 -->
-          <hr class="divider" />
+          <hr class="divider">
           <!-- 내용 -->
           <div id="popupContents">내용</div>
           <!-- 최종 업데이트 날짜 -->
-          <div class="updated-date" id="popupDate">최종 업데이트 날짜</div>
+          <span class="updated-date" id="popupDate">최종 업데이트 날짜</div>
         </div>
       </div>
     </div>
