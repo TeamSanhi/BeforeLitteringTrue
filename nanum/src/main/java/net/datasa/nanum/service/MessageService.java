@@ -30,7 +30,6 @@ public class MessageService {
         private final MessageRepository messageRepository;
         private final RoomRepository roomRepository;
 
-
         /**
          * 현재 사용자가 생성한 쪽지방을 찾아옴
          * 
@@ -51,7 +50,6 @@ public class MessageService {
                 return room;
         }
 
-
         public List<MessageDTO> getMessage(RoomEntity room, int num) {
                 List<MessageEntity> messageList = messageRepository.findAllByRoom(room);
                 List<MessageDTO> dtoList = new ArrayList<>();
@@ -62,45 +60,45 @@ public class MessageService {
 
                 // // 내가 쓴 쪽지일때
                 // if (num == room.getCreator().getMemberNum()) {
-                //         for (MessageEntity message : messageList) {
-                //                 MessageDTO dto = MessageDTO.builder()
-                //                                 .messageNum(message.getMessageNum())
-                //                                 .senderNum(message.getSender().getMemberNum())
-                //                                 .senderNickname(message.getSender().getMemberNickname())
-                //                                 .roomNum(message.getRoom().getRoomNum())
-                //                                 .messageContents(message.getMessageContents())
-                //                                 .deliverDate(message.getDeliverDate())
-                //                                 .isRead(message.getIsRead())
-                //                                 .build();
-                //                 dtoList.add(dto);
-                //         }
+                // for (MessageEntity message : messageList) {
+                // MessageDTO dto = MessageDTO.builder()
+                // .messageNum(message.getMessageNum())
+                // .senderNum(message.getSender().getMemberNum())
+                // .senderNickname(message.getSender().getMemberNickname())
+                // .roomNum(message.getRoom().getRoomNum())
+                // .messageContents(message.getMessageContents())
+                // .deliverDate(message.getDeliverDate())
+                // .isRead(message.getIsRead())
+                // .build();
+                // dtoList.add(dto);
+                // }
                 // }
                 // // 내가 받은 쪽지일때
                 // else if (num == room.getReceiver().getMemberNum()) {
-                //         for (MessageEntity message : messageList) {
-                //                 message.setIsRead(true);
-                //                 messageRepository.save(message);
+                // for (MessageEntity message : messageList) {
+                // message.setIsRead(true);
+                // messageRepository.save(message);
 
-                //                 MessageDTO dto = MessageDTO.builder()
-                //                                 .messageNum(message.getMessageNum())
-                //                                 .senderNum(message.getSender().getMemberNum())
-                //                                 .senderNickname(message.getSender().getMemberNickname())
-                //                                 .roomNum(message.getRoom().getRoomNum())
-                //                                 .messageContents(message.getMessageContents())
-                //                                 .deliverDate(message.getDeliverDate())
-                //                                 .isRead(message.getIsRead())
-                //                                 .build();
-                //                 dtoList.add(dto);
-                //         }
+                // MessageDTO dto = MessageDTO.builder()
+                // .messageNum(message.getMessageNum())
+                // .senderNum(message.getSender().getMemberNum())
+                // .senderNickname(message.getSender().getMemberNickname())
+                // .roomNum(message.getRoom().getRoomNum())
+                // .messageContents(message.getMessageContents())
+                // .deliverDate(message.getDeliverDate())
+                // .isRead(message.getIsRead())
+                // .build();
+                // dtoList.add(dto);
+                // }
                 // } else {
-                //         return null;
+                // return null;
                 // }
 
                 for (MessageEntity message : messageList) {
                         log.debug("발신자: {}", message.getSender().getMemberNum());
 
                         // 쪽지를 보낸 게 나일 때
-                        if (num == message.getSender().getMemberNum()){
+                        if (num == message.getSender().getMemberNum()) {
                                 MessageDTO dto = MessageDTO.builder()
                                                 .messageNum(message.getMessageNum())
                                                 .senderNum(message.getSender().getMemberNum())
@@ -111,7 +109,7 @@ public class MessageService {
                                                 .isRead(message.getIsRead())
                                                 .build();
                                 dtoList.add(dto);
-                        } 
+                        }
                         // 쪽지를 받은 게 나일 때
                         else {
                                 message.setIsRead(true);
@@ -133,14 +131,12 @@ public class MessageService {
                 return dtoList;
         }
 
-
         public RoomEntity findOrCreateRoom(MemberEntity creator, ShareBoardEntity shareBoard) {
 
                 RoomEntity room = findRoom(creator.getMemberNum(), shareBoard.getShareNum());
                 MemberEntity receiver = memberRepository.findById(shareBoard.getMember().getMemberNum())
                                 .orElseThrow(() -> new EntityNotFoundException("게시자 정보를 찾을 수 없습니다."));
 
-                                                
                 if (room == null) {
                         room = new RoomEntity();
                         room.setCreator(creator);
@@ -157,72 +153,91 @@ public class MessageService {
 
         public List<MessageDTO> getUserRoomsWithLatestMessages(Integer memberNum) {
                 MemberEntity member = memberRepository.findById(memberNum)
-                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
+                                .orElseThrow(() -> new EntityNotFoundException("회원 정보를 찾을 수 없습니다."));
 
                 List<RoomEntity> rooms = roomRepository.findByCreatorOrReceiver(member, member);
 
                 List<MessageDTO> result = rooms.stream()
-                .map(room -> {
-                        List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
-                        MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
-                        log.debug("방 번호: {}", room.getRoomNum());
-                        log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
+                                .map(room -> {
+                                        List<MessageEntity> messages = messageRepository.findLatestMessageByRoom(room);
+                                        MessageEntity latestMessage = messages.isEmpty() ? null : messages.get(0);
+                                        log.debug("방 번호: {}", room.getRoomNum());
+                                        log.debug("게시글 번호: {}", room.getShareBoard().getShareNum());
 
-                        // 해당 방에 읽지 않은 쪽지가 있는지 체크
-                        boolean hasUnreadMessages = messages.stream().anyMatch(message -> !message.getIsRead());
+                                        // 해당 방에 읽지 않은 쪽지가 있는지 체크
+                                        boolean hasUnreadMessages = messages.stream()
+                                                        .anyMatch(message -> !message.getIsRead());
 
-                        int creator = room.getCreator().getMemberNum();
-                        int receiver = room.getReceiver().getMemberNum();
+                                        int creator = room.getCreator().getMemberNum();
+                                        int receiver = room.getReceiver().getMemberNum();
 
-                        if (memberNum == creator || memberNum == receiver) {
-                                MessageDTO dto = MessageDTO.builder()
-                                .messageNum(latestMessage!= null? latestMessage.getMessageNum() : null)
-                                .senderNum(latestMessage != null ? latestMessage.getSender().getMemberNum() : null)
-                                .senderNickname(memberNum == creator ? room.getReceiver().getMemberNickname() : room.getCreator().getMemberNickname())
-                                .receiverNum(memberNum == creator ? room.getReceiver().getMemberNum() : room.getCreator().getMemberNum())
-                                .shareNum(room.getShareBoard().getShareNum())
-                                .shareTitle(room.getShareBoard().getShareTitle())
-                                .roomNum(room.getRoomNum())
-                                .messageContents(latestMessage != null ? latestMessage.getMessageContents() : null)
-                                .deliverDate(latestMessage != null ? latestMessage.getDeliverDate() : null)
-                                .isRead(latestMessage!= null? latestMessage.getIsRead() : false)
-                                .shareWriteNum(room.getShareBoard().getMember().getMemberNum())
-                                .shareCompleted(room.getShareBoard().getShareCompleted())
-                                .hasUnreadMessages(hasUnreadMessages) // 읽지 않은 쪽지 여부를 전달
-                                .memberFileName(memberNum == creator ? room.getReceiver().getMemberFileName() : room.getCreator().getMemberFileName())
-                                .build();
+                                        if (memberNum == creator || memberNum == receiver) {
+                                                MessageDTO dto = MessageDTO.builder()
+                                                                .messageNum(latestMessage != null
+                                                                                ? latestMessage.getMessageNum()
+                                                                                : null)
+                                                                .senderNum(latestMessage != null
+                                                                                ? latestMessage.getSender()
+                                                                                                .getMemberNum()
+                                                                                : null)
+                                                                .senderNickname(memberNum == creator
+                                                                                ? room.getReceiver().getMemberNickname()
+                                                                                : room.getCreator().getMemberNickname())
+                                                                .receiverNum(memberNum == creator
+                                                                                ? room.getReceiver().getMemberNum()
+                                                                                : room.getCreator().getMemberNum())
+                                                                .shareNum(room.getShareBoard().getShareNum())
+                                                                .shareTitle(room.getShareBoard().getShareTitle())
+                                                                .roomNum(room.getRoomNum())
+                                                                .messageContents(latestMessage != null
+                                                                                ? latestMessage.getMessageContents()
+                                                                                : null)
+                                                                .deliverDate(latestMessage != null
+                                                                                ? latestMessage.getDeliverDate()
+                                                                                : null)
+                                                                .isRead(latestMessage != null
+                                                                                ? latestMessage.getIsRead()
+                                                                                : false)
+                                                                .shareWriteNum(room.getShareBoard().getMember()
+                                                                                .getMemberNum())
+                                                                .shareCompleted(room.getShareBoard()
+                                                                                .getShareCompleted())
+                                                                .hasUnreadMessages(hasUnreadMessages) // 읽지 않은 쪽지 여부를 전달
+                                                                .memberFileName(memberNum == creator
+                                                                                ? room.getReceiver().getMemberFileName()
+                                                                                : room.getCreator().getMemberFileName())
+                                                                .build();
 
-                                return dto;
-                        }
-                        else {
-                                return null;
-                        }
-                })
-                .filter(Objects::nonNull)   // null값 필터링
-                .collect(Collectors.toList());
+                                                return dto;
+                                        } else {
+                                                return null;
+                                        }
+                                })
+                                .filter(Objects::nonNull) // null값 필터링
+                                .collect(Collectors.toList());
                 return result;
         }
 
         // public void saveMessage(int roomNum, String messageContents, int senderNum) {
-        //         RoomEntity room = roomRepository.findById(roomNum)
-        //             .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
-            
-        //         MemberEntity sender = memberRepository.findById(senderNum)
-        //             .orElseThrow(() -> new EntityNotFoundException("발신자를 찾을 수 없습니다."));
-            
-        //         MessageEntity message = MessageEntity.builder()
-        //             .room(room)
-        //             .sender(sender)
-        //             .messageContents(messageContents)
-        //             .isRead(false)
-        //             .build();
-            
-        //         messageRepository.save(message);
-        //     }
-        
+        // RoomEntity room = roomRepository.findById(roomNum)
+        // .orElseThrow(() -> new EntityNotFoundException("쪽지방을 찾을 수 없습니다."));
+
+        // MemberEntity sender = memberRepository.findById(senderNum)
+        // .orElseThrow(() -> new EntityNotFoundException("발신자를 찾을 수 없습니다."));
+
+        // MessageEntity message = MessageEntity.builder()
+        // .room(room)
+        // .sender(sender)
+        // .messageContents(messageContents)
+        // .isRead(false)
+        // .build();
+
+        // messageRepository.save(message);
+        // }
+
         public long countRoomsWithUnreadMessagesByMemberNum(int memberNum) {
                 log.debug("레포지토리에서 계산한 값: {}", messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum));
                 return messageRepository.countRoomsWithUnreadMessagesByMemberNum(memberNum);
-            }
+        }
 
 }
