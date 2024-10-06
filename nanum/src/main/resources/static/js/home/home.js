@@ -257,6 +257,7 @@ $(document).ready(function () {
                 ).toLocaleString()}</div>
               </div>
               <br>
+              <hr style="border: 0.03vw solid black;">
               `;
           } else {
             detailsList += `
@@ -268,6 +269,7 @@ $(document).ready(function () {
                 ).toLocaleString()}</div>
               </div>
               <br>
+              <hr style="border: 0.03vw solid black;">
             `;
           }
         });
@@ -358,6 +360,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+                  <hr style="border: 0.03vw solid black;">
                   `;
               } else {
                 detailsList += `
@@ -371,6 +374,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+                  <hr style="border: 0.03vw solid black;">
                 `;
               }
             });

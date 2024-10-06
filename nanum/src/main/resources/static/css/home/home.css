@@ -220,7 +220,6 @@
     line-height: 5vh;
     color: black;
     background-color: white;
-    box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -318,11 +317,12 @@
   }
 
   .message-room {
-    border: 0.07vw solid #ccc;
+    border: 0.07vw solid black;
     padding: 1vh;
     margin-bottom: 1vh;
+    font-size: 1.8vh;
+    line-height: 5vh;
     cursor: pointer;
-    background-color: #f9f9f9;
   }
 
   .message-room:hover {
