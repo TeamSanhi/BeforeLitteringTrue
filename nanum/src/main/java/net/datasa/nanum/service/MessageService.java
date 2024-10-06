@@ -1,6 +1,7 @@
 package net.datasa.nanum.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -214,6 +215,8 @@ public class MessageService {
                                         }
                                 })
                                 .filter(Objects::nonNull) // null값 필터링
+                                .sorted(Comparator.comparing(MessageDTO::getDeliverDate, // 최신글 순으로 보여준다.
+                                                Comparator.nullsLast(Comparator.reverseOrder())))
                                 .collect(Collectors.toList());
                 return result;
         }
