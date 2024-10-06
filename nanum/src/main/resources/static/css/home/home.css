@@ -190,6 +190,15 @@
     align-items: center;
   }
 
+  /* 사용자 프로필 사진 */
+  #receiverProfileImage {
+    width: 2.5vh;
+    height: 2.5vh;
+    border-radius: 50%;
+    border: 0.07vw solid black;
+    margin-right: 0.5vw;
+  }
+
   /* 사용자 이름 */
   .usernameTitle {
     font-size: 2.5vh;
@@ -205,7 +214,13 @@
     padding-top: 3vh;
     padding-bottom: 3vh;
     height: 49vh;
+    font-size: 2.2vh;
     width: 100%;
+    letter-spacing: 0.05vw;
+    line-height: 5vh;
+    color: black;
+    background-color: white;
+    box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
@@ -226,7 +241,7 @@
 
   /* 존재하는 메시지 */
   #messageDetailsContainer {
-    margin-top: 2vh;
+    margin-top: 4vh;
     margin-bottom: 4vh;
     padding-right: 2vh;
     padding-left: 2vh;
@@ -237,6 +252,7 @@
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    border: 0.07vw solid black;
     box-shadow: rgba(149, 157, 165, 0.2) 0 1vh 2vh;
   }
 
@@ -247,10 +263,10 @@
 
   /* 보내기 버튼 */
   #sendMessageBtn {
-    position: relative;
+    position: absolute;
     padding-top: 0.2vh;
     padding-left: 0.5vw;
-    right: 0.4vh;
+    right: 11.7vh;
     width: 8vh;
     height: 3.8vh;
     border-radius: 2.5vh;
@@ -271,18 +287,18 @@
   }
 
   /* 나눔 완료 버튼 */
-  #sendMessageBtn {
-    position: relative;
+  #shareComplete {
+    position: absolute;
     padding-top: 0.2vh;
     padding-left: 0.5vw;
-    right: 0.4vh;
-    width: 8vh;
+    right: 0;
+    width: 10vh;
     height: 3.8vh;
     border-radius: 2.5vh;
     font-size: 1.7vh;
     letter-spacing: 0.05vw;
-    background-color: #2dc986;
-    color: white;
+    background-color: white;
+    color: black;
     border: 0.07vw solid black;
     cursor: pointer;
     font-weight: 500;
@@ -292,7 +308,8 @@
 
   /* 나눔 완료 버튼 호버 효과 */
   #shareComplete:hover {
-    text-decoration: underline;
+    background-color: #2DC986;
+    color: white;
   }
 
   /* 유저 신고하기 모달만 배경 투명 처리 */
@@ -407,13 +424,14 @@
 
   /* 메시지 보내기 창 */
   .messageContents {
-    width: 100%;
+    width: 28vw;
     height: 4.5vh;
-    padding: 0.8vh 8vh 0 2vh;       /* 버튼을 위한 패딩 공간 */
+    padding: 0.8vh 8vh 0 2vh; /* 버튼을 위한 패딩 공간 */
     border: 0.07vw solid black;
-    border-radius: 2.5vh;           /* 둥근 모서리 */
+    border-radius: 2.5vh; /* 둥근 모서리 */
     font-size: 2vh;
     line-height: 3vh;
+    letter-spacing: 0.05vw;
     outline: none;
     resize: none;
     overflow: scroll;
@@ -498,8 +516,10 @@
 
   /* 기타 사유 작성 창 */
   .additionalReason {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    letter-spacing: 0.1vw;
     width: 90%;
-    height: 30vh;
+    height: 28vh;
     margin-top: 0.5vh;
     margin-left: 1.5vw;
     padding-top: 2vh;
@@ -507,7 +527,7 @@
     padding-left: 1.5vw;
     padding-right: 1.5vw;
     border: 0.07vw solid black;
-    border-radius: 2.5vh;     /* 둥근 모서리 */
+    border-radius: 2.5vh; /* 둥근 모서리 */
     font-size: 2vh;
     line-height: 3.2vh;
     outline: none;
