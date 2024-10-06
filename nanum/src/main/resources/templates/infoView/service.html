@@ -367,8 +367,6 @@
                 minLevel: 4, // 최소 레벨로 클러스터링을 적용
                 disableClickZoom: false // 클러스터 클릭 시 확대하는 기본 동작을 비활성화
             });
-
-
             // 내 위치 가져오기
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -455,7 +453,7 @@
                                 markers.push(marker);  // 마커를 배열에 추가합니다.
 
                                 // 마커에 인포윈도우와 이벤트를 등록합니다.
-                                createMarkerWithInfo(marker, share);
+                                createMarkerWithDynamicInfo(marker, share);
                             }
                         });
 
@@ -466,38 +464,45 @@
                 });
             }
 
-            // 마커에 인포윈도우를 매칭하고 이벤트를 등록하는 함수
-            function createMarkerWithInfo(marker, share) {
-                let iwContent = `
-                    <div style="padding:5px; width:110px; height:150px;">
-                        <span>${share.shareTitle}</span><br>
-                        <span>${share.memberNickname}</span>
-                        <img style="width:100px; height:100px;" src="/share/download?imageNum=${share.imageList[0].imageNum}" alt="${share.shareTitle}">
-                    </div>
-                `;
-
-                // 인포윈도우를 생성합니다.
-                let infoWindow = new kakao.maps.InfoWindow({
-                    content: iwContent,
-                    disableAutoPan: true // 자동 이동 비활성화
-                });
-
-                // 마커에 마우스 이벤트를 등록합니다.
+             // ****************마커에 동적 인포윈도우를 매치, 마커에 이벤트 등록 *****************
+             function createMarkerWithDynamicInfo(marker, share) {
                 kakao.maps.event.addListener(marker, 'mouseover', function () {
-                    // 다른 인포윈도우가 열려 있으면 닫습니다.
+                    let iwContent = `
+                        <div class="mapInfo">
+                          <div class="markerPostName">${share.shareTitle}</div>
+                          <div class="markerUserName">${share.memberNickname}</div>
+                          <div class="markerImage">
+                            <img style="width:12vw;" src="/share/download?imageNum=${share.imageList[0].imageNum}">
+                          </div>
+                        </div>
+                    `;
+
+                    // 인포윈도우 생성
+                    let infoWindow = new kakao.maps.InfoWindow({
+                        content: iwContent,
+                        disableAutoPan: true
+                    });
+
+                    // 인포윈도우 열기
                     if (openInfoWindow) {
-                        openInfoWindow.close();
+                        openInfoWindow.close();  // 기존 열린 인포윈도우가 있으면 닫기
                     }
-                    // 인포윈도우를 마커 위에 표시합니다.
                     infoWindow.open(map, marker);
                     openInfoWindow = infoWindow;
                 });
 
+                // 마커에 마우스아웃 이벤트를 등록
                 kakao.maps.event.addListener(marker, 'mouseout', function () {
-                    // 마우스 아웃 시 인포윈도우를 닫습니다.
-                    infoWindow.close();
+                    if (openInfoWindow) {
+                        openInfoWindow.close();
+                    }
                     openInfoWindow = null;
                 });
+
+                // 마커 클릭 시 해당 게시글로 이동
+                // kakao.maps.event.addListener(marker, 'click', function () {
+                //     window.location.href = '/share/read?shareNum=' + share.shareNum;
+                // });
             }
 
             // 마커 중복 여부를 확인하는 함수
