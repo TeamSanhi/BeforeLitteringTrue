@@ -120,6 +120,10 @@
                         src=""
                         alt="Profile"> 
                       <span class="usernameTitle"><b id="receiverNickname"></b>님에게</span>
+                      <!-- 게시글로 이동하기 버튼 (공백 유지) -->
+                      <span id="shareBoardLink"  class="moveToPostButton highlighterMove" style="display: none;">나눔완료</span>                      
+                      <!-- 나눔완료 버튼_작성자에게만 보임 -->
+                      <span id="shareComplete" class="shareEndButton highlighterMove">게시글로 이동</span>                      
                       <!-- 신고하기 버튼 (공백 유지) -->
                       <span id="userReportBtn" class="userReportButton highlighterRed">신고하기</span>                      
                     </div>
@@ -127,28 +131,15 @@
                     <span class="close">╳</span> 
                   </div>
                   
-                  <!-- 게시글로 이동하는 영역 추가 -->
-                  <div id="goToShareBoard">
-                    <div id="shareBoardLink">
-                    게시글로 이동
-                    </div>
-                  </div>
-
                 <!-- 쪽지 목록 출력 영역 -->
                 <div id="messageDetailsContainer"></div>
                 <!-- 쪽지 보내기 -->
                 <div id="detailContentsContainer">
-                  <textarea
-                  id="messageInput"
-                  class="messageContents" 
-                  placeholder="내용을 입력해주세요!"
-                  maxlength="100"
-                    ></textarea>
+                  <textarea id="messageInput" class="messageContents" 
+                            placeholder="내용을 입력해주세요!" maxlength="100">
+                  </textarea>
                     <!-- 보내기 버튼 -->
                     <button id="sendMessageBtn">보내기</button>
-                    <button id="shareComplete" style="display: none;">
-                      나눔 완료
-                    </button>
                 </div>
                 </div>
               </div>
