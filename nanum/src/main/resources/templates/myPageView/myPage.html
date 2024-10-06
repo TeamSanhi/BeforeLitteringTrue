@@ -251,7 +251,7 @@
                     <span class="userName" th:text="${userNickname}">이름</span>
                     <!-- 개인정보 수정 -->
                     <div class="infoSetting">
-                        <a th:href="@{/myPage/profileEdit}"><img src="/images/setting.png"></a>
+                        <img src="/images/setting.png">
                     </div>
                     <!-- 알림 추가-->
                     <!-- <span id="alarmAdd">알림 추가</span> -->
@@ -408,6 +408,169 @@
             <div id="verify">탈퇴되었습니다.</div>
         </div>
     </div>
+
+    <!-- 회원 정보 수정 모달 창 -->
+    <div id="infoSettingModal" class="modal" style="display: none;">
+        <div class="modal-content">
+                <!-- 타이틀 영역 -->
+                <div class="modal-header">
+                    <!-- 타이틀 -->
+                    <div class="modal-title">회원 정보 수정</div>
+                    <span class="close" id="infoSettingClose">╳</span>
+                </div>
+            <div class="joinArea">
+                <!-- 프로필 사진 영역 -->
+                <div class="editProfileArea">
+                    <!-- 프로필 사진 -->
+                    <div class="editProfile">
+                        <img src="./img/user.png">
+                    </div>
+                    <!-- 프로필 사진 변경 -->
+                    <div class="editProfileButton">프로필 사진 바꾸기</div>
+                </div>
+
+                <!-- 아이디 영역 -->
+                <div class="idArea">
+                    <!-- 아이디 상단 영역 -->
+                    <div class="idUpsideArea">
+                        <!-- 아이디 타이틀 -->
+                        <div class="idTitle">
+                            아이디   
+                        </div>
+                    </div>
+                    
+                    <!-- 아이디_input 영역 -->
+                    <div class="idInputArea">
+                        <!-- 아이디_input -->
+                        <input type="text" name="memberId" id="memberId" class="memberId" readonly>
+                        <!-- 아이디 입력 메시지 출력 -->
+                        <div class="idError">아이디는 변경할 수 없습니다.</div>
+                    </div>
+                </div>
+
+
+                <!-- 비밀번호 영역 -->
+                <div class="passwordArea">
+                    <!-- 비밀번호 상단 영역 -->
+                    <div class="passwordUpsideArea">
+                        <!-- 비밀번호 타이틀 -->
+                        <div class="passwordTitle">
+                            비밀번호 변경   
+                        </div>
+                    </div>
+                    
+                    <!-- 비밀번호_input 영역 -->
+                    <div class="passwordInputArea">
+                        <!-- 비밀번호_input -->
+                        <input type="password" name="memberPw" id="memberPw" class="memberPw">
+                        <!-- 비밀번호 입력 메시지 출력 -->
+                        <div class="passwordError"></div>
+                    </div>
+                </div>
+
+
+                <!-- 비밀번호 확인 영역 -->
+                <div class="pwCheckArea">
+                    <!-- 비밀번호 확인 상단 영역 -->
+                    <div class="pwCheckUpsideArea">
+                        <!-- 비밀번호 확인 타이틀 -->
+                        <div class="pwCheckTitle">
+                            비밀번호 확인  
+                        </div>
+                    </div>
+                    
+                    <!-- 비밀번호 확인_input 영역 -->
+                    <div class="pwCheckInputArea">
+                        <!-- 비밀번호 확인_input -->
+                        <input type="password" name="pwCheck" id="pwCheck" class="pwCheck">
+                        <!-- 비밀번호 확인 메시지 출력 -->
+                        <div class="pwCheckError"></div>
+                    </div>
+                </div>
+
+
+                <!-- 이메일 영역 -->
+                <div class="emailArea">
+                    <!-- 이메일 상단 영역 -->
+                    <div class="emailUpsideArea">
+                        <!-- 이메일 타이틀 -->
+                        <div class="emailTitle">
+                            이메일   
+                        </div>
+                        <!-- 이메일 인증 -->
+                        <div class="emailButton" onclick="sendEmailVerificationCode()">인증번호 전송</div>
+                    </div>
+                    
+                    <!-- 이메일_input 영역 -->
+                    <div class="emailInputArea">
+                        <!-- 이메일_input -->
+                        <input type="text" name="memberEmail" id="memberEmail" class="memberEmail">
+                        <br>
+                        <!-- 이메일 입력 메시지 출력 -->
+                        <div class="emailError"></div>
+                    </div>
+                </div>
+
+
+                <!-- 인증번호 인증 영역 -->
+                <div class="emailCodeArea">
+                    <!-- 인증번호 인증 상단 영역 -->
+                    <div class="emailCodeUpsideArea">
+                        <!-- 인증번호 인증 타이틀 -->
+                        <div class="emailCodeTitle">
+                            인증번호   
+                        </div>
+                        <!-- 인증번호 인증 -->
+                        <div class="codeButton" onclick="verifyEmailCode()">인증번호 확인</div>
+                    </div>
+                    
+                    <!-- 인증번호_input 영역 -->
+                    <div class="emailCodeInput">
+                        <!-- 인증번호_input -->
+                        <input type="text" name="emailCode" id="emailCode" class="emailCode">
+                        <!-- 인증번호 입력 메시지 출력 -->
+                        <div class="emailCodeError">
+                            인증번호를 입력해 주세요.
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 닉네임 영역 -->
+                <div class="nickArea">
+                    <!-- 닉네임 상단 영역 -->
+                    <div class="nickUpsideArea">
+                        <!-- 닉네임 타이틀 -->
+                        <div class="nickTitle">
+                            닉네임   
+                        </div>
+                        <!-- 닉네임 찾기 -->
+                        <div class="nickDoubleCheck" onclick="nickDoubleCheck()">닉네임 중복확인</div>
+                    </div>
+                    
+                    <!-- 닉네임_input 영역 -->
+                    <div class="nickInputArea">
+                        <!-- 닉네임_input -->
+                        <input type="text" name="memberNickname" id="memberNickname" class="memberNickname" maxlength="12" oninput="onlyAlphaNumForNickname(this)">
+                        <!-- 닉네임 입력 메시지 출력 -->
+                        <div class="nickError">
+                            닉네임를 입력해 주세요.
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- 버튼 영역 -->
+                <div class="buttonArea">
+                    <!-- 닫기 버튼 -->
+                    <button type="submit" class="closeButton">닫기</button>
+                    <!-- 회원가입 버튼 -->
+                    <button type="submit" class="joinButton">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!--    <button data-list="donate" data-url="/myPage/showGive">나눴어요</button>-->
     <!--    <button data-list="pendingGive" data-url="/myPage/showGive">나눠요</button>-->

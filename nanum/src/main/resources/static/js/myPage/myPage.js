@@ -17,6 +17,7 @@ $(document).ready(function () {
         images: ["/images/trash.png", "/images/box.png"], // 두 개의 이미지 경로
     };
 
+
     // 모달 초기화 함수
     function initModal(triggerSelector, modalSelector) {
         $(triggerSelector).click(function () {
@@ -37,8 +38,10 @@ $(document).ready(function () {
     // 모달 초기화
     initModal('#messages', '#messagesModal');
     initModal('#alarmAdd', '#alarmAddModal');
-    initModal('.alarmEdit', '#alarmEditModal');
+    // initModal('.alarmEdit', '#alarmEditModal');
     initModal('#deleteId', '#alertModal');
+    initModal('.infoSetting', '#infoSettingModal')// 회원정보 수정 모달 보여줌 
+
 
     // 탈퇴 단계 처리
     $('#next').click(function () {
