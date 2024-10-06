@@ -296,14 +296,19 @@ $(document).ready(function () {
         );
         // 나눔 완료 버튼 표시 및 비활성화 설정
         if (userNum === shareWriteNum) {
+          // 로그인한 사람과 게시글을 작선한 사람이 일치하지 않으면 나눔완료버튼을 숨긴다.
           $("#shareComplete").show();
-
+          // 게시글의 나눔상태 즉 완료된 상태가 1이라면 
           if (shareCompleted) {
-            $("#shareComplete").prop("disabled", true);
-          } else {
-            $("#shareComplete").prop("disabled", false);
-          }
+            // 나눔완료 버튼기능은 숨기고, 형관편 처리된 나눔완료를 의미하는 span을보여준다.
+            $("#shareComplete").hide();
+            $("#shareCompleted").show();
+          } 
+          // else {
+          //   $("#shareComplete").prop("disabled", false);
+          // }
         } else {
+          // 로그인한 사람과 게시글을 작선한 사람이 일치하지 않으면 나눔완료버튼을 숨긴다.
           $("#shareComplete").hide();
         }
 
@@ -467,7 +472,10 @@ $(document).ready(function () {
       data: { shareNum: shareNum, receiverNum: receiverNum },
       success: function (response) {
         alert("나눔이 완료되었습니다.");
-        $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+      //  $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+        // 나눔완료 버튼기능은 숨기고, 형관편 처리된 나눔완료를 의미하는 span을 보여준다. 
+        $("#shareComplete").hide();
+        $("#shareCompleted").show();
         // 나눔 완료 후 쪽지 목록 갱신
         let memberNum = $("#messages").data("num");
         $.ajax({
