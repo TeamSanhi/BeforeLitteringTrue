@@ -66,7 +66,9 @@ public class MyPageController {
         // 북마크 갯수를 받아온다.
         int bookmarkCount = bookMarkRepository.countByMember(member);
 
-        model.addAttribute("userNickname", userNickname);
+        model.addAttribute("memberId", member.getMemberId());
+        model.addAttribute("memberEmail", member.getMemberEmail());
+        model.addAttribute("memberNickname", member.getMemberNickname());
         model.addAttribute("shareCount", shareCount);
         model.addAttribute("alarmTotal", alarmTotal);
         model.addAttribute("alarmLength", alarmLength); // 알람 갯수
@@ -87,7 +89,7 @@ public class MyPageController {
 
         model.addAttribute("member", member);
 
-        return "myPageView/profileEdit";
+        return "redirect:/myPage/view";
     }
 
     @PostMapping("profileEdit")

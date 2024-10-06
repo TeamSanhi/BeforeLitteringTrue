@@ -371,8 +371,6 @@
         }
 
         /* 에러 메시지 */
-        .idError,
-        .emailError,
         .emailCodeError,
         .nickError {
             display: none;
@@ -389,8 +387,9 @@
             margin-top: 5vh;
         }
 
-        .closeButton,
+
         .joinButton {
+            font-family: 'NEXON Lv1 Gothic OTF';
             margin-right: 2vw;
             width: 5vw;
             height: 4.5vh;
@@ -401,7 +400,7 @@
             color: white;
             border: 0.07vw solid black;
             cursor: pointer;
-            font-weight: 500;
+            font-weight: 700;
             text-align: center;
         }
 
@@ -759,8 +758,8 @@
             font-size: 2.3vh;
             font-weight:700;
             letter-spacing: 0.1vw;
-            background-color: white;
-            color: black;
+            background-color: gray;
+            color: white;
             border: 0.07vw solid black;
             cursor: pointer;
             font-weight: 700;
@@ -887,8 +886,8 @@
             font-size: 2.3vh;
             font-weight:700;
             letter-spacing: 0.1vw;
-            background-color: white;
-            color: black;
+            background-color: gray;
+            color: white;
             border: 0.07vw solid black;
             cursor: pointer;
             font-weight: 700;
@@ -1083,8 +1082,8 @@
         margin: 0 auto;
         margin-bottom: 2vh;
         display: block;
-        width: 12vh;
-        height: 12vh;
+        width: 15vh;
+        height: 15vh;
     }
 
     /* 프로필 사진 원형 수정 */
@@ -1093,17 +1092,20 @@
         border: 0.07vw solid black;
     }
 
+    .editProfile img:hover{
+        cursor: pointer;
+        box-shadow: rgba(57, 57, 57, 0.2) 0vw 1vh 4vh 0vw;
+    }
+
     /* 프로필 사진 영역 안에 버튼 */
     .editProfileButton {
         display: block;
         font-size: 1.8vh;
         color: gray;
-        cursor: pointer;
     }
 
     /* 프로필 사진 영역 안에 버튼_hover */
     .editProfileButton:hover {
-        text-decoration: underline;
         color: black;
     }
 
@@ -1152,7 +1154,6 @@
 
     /* 아이디 에러 메시지 */
     .idError {
-        /* display: none; */
         width: 100%;
         font-size: 1.6vh;
         margin-top: 1.2vh;
@@ -1328,12 +1329,11 @@
 
     /* 이메일 에러 메시지 */
     .emailError {
-        display: none;
         width: 100%;
         font-size: 1.6vh;
         margin-top: 1.2vh;
         text-align: center;
-        color: red;
+        color: gray;
     }
 
     /* 이메일 인증 영역 */
