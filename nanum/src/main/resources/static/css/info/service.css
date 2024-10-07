@@ -761,6 +761,7 @@
     .roll {
         font-size: 2.2vh;
         letter-spacing: 0.1vw;
+        line-height: 3.5vh;
     }
 
     .member1 {
@@ -779,18 +780,18 @@
     }
 
     .member4 {
-        top: 1735vh;
-        left: 28vw;
+        top: 1740vh;
+        left: 30vw;
     }
 
     .member5 {
-        top: 1745vh;
+        top: 1753vh;
         right: 20vw;
     }
 
     .member6 {
-        top: 1790vh;
-        right: 30vw;
+        top: 1730vh;
+        left: 10vw;
     }
 
     /* 저작권 영역 */
