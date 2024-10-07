@@ -909,7 +909,7 @@
             font-size: 2vh;
             font-weight: 700;
             border: 0.07vw solid black;
-            border-radius: 5vh;
+            border-radius: 50%;
             cursor: pointer;
             background-color: white;
             transition: background-color 0.3s;
