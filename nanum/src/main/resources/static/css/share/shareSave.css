@@ -106,80 +106,6 @@
 
 
 /* 로그인 했을 시 */
-    /* 나눔 이야기 (쪽지) */
-    .message {
-        padding: 2vh;
-        display: inline-flex;
-        align-items: center;
-        margin-right: 0.5vw;
-        vertical-align: center;
-        cursor: pointer;
-    }
-
-/* ****************************쪽지 모달부분 ********************* */
-    .modal {
-        display: none;                          /* 모달을 숨김 */
-        position: fixed;                        /* 화면에 고정된 위치로 설정 */
-        z-index: 2;                             /* 다른 요소보다 앞에 오도록 설정 */
-        left: 0;                                /* 화면 왼쪽부터 시작 */
-        top: 0;                                 /* 화면 상단부터 시작 */
-        width: 100%;                            /* 화면 전체 너비 */
-        height: 100%;                           /* 화면 전체 높이 */
-        background-color: rgba(0, 0, 0, 0.5); /* 반투명한 검정색 배경 */
-    }
-
-    .modal-content {
-        background-color: #fff;
-        margin: 10% auto;           /* 창 크기가 커질 경우, 위 여백을 줄일 수도 있음 */
-        padding: 3vh;               /* 패딩을 늘려서 내부 콘텐츠 여백도 증가 */
-        border: 0.07vw solid #888;
-        width: 90%;                 /* 너비를 화면의 90%로 변경 */
-        max-width: 60vw;            /* 최대 너비를 60vw로 확장 */
-        text-align: center;
-    }
-
-    .message-room {
-        border: 0.07vw solid #ccc;
-        padding: 1vh;
-        margin-bottom: 1vh;
-        cursor: pointer;
-        background-color: #f9f9f9;
-    }
-
-    .message-room:hover {
-        background-color: #e9e9e9;
-    }
-
-    /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
-    .close {
-        color: #aaa;          /* 닫기 버튼의 기본 색상 */
-        float: right;           /* 닫기 버튼을 모달의 오른쪽 상단에 배치 */
-        font-size: 2.8vh;       /* 닫기 버튼의 글자 크기 */
-        font-weight: bold;      /* 닫기 버튼의 글자 두께를 두껍게 설정 */
-    }
-
-    /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
-    .close:hover,
-    .close:focus {
-        color: black;         /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
-        text-decoration: none;  /* 닫기 버튼의 밑줄 제거 */
-        cursor: pointer;        /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
-    }
-    /* 쪽지 이미지 */
-    .postImage {
-        margin-top: 0;
-        width: 1.5vw;
-    }
-/********************************* 쪽지 모달 css 끝 ************************** */
-
-    /* 나눔 이야기 알림 뱃지 */
-    .badge {
-        color: black;
-        margin-left: 0.5vw;
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 0.2vw;
-    }
 
     /* 마이페이지 */
     .mypage {
@@ -447,3 +373,532 @@
         text-decoration: underline;
         color: gray;
     }
+
+    
+/*********************************************** 쪽지 모달부분  ********************************************/
+/*********************************************** 쪽지 모달부분  ********************************************/
+/*********************************************** 쪽지 모달부분  ********************************************/
+
+ /* 나눔 이야기 (쪽지) */
+  .message {
+    padding: 2vh;
+    display: inline-flex;
+    align-items: center;
+    margin-right: 0.5vw;
+    vertical-align: center;
+    cursor: pointer;
+  }
+  
+    /* 쪽지 이미지 */
+    .postImage {
+      margin-top: 0;
+      width: 1.5vw;
+    }
+  
+    /* 나눔 이야기 알림 뱃지 */
+    .badge {
+      color: black;
+      margin-left: 0.5vw;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.2vw;
+    }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+    box-shadow: rgba(100, 100, 111, 0.2) 0vw 1vh 4vh 0vw;
+  }
+
+  /* 모달 콘텐츠 스타일 */
+  .modal-content {
+    background-color: white;
+    padding: 4vh 3vw;
+    width: 40vw;
+    height: 75vh;
+    overflow-y: hidden;
+  }
+
+
+/* 나눔 이야기 영역 */
+  /* 모달 상단 영역_타이틀, 닫기 */
+  .messageUpside {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 사용자 이름과 신고하기 버튼 컨테이너 */
+  .usernameContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  /* 사용자 프로필 사진 */
+  #receiverProfileImage {
+    width: 2.5vh;
+    height: 2.5vh;
+    border-radius: 50%;
+    border: 0.07vw solid black;
+    margin-right: 0.5vw;
+  }
+
+  /* 사용자 이름 */
+  .usernameTitle {
+    font-size: 2.5vh;
+    letter-spacing: 0.1vw;
+  }
+
+  /* 쪽지방 목록 */
+  #messageListContainer {
+    margin-top: 2vh;
+    padding-right: 2vh;
+    padding-left: 2vh;
+    height: 49vh;
+    font-size: 2.2vh;
+    width: 100%;
+    letter-spacing: 0.05vw;
+    line-height: 5vh;
+    color: black;
+    background-color: white;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
+  #messageListContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 메시지 보내기 영역 */
+  #detailContentsContainer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  /* 존재하는 메시지 */
+  #messageDetailsContainer {
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+    padding-right: 2vh;
+    padding-left: 2vh;
+    padding-top: 3vh;
+    padding-bottom: 3vh;
+    height: 49vh;
+    width: 100%;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    border: 0.07vw solid black;
+    box-shadow: rgba(149, 157, 165, 0.2) 0 1vh 2vh;
+  }
+
+  /* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
+  #messageDetailsContainer::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 보내기 버튼 */
+  #sendMessageBtn {
+    font-family: "NEXON Lv1 Gothic OTF";
+    position: absolute;
+    margin-right: 0.1vw;
+    padding-top: 0.2vh;
+    padding-left: 0.5vw;
+    right: 0.4vh;
+    width: 8vh;
+    height: 3.8vh;
+    border-radius: 2.5vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.05vw;
+    background-color: #2DC986;
+    color: white;
+    border: 0.07vw solid black;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    z-index: 1;
+  }
+
+  /* 검색 버튼 호버 효과 */
+  #sendMessageBtn:hover {
+    text-decoration: underline;
+  }
+
+  /* 유저 신고하기 모달만 배경 투명 처리 */
+  #reportModal {
+    background-color: transparent;    /* 배경 투명 처리 */
+  }
+
+  .message-room {
+    border: 0.07vw solid black;
+    padding: 1vh;
+    margin-bottom: 1vh;
+    font-size: 2.1vh;
+    line-height: 4vh;
+    cursor: pointer;
+    background-color: #fafafa;
+  }
+
+  .message-room:hover {
+    background-color: #e9e9e9;
+  }
+
+  /* .close 클래스는 모달의 닫기 버튼을 정의합니다. */
+  .close {
+    font-size: 2.5vh;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* 닫기 버튼에 마우스를 올리거나 포커스할 때의 스타일을 정의합니다. */
+  .close:hover,
+  .close:focus {
+    color: black;           /* 닫기 버튼에 마우스를 올렸을 때 색상이 검정으로 변경 */
+    text-decoration: none;    /* 닫기 버튼의 밑줄 제거 */
+    cursor: pointer;          /* 닫기 버튼에 마우스를 올렸을 때 커서를 손 모양으로 변경 */
+  }
+
+
+/* 보낸 이야기 영역 */
+  /* 보낸 메시지 영역 */
+  .myMessageArea {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    padding-left: 3vh;
+    padding-right: 3vh;
+    text-align: right;
+    width: 100%;
+    height: auto;
+  }
+
+  /* 보낸 이야기_타이틀 */
+  .myMessage {
+    font-size: 1.5vh;
+    font-weight: 700;
+    letter-spacing: 0.05vw;
+    margin-bottom: 1.2vh;
+    color: #2dc986;
+  }
+
+  /* 보낸 이야기_내용 */
+  .myMessageContent {
+    font-size: 1.8vh;
+    letter-spacing: 0.06vw;
+    line-height: 3vh;
+    margin-bottom: 1.2vh;
+  }
+
+  /* 보낸 메시지_날짜 */
+  .myMessageDate {
+    font-size: 1.5vh;
+    font-weight: 700;
+    letter-spacing: 0.05vw;
+    margin-bottom: 1.2vh;
+    color: gray;
+  }
+
+
+/* 받은 이야기 영역 */
+  /* 받은 이야기 영역 */
+  .getMessageArea {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    padding-left: 3vh;
+    padding-right: 3vh;
+    text-align: left;
+    width: 100%;
+    height: auto;
+  }
+
+  /* 받은 이야기_타이틀 */
+  .getMessage {
+    font-size: 1.5vh;
+    font-weight: 700;
+    letter-spacing: 0.05vw;
+    margin-bottom: 1.2vh;
+    color: #8abaff;
+  }
+
+  /* 받은 이야기_내용 */
+  .getMessageContent {
+    font-size: 1.8vh;
+    letter-spacing: 0.06vw;
+    line-height: 3.5vh;
+    margin-bottom: 1.2vh;
+  }
+
+  /* 받은 메시지_날짜 */
+  .getMessageDate {
+    font-size: 1.5vh;
+    font-weight: 700;
+    letter-spacing: 0.05vw;
+    margin-bottom: 1.2vh;
+    color: gray;
+  }
+
+  /* 메시지 보내기 창 */
+  .messageContents {
+    font-family: "NEXON Lv1 Gothic OTF";
+    width: 100%;
+    height: 4.5vh;
+    padding: 0.8vh 8vh 0 2vh; /* 버튼을 위한 패딩 공간 */
+    border: 0.07vw solid black;
+    border-radius: 2.5vh; /* 둥근 모서리 */
+    font-size: 2vh;
+    line-height: 3vh;
+    letter-spacing: 0.05vw;
+    outline: none;
+    resize: none;
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* Webkit 브라우저 (Chrome, Safari, Edge)에서 스크롤바 숨기기 */
+  .messageContents::-webkit-scrollbar {
+    display: none;
+  }
+
+  
+/* 신고 영역 */
+  /* 모달 상단 영역_타이틀, 닫기 */
+  .reportUpside {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* 사용자 이름과 신고하기 버튼 컨테이너 */
+  .reportContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  /* 신고하기 타이틀 */
+  .reportTitle {
+    font-size: 2.5vh;
+    letter-spacing: 0.1vw;
+  }
+
+  /* 신고하고자 하는 유저 닉네임 */
+  .reportUser {
+    padding-top: 1vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.07vw;
+    color: gray;
+    margin-left: 2vw;
+  }
+
+  /* 신고 폼 영역 */
+  .reportArea {
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+  }
+
+  /* 신고사유_라디오버튼 */
+  .reportReason {
+    display: flex;
+    align-items: center;
+    font-size: 2vh;
+    letter-spacing: 0.05vw;
+    line-height: 2vh;
+    margin-bottom: 1vh;
+  }
+
+  /* 라디오버튼 체크 상태 스타일 */
+  input[type="radio"]:checked {
+    background-color: black;  /* 체크 상태의 배경색을 검정색으로 변경 */
+  }
+
+  /* Webkit 브라우저 (Chrome, Safari, Edge)에서 체크박스 모양을 변경 */
+  input[type="radio"] {
+    appearance: none;       /* 기본 체크박스 스타일 제거 */
+    margin-right: 0.7vw;
+    width: 1.5vh;           /* 원하는 크기로 조정 */
+    height: 1.5vh;
+    cursor: pointer;
+    border: 0.07vw solid black;
+  }
+
+  /* 체크된 상태의 라디오버튼 스타일 */
+  input[type="radio"]:checked {
+    background-color: red;
+  }
+
+  /* 기타 사유 작성 창 */
+  .additionalReason {
+    font-family: 'NEXON Lv1 Gothic OTF';
+    letter-spacing: 0.1vw;
+    width: 90%;
+    height: 28vh;
+    margin-top: 0.5vh;
+    margin-left: 1.5vw;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+    padding-left: 1.5vw;
+    padding-right: 1.5vw;
+    border: 0.07vw solid black;
+    border-radius: 2.5vh; /* 둥근 모서리 */
+    font-size: 2vh;
+    line-height: 3.2vh;
+    outline: none;
+    resize: none;
+    overflow: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  /* 보내기 버튼 */
+  .reportSubmit {
+    margin: 5vh auto;
+    width: 8vw;
+    height: 5vh;
+    color: white;
+    background-color: gray;
+    border-radius: 5vh;
+    border: 0.07vw solid black;
+    font-size: 2.1vh;
+    font-weight: 700;
+    letter-spacing: 0.1vw;
+    cursor: pointer;
+    padding-top: 0.5vh;
+    display: block;
+  }
+
+  /* 검색 버튼 호버 효과 */
+  .reportSubmit:hover {
+    color: white;
+    background-color: red;
+  }
+
+  /* 모달 버튼 스타일 */
+  .modal-button {
+    padding: 1vh 2vw;
+    margin: 2vh 1vw;
+    font-size: 2vh;
+    cursor: pointer;
+    border: none;
+    border-radius: 5vh;
+  }
+
+  /* 취소 버튼 */
+  .cancel-button {
+    background-color: lightgray;
+  }
+
+  /* 신고 버튼 */
+  .report-confirm-button {
+    background-color: red;
+    color: white;
+  }
+
+  /* 유저 신고 확인용 모달 스타일 */
+  .confirm-report-modal-content {
+    background-color: white;
+    padding: 2vh 2vw;
+    width: 30vw;
+    height: 30vh;
+    text-align: center;
+    border-radius: 1vh;
+  }
+
+  /* 게시글 이동, 완료, 신고 버튼을 포함한 div  */
+  /* .messageMenu{
+    align-items:end
+  } */
+
+  /* 게시글로 이동하기 버튼 */
+  .moveToPostButton {
+    padding-top: 1vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.07vw;
+    color: gray;
+    margin-left: 1vw;
+  }
+
+  /* 나눔완료 버튼 */
+  .shareEndButton {
+    padding-top: 1vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.07vw;
+    color: gray;
+    margin-left: 0.5vw;
+  }
+
+  /* 나눔 완료된 게시글일시 나눔완료버튼 */
+  .shareCompleted{
+    padding-top: 1vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.07vw;
+    color: black;
+    margin-left: 0.5vw;
+    background: linear-gradient(#2DC986 0 100%);
+    background-position: 0 calc(100% - 0.25vh);
+    background-size: 100% 0.8vh;
+    background-repeat: no-repeat;
+  }
+
+  /* 신고하기 버튼 */
+  .userReportButton {
+    padding-top: 1vh;
+    font-size: 1.7vh;
+    letter-spacing: 0.07vw;
+    color: gray;
+    margin-left: 0.5vw;
+  }
+
+    /* 형광펜 효과_게시글로 이동 */
+    .highlighterMove {
+      background: linear-gradient(#2DC986 0 100%);
+      background-position: 0 calc(100% - 0.25vh);
+      background-size: 0 0.8vh;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+    }
+  
+    /* 형광펜 효과_게시글로 이동_hover */
+    .highlighterMove:hover {
+      background-size: 100% 0.8vh;
+      color: black;
+      cursor: pointer;
+    }
+  
+    /* 형광펜 효과_빨간색 */
+    .highlighterRed {
+      background: linear-gradient(red 0 100%);
+      background-position: 0 calc(100% - 0.25vh);
+      background-size: 0 0.8vh;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+    }
+  
+    /* 형광펜 효과_빨간색_hover */
+    .highlighterRed:hover {
+      background-size: 100% 0.8vh;
+      color: black;
+      cursor: pointer;
+    }
+
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/

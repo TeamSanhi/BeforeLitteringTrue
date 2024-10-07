@@ -155,6 +155,7 @@ $(document).ready(function () {
         if (userNum === shareWriteNum) {
           // 로그인한 사람과 게시글을 작선한 사람이 일치하지 않으면 나눔완료버튼을 숨긴다.
           $("#shareComplete").show();
+          $("#shareCompleted").hide();
           // 게시글의 나눔상태 즉 완료된 상태가 1이라면 
           if (shareCompleted) {
             // 나눔완료 버튼기능은 숨기고, 형관편 처리된 나눔완료를 의미하는 span을보여준다.
