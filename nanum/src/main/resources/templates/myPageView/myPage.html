@@ -386,11 +386,23 @@
             <div id="check">
                 <!-- 비밀번호 입력 -->
                 <div class="passwordUpsideArea">
-                    <div class="passwordTitle">비밀번호를 입력해주세요</div>
+                    <div class="deletePwCheck">비밀번호를 입력해주세요.</div>
                 </div>
-                <div class="passwordInputArea">
-                    <input type="password" name="pwCheck" id="pwCheck"/>
+
+                <br><br>
+                
+                <!-- 비밀번호 확인 영역 -->
+                <div id="pwCheckUpsideArea" class="pwCheckUpsideArea">
+                    <!-- 비밀번호 확인 타이틀 -->
+                    <div id="pwCheckTitle" class="pwCheckTitle">
+                        <b>비밀번호 확인</b>
+                    </div>
                 </div>
+                <!-- 비밀번호 확인_input -->
+                <input type="password" name="pwCheck" id="pwCheck" class="pwCheck">
+                <!-- 비밀번호 확인 메시지 출력 -->
+                <div id="pwCheckError" class="pwCheckError"></div>
+            </div>
                 <div class="button">
                     <button id="delete">탈퇴</button>
                 </div>
