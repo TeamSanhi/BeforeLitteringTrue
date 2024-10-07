@@ -113,15 +113,15 @@
                     <!-- 로그인 하지 않았을시 -->
                     <th:block sec:authorize="not isAuthenticated()">
                       <!-- 기본 문구 출력 -->
-                      <span class="typeMessage typing">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
+                      <span class="typeMessage typing1">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
                     </th:block>
                     <!-- 로그인 하였을시 해당요일의 알람메시지를 보여준다. -->
                     <th:blcok sec:authorize="isAuthenticated()">
                       <span class="typeMessage">
                         <!-- alarmDTO가 null이 아닐 때만 해당 요일의 알람내용을 보여준다. -->
-                        <span class="typing" th:if="${alarm != null}" th:text="|오늘은 ${week}! ${alarm.alarmContents}|"></span>
+                        <span class="typing1" th:if="${alarm != null}" th:text="|오늘은 ${week}! ${alarm.alarmContents}|"></span>
                         <!-- alarmDTO가 null일 때 기본 메시지를 출력 -->
-                        <span class="typing" th:if="${alarm == null}">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
+                        <span class="typing1" th:if="${alarm == null}">잘 나누고, 잘 버려요! 에코나비와 함께!</span>
                       </span>                   
                     </th:blcok>
                 </div>
@@ -138,7 +138,7 @@
           <div class="realContent" >
             <!-- 설정에 따라 변경되는 css -->
             <div class="mainMessage">
-                <span class="typeMessage">나눔 인기글!</span>
+                <span class="typeMessage typing2" >나눔 인기글!</span>
             </div>
               <!-- 게시글 틀  -->
               <div class="shareArea">
@@ -170,7 +170,7 @@
         <div class="slide_content">
             <div class="realContent">
               <div class="mainMessage" >
-                <span class="typeMessage">
+                <span class="typeMessage typing3">
                   나눔 매니아!
                 </span>
               </div>
