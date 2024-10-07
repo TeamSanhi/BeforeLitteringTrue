@@ -36,7 +36,7 @@ function openPopup(recycleNum) {
         `/images/` + data.recycleFileName;
 
       // 팝업 표시
-      $(".popup-overlay").fadeIn(200);
+      $(".popup-overlay").fadeIn();
     })
     .catch((error) => {
       console.error("데이터를 불러오는 중 오류 발생:", error);
@@ -45,7 +45,7 @@ function openPopup(recycleNum) {
 }
 
 function closePopup() {
-  $(".popup-overlay").fadeOut(200);
+  $(".popup-overlay").fadeOut();
 }
 
 // 외부 영역 클릭 시 팝업 닫기
@@ -236,7 +236,7 @@ function openPopup(recycleNum) {
         `/images/` + data.recycleFileName;
 
       // 팝업 표시
-      document.querySelector(".popup-overlay").style.display = "block";
+      $(".popup-overlay").fadeIn(200);
     })
     .catch((error) => {
       console.error("데이터를 불러오는 중 오류 발생:", error);
@@ -245,7 +245,7 @@ function openPopup(recycleNum) {
 }
 
 function closePopup() {
-  document.querySelector(".popup-overlay").style.display = "none";
+  $(".popup-overlay").fadeOut(200);
 }
 
 // 외부 영역 클릭 시 팝업 닫기
