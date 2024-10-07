@@ -136,7 +136,12 @@
   }
 
 /* 로그인 했을 시 */
-  /* 나눔 이야기 (쪽지) */
+
+/*********************************************** 쪽지 모달부분  ********************************************/
+/*********************************************** 쪽지 모달부분  ********************************************/
+/*********************************************** 쪽지 모달부분  ********************************************/
+
+ /* 나눔 이야기 (쪽지) */
   .message {
     padding: 2vh;
     display: inline-flex;
@@ -145,8 +150,22 @@
     vertical-align: center;
     cursor: pointer;
   }
+  
+    /* 쪽지 이미지 */
+    .postImage {
+      margin-top: 0;
+      width: 1.5vw;
+    }
+  
+    /* 나눔 이야기 알림 뱃지 */
+    .badge {
+      color: black;
+      margin-left: 0.5vw;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 0.2vw;
+    }
 
-/* 쪽지 모달부분  */
   .modal {
     display: none;
     position: fixed;
@@ -610,22 +629,41 @@
     margin-left: 0.5vw;
   }
 
-/* 쪽지 모달 css 끝  */
+    /* 형광펜 효과_게시글로 이동 */
+    .highlighterMove {
+      background: linear-gradient(#2DC986 0 100%);
+      background-position: 0 calc(100% - 0.25vh);
+      background-size: 0 0.8vh;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+    }
+  
+    /* 형광펜 효과_게시글로 이동_hover */
+    .highlighterMove:hover {
+      background-size: 100% 0.8vh;
+      color: black;
+      cursor: pointer;
+    }
+  
+    /* 형광펜 효과_빨간색 */
+    .highlighterRed {
+      background: linear-gradient(red 0 100%);
+      background-position: 0 calc(100% - 0.25vh);
+      background-size: 0 0.8vh;
+      background-repeat: no-repeat;
+      transition: background-size 0.3s;
+    }
+  
+    /* 형광펜 효과_빨간색_hover */
+    .highlighterRed:hover {
+      background-size: 100% 0.8vh;
+      color: black;
+      cursor: pointer;
+    }
 
-  /* 쪽지 이미지 */
-  .postImage {
-    margin-top: 0;
-    width: 1.5vw;
-  }
-
-  /* 나눔 이야기 알림 뱃지 */
-  .badge {
-    color: black;
-    margin-left: 0.5vw;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 0.2vw;
-  }
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/
+/******************************************************** 쪽지 모달 css 끝  **********************************************************/
 
   /* 마이페이지 */
   .mypage {
@@ -900,37 +938,7 @@
     background-repeat: no-repeat;
   }
 
-  /* 형광펜 효과_게시글로 이동 */
-  .highlighterMove {
-    background: linear-gradient(#2DC986 0 100%);
-    background-position: 0 calc(100% - 0.25vh);
-    background-size: 0 0.8vh;
-    background-repeat: no-repeat;
-    transition: background-size 0.3s;
-  }
 
-  /* 형광펜 효과_게시글로 이동_hover */
-  .highlighterMove:hover {
-    background-size: 100% 0.8vh;
-    color: black;
-    cursor: pointer;
-  }
-
-  /* 형광펜 효과_빨간색 */
-  .highlighterRed {
-    background: linear-gradient(red 0 100%);
-    background-position: 0 calc(100% - 0.25vh);
-    background-size: 0 0.8vh;
-    background-repeat: no-repeat;
-    transition: background-size 0.3s;
-  }
-
-  /* 형광펜 효과_빨간색_hover */
-  .highlighterRed:hover {
-    background-size: 100% 0.8vh;
-    color: black;
-    cursor: pointer;
-  }
 
   /* 나눠요 포인트 순위 리스트 영역 */
   .memberArea {

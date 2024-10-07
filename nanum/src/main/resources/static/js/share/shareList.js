@@ -1,7 +1,9 @@
-// 쪽지기능
+
+//*********************************************쪽지 ********************************************
 $(document).ready(function () {
   // 모든 모달을 숨긴 상태로 초기화
   $(".modal").hide();
+
   // 읽지 않은 쪽지 개수 가져오기
   updateUnreadCount();
 
@@ -9,7 +11,6 @@ $(document).ready(function () {
   $("#messages").click(function () {
     $("#messagesModal").fadeIn().css("display", "flex");
     updateUnreadCount(); // 쪽지 모달 열릴 때마다 개수 업데이트
-
     let memberNum = $("#messages").data("num");
 
     // 회원 번호를 통해 속한 쪽지방을 모두 가져옴
@@ -82,7 +83,6 @@ $(document).ready(function () {
       shareNum
     );
     $("#detailsModal").fadeIn().css("display", "flex");
-
     // 쪽지 상세 목록에서 게시글로 이동하는 클릭 이벤트
     $("#goToShareBoard").click(function () {
       let shareBoardUrl = `/share/read?shareNum=${shareNum}`; // 게시글 상세 페이지로 이동하는 URL
@@ -154,20 +154,25 @@ $(document).ready(function () {
         );
         // 나눔 완료 버튼 표시 및 비활성화 설정
         if (userNum === shareWriteNum) {
+          // 로그인한 사람과 게시글을 작선한 사람이 일치하지 않으면 나눔완료버튼을 숨긴다.
           $("#shareComplete").show();
-
+          // 게시글의 나눔상태 즉 완료된 상태가 1이라면 
           if (shareCompleted) {
-            $("#shareComplete").prop("disabled", true);
-          } else {
-            $("#shareComplete").prop("disabled", false);
-          }
+            // 나눔완료 버튼기능은 숨기고, 형관편 처리된 나눔완료를 의미하는 span을보여준다.
+            $("#shareComplete").hide();
+            $("#shareCompleted").show();
+          } 
+          // else {
+          //   $("#shareComplete").prop("disabled", false);
+          // }
         } else {
+          // 로그인한 사람과 게시글을 작선한 사람이 일치하지 않으면 나눔완료버튼을 숨긴다.
           $("#shareComplete").hide();
         }
 
         $("#messageDetailsContainer").scrollTop(
           $("#messageDetailsContainer")[0].scrollHeight
-        ); // 상세목록 이동 시 맨 아래로 자동 스크롤
+        ); // 상세 목록 이동 시 자동 스크롤
       },
       error: function (xhr, status, error) {
         console.error("AJAX 요청 오류:", status, error);
@@ -216,6 +221,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+  
                   `;
               } else {
                 detailsList += `
@@ -229,6 +235,7 @@ $(document).ready(function () {
                     ).toLocaleString()}</div>
                   </div>
                   <br>
+  
                 `;
               }
             });
@@ -248,32 +255,32 @@ $(document).ready(function () {
     });
   });
 
-  // 나눔 이야기 닫기
-  $("#messagesClose").click(function () {
-    $("#messagesModal").fadeOut().css("display", "none");
-    updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+  // 모달 닫기 버튼 클릭 시 모달 닫기
+  $(".close").click(function () {
+    if ($(this).closest("#reportModal").length > 0) {
+      // 신고하기 모달을 닫고 쪽지 모달 열기
+      $("#reportModal").hide();
+      $("#messageModal").show();
+      updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+      updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+    } else {
+      $(".modal").hide();
+      updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+      updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+    }
   });
 
-  // 쪽지 상세내역 닫기
-  $("#detailsClose").click(function () {
-    $("#detailsModal").fadeOut().css("display", "none");
-    // 쪽지 목록 갱신을 위해 다시 목록 불러오기
-    updateMessageRooms();
-  });
+  // // 나눔 이야기 닫기
+  // $("#messagesClose").click(function () {
+  //   $("#messagesModal").fadeOut();
+  //   updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
+  // });
 
-  // // 모달 닫기 버튼 클릭 시 모달 닫기
-  // $(".close").click(function () {
-  //   if ($(this).closest("#reportModal").length > 0) {
-  //     // 신고하기 모달을 닫고 쪽지 모달 열기
-  //     $("#reportModal").hide();
-  //     $("#messageModal").show();
-  //     updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
-  //     updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
-  //   } else {
-  //     $(".modal").hide();
-  //     updateUnreadCount(); // 모달 닫을 때 안 읽은 쪽지 개수 업데이트
-  //     updateMessageRooms(); // 쪽지 목록 갱신을 위해 다시 목록 불러오기
-  //   }
+  // // 쪽지 상세내역 닫기
+  // $("#detailsClose").click(function () {
+  //   $("#detailsModal").fadeOut();
+  //   // 쪽지 목록 갱신을 위해 다시 목록 불러오기
+  //   updateMessageRooms();
   // });
 
   $(window).click(function (event) {
@@ -323,7 +330,10 @@ $(document).ready(function () {
       data: { shareNum: shareNum, receiverNum: receiverNum },
       success: function (response) {
         alert("나눔이 완료되었습니다.");
-        $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+      //  $("#shareComplete").prop("disabled", true); // 버튼 비활성화
+        // 나눔완료 버튼기능은 숨기고, 형관편 처리된 나눔완료를 의미하는 span을 보여준다. 
+        $("#shareComplete").hide();
+        $("#shareCompleted").show();
         // 나눔 완료 후 쪽지 목록 갱신
         let memberNum = $("#messages").data("num");
         $.ajax({
@@ -482,3 +492,5 @@ function updateMessageRooms() {
     },
   });
 }
+
+//************************************쪽지 *******************************************************/
