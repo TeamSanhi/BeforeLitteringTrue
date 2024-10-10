@@ -44,8 +44,6 @@ public class WebSecurityConfig {
                         , "/share/mapList" // 나눔 지도 리스트
                         , "/share/serviceList" // 나눔 완료 지도 리스트
                         , "/info/service" // 서비스 소개
-                        , "/info/siteMap" // 사이트맵
-                        , "/info/faq" // FAQ
                         , "/recycle/list" // 버려요 게시글 리스트
                         , "/recycle/read" // 버려요 게시글 읽기
         };

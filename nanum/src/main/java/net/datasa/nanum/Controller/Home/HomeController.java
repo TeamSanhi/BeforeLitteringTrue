@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.AlarmDTO;
 import net.datasa.nanum.domain.dto.MemberDTO;
 import net.datasa.nanum.domain.dto.ShareBoardDTO;
-import net.datasa.nanum.domain.entity.AlarmEntity;
 import net.datasa.nanum.security.AuthenticatedUser;
 import net.datasa.nanum.service.HomeService;
 

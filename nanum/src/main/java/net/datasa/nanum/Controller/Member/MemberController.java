@@ -26,26 +26,6 @@ public class MemberController {
     @Value("${profile.uploadPath}")
     String uploadPath;
 
-    /**
-     * 로그인 화면으로 이동
-     * 
-     * @return memberView/login.html
-     */
-    // @GetMapping("loginForm")
-    // public String login(@RequestParam(value = "error", required = false) String
-    // error,
-    // @RequestParam(value = "exception", required = false) String exception, Model
-    // model) {
-    // log.debug("login.html 이동");
-    // log.debug("Error: " + error);
-    // log.debug("Exception: " + exception);
-    // if (error != null) {
-    // model.addAttribute("error", error);
-    // model.addAttribute("exception", exception);
-    // }
-    // return "memberView/login";
-    // }
-
     @GetMapping("loginForm")
     public String login(HttpServletRequest request, Model model) {
 

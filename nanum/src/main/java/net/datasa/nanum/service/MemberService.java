@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datasa.nanum.domain.dto.MemberDTO;
-import net.datasa.nanum.domain.entity.ImageEntity;
 import net.datasa.nanum.domain.entity.MemberEntity;
 import net.datasa.nanum.repository.MemberRepository;
 

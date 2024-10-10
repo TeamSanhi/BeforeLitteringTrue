@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                        AuthenticationException exception) throws IOException, ServletException {
+            AuthenticationException exception) throws IOException, ServletException {
         String errorMessage;
 
         if (exception instanceof DisabledException) {
@@ -37,12 +37,6 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
         } else {
             errorMessage = "알 수 없는 이유로 로그인에 실패하였습니다. 관리자에게 문의하세요.";
         }
-
-        //request.setAttribute("errorMessage", errorMessage);
-        //request.getRequestDispatcher("/member/loginForm").forward(request, response);
-
-        //setDefaultFailureUrl("/member/loginForm?error=true&exception=" + URLEncoder.encode(errorMessage, "UTF-8"));
-        //super.onAuthenticationFailure(request, response, exception);
 
         // 에러 메시지를 세션에 저장
         request.getSession().setAttribute("errorMessage", errorMessage);
