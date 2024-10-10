@@ -170,7 +170,6 @@
                         let lat = position.coords.latitude; // 위도
                         let lon = position.coords.longitude; // 경도
                         let locPosition = new kakao.maps.LatLng(lat, lon);
-                        console.log(lat, lon, locPosition);
                         // 지도 중심을 내 위치로 이동
                         map.setCenter(locPosition);
                     },
